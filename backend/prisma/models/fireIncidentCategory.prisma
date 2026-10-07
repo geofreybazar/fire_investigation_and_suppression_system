@@ -1,0 +1,17 @@
+enum CATEGORY_TYPE {
+ STRUCTURAL 
+ TRANSPORTATION
+ WILDLAND 
+}
+
+model FireIncidentCategory {
+  id            String   @id @default(uuid())
+  name          String   @unique
+
+  type          CATEGORY_TYPE
+  subCategories FireIncidentSubcategory[]
+  incidents     FireIncident[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

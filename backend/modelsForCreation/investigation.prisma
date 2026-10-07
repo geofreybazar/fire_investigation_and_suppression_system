@@ -1,0 +1,25 @@
+model Investigation {
+  id                    String   @id @default(uuid())
+  investigationNo       String   @unique
+
+  causeOfFire           CauseOfFire?
+  classification        FireCaseClassification?
+  status                FireCaseStatus?
+  originOfFire          String?
+
+  startedAt             DateTime?
+  completedAt           DateTime?
+
+  fireIncidentId        String   @unique
+
+  fireIncident          FireIncident @relation(
+    fields: [fireIncidentId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  report                InvestigationReport?
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}

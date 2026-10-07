@@ -1,0 +1,34 @@
+enum OfficeType {
+  NATIONAL_HEADQUARTERS
+  REGIONAL_OFFICE
+  DISTRICT_FIRE_STATION
+  PROVINCIAL_FIRE_STATION
+  CITY_FIRE_STATION
+  MUNICIPAL_FIRE_STATION
+}
+
+model Office {
+  id        String     @id @default(uuid())
+  name      String
+  type      OfficeType
+  isActive    Boolean @default(true)
+
+  // office heirarchy
+  parentId  String?
+  parent    Office?    @relation("OfficeHierarchy", fields: [parentId], references: [id])
+  children  Office[]   @relation("OfficeHierarchy")
+
+  // Regional scope
+  regionId String?
+  region   Office?  @relation("OfficeRegion", fields: [regionId], references: [id])
+  regionalOffices Office[] @relation("OfficeRegion")
+
+  users     User[]
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([parentId])
+  @@index([regionId])
+  @@index([type])
+}

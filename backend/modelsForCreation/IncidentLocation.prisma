@@ -1,0 +1,16 @@
+model IncidentLocation {
+  id                  String @id @default(uuid())
+
+  placeOfOccurrence   String
+  region              String?
+  province            String?
+  municipality        String?
+
+  fireIncidentId      String @unique
+
+  fireIncident        FireIncident @relation(
+    fields: [fireIncidentId],
+    references: [id],
+    onDelete: Cascade
+  )
+}

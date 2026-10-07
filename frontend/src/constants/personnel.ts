@@ -1,0 +1,35 @@
+export const RANKS = [
+  "FDIR",
+  "FCSUPT",
+  "FSSUPT",
+  "FSUPT",
+  "FCINSP",
+  "FSINSP",
+  "FINSP",
+  "SFO4",
+  "SFO3",
+  "SFO2",
+  "SFO1",
+  "FO3",
+  "FO2",
+  "FO1",
+] as const;
+
+export const ROLE = [
+  // "SUPER_ADMIN",
+  "NHQ_ADMIN",
+  "NHQ_CHIEF_INVESTIGATOR",
+  "NHQ_INVESTIGATOR",
+  "NHQ_VIEWER",
+  "REGIONAL_ADMIN",
+  "REGIONAL_CHIEF_INVESTIGATOR",
+  "REGIONAL_INVESTIGATOR",
+  "REGIONAL_VIEWER",
+  "DISTRICT_CHIEF_INVESTIGATOR",
+  "DISTRICT_INVESTIGATOR",
+  "DISTRICT_VIEWER",
+  "STATION_INVESTIGATOR",
+  "STATION_COMMEL",
+] as const;
+
+export type Rank = (typeof RANKS)[number];

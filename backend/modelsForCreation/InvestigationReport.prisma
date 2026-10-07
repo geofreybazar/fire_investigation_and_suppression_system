@@ -1,0 +1,24 @@
+model InvestigationReport {
+  id                 String   @id @default(uuid())
+
+  investigationId    String   @unique
+
+  findings           String?
+  cause              String?
+  conclusion         String?
+  recommendations    String?
+
+  status             ReportStatus
+
+  submittedAt        DateTime?
+  reviewedAt         DateTime?
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  investigation     Investigation @relation(
+    fields: [investigationId],
+    references: [id],
+    onDelete: Cascade
+  )
+}

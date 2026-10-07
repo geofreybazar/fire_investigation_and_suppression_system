@@ -1,0 +1,23 @@
+model SuppressionOperation {
+  id                  String @id @default(uuid())
+
+  respondingTeam      String?
+
+  fireTrucksResponded Int @default(0)
+  trucksBFPOwned      Int @default(0)
+  trucksVolunteer     Int @default(0)
+  trucksBFPManned     Int @default(0)
+
+  ambulancesResponded Int @default(0)
+  ambulancesBFPOwned  Int @default(0)
+  ambulancesVolunteer Int @default(0)
+  ambulancesBFPManned Int @default(0)
+
+  fireIncidentId      String @unique
+
+  fireIncident        FireIncident @relation(
+    fields: [fireIncidentId],
+    references: [id],
+    onDelete: Cascade
+  )
+}

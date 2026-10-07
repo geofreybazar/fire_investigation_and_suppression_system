@@ -1,0 +1,22 @@
+model IncidentTimeline {
+  id                 String @id @default(uuid())
+
+  reportedAt        DateTime?
+  fireIncidentAt    DateTime?
+  callReceivedAt    DateTime?
+  unrespondedAt     DateTime?
+
+  arrivalAt         DateTime?
+  fireStartedAt     DateTime?
+  fireUnderControlAt DateTime?
+  fireOutAt         DateTime?
+  fireAlarmSetAt    DateTime?
+
+  fireIncidentId    String @unique
+
+  fireIncident      FireIncident @relation(
+    fields: [fireIncidentId],
+    references: [id],
+    onDelete: Cascade
+  )
+}

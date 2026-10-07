@@ -1,0 +1,11 @@
+model NotificationPreference {
+  id                    String   @id @default(uuid())
+
+
+  investigationUpdates  Boolean  @default(true)
+  reportReview          Boolean  @default(true)
+  systemAnnouncements   Boolean  @default(true)
+
+  userId                String   @unique
+  user                  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

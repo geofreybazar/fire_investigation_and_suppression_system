@@ -1,0 +1,33 @@
+model IncidentPersonnel {
+  id                    String @id @default(uuid())
+
+  groundCommanderId     String?
+  arsonInvestigatorId   String?
+  senderId              String?
+
+  fireIncidentId        String @unique
+
+  fireIncident          FireIncident @relation(
+    fields: [fireIncidentId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  groundCommander       User? @relation(
+    "GroundCommander",
+    fields: [groundCommanderId],
+    references: [id]
+  )
+
+  arsonInvestigator     User? @relation(
+    "ArsonInvestigator",
+    fields: [arsonInvestigatorId],
+    references: [id]
+  )
+
+  sender                User? @relation(
+    "IncidentSender",
+    fields: [senderId],
+    references: [id]
+  )
+}

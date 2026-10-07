@@ -1,0 +1,32 @@
+model IncidentImpact {
+  id                    String   @id @default(uuid())
+
+  // Civilian casualties
+  fatalities            Int      @default(0)
+  injured               Int      @default(0)
+
+  // BFP casualties
+  fatalitiesBFP         Int      @default(0)
+  injuredBFP            Int      @default(0)
+
+  // Law enforcement / other agencies
+  fatalitiesLEA         Int      @default(0)
+  injuredLEA            Int      @default(0)
+
+  // Community impact
+  establishmentsBurned Int      @default(0)
+  familiesAffected      Int      @default(0)
+  individualsAffected   Int      @default(0)
+
+  // Financial impact
+  estimatedDamages      Decimal? @db.Decimal(15, 2)
+  finalEstimatedDamages Decimal? @db.Decimal(15, 2)
+
+  fireIncidentId        String   @unique
+
+  fireIncident          FireIncident @relation(
+    fields: [fireIncidentId],
+    references: [id],
+    onDelete: Cascade
+  )
+}

@@ -1,0 +1,61 @@
+enum ROLE {
+  SUPER_ADMIN
+  NHQ_ADMIN
+  NHQ_CHIEF_INVESTIGATOR
+  NHQ_INVESTIGATOR
+  NHQ_VIEWER
+  REGIONAL_ADMIN
+  REGIONAL_CHIEF_INVESTIGATOR
+  REGIONAL_INVESTIGATOR
+  REGIONAL_VIEWER
+  DISTRICT_CHIEF_INVESTIGATOR
+  DISTRICT_INVESTIGATOR
+  DISTRICT_VIEWER
+  STATION_INVESTIGATOR
+  STATION_COMMEL
+}
+
+enum RANK {
+  FDIR
+  FCSUPT
+  FSSUPT
+  FSUPT
+  FCINSP
+  FSINSP
+  FINSP
+  SFO4
+  SFO3
+  SFO2
+  SFO1
+  FO3
+  FO2
+  FO1
+}
+
+model User { 
+  id    String  @id @default(uuid())
+  email String  @unique
+  account_number String  @unique
+  rank RANK
+  first_name  String
+  last_name  String
+  middle_name String?
+  password String
+  isActive    Boolean @default(true)
+  
+  refreshTokens RefreshToken[]
+  
+  officeId       String
+  office         Office   @relation(fields: [officeId], references: [id])
+
+  positionId    String
+  position      Position @relation(fields: [positionId], references: [id])
+  role          ROLE
+
+  notification   NotificationPreference?
+  fireIncidents  FireIncident[]
+
+  @@index([officeId])
+  @@index([positionId])
+  @@index([role])
+} 

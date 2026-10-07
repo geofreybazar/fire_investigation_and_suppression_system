@@ -1,0 +1,113 @@
+enum FireIncidentStatus {
+    REPORTED
+    DISPATCHED
+    ON_GOING
+    UNDER_CONTROL
+    FIRE_OUT
+}
+
+enum AlarmStatus {
+  NO_ALARM
+  ALARM_RECEIVED
+  FALSE_ALARM
+  UNKNOWN
+}
+
+
+enum CauseOfFire {
+  UNDER_INVESTIGATION
+  ELECTRICAL
+  ARSON
+  ACCIDENTAL
+  NATURAL
+  UNKNOWN
+  OTHER
+}
+
+enum FireCaseClassification {
+  ACCIDENTAL
+  NATURAL
+  ARSON
+  UNDETERMINED
+}
+
+enum FireCaseStatus {
+    FIRST_ALARM
+    SECOND_ALARM
+    THIRD_ALARM
+    FOURTH_ALARM
+    FIFTH_ALARM
+    TASK_FORCE_ALPHA
+    TASK_FORCE_BRAVO
+    TASK_FORCE_CHARLIE
+    TASK_FORCE_DELTA
+    GENERAL_ALARM
+}
+
+enum ReportStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+
+model FireIncident {
+  id                   String   @id @default(uuid())
+  incidentNo           String   @unique
+
+  // Incident information
+  dateTimeReported     DateTime?
+  dateTimeFireIncident DateTime?
+  dateTimeCallReceived DateTime?
+  dateTimeUnresponded  DateTime?
+
+  fireIncidentStatus   FireIncidentStatus
+
+  // Classification
+  categoryId           String
+  subcategoryId        String?
+
+  category             FireIncidentCategory @relation(    fields: [categoryId],    references: [id]  )
+
+  subcategory          FireIncidentSubcategory? @relation(    fields: [subcategoryId],    references: [id]  )
+
+  // Establishment
+//   establishmentId      String?
+//   establishment        Establishment? @relation(
+//     fields: [establishmentId],
+//     references: [id]
+//   )
+
+  // Responsible office
+//   officeId             String
+//   office               Office @relation(
+//     fields: [officeId],
+//     references: [id]
+//   )
+
+  // Creator
+  createdById           String
+  createdBy             User @relation(   fields: [createdById],   references: [id]  )
+
+  // Related information
+//   location             IncidentLocation?
+//   timeline             IncidentTimeline?
+//   impact               IncidentImpact?
+//   suppression          SuppressionOperation?
+//   personnel            IncidentPersonnel?
+//   investigation        Investigation?
+
+  remarks              String?
+
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([subcategoryId])
+//   @@index([establishmentId])
+//   @@index([officeId])
+  @@index([dateTimeFireIncident])
+  @@index([fireIncidentStatus])
+}
