@@ -18,6 +18,46 @@ export { Prisma }
 export * as $Enums from './enums.js'
 export * from './enums.js';
 /**
+ * Model InvestigationReport
+ * 
+ */
+export type InvestigationReport = Prisma.InvestigationReportModel
+/**
+ * Model Investigation
+ * 
+ */
+export type Investigation = Prisma.InvestigationModel
+/**
+ * Model FireOpertaionResources
+ * 
+ */
+export type FireOpertaionResources = Prisma.FireOpertaionResourcesModel
+/**
+ * Model IncidentImpact
+ * 
+ */
+export type IncidentImpact = Prisma.IncidentImpactModel
+/**
+ * Model IncidentLocation
+ * 
+ */
+export type IncidentLocation = Prisma.IncidentLocationModel
+/**
+ * Model IncidentPersonnel
+ * 
+ */
+export type IncidentPersonnel = Prisma.IncidentPersonnelModel
+/**
+ * Model IncidentTimeline
+ * 
+ */
+export type IncidentTimeline = Prisma.IncidentTimelineModel
+/**
+ * Model Establishment
+ * 
+ */
+export type Establishment = Prisma.EstablishmentModel
+/**
  * Model FireIncident
  * 
  */
@@ -32,6 +72,11 @@ export type FireIncidentCategory = Prisma.FireIncidentCategoryModel
  * 
  */
 export type FireIncidentSubcategory = Prisma.FireIncidentSubcategoryModel
+/**
+ * Model IncidentNumberCounter
+ * 
+ */
+export type IncidentNumberCounter = Prisma.IncidentNumberCounterModel
 /**
  * Model NotificationPreference
  * 

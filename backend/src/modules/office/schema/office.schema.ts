@@ -10,6 +10,7 @@ export const officeSchema = z.object({
     'CITY_FIRE_STATION',
     'MUNICIPAL_FIRE_STATION',
   ]),
+  regionCode: z.string().optional(),
   parentId: z.uuid().optional(),
 });
 

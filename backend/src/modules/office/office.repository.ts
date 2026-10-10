@@ -9,6 +9,12 @@ import { OfficeType, Prisma } from '../../generated/prisma/client.js';
 import { UUID } from 'crypto';
 import { CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 
+// Stored trimmed and upper-cased to match generateIncidentNumber; blank
+// (non-regional offices) is stored as null so the unique index allows many.
+function normalizeRegionCode(regionCode?: string | null): string | null {
+  return regionCode?.trim().toUpperCase() || null;
+}
+
 @Injectable()
 export class OfficeRepository {
   constructor(private readonly prismaService: PrismaService) {}
@@ -145,6 +151,7 @@ export class OfficeRepository {
         type: data.type,
         parentId: data.parentId,
         regionId,
+        regionCode: normalizeRegionCode(data.regionCode),
       },
     });
   }
@@ -192,6 +199,7 @@ export class OfficeRepository {
         type: data.type,
         parentId: data.parentId,
         regionId,
+        regionCode: normalizeRegionCode(data.regionCode),
       },
       where: {
         id: officeId,

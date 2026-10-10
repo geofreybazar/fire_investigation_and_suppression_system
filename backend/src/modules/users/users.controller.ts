@@ -45,8 +45,11 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Get(':id')
-  async getUser(@Param('id', new ParseUUIDPipe()) id: UUID) {
-    return this.usersService.getUser(id);
+  async getUser(
+    @Param('id', new ParseUUIDPipe()) id: UUID,
+    @CurrentUser() user: CurrentUserJwtPayload,
+  ) {
+    return this.usersService.getUser(id, user);
   }
 
   @UseGuards(AuthGuard, RoleGuard)
@@ -62,6 +65,7 @@ export class UsersController {
   @UseGuards(AuthGuard, RoleGuard)
   @Get()
   async findPaginatedUsers(
+    @CurrentUser() user: CurrentUserJwtPayload,
     @Query('page') page: number,
     @Query('search') search?: string,
     @Query('officeid') officeid?: string,
@@ -74,6 +78,7 @@ export class UsersController {
     const userStatus = status || 'Active';
 
     return this.usersService.findPaginatedUsers(
+      user,
       page,
       searchQuery,
       officeId as UUID,
@@ -88,8 +93,9 @@ export class UsersController {
   async changeUserStatus(
     @Param('id', new ParseUUIDPipe()) id: UUID,
     @Body({ schema: changeUserStatusSchema }) data: ChangeUserStatusInput,
+    @CurrentUser() user: CurrentUserJwtPayload,
   ) {
-    return this.usersService.changeUserStatus(id, data);
+    return this.usersService.changeUserStatus(id, data, user);
   }
 
   @Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')

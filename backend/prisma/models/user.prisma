@@ -1,18 +1,29 @@
 enum ROLE {
   SUPER_ADMIN
   NHQ_ADMIN
+  NHQ_VIEWER
   NHQ_CHIEF_INVESTIGATOR
   NHQ_INVESTIGATOR
-  NHQ_VIEWER
+  NHQ_OPERATION
+  NHQ_OPERATION_STAFF
+
   REGIONAL_ADMIN
+  REGIONAL_OPERATION
+  REGIONAL_OPERATION_STAFF
   REGIONAL_CHIEF_INVESTIGATOR
   REGIONAL_INVESTIGATOR
   REGIONAL_VIEWER
-  DISTRICT_CHIEF_INVESTIGATOR
-  DISTRICT_INVESTIGATOR
-  DISTRICT_VIEWER
-  STATION_INVESTIGATOR
-  STATION_COMMEL
+
+  DISTRICT_PROVINCE_OPERATION
+  DISTRICT_PROVINCE_OPERATION_STAFF
+  DISTRICT_PROVINCE_CHIEF_INVESTIGATOR
+  DISTRICT_PROVINCE_INVESTIGATOR
+  DISTRICT_PROVINCE_VIEWER
+
+  CITY_MUNICIPALITY_OPERATION
+  CITY_MUNICIPALITY_OPERATION_STAFF
+  CITY_MUNICIPALITY_INVESTIGATOR
+  CITY_MUNICIPALITY_COMMEL
 }
 
 enum RANK {
@@ -32,30 +43,30 @@ enum RANK {
   FO1
 }
 
-model User { 
-  id    String  @id @default(uuid())
-  email String  @unique
+model User {
+  id             String  @id @default(uuid())
+  email          String  @unique
   account_number String  @unique
-  rank RANK
-  first_name  String
-  last_name  String
-  middle_name String?
-  password String
-  isActive    Boolean @default(true)
-  
+  rank           RANK
+  first_name     String
+  last_name      String
+  middle_name    String?
+  password       String
+  isActive       Boolean @default(true)
+
   refreshTokens RefreshToken[]
-  
-  officeId       String
-  office         Office   @relation(fields: [officeId], references: [id])
 
-  positionId    String
-  position      Position @relation(fields: [positionId], references: [id])
-  role          ROLE
+  officeId String
+  office   Office @relation(fields: [officeId], references: [id])
 
-  notification   NotificationPreference?
-  fireIncidents  FireIncident[]
+  positionId String
+  position   Position @relation(fields: [positionId], references: [id])
+  role       ROLE
+
+  notification  NotificationPreference?
+  fireIncidents FireIncident[]
 
   @@index([officeId])
   @@index([positionId])
   @@index([role])
-} 
+}

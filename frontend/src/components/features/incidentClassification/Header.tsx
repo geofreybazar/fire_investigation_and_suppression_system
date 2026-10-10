@@ -2,7 +2,6 @@ import { useState } from "react";
 import DialogComponent from "@/components/common/DialogComponent";
 import { Shapes, Plus } from "lucide-react";
 import AddClassification from "./addClassification/AddClassification";
-// import AddPosition from "./addPosition/AddPosition";
 
 const Header = () => {
   const [openAddClassification, setOpenAddClassification] = useState(false);

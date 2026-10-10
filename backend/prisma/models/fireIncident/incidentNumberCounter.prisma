@@ -1,0 +1,10 @@
+model IncidentNumberCounter {
+  id         String @id @default(uuid())
+  year       Int
+  month      Int
+  regionCode String
+  lastNumber Int    @default(0)
+
+  @@unique([year, month, regionCode])
+  @@map("incident_number_counters")
+}

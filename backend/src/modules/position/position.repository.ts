@@ -31,7 +31,11 @@ export class PositionRepository {
       this.prismaService.position.findMany({
         where,
         include: {
-          users: true,
+          users: {
+            omit: {
+              password: true,
+            },
+          },
         },
         skip,
         take: limit,

@@ -33,7 +33,8 @@ export class AuthService {
         ? false
         : await bcrypt.compare(loginData.password, user.password);
 
-    if (!user || !passwordCorrect) {
+    // Deactivated accounts get the same generic error so account status isn't revealed.
+    if (!user || !passwordCorrect || !user.isActive) {
       this.logger.error(
         `User not found or invalid credentials: ${loginData.account_number}`,
       );
@@ -73,7 +74,10 @@ export class AuthService {
 
     await this.authRepository.createRefreshToken(user.id, refreshToken);
 
-    return { user, accessToken, refreshToken };
+    // The hash is needed above for bcrypt.compare but must never leave the API.
+    const { password: _password, ...safeUser } = user;
+
+    return { user: safeUser, accessToken, refreshToken };
   }
 
   async logout(refreshToken: string) {
@@ -119,7 +123,7 @@ export class AuthService {
       const storedToken =
         await this.authRepository.findRefreshToken(refreshToken);
 
-      if (!user || !storedToken || !decodedToken) {
+      if (!user || !user.isActive || !storedToken || !decodedToken) {
         throw new UnauthorizedException('Invalid refresh token');
       }
 

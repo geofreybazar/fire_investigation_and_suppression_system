@@ -46,7 +46,7 @@ export const axiosJWT = async (baseUrl: string) => {
         try {
           if (!refreshPromise) {
             refreshPromise = axios
-              .post("/auth/refresh_token", {}, { withCredentials: true })
+              .post("/api/auth/refresh_token", {}, { withCredentials: true })
               .finally(() => {
                 refreshPromise = null;
               });

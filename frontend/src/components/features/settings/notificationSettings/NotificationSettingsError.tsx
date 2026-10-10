@@ -9,7 +9,6 @@ interface NotificationSettingsErrorProps {
 }
 
 const NotificationSettingsError = ({
-  error,
   resetErrorBoundary,
 }: NotificationSettingsErrorProps) => {
   return (

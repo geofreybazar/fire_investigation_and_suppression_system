@@ -20,19 +20,17 @@ import { RoleGuard } from '../../common/guards/role.guard.js';
 import { Roles } from '../../common/decorators/roles.decorator.js';
 import { type UUID } from 'crypto';
 
+@Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('position_api')
 export class PositionController {
   constructor(private readonly positionService: PositionService) {}
 
-  @Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
-  @UseGuards(AuthGuard, RoleGuard)
   @Post()
   async create(@Body({ schema: positionSchema }) positionData: PositionInput) {
     return await this.positionService.create(positionData);
   }
 
-  @Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
-  @UseGuards(AuthGuard, RoleGuard)
   @Get()
   async findPaginatedPositions(
     @Query('page') page: number,
@@ -41,15 +39,11 @@ export class PositionController {
     return await this.positionService.findPaginatedPositions(page, search);
   }
 
-  @Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
-  @UseGuards(AuthGuard, RoleGuard)
   @Get('/allpositions')
   async findAllPositions() {
     return await this.positionService.findAllPositions();
   }
 
-  @Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
-  @UseGuards(AuthGuard, RoleGuard)
   @Patch(':id')
   async updatePositon(
     @Body({ schema: positionSchema }) positionData: PositionInput,
@@ -58,8 +52,6 @@ export class PositionController {
     return await this.positionService.updatePositon(id, positionData);
   }
 
-  @Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
-  @UseGuards(AuthGuard, RoleGuard)
   @Delete(':id')
   async deletePosiiton(@Param('id', new ParseUUIDPipe()) positionid: UUID) {
     return await this.positionService.deletePosiiton(positionid);

@@ -19,10 +19,19 @@ import {
 import bcrypt from 'bcrypt';
 import { UUID } from 'crypto';
 
-import { RANK } from '../../generated/prisma/enums.js';
+import { RANK, ROLE } from '../../generated/prisma/enums.js';
 import { rolePermissions } from './utils/users.permissions.js';
 import { role_officePermissions } from './utils/users.role_office.permissions.js';
+import { OfficeAuthorizationService } from '../office/services/office.authorization.service.js';
 import { CurrentUserJwtPayload } from '../../types/jwt.payload.js';
+
+const USER_SCOPE_MESSAGE = 'You can only manage users within your own region';
+
+const ADMIN_ROLES: ROLE[] = [
+  ROLE.SUPER_ADMIN,
+  ROLE.NHQ_ADMIN,
+  ROLE.REGIONAL_ADMIN,
+];
 
 @Injectable()
 export class UsersService {
@@ -32,6 +41,7 @@ export class UsersService {
     private usersRepository: UsersRepository,
     private officeRepository: OfficeRepository,
     private configService: ConfigService,
+    private officeAuthorizationService: OfficeAuthorizationService,
   ) {}
 
   async createUser(userData: UserInput, user: CurrentUserJwtPayload) {
@@ -61,6 +71,12 @@ export class UsersService {
       );
     }
 
+    this.officeAuthorizationService.assertOfficeInScope(
+      user,
+      office,
+      USER_SCOPE_MESSAGE,
+    );
+
     const defaultPassword = this.configService.get<string>(
       'defaultPassword',
     ) as string;
@@ -80,11 +96,34 @@ export class UsersService {
     return newUser;
   }
 
-  async getUser(userId: UUID) {
+  // Users may read their own profile; admins may read users in their scope.
+  async getUser(userId: UUID, currentUser: CurrentUserJwtPayload) {
+    const isSelf = userId === currentUser.sub;
+    const isNationalAdmin =
+      currentUser.role === ROLE.SUPER_ADMIN ||
+      currentUser.role === ROLE.NHQ_ADMIN;
+
+    // Reject before the lookup so non-admins can't probe which ids exist.
+    if (
+      !isSelf &&
+      !isNationalAdmin &&
+      currentUser.role !== ROLE.REGIONAL_ADMIN
+    ) {
+      throw new ForbiddenException('You are not allowed to view this user.');
+    }
+
     const user = await this.usersRepository.findUserById(userId);
 
     if (!user) {
       throw new NotFoundException('User not found');
+    }
+
+    const isInRegion =
+      user.officeId === currentUser.officeId ||
+      user.office.regionId === currentUser.officeId;
+
+    if (!isSelf && !isNationalAdmin && !isInRegion) {
+      throw new ForbiddenException('You are not allowed to view this user.');
     }
 
     const { password, ...safeUser } = user;
@@ -122,16 +161,22 @@ export class UsersService {
   }
 
   async findPaginatedUsers(
+    currentUser: CurrentUserJwtPayload,
     page: number,
     search: string,
     officeId: UUID,
     status: 'Active' | 'Inactive',
     rank?: RANK,
   ) {
+    if (!ADMIN_ROLES.includes(currentUser.role)) {
+      throw new ForbiddenException('You are not allowed to list users.');
+    }
+
     const limit = 10;
     const skip = (page - 1) * limit;
 
     const { personnel, total } = await this.usersRepository.findPaginatedUsers(
+      currentUser,
       search,
       officeId,
       limit,
@@ -151,7 +196,17 @@ export class UsersService {
     };
   }
 
-  async changeUserStatus(userId: UUID, isActive: ChangeUserStatusInput) {
+  async changeUserStatus(
+    userId: UUID,
+    isActive: ChangeUserStatusInput,
+    currentUser: CurrentUserJwtPayload,
+  ) {
+    if (!isActive.isActive && userId === currentUser.sub) {
+      throw new ForbiddenException('You cannot deactivate your own account.');
+    }
+
+    await this.assertCanManageUser(userId, currentUser);
+
     const user = await this.usersRepository.deactivateUser(
       userId,
       isActive.isActive,
@@ -162,7 +217,9 @@ export class UsersService {
     }
 
     return {
-      message: 'User deactivated successfully.',
+      message: isActive.isActive
+        ? 'User activated successfully.'
+        : 'User deactivated successfully.',
     };
   }
 
@@ -173,13 +230,24 @@ export class UsersService {
   ) {
     this.logger.log(`Creating user: ${userData.email}`);
 
-    // check allowed role creation by user role
-    const allowedRoles = rolePermissions[user.role];
+    const targetRole = await this.assertCanManageUser(userId, user);
 
-    if (!allowedRoles?.includes(userData.role)) {
-      throw new ForbiddenException(
-        `${user.role} is not allowed to assign a user with role ${userData.role}`,
-      );
+    // The SUPER_ADMIN account keeps its role: the API can neither grant nor remove it.
+    if (targetRole === ROLE.SUPER_ADMIN || userData.role === ROLE.SUPER_ADMIN) {
+      if (targetRole !== userData.role) {
+        throw new ForbiddenException(
+          'The SUPER_ADMIN role cannot be granted or removed through the API',
+        );
+      }
+    } else {
+      // check allowed role creation by user role
+      const allowedRoles = rolePermissions[user.role];
+
+      if (!allowedRoles?.includes(userData.role)) {
+        throw new ForbiddenException(
+          `${user.role} is not allowed to assign a user with role ${userData.role}`,
+        );
+      }
     }
 
     // check allow role to office permission
@@ -197,6 +265,12 @@ export class UsersService {
       );
     }
 
+    this.officeAuthorizationService.assertOfficeInScope(
+      user,
+      office,
+      USER_SCOPE_MESSAGE,
+    );
+
     // edit user info
     const editedUser = await this.usersRepository.editUser(userId, userData);
 
@@ -209,5 +283,37 @@ export class UsersService {
     return {
       message: 'user successfully updated',
     };
+  }
+
+  // An admin may only manage users whose current role they could grant;
+  // SUPER_ADMIN may additionally manage the SUPER_ADMIN account.
+  private async assertCanManageUser(
+    userId: UUID,
+    currentUser: CurrentUserJwtPayload,
+  ) {
+    const target = await this.usersRepository.findUserRoleById(userId);
+
+    if (!target) {
+      throw new NotFoundException('User not found.');
+    }
+
+    const canManage =
+      rolePermissions[currentUser.role]?.includes(target.role) ||
+      (currentUser.role === ROLE.SUPER_ADMIN &&
+        target.role === ROLE.SUPER_ADMIN);
+
+    if (!canManage) {
+      throw new ForbiddenException(
+        `${currentUser.role} is not allowed to manage a user with role ${target.role}`,
+      );
+    }
+
+    this.officeAuthorizationService.assertOfficeInScope(
+      currentUser,
+      target.office,
+      USER_SCOPE_MESSAGE,
+    );
+
+    return target.role;
   }
 }

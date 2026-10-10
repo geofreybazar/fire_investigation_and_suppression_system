@@ -9,6 +9,7 @@ import { Spinner } from "@/components/ui/spinner";
 import Name from "./Name";
 import ParentId from "./ParentId";
 import OfficeType from "./OfficeType";
+import RegionCode from "./RegionCode";
 
 const AddOffice = ({
   setOpenAddOffice,
@@ -42,6 +43,9 @@ const AddOffice = ({
 
         {/* Office Type*/}
         <OfficeType />
+
+        {/* region code */}
+        <RegionCode />
 
         {/* parent office */}
         <ParentId />

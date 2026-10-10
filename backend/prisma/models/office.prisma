@@ -8,25 +8,26 @@ enum OfficeType {
 }
 
 model Office {
-  id        String     @id @default(uuid())
-  name      String
-  type      OfficeType
-  isActive    Boolean @default(true)
+  id       String     @id @default(uuid())
+  name     String
+  type     OfficeType
+  isActive Boolean    @default(true)
 
   // office heirarchy
-  parentId  String?
-  parent    Office?    @relation("OfficeHierarchy", fields: [parentId], references: [id])
-  children  Office[]   @relation("OfficeHierarchy")
+  parentId String?
+  parent   Office?  @relation("OfficeHierarchy", fields: [parentId], references: [id])
+  children Office[] @relation("OfficeHierarchy")
 
   // Regional scope
-  regionId String?
-  region   Office?  @relation("OfficeRegion", fields: [regionId], references: [id])
+  regionId        String?
+  regionCode      String? @unique
+  region          Office?  @relation("OfficeRegion", fields: [regionId], references: [id])
   regionalOffices Office[] @relation("OfficeRegion")
 
-  users     User[]
+  users User[]
 
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([parentId])
   @@index([regionId])

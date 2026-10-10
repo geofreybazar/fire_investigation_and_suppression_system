@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { existsSync } from 'fs';
+import { join } from 'path';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 
@@ -16,6 +19,19 @@ import { NotificationModule } from './modules/notification/notification.module.j
 import { FireIncidentCategoriesModule } from './modules/fire-incident-categories/fire-incident-categories.module.js';
 import { FireIncidentSubcategoriesModule } from './modules/fire-incident-subcategories/fire-incident-subcategories.module.js';
 import { FireIncidentModule } from './modules/fire-incident/fire-incident.module.js';
+
+// Built React app. Only served when it exists, so `start:dev` alongside the
+// Vite dev server keeps working without a frontend build.
+const frontendDist =
+  process.env.FRONTEND_DIST ?? join(process.cwd(), '..', 'frontend', 'dist');
+const serveFrontend = existsSync(join(frontendDist, 'index.html'))
+  ? [
+      ServeStaticModule.forRoot({
+        rootPath: frontendDist,
+        exclude: ['/api{/*path}'],
+      }),
+    ]
+  : [];
 
 @Module({
   imports: [
@@ -37,6 +53,7 @@ import { FireIncidentModule } from './modules/fire-incident/fire-incident.module
     FireIncidentCategoriesModule,
     FireIncidentSubcategoriesModule,
     FireIncidentModule,
+    ...serveFrontend,
   ],
   controllers: [AppController],
   providers: [AppService],

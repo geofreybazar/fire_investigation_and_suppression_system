@@ -8,9 +8,18 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/InvestigationReport.js'
+export type * from './models/Investigation.js'
+export type * from './models/FireOpertaionResources.js'
+export type * from './models/IncidentImpact.js'
+export type * from './models/IncidentLocation.js'
+export type * from './models/IncidentPersonnel.js'
+export type * from './models/IncidentTimeline.js'
+export type * from './models/Establishment.js'
 export type * from './models/FireIncident.js'
 export type * from './models/FireIncidentCategory.js'
 export type * from './models/FireIncidentSubcategory.js'
+export type * from './models/IncidentNumberCounter.js'
 export type * from './models/NotificationPreference.js'
 export type * from './models/Office.js'
 export type * from './models/Position.js'

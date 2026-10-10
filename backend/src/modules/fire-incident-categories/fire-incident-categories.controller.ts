@@ -20,19 +20,21 @@ import { Roles } from '../../common/decorators/roles.decorator.js';
 import { AuthGuard } from '../auth/auth.guard.js';
 import { RoleGuard } from '../../common/guards/role.guard.js';
 
+@Roles(
+  'SUPER_ADMIN',
+  'NHQ_ADMIN',
+  'NHQ_CHIEF_INVESTIGATOR',
+  'NHQ_INVESTIGATOR',
+  'NHQ_OPERATION',
+  'NHQ_OPERATION_STAFF',
+)
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('fire_incident_categories_api')
 export class FireIncidentCategoriesController {
   constructor(
     private readonly fireIncidentCategoriesService: FireIncidentCategoriesService,
   ) {}
 
-  @Roles(
-    'SUPER_ADMIN',
-    'NHQ_ADMIN',
-    'NHQ_CHIEF_INVESTIGATOR',
-    'NHQ_INVESTIGATOR',
-  )
-  @UseGuards(AuthGuard, RoleGuard)
   @Post()
   async addFireIncidentCategory(
     @Body({ schema: fireIncidentCategoriesSchema })
@@ -43,13 +45,6 @@ export class FireIncidentCategoriesController {
     );
   }
 
-  @Roles(
-    'SUPER_ADMIN',
-    'NHQ_ADMIN',
-    'NHQ_CHIEF_INVESTIGATOR',
-    'NHQ_INVESTIGATOR',
-  )
-  @UseGuards(AuthGuard, RoleGuard)
   @Get()
   async getPaginatedCategories(
     @Query('page') page: number,
@@ -63,13 +58,6 @@ export class FireIncidentCategoriesController {
     );
   }
 
-  @Roles(
-    'SUPER_ADMIN',
-    'NHQ_ADMIN',
-    'NHQ_CHIEF_INVESTIGATOR',
-    'NHQ_INVESTIGATOR',
-  )
-  @UseGuards(AuthGuard, RoleGuard)
   @Patch(':id')
   async editFireIncidentCategory(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -81,25 +69,11 @@ export class FireIncidentCategoriesController {
     );
   }
 
-  @Roles(
-    'SUPER_ADMIN',
-    'NHQ_ADMIN',
-    'NHQ_CHIEF_INVESTIGATOR',
-    'NHQ_INVESTIGATOR',
-  )
-  @UseGuards(AuthGuard, RoleGuard)
   @Get(':id')
   async getCategoryById(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.fireIncidentCategoriesService.getCategoryById(id);
   }
 
-  @Roles(
-    'SUPER_ADMIN',
-    'NHQ_ADMIN',
-    'NHQ_CHIEF_INVESTIGATOR',
-    'NHQ_INVESTIGATOR',
-  )
-  @UseGuards(AuthGuard, RoleGuard)
   @Delete(':id')
   async deleteCategory(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.fireIncidentCategoriesService.deleteCategory(id);

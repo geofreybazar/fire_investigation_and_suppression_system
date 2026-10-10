@@ -11,6 +11,7 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
+  app.setGlobalPrefix('api');
   app.use(cookieParser());
   app.useGlobalPipes(new StandardSchemaValidationPipe());
   app.useGlobalFilters(new PrismaExceptionFilter(httpAdapter));

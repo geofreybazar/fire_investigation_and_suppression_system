@@ -1,9 +1,9 @@
 model Position {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  isActive  Boolean @default(true)
+  id       String  @id @default(uuid())
+  name     String  @unique
+  isActive Boolean @default(true)
 
-  users     User[]
+  users User[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

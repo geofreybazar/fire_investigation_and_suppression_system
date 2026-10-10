@@ -3,6 +3,7 @@ import { PrismaService } from '../../prisma.service.js';
 import { UserInput } from './schema/user.schema.js';
 import { Prisma, RANK } from '../../generated/prisma/client.js';
 import { UUID } from 'crypto';
+import { CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 
 @Injectable()
 export class UsersRepository {
@@ -18,6 +19,9 @@ export class UsersRepository {
           create: {},
         },
       },
+      omit: {
+        password: true,
+      },
     });
   }
 
@@ -30,6 +34,25 @@ export class UsersRepository {
       include: {
         office: true,
         position: true,
+      },
+    });
+  }
+
+  // No isActive filter: inactive users must still be found to be reactivated.
+  async findUserRoleById(userId: UUID) {
+    return this.prismaService.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        role: true,
+        office: {
+          select: {
+            id: true,
+            regionId: true,
+          },
+        },
       },
     });
   }
@@ -54,6 +77,7 @@ export class UsersRepository {
   }
 
   async findPaginatedUsers(
+    user: CurrentUserJwtPayload,
     search: string,
     officeId: UUID,
     limit: number,
@@ -90,12 +114,22 @@ export class UsersRepository {
       isActive: status === 'Active' ? true : false,
     };
 
+    // REGIONAL_ADMIN only sees users in their own office and its region.
+    if (user.role === 'REGIONAL_ADMIN') {
+      where.office = {
+        OR: [{ id: user.officeId }, { regionId: user.officeId }],
+      };
+    }
+
     const [personnel, total] = await Promise.all([
       this.prismaService.user.findMany({
         where,
         include: {
           office: true,
           position: true,
+        },
+        omit: {
+          password: true,
         },
         skip,
         take: limit,

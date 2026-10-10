@@ -15,7 +15,7 @@ const ViewPersonnel = ({ selectedPersonnel }: ViewPersonnelProps) => {
   if (!selectedPersonnel) {
     return <PersonnelNotFound />;
   }
-
+  console.log(selectedPersonnel);
   return (
     <div className='flex flex-col'>
       {/* Header */}

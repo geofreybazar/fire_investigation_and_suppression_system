@@ -10,7 +10,7 @@ import type {
 } from "@/interface/users/users";
 
 const getUser = async (userId: string): Promise<User> => {
-  const apiClient = await axiosJWT("/users");
+  const apiClient = await axiosJWT("/api/users");
   const response = await apiClient.get(`/${userId}`);
   return response.data;
 };
@@ -22,7 +22,7 @@ const getUsers = async (
   rank: Rank | undefined,
   status: "Active" | "Inactive",
 ): Promise<GetAllPersonnel> => {
-  const apiClient = await axiosJWT("/users");
+  const apiClient = await axiosJWT("/api/users");
   const response = await apiClient.get("/", {
     params: {
       search: searchQuery,
@@ -36,19 +36,19 @@ const getUsers = async (
 };
 
 const changePassword = async (data: ChangePasswordInput) => {
-  const apiClient = await axiosJWT("/users");
+  const apiClient = await axiosJWT("/api/users");
   const response = await apiClient.patch("/", data);
   return response.data;
 };
 
 const addNewUser = async (data: AddNewUserInput) => {
-  const apiClient = await axiosJWT("/users");
+  const apiClient = await axiosJWT("/api/users");
   const response = await apiClient.post("/", data);
   return response.data;
 };
 
 const changeUserStatus = async (data: ChangeUserStatus) => {
-  const apiClient = await axiosJWT("/users");
+  const apiClient = await axiosJWT("/api/users");
   const response = await apiClient.patch(`${data.userId}`, {
     isActive: data.isActive,
   });
@@ -58,7 +58,7 @@ const changeUserStatus = async (data: ChangeUserStatus) => {
 const editUser = async (data: EditUserInput) => {
   const { userId, ...userData } = data;
 
-  const apiClient = await axiosJWT("/users");
+  const apiClient = await axiosJWT("/api/users");
   const response = await apiClient.patch(`/edituser/${userId}`, userData);
   return response.data;
 };

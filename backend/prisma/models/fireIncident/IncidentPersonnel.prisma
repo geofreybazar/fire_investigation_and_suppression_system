@@ -1,0 +1,8 @@
+model IncidentPersonnel {
+  id                String       @id @default(uuid())
+  groundCommander   String
+  arsonInvestigator String
+  sender            String
+  fireIncidentId    String       @unique
+  fireIncident      FireIncident @relation(fields: [fireIncidentId], references: [id], onDelete: Cascade)
+}

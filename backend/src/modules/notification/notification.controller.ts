@@ -12,6 +12,8 @@ import {
 } from '@nestjs/common';
 import { NotificationService } from './notification.service.js';
 import { AuthGuard } from '../auth/auth.guard.js';
+import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
+import { type CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 import { type UUID } from 'crypto';
 import {
   notificationSchema,
@@ -26,8 +28,9 @@ export class NotificationController {
   @Get(':id')
   async getUserNotificationSettings(
     @Param('id', new ParseUUIDPipe()) id: UUID,
+    @CurrentUser() user: CurrentUserJwtPayload,
   ) {
-    return await this.notificationService.getUserNotificationSettings(id);
+    return await this.notificationService.getUserNotificationSettings(id, user);
   }
 
   @UseGuards(AuthGuard)
@@ -36,10 +39,12 @@ export class NotificationController {
     @Param('id', new ParseUUIDPipe()) id: UUID,
     @Body({ schema: notificationSchema })
     updateNotificationDto: NotificationInput,
+    @CurrentUser() user: CurrentUserJwtPayload,
   ) {
     return await this.notificationService.updateNotificationSettings(
       id,
       updateNotificationDto,
+      user,
     );
   }
 

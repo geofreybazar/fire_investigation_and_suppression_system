@@ -15,4 +15,12 @@ describe('FireIncidentService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  // addFireIncident is still a scaffold placeholder; replace this with real
+  // tests once it persists incidents.
+  it('addFireIncident returns the placeholder message', () => {
+    expect(service.addFireIncident({})).toBe(
+      'This action adds a new fireIncident',
+    );
+  });
 });

@@ -24,12 +24,12 @@ import { OfficeType } from '../../generated/prisma/enums.js';
 import { type UUID } from 'crypto';
 import { type CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 
+@Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('office_api')
 export class OfficeController {
   constructor(private readonly officeService: OfficeService) {}
 
-  @Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
-  @UseGuards(AuthGuard, RoleGuard)
   @Post()
   async createOffice(
     @Body({ schema: officeSchema }) officeData: OfficeInput,
@@ -38,8 +38,6 @@ export class OfficeController {
     return await this.officeService.createOffice(officeData, user);
   }
 
-  @Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
-  @UseGuards(AuthGuard, RoleGuard)
   @Get()
   async findPaginatedOffices(
     @CurrentUser() user: CurrentUserJwtPayload,
@@ -58,15 +56,11 @@ export class OfficeController {
     );
   }
 
-  @Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
-  @UseGuards(AuthGuard, RoleGuard)
   @Get('/alloffices')
   async getAllOffices(@CurrentUser() user: CurrentUserJwtPayload) {
     return await this.officeService.getAllOffices(user);
   }
 
-  @Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
-  @UseGuards(AuthGuard, RoleGuard)
   @Patch(':id')
   async updateOffice(
     @Param('id', new ParseUUIDPipe()) id: UUID,
@@ -76,10 +70,11 @@ export class OfficeController {
     return await this.officeService.updateOffice(id, officeData, user);
   }
 
-  @Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
-  @UseGuards(AuthGuard, RoleGuard)
   @Delete(':id')
-  async deleteOffice(@Param('id', new ParseUUIDPipe()) id: UUID) {
-    return await this.officeService.deleteOffice(id);
+  async deleteOffice(
+    @Param('id', new ParseUUIDPipe()) id: UUID,
+    @CurrentUser() user: CurrentUserJwtPayload,
+  ) {
+    return await this.officeService.deleteOffice(id, user);
   }
 }

@@ -7,7 +7,7 @@ import type {
 const getUserNotificationSettings = async (
   userId: string,
 ): Promise<NotificationSettings> => {
-  const apiClient = await axiosJWT("/notification");
+  const apiClient = await axiosJWT("/api/notification");
   const response = await apiClient.get(`/${userId}`);
   return response.data;
 };
@@ -15,7 +15,7 @@ const getUserNotificationSettings = async (
 const updateNotificationSettings = async (
   data: UpdateNotifSettings,
 ): Promise<NotificationSettings> => {
-  const apiClient = await axiosJWT("/notification");
+  const apiClient = await axiosJWT("/api/notification");
   const response = await apiClient.patch(`/${data.userId}`, data);
   return response.data;
 };

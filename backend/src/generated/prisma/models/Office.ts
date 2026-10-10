@@ -31,6 +31,7 @@ export type OfficeMinAggregateOutputType = {
   isActive: boolean | null
   parentId: string | null
   regionId: string | null
+  regionCode: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -42,6 +43,7 @@ export type OfficeMaxAggregateOutputType = {
   isActive: boolean | null
   parentId: string | null
   regionId: string | null
+  regionCode: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -53,6 +55,7 @@ export type OfficeCountAggregateOutputType = {
   isActive: number
   parentId: number
   regionId: number
+  regionCode: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -66,6 +69,7 @@ export type OfficeMinAggregateInputType = {
   isActive?: true
   parentId?: true
   regionId?: true
+  regionCode?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -77,6 +81,7 @@ export type OfficeMaxAggregateInputType = {
   isActive?: true
   parentId?: true
   regionId?: true
+  regionCode?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -88,6 +93,7 @@ export type OfficeCountAggregateInputType = {
   isActive?: true
   parentId?: true
   regionId?: true
+  regionCode?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -172,6 +178,7 @@ export type OfficeGroupByOutputType = {
   isActive: boolean
   parentId: string | null
   regionId: string | null
+  regionCode: string | null
   createdAt: Date
   updatedAt: Date
   _count: OfficeCountAggregateOutputType | null
@@ -204,6 +211,7 @@ export type OfficeWhereInput = {
   isActive?: Prisma.BoolFilter<"Office"> | boolean
   parentId?: Prisma.StringNullableFilter<"Office"> | string | null
   regionId?: Prisma.StringNullableFilter<"Office"> | string | null
+  regionCode?: Prisma.StringNullableFilter<"Office"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Office"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Office"> | Date | string
   parent?: Prisma.XOR<Prisma.OfficeNullableScalarRelationFilter, Prisma.OfficeWhereInput> | null
@@ -220,6 +228,7 @@ export type OfficeOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   parentId?: Prisma.SortOrderInput | Prisma.SortOrder
   regionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  regionCode?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   parent?: Prisma.OfficeOrderByWithRelationInput
@@ -231,6 +240,7 @@ export type OfficeOrderByWithRelationInput = {
 
 export type OfficeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  regionCode?: string
   AND?: Prisma.OfficeWhereInput | Prisma.OfficeWhereInput[]
   OR?: Prisma.OfficeWhereInput[]
   NOT?: Prisma.OfficeWhereInput | Prisma.OfficeWhereInput[]
@@ -246,7 +256,7 @@ export type OfficeWhereUniqueInput = Prisma.AtLeast<{
   region?: Prisma.XOR<Prisma.OfficeNullableScalarRelationFilter, Prisma.OfficeWhereInput> | null
   regionalOffices?: Prisma.OfficeListRelationFilter
   users?: Prisma.UserListRelationFilter
-}, "id">
+}, "id" | "regionCode">
 
 export type OfficeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -255,6 +265,7 @@ export type OfficeOrderByWithAggregationInput = {
   isActive?: Prisma.SortOrder
   parentId?: Prisma.SortOrderInput | Prisma.SortOrder
   regionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  regionCode?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.OfficeCountOrderByAggregateInput
@@ -272,6 +283,7 @@ export type OfficeScalarWhereWithAggregatesInput = {
   isActive?: Prisma.BoolWithAggregatesFilter<"Office"> | boolean
   parentId?: Prisma.StringNullableWithAggregatesFilter<"Office"> | string | null
   regionId?: Prisma.StringNullableWithAggregatesFilter<"Office"> | string | null
+  regionCode?: Prisma.StringNullableWithAggregatesFilter<"Office"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Office"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Office"> | Date | string
 }
@@ -281,6 +293,7 @@ export type OfficeCreateInput = {
   name: string
   type: $Enums.OfficeType
   isActive?: boolean
+  regionCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   parent?: Prisma.OfficeCreateNestedOneWithoutChildrenInput
@@ -297,6 +310,7 @@ export type OfficeUncheckedCreateInput = {
   isActive?: boolean
   parentId?: string | null
   regionId?: string | null
+  regionCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   children?: Prisma.OfficeUncheckedCreateNestedManyWithoutParentInput
@@ -309,6 +323,7 @@ export type OfficeUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   parent?: Prisma.OfficeUpdateOneWithoutChildrenNestedInput
@@ -325,6 +340,7 @@ export type OfficeUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
@@ -339,6 +355,7 @@ export type OfficeCreateManyInput = {
   isActive?: boolean
   parentId?: string | null
   regionId?: string | null
+  regionCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -348,6 +365,7 @@ export type OfficeUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -359,6 +377,7 @@ export type OfficeUncheckedUpdateManyInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -385,6 +404,7 @@ export type OfficeCountOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
   regionId?: Prisma.SortOrder
+  regionCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -396,6 +416,7 @@ export type OfficeMaxOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
   regionId?: Prisma.SortOrder
+  regionCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -407,6 +428,7 @@ export type OfficeMinOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
   regionId?: Prisma.SortOrder
+  regionCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -555,6 +577,7 @@ export type OfficeCreateWithoutChildrenInput = {
   name: string
   type: $Enums.OfficeType
   isActive?: boolean
+  regionCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   parent?: Prisma.OfficeCreateNestedOneWithoutChildrenInput
@@ -570,6 +593,7 @@ export type OfficeUncheckedCreateWithoutChildrenInput = {
   isActive?: boolean
   parentId?: string | null
   regionId?: string | null
+  regionCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   regionalOffices?: Prisma.OfficeUncheckedCreateNestedManyWithoutRegionInput
@@ -586,6 +610,7 @@ export type OfficeCreateWithoutParentInput = {
   name: string
   type: $Enums.OfficeType
   isActive?: boolean
+  regionCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   children?: Prisma.OfficeCreateNestedManyWithoutParentInput
@@ -600,6 +625,7 @@ export type OfficeUncheckedCreateWithoutParentInput = {
   type: $Enums.OfficeType
   isActive?: boolean
   regionId?: string | null
+  regionCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   children?: Prisma.OfficeUncheckedCreateNestedManyWithoutParentInput
@@ -622,6 +648,7 @@ export type OfficeCreateWithoutRegionalOfficesInput = {
   name: string
   type: $Enums.OfficeType
   isActive?: boolean
+  regionCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   parent?: Prisma.OfficeCreateNestedOneWithoutChildrenInput
@@ -637,6 +664,7 @@ export type OfficeUncheckedCreateWithoutRegionalOfficesInput = {
   isActive?: boolean
   parentId?: string | null
   regionId?: string | null
+  regionCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   children?: Prisma.OfficeUncheckedCreateNestedManyWithoutParentInput
@@ -653,6 +681,7 @@ export type OfficeCreateWithoutRegionInput = {
   name: string
   type: $Enums.OfficeType
   isActive?: boolean
+  regionCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   parent?: Prisma.OfficeCreateNestedOneWithoutChildrenInput
@@ -667,6 +696,7 @@ export type OfficeUncheckedCreateWithoutRegionInput = {
   type: $Enums.OfficeType
   isActive?: boolean
   parentId?: string | null
+  regionCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   children?: Prisma.OfficeUncheckedCreateNestedManyWithoutParentInput
@@ -700,6 +730,7 @@ export type OfficeUpdateWithoutChildrenInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   parent?: Prisma.OfficeUpdateOneWithoutChildrenNestedInput
@@ -715,6 +746,7 @@ export type OfficeUncheckedUpdateWithoutChildrenInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   regionalOffices?: Prisma.OfficeUncheckedUpdateManyWithoutRegionNestedInput
@@ -747,6 +779,7 @@ export type OfficeScalarWhereInput = {
   isActive?: Prisma.BoolFilter<"Office"> | boolean
   parentId?: Prisma.StringNullableFilter<"Office"> | string | null
   regionId?: Prisma.StringNullableFilter<"Office"> | string | null
+  regionCode?: Prisma.StringNullableFilter<"Office"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Office"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Office"> | Date | string
 }
@@ -767,6 +800,7 @@ export type OfficeUpdateWithoutRegionalOfficesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   parent?: Prisma.OfficeUpdateOneWithoutChildrenNestedInput
@@ -782,6 +816,7 @@ export type OfficeUncheckedUpdateWithoutRegionalOfficesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
@@ -809,6 +844,7 @@ export type OfficeCreateWithoutUsersInput = {
   name: string
   type: $Enums.OfficeType
   isActive?: boolean
+  regionCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   parent?: Prisma.OfficeCreateNestedOneWithoutChildrenInput
@@ -824,6 +860,7 @@ export type OfficeUncheckedCreateWithoutUsersInput = {
   isActive?: boolean
   parentId?: string | null
   regionId?: string | null
+  regionCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   children?: Prisma.OfficeUncheckedCreateNestedManyWithoutParentInput
@@ -851,6 +888,7 @@ export type OfficeUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   parent?: Prisma.OfficeUpdateOneWithoutChildrenNestedInput
@@ -866,6 +904,7 @@ export type OfficeUncheckedUpdateWithoutUsersInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
@@ -878,6 +917,7 @@ export type OfficeCreateManyParentInput = {
   type: $Enums.OfficeType
   isActive?: boolean
   regionId?: string | null
+  regionCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -888,6 +928,7 @@ export type OfficeCreateManyRegionInput = {
   type: $Enums.OfficeType
   isActive?: boolean
   parentId?: string | null
+  regionCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -897,6 +938,7 @@ export type OfficeUpdateWithoutParentInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   children?: Prisma.OfficeUpdateManyWithoutParentNestedInput
@@ -911,6 +953,7 @@ export type OfficeUncheckedUpdateWithoutParentInput = {
   type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   regionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
@@ -924,6 +967,7 @@ export type OfficeUncheckedUpdateManyWithoutParentInput = {
   type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   regionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -933,6 +977,7 @@ export type OfficeUpdateWithoutRegionInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   parent?: Prisma.OfficeUpdateOneWithoutChildrenNestedInput
@@ -947,6 +992,7 @@ export type OfficeUncheckedUpdateWithoutRegionInput = {
   type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
@@ -960,6 +1006,7 @@ export type OfficeUncheckedUpdateManyWithoutRegionInput = {
   type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1020,6 +1067,7 @@ export type OfficeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   isActive?: boolean
   parentId?: boolean
   regionId?: boolean
+  regionCode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   parent?: boolean | Prisma.Office$parentArgs<ExtArgs>
@@ -1037,6 +1085,7 @@ export type OfficeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   isActive?: boolean
   parentId?: boolean
   regionId?: boolean
+  regionCode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   parent?: boolean | Prisma.Office$parentArgs<ExtArgs>
@@ -1050,6 +1099,7 @@ export type OfficeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   isActive?: boolean
   parentId?: boolean
   regionId?: boolean
+  regionCode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   parent?: boolean | Prisma.Office$parentArgs<ExtArgs>
@@ -1063,11 +1113,12 @@ export type OfficeSelectScalar = {
   isActive?: boolean
   parentId?: boolean
   regionId?: boolean
+  regionCode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type OfficeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "type" | "isActive" | "parentId" | "regionId" | "createdAt" | "updatedAt", ExtArgs["result"]["office"]>
+export type OfficeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "type" | "isActive" | "parentId" | "regionId" | "regionCode" | "createdAt" | "updatedAt", ExtArgs["result"]["office"]>
 export type OfficeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   parent?: boolean | Prisma.Office$parentArgs<ExtArgs>
   children?: boolean | Prisma.Office$childrenArgs<ExtArgs>
@@ -1101,6 +1152,7 @@ export type $OfficePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     isActive: boolean
     parentId: string | null
     regionId: string | null
+    regionCode: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["office"]>
@@ -1537,6 +1589,7 @@ export interface OfficeFieldRefs {
   readonly isActive: Prisma.FieldRef<"Office", 'Boolean'>
   readonly parentId: Prisma.FieldRef<"Office", 'String'>
   readonly regionId: Prisma.FieldRef<"Office", 'String'>
+  readonly regionCode: Prisma.FieldRef<"Office", 'String'>
   readonly createdAt: Prisma.FieldRef<"Office", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Office", 'DateTime'>
 }

@@ -51,9 +51,18 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  InvestigationReport: 'InvestigationReport',
+  Investigation: 'Investigation',
+  FireOpertaionResources: 'FireOpertaionResources',
+  IncidentImpact: 'IncidentImpact',
+  IncidentLocation: 'IncidentLocation',
+  IncidentPersonnel: 'IncidentPersonnel',
+  IncidentTimeline: 'IncidentTimeline',
+  Establishment: 'Establishment',
   FireIncident: 'FireIncident',
   FireIncidentCategory: 'FireIncidentCategory',
   FireIncidentSubcategory: 'FireIncidentSubcategory',
+  IncidentNumberCounter: 'IncidentNumberCounter',
   NotificationPreference: 'NotificationPreference',
   Office: 'Office',
   Position: 'Position',
@@ -77,6 +86,126 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const InvestigationReportScalarFieldEnum = {
+  id: 'id',
+  investigationId: 'investigationId',
+  findings: 'findings',
+  cause: 'cause',
+  conclusion: 'conclusion',
+  recommendations: 'recommendations',
+  status: 'status',
+  submittedAt: 'submittedAt',
+  reviewedAt: 'reviewedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InvestigationReportScalarFieldEnum = (typeof InvestigationReportScalarFieldEnum)[keyof typeof InvestigationReportScalarFieldEnum]
+
+
+export const InvestigationScalarFieldEnum = {
+  id: 'id',
+  investigationNo: 'investigationNo',
+  causeOfFire: 'causeOfFire',
+  classification: 'classification',
+  originOfFire: 'originOfFire',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  fireIncidentId: 'fireIncidentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InvestigationScalarFieldEnum = (typeof InvestigationScalarFieldEnum)[keyof typeof InvestigationScalarFieldEnum]
+
+
+export const FireOpertaionResourcesScalarFieldEnum = {
+  id: 'id',
+  respondingTeam: 'respondingTeam',
+  fireTrucksResponded: 'fireTrucksResponded',
+  trucksBFPOwned: 'trucksBFPOwned',
+  trucksVolunteer: 'trucksVolunteer',
+  trucksBFPManned: 'trucksBFPManned',
+  ambulancesResponded: 'ambulancesResponded',
+  ambulancesBFPOwned: 'ambulancesBFPOwned',
+  ambulancesVolunteer: 'ambulancesVolunteer',
+  ambulancesBFPManned: 'ambulancesBFPManned',
+  fireIncidentId: 'fireIncidentId'
+} as const
+
+export type FireOpertaionResourcesScalarFieldEnum = (typeof FireOpertaionResourcesScalarFieldEnum)[keyof typeof FireOpertaionResourcesScalarFieldEnum]
+
+
+export const IncidentImpactScalarFieldEnum = {
+  id: 'id',
+  fatalitiesCiv: 'fatalitiesCiv',
+  injuredCiv: 'injuredCiv',
+  fatalitiesBFP: 'fatalitiesBFP',
+  injuredBFP: 'injuredBFP',
+  fatalitiesLEA: 'fatalitiesLEA',
+  injuredLEA: 'injuredLEA',
+  establishmentsBurned: 'establishmentsBurned',
+  familiesAffected: 'familiesAffected',
+  individualsAffected: 'individualsAffected',
+  estimatedDamages: 'estimatedDamages',
+  finalEstimatedDamages: 'finalEstimatedDamages',
+  fireIncidentId: 'fireIncidentId'
+} as const
+
+export type IncidentImpactScalarFieldEnum = (typeof IncidentImpactScalarFieldEnum)[keyof typeof IncidentImpactScalarFieldEnum]
+
+
+export const IncidentLocationScalarFieldEnum = {
+  id: 'id',
+  placeOfOccurence: 'placeOfOccurence',
+  region: 'region',
+  province_district: 'province_district',
+  city_municipality: 'city_municipality',
+  fireIncidentId: 'fireIncidentId'
+} as const
+
+export type IncidentLocationScalarFieldEnum = (typeof IncidentLocationScalarFieldEnum)[keyof typeof IncidentLocationScalarFieldEnum]
+
+
+export const IncidentPersonnelScalarFieldEnum = {
+  id: 'id',
+  groundCommander: 'groundCommander',
+  arsonInvestigator: 'arsonInvestigator',
+  sender: 'sender',
+  fireIncidentId: 'fireIncidentId'
+} as const
+
+export type IncidentPersonnelScalarFieldEnum = (typeof IncidentPersonnelScalarFieldEnum)[keyof typeof IncidentPersonnelScalarFieldEnum]
+
+
+export const IncidentTimelineScalarFieldEnum = {
+  id: 'id',
+  fireIncidentId: 'fireIncidentId',
+  status: 'status',
+  alarmLevel: 'alarmLevel',
+  occurredAt: 'occurredAt',
+  remarks: 'remarks',
+  createdById: 'createdById',
+  createdAt: 'createdAt'
+} as const
+
+export type IncidentTimelineScalarFieldEnum = (typeof IncidentTimelineScalarFieldEnum)[keyof typeof IncidentTimelineScalarFieldEnum]
+
+
+export const EstablishmentScalarFieldEnum = {
+  id: 'id',
+  binBanNumber: 'binBanNumber',
+  name: 'name',
+  ownerName: 'ownerName',
+  occupantName: 'occupantName',
+  totalLotFloorArea: 'totalLotFloorArea',
+  contentStorage: 'contentStorage',
+  numberOfStoreys: 'numberOfStoreys'
+} as const
+
+export type EstablishmentScalarFieldEnum = (typeof EstablishmentScalarFieldEnum)[keyof typeof EstablishmentScalarFieldEnum]
+
+
 export const FireIncidentScalarFieldEnum = {
   id: 'id',
   incidentNo: 'incidentNo',
@@ -85,8 +214,10 @@ export const FireIncidentScalarFieldEnum = {
   dateTimeCallReceived: 'dateTimeCallReceived',
   dateTimeUnresponded: 'dateTimeUnresponded',
   fireIncidentStatus: 'fireIncidentStatus',
+  currentAlarmLevel: 'currentAlarmLevel',
   categoryId: 'categoryId',
   subcategoryId: 'subcategoryId',
+  establishmentId: 'establishmentId',
   createdById: 'createdById',
   remarks: 'remarks',
   createdAt: 'createdAt',
@@ -118,6 +249,17 @@ export const FireIncidentSubcategoryScalarFieldEnum = {
 export type FireIncidentSubcategoryScalarFieldEnum = (typeof FireIncidentSubcategoryScalarFieldEnum)[keyof typeof FireIncidentSubcategoryScalarFieldEnum]
 
 
+export const IncidentNumberCounterScalarFieldEnum = {
+  id: 'id',
+  year: 'year',
+  month: 'month',
+  regionCode: 'regionCode',
+  lastNumber: 'lastNumber'
+} as const
+
+export type IncidentNumberCounterScalarFieldEnum = (typeof IncidentNumberCounterScalarFieldEnum)[keyof typeof IncidentNumberCounterScalarFieldEnum]
+
+
 export const NotificationPreferenceScalarFieldEnum = {
   id: 'id',
   investigationUpdates: 'investigationUpdates',
@@ -136,6 +278,7 @@ export const OfficeScalarFieldEnum = {
   isActive: 'isActive',
   parentId: 'parentId',
   regionId: 'regionId',
+  regionCode: 'regionCode',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

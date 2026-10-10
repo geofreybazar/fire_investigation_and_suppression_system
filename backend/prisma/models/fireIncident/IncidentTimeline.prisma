@@ -1,0 +1,17 @@
+model IncidentTimeline {
+  id String @id @default(uuid())
+
+  fireIncidentId String
+  fireIncident   FireIncident @relation(fields: [fireIncidentId], references: [id], onDelete: Cascade)
+
+  status     FireIncidentStatus
+  alarmLevel FireAlarmLevel?
+
+  occurredAt DateTime @db.Timestamptz(3)
+  remarks    String?
+
+  createdById String
+  createdAt   DateTime @default(now())
+
+  @@index([fireIncidentId, occurredAt])
+}

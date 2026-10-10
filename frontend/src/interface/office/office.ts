@@ -4,6 +4,7 @@ import type { Pagination } from "../pagination";
 export const officeSchema = z.object({
   name: z.string().min(2, "Office name is required."),
   parentId: z.string().optional(),
+  regionCode: z.string().optional(),
   type: z.enum(
     [
       "NATIONAL_HEADQUARTERS",

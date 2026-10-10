@@ -4,7 +4,7 @@ import type { FireIncidentSubCategoriesInput } from "@/interface/incidentSubClas
 const addFireIncidentSubClassification = async (
   data: FireIncidentSubCategoriesInput,
 ) => {
-  const apiClient = await axiosJWT("/fire_incident_subcategories_api");
+  const apiClient = await axiosJWT("/api/fire_incident_subcategories_api");
   const response = await apiClient.post("/", data);
   return response.data;
 };

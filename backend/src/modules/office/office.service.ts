@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   Logger,
@@ -11,6 +12,7 @@ import { UUID } from 'crypto';
 import { OfficeAuthorizationService } from './services/office.authorization.service.js';
 import { OfficeRepository } from './office.repository.js';
 import { CurrentUserJwtPayload } from '../../types/jwt.payload.js';
+import { validateRegionCode } from './utils/validateRegionCode.js';
 
 @Injectable()
 export class OfficeService {
@@ -34,14 +36,19 @@ export class OfficeService {
       if (!parentOffice) {
         throw new NotFoundException('Parent office not found');
       }
+
+      this.officeAuthorizationService.assertOfficeInScope(user, parentOffice);
     }
 
     validateOfficeHierarchy(officeData.type, parentOffice?.type);
+
+    validateRegionCode(officeData.type, officeData.regionCode);
 
     const office = await this.officeRepository.createOffice({
       name: officeData.name,
       type: officeData.type,
       parentId: officeData.parentId,
+      regionCode: officeData.regionCode,
     });
 
     this.logger.log(`Office is created: ${office.name}`);
@@ -88,6 +95,15 @@ export class OfficeService {
   ) {
     this.logger.log(`Updating Office ${officeData.name}`);
 
+    const office = await this.officeRepository.findById(id);
+
+    if (!office) {
+      throw new NotFoundException('Office not found.');
+    }
+
+    // The actor must be allowed to manage the office as it is now, and as it will be.
+    this.officeAuthorizationService.canManageOffice(user, office.type);
+    this.officeAuthorizationService.assertOfficeInScope(user, office);
     this.officeAuthorizationService.canManageOffice(user, officeData.type);
 
     let parentOffice;
@@ -98,9 +114,13 @@ export class OfficeService {
       if (!parentOffice) {
         throw new NotFoundException('Parent office not found');
       }
+
+      this.officeAuthorizationService.assertOfficeInScope(user, parentOffice);
     }
 
     validateOfficeHierarchy(officeData.type, parentOffice?.type);
+
+    validateRegionCode(officeData.type, officeData.regionCode);
 
     const updatedOffice = await this.officeRepository.updateOffice(
       id,
@@ -112,12 +132,15 @@ export class OfficeService {
     return updatedOffice;
   }
 
-  async deleteOffice(officeId: UUID) {
+  async deleteOffice(officeId: UUID, user: CurrentUserJwtPayload) {
     const office = await this.officeRepository.findByIdForDeletion(officeId);
 
     if (!office) {
       throw new NotFoundException('Office not found.');
     }
+
+    this.officeAuthorizationService.canManageOffice(user, office.type);
+    this.officeAuthorizationService.assertOfficeInScope(user, office);
 
     if (office._count.users > 0) {
       throw new ConflictException(

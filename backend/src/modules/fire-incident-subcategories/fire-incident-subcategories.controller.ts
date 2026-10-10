@@ -28,6 +28,8 @@ export class FireIncidentSubcategoriesController {
     'NHQ_ADMIN',
     'NHQ_CHIEF_INVESTIGATOR',
     'NHQ_INVESTIGATOR',
+    'NHQ_OPERATION',
+    'NHQ_OPERATION_STAFF',
   )
   @UseGuards(AuthGuard, RoleGuard)
   @Post()

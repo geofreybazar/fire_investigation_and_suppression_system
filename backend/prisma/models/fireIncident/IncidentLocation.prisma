@@ -1,0 +1,12 @@
+model IncidentLocation {
+  id String @id @default(uuid())
+
+  placeOfOccurence  String
+  region            String
+  province_district String?
+  city_municipality String?
+
+  fireIncidentId String @unique
+
+  fireIncident FireIncident @relation(fields: [fireIncidentId], references: [id])
+}
