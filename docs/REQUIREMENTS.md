@@ -909,6 +909,7 @@ Severity: **H** = security or data-integrity risk, **M** = rule not enforced, **
 | 2026-10-10 | Phase 2 (schema, migration `20261010120000_add_incident_workflow_schema`) | Schema level: D-02, D-15, D-25, D-26 (enum, permission maps and frontend role list), D-28, D-29, D-30, D-31. Each still needs its Phase 3/4 service logic. |
 | 2026-10-10 | Phase 3 (fire-incident backend) | D-04 (incident and location created in one write), D-20 (new input schemas), D-18 (category edits validated), D-19 (incident roles can read categories). Service logic for D-02, D-15, D-25, D-28, D-30, D-31. |
 | 2026-10-10 | Phase 4 (investigation backend) | Service logic for D-29 (several investigations per incident, one open at a time), referrals, assignment, reports and reviews; FR-USR-013/014 (investigators with an open investigation are locked). |
+| 2026-10-10 | Phase 5 (frontend) | Fire-incident list, submission, detail (approval, timeline with corrections, details, impact/resources/personnel, deletion and restore) and investigation pages (case queue, assignments, referral, start, drafting, submission and review). Controls are shown by role; the backend enforces every rule. |
 
 Still open from priority 2: none.
 
