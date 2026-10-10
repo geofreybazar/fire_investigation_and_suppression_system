@@ -20,63 +20,103 @@ export type IncidentLocationModel = runtime.Types.Result.DefaultSelection<Prisma
 
 export type AggregateIncidentLocation = {
   _count: IncidentLocationCountAggregateOutputType | null
+  _avg: IncidentLocationAvgAggregateOutputType | null
+  _sum: IncidentLocationSumAggregateOutputType | null
   _min: IncidentLocationMinAggregateOutputType | null
   _max: IncidentLocationMaxAggregateOutputType | null
+}
+
+export type IncidentLocationAvgAggregateOutputType = {
+  latitude: runtime.Decimal | null
+  longitude: runtime.Decimal | null
+}
+
+export type IncidentLocationSumAggregateOutputType = {
+  latitude: runtime.Decimal | null
+  longitude: runtime.Decimal | null
 }
 
 export type IncidentLocationMinAggregateOutputType = {
   id: string | null
   placeOfOccurence: string | null
+  barangay: string | null
   region: string | null
   province_district: string | null
   city_municipality: string | null
+  latitude: runtime.Decimal | null
+  longitude: runtime.Decimal | null
   fireIncidentId: string | null
 }
 
 export type IncidentLocationMaxAggregateOutputType = {
   id: string | null
   placeOfOccurence: string | null
+  barangay: string | null
   region: string | null
   province_district: string | null
   city_municipality: string | null
+  latitude: runtime.Decimal | null
+  longitude: runtime.Decimal | null
   fireIncidentId: string | null
 }
 
 export type IncidentLocationCountAggregateOutputType = {
   id: number
   placeOfOccurence: number
+  barangay: number
   region: number
   province_district: number
   city_municipality: number
+  latitude: number
+  longitude: number
   fireIncidentId: number
   _all: number
 }
 
 
+export type IncidentLocationAvgAggregateInputType = {
+  latitude?: true
+  longitude?: true
+}
+
+export type IncidentLocationSumAggregateInputType = {
+  latitude?: true
+  longitude?: true
+}
+
 export type IncidentLocationMinAggregateInputType = {
   id?: true
   placeOfOccurence?: true
+  barangay?: true
   region?: true
   province_district?: true
   city_municipality?: true
+  latitude?: true
+  longitude?: true
   fireIncidentId?: true
 }
 
 export type IncidentLocationMaxAggregateInputType = {
   id?: true
   placeOfOccurence?: true
+  barangay?: true
   region?: true
   province_district?: true
   city_municipality?: true
+  latitude?: true
+  longitude?: true
   fireIncidentId?: true
 }
 
 export type IncidentLocationCountAggregateInputType = {
   id?: true
   placeOfOccurence?: true
+  barangay?: true
   region?: true
   province_district?: true
   city_municipality?: true
+  latitude?: true
+  longitude?: true
   fireIncidentId?: true
   _all?: true
 }
@@ -119,6 +159,18 @@ export type IncidentLocationAggregateArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: IncidentLocationAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: IncidentLocationSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: IncidentLocationMinAggregateInputType
@@ -149,6 +201,8 @@ export type IncidentLocationGroupByArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   _count?: IncidentLocationCountAggregateInputType | true
+  _avg?: IncidentLocationAvgAggregateInputType
+  _sum?: IncidentLocationSumAggregateInputType
   _min?: IncidentLocationMinAggregateInputType
   _max?: IncidentLocationMaxAggregateInputType
 }
@@ -156,11 +210,16 @@ export type IncidentLocationGroupByArgs<ExtArgs extends runtime.Types.Extensions
 export type IncidentLocationGroupByOutputType = {
   id: string
   placeOfOccurence: string
+  barangay: string
   region: string
-  province_district: string | null
-  city_municipality: string | null
+  province_district: string
+  city_municipality: string
+  latitude: runtime.Decimal | null
+  longitude: runtime.Decimal | null
   fireIncidentId: string
   _count: IncidentLocationCountAggregateOutputType | null
+  _avg: IncidentLocationAvgAggregateOutputType | null
+  _sum: IncidentLocationSumAggregateOutputType | null
   _min: IncidentLocationMinAggregateOutputType | null
   _max: IncidentLocationMaxAggregateOutputType | null
 }
@@ -186,9 +245,12 @@ export type IncidentLocationWhereInput = {
   NOT?: Prisma.IncidentLocationWhereInput | Prisma.IncidentLocationWhereInput[]
   id?: Prisma.StringFilter<"IncidentLocation"> | string
   placeOfOccurence?: Prisma.StringFilter<"IncidentLocation"> | string
+  barangay?: Prisma.StringFilter<"IncidentLocation"> | string
   region?: Prisma.StringFilter<"IncidentLocation"> | string
-  province_district?: Prisma.StringNullableFilter<"IncidentLocation"> | string | null
-  city_municipality?: Prisma.StringNullableFilter<"IncidentLocation"> | string | null
+  province_district?: Prisma.StringFilter<"IncidentLocation"> | string
+  city_municipality?: Prisma.StringFilter<"IncidentLocation"> | string
+  latitude?: Prisma.DecimalNullableFilter<"IncidentLocation"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.DecimalNullableFilter<"IncidentLocation"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fireIncidentId?: Prisma.StringFilter<"IncidentLocation"> | string
   fireIncident?: Prisma.XOR<Prisma.FireIncidentScalarRelationFilter, Prisma.FireIncidentWhereInput>
 }
@@ -196,9 +258,12 @@ export type IncidentLocationWhereInput = {
 export type IncidentLocationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   placeOfOccurence?: Prisma.SortOrder
+  barangay?: Prisma.SortOrder
   region?: Prisma.SortOrder
-  province_district?: Prisma.SortOrderInput | Prisma.SortOrder
-  city_municipality?: Prisma.SortOrderInput | Prisma.SortOrder
+  province_district?: Prisma.SortOrder
+  city_municipality?: Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   fireIncidentId?: Prisma.SortOrder
   fireIncident?: Prisma.FireIncidentOrderByWithRelationInput
 }
@@ -210,22 +275,30 @@ export type IncidentLocationWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.IncidentLocationWhereInput[]
   NOT?: Prisma.IncidentLocationWhereInput | Prisma.IncidentLocationWhereInput[]
   placeOfOccurence?: Prisma.StringFilter<"IncidentLocation"> | string
+  barangay?: Prisma.StringFilter<"IncidentLocation"> | string
   region?: Prisma.StringFilter<"IncidentLocation"> | string
-  province_district?: Prisma.StringNullableFilter<"IncidentLocation"> | string | null
-  city_municipality?: Prisma.StringNullableFilter<"IncidentLocation"> | string | null
+  province_district?: Prisma.StringFilter<"IncidentLocation"> | string
+  city_municipality?: Prisma.StringFilter<"IncidentLocation"> | string
+  latitude?: Prisma.DecimalNullableFilter<"IncidentLocation"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.DecimalNullableFilter<"IncidentLocation"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fireIncident?: Prisma.XOR<Prisma.FireIncidentScalarRelationFilter, Prisma.FireIncidentWhereInput>
 }, "id" | "fireIncidentId">
 
 export type IncidentLocationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   placeOfOccurence?: Prisma.SortOrder
+  barangay?: Prisma.SortOrder
   region?: Prisma.SortOrder
-  province_district?: Prisma.SortOrderInput | Prisma.SortOrder
-  city_municipality?: Prisma.SortOrderInput | Prisma.SortOrder
+  province_district?: Prisma.SortOrder
+  city_municipality?: Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   fireIncidentId?: Prisma.SortOrder
   _count?: Prisma.IncidentLocationCountOrderByAggregateInput
+  _avg?: Prisma.IncidentLocationAvgOrderByAggregateInput
   _max?: Prisma.IncidentLocationMaxOrderByAggregateInput
   _min?: Prisma.IncidentLocationMinOrderByAggregateInput
+  _sum?: Prisma.IncidentLocationSumOrderByAggregateInput
 }
 
 export type IncidentLocationScalarWhereWithAggregatesInput = {
@@ -234,99 +307,142 @@ export type IncidentLocationScalarWhereWithAggregatesInput = {
   NOT?: Prisma.IncidentLocationScalarWhereWithAggregatesInput | Prisma.IncidentLocationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"IncidentLocation"> | string
   placeOfOccurence?: Prisma.StringWithAggregatesFilter<"IncidentLocation"> | string
+  barangay?: Prisma.StringWithAggregatesFilter<"IncidentLocation"> | string
   region?: Prisma.StringWithAggregatesFilter<"IncidentLocation"> | string
-  province_district?: Prisma.StringNullableWithAggregatesFilter<"IncidentLocation"> | string | null
-  city_municipality?: Prisma.StringNullableWithAggregatesFilter<"IncidentLocation"> | string | null
+  province_district?: Prisma.StringWithAggregatesFilter<"IncidentLocation"> | string
+  city_municipality?: Prisma.StringWithAggregatesFilter<"IncidentLocation"> | string
+  latitude?: Prisma.DecimalNullableWithAggregatesFilter<"IncidentLocation"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.DecimalNullableWithAggregatesFilter<"IncidentLocation"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fireIncidentId?: Prisma.StringWithAggregatesFilter<"IncidentLocation"> | string
 }
 
 export type IncidentLocationCreateInput = {
   id?: string
   placeOfOccurence: string
+  barangay: string
   region: string
-  province_district?: string | null
-  city_municipality?: string | null
+  province_district: string
+  city_municipality: string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fireIncident: Prisma.FireIncidentCreateNestedOneWithoutLocationInput
 }
 
 export type IncidentLocationUncheckedCreateInput = {
   id?: string
   placeOfOccurence: string
+  barangay: string
   region: string
-  province_district?: string | null
-  city_municipality?: string | null
+  province_district: string
+  city_municipality: string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fireIncidentId: string
 }
 
 export type IncidentLocationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   placeOfOccurence?: Prisma.StringFieldUpdateOperationsInput | string
+  barangay?: Prisma.StringFieldUpdateOperationsInput | string
   region?: Prisma.StringFieldUpdateOperationsInput | string
-  province_district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city_municipality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province_district?: Prisma.StringFieldUpdateOperationsInput | string
+  city_municipality?: Prisma.StringFieldUpdateOperationsInput | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutLocationNestedInput
 }
 
 export type IncidentLocationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   placeOfOccurence?: Prisma.StringFieldUpdateOperationsInput | string
+  barangay?: Prisma.StringFieldUpdateOperationsInput | string
   region?: Prisma.StringFieldUpdateOperationsInput | string
-  province_district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city_municipality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province_district?: Prisma.StringFieldUpdateOperationsInput | string
+  city_municipality?: Prisma.StringFieldUpdateOperationsInput | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type IncidentLocationCreateManyInput = {
   id?: string
   placeOfOccurence: string
+  barangay: string
   region: string
-  province_district?: string | null
-  city_municipality?: string | null
+  province_district: string
+  city_municipality: string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fireIncidentId: string
 }
 
 export type IncidentLocationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   placeOfOccurence?: Prisma.StringFieldUpdateOperationsInput | string
+  barangay?: Prisma.StringFieldUpdateOperationsInput | string
   region?: Prisma.StringFieldUpdateOperationsInput | string
-  province_district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city_municipality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province_district?: Prisma.StringFieldUpdateOperationsInput | string
+  city_municipality?: Prisma.StringFieldUpdateOperationsInput | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type IncidentLocationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   placeOfOccurence?: Prisma.StringFieldUpdateOperationsInput | string
+  barangay?: Prisma.StringFieldUpdateOperationsInput | string
   region?: Prisma.StringFieldUpdateOperationsInput | string
-  province_district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city_municipality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province_district?: Prisma.StringFieldUpdateOperationsInput | string
+  city_municipality?: Prisma.StringFieldUpdateOperationsInput | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type IncidentLocationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   placeOfOccurence?: Prisma.SortOrder
+  barangay?: Prisma.SortOrder
   region?: Prisma.SortOrder
   province_district?: Prisma.SortOrder
   city_municipality?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   fireIncidentId?: Prisma.SortOrder
+}
+
+export type IncidentLocationAvgOrderByAggregateInput = {
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
 }
 
 export type IncidentLocationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   placeOfOccurence?: Prisma.SortOrder
+  barangay?: Prisma.SortOrder
   region?: Prisma.SortOrder
   province_district?: Prisma.SortOrder
   city_municipality?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   fireIncidentId?: Prisma.SortOrder
 }
 
 export type IncidentLocationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   placeOfOccurence?: Prisma.SortOrder
+  barangay?: Prisma.SortOrder
   region?: Prisma.SortOrder
   province_district?: Prisma.SortOrder
   city_municipality?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   fireIncidentId?: Prisma.SortOrder
+}
+
+export type IncidentLocationSumOrderByAggregateInput = {
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
 }
 
 export type IncidentLocationNullableScalarRelationFilter = {
@@ -369,17 +485,23 @@ export type IncidentLocationUncheckedUpdateOneWithoutFireIncidentNestedInput = {
 export type IncidentLocationCreateWithoutFireIncidentInput = {
   id?: string
   placeOfOccurence: string
+  barangay: string
   region: string
-  province_district?: string | null
-  city_municipality?: string | null
+  province_district: string
+  city_municipality: string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type IncidentLocationUncheckedCreateWithoutFireIncidentInput = {
   id?: string
   placeOfOccurence: string
+  barangay: string
   region: string
-  province_district?: string | null
-  city_municipality?: string | null
+  province_district: string
+  city_municipality: string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type IncidentLocationCreateOrConnectWithoutFireIncidentInput = {
@@ -401,17 +523,23 @@ export type IncidentLocationUpdateToOneWithWhereWithoutFireIncidentInput = {
 export type IncidentLocationUpdateWithoutFireIncidentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   placeOfOccurence?: Prisma.StringFieldUpdateOperationsInput | string
+  barangay?: Prisma.StringFieldUpdateOperationsInput | string
   region?: Prisma.StringFieldUpdateOperationsInput | string
-  province_district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city_municipality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province_district?: Prisma.StringFieldUpdateOperationsInput | string
+  city_municipality?: Prisma.StringFieldUpdateOperationsInput | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type IncidentLocationUncheckedUpdateWithoutFireIncidentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   placeOfOccurence?: Prisma.StringFieldUpdateOperationsInput | string
+  barangay?: Prisma.StringFieldUpdateOperationsInput | string
   region?: Prisma.StringFieldUpdateOperationsInput | string
-  province_district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city_municipality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province_district?: Prisma.StringFieldUpdateOperationsInput | string
+  city_municipality?: Prisma.StringFieldUpdateOperationsInput | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 
@@ -419,9 +547,12 @@ export type IncidentLocationUncheckedUpdateWithoutFireIncidentInput = {
 export type IncidentLocationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   placeOfOccurence?: boolean
+  barangay?: boolean
   region?: boolean
   province_district?: boolean
   city_municipality?: boolean
+  latitude?: boolean
+  longitude?: boolean
   fireIncidentId?: boolean
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["incidentLocation"]>
@@ -429,9 +560,12 @@ export type IncidentLocationSelect<ExtArgs extends runtime.Types.Extensions.Inte
 export type IncidentLocationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   placeOfOccurence?: boolean
+  barangay?: boolean
   region?: boolean
   province_district?: boolean
   city_municipality?: boolean
+  latitude?: boolean
+  longitude?: boolean
   fireIncidentId?: boolean
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["incidentLocation"]>
@@ -439,9 +573,12 @@ export type IncidentLocationSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
 export type IncidentLocationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   placeOfOccurence?: boolean
+  barangay?: boolean
   region?: boolean
   province_district?: boolean
   city_municipality?: boolean
+  latitude?: boolean
+  longitude?: boolean
   fireIncidentId?: boolean
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["incidentLocation"]>
@@ -449,13 +586,16 @@ export type IncidentLocationSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
 export type IncidentLocationSelectScalar = {
   id?: boolean
   placeOfOccurence?: boolean
+  barangay?: boolean
   region?: boolean
   province_district?: boolean
   city_municipality?: boolean
+  latitude?: boolean
+  longitude?: boolean
   fireIncidentId?: boolean
 }
 
-export type IncidentLocationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "placeOfOccurence" | "region" | "province_district" | "city_municipality" | "fireIncidentId", ExtArgs["result"]["incidentLocation"]>
+export type IncidentLocationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "placeOfOccurence" | "barangay" | "region" | "province_district" | "city_municipality" | "latitude" | "longitude" | "fireIncidentId", ExtArgs["result"]["incidentLocation"]>
 export type IncidentLocationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
 }
@@ -474,9 +614,12 @@ export type $IncidentLocationPayload<ExtArgs extends runtime.Types.Extensions.In
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     placeOfOccurence: string
+    barangay: string
     region: string
-    province_district: string | null
-    city_municipality: string | null
+    province_district: string
+    city_municipality: string
+    latitude: runtime.Decimal | null
+    longitude: runtime.Decimal | null
     fireIncidentId: string
   }, ExtArgs["result"]["incidentLocation"]>
   composites: {}
@@ -904,9 +1047,12 @@ export interface Prisma__IncidentLocationClient<T, Null = never, ExtArgs extends
 export interface IncidentLocationFieldRefs {
   readonly id: Prisma.FieldRef<"IncidentLocation", 'String'>
   readonly placeOfOccurence: Prisma.FieldRef<"IncidentLocation", 'String'>
+  readonly barangay: Prisma.FieldRef<"IncidentLocation", 'String'>
   readonly region: Prisma.FieldRef<"IncidentLocation", 'String'>
   readonly province_district: Prisma.FieldRef<"IncidentLocation", 'String'>
   readonly city_municipality: Prisma.FieldRef<"IncidentLocation", 'String'>
+  readonly latitude: Prisma.FieldRef<"IncidentLocation", 'Decimal'>
+  readonly longitude: Prisma.FieldRef<"IncidentLocation", 'Decimal'>
   readonly fireIncidentId: Prisma.FieldRef<"IncidentLocation", 'String'>
 }
     

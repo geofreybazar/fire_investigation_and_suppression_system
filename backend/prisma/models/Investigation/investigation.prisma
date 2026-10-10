@@ -6,15 +6,31 @@ model Investigation {
   classification FireCaseClassification?
   originOfFire   String?
 
-  startedAt   DateTime?
+  // Starting an investigation means assigning it; completed on report approval.
+  startedAt   DateTime
   completedAt DateTime?
 
-  fireIncidentId String @unique
+  // Several per incident; at most one open (completedAt null) at a time,
+  // enforced in the start-investigation transaction.
+  fireIncidentId String
 
   fireIncident FireIncident @relation(fields: [fireIncidentId], references: [id], onDelete: Cascade)
+
+  conductingOfficeId String
+  conductingOffice   Office @relation("InvestigationConductingOffice", fields: [conductingOfficeId], references: [id])
+
+  assignedInvestigatorId String
+  assignedInvestigator   User   @relation("InvestigationAssignee", fields: [assignedInvestigatorId], references: [id])
+
+  assignedById String
+  assignedBy   User   @relation("InvestigationAssigner", fields: [assignedById], references: [id])
 
   report InvestigationReport?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([fireIncidentId])
+  @@index([conductingOfficeId])
+  @@index([assignedInvestigatorId])
 }

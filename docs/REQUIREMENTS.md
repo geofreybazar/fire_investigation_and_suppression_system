@@ -901,6 +901,17 @@ Severity: **H** = security or data-integrity risk, **M** = rule not enforced, **
 | — | Accept as-is (soft delete makes it irrelevant) | D-05 |
 | — | Done with this approval | D-27 (`CLAUDE.md` updated) |
 
+**Progress**
+
+| Date | Phase | Resolved |
+|---|---|---|
+| 2026-10-10 | Phase 1 (security, branch `phase-1-security-fixes`) | D-01, D-03, D-06, D-07, D-08, D-09, D-10, D-12 |
+| 2026-10-10 | Phase 2 (schema, migration `20261010120000_add_incident_workflow_schema`) | Schema level: D-02, D-15, D-25, D-26 (enum, permission maps and frontend role list), D-28, D-29, D-30, D-31. Each still needs its Phase 3/4 service logic. |
+
+Still open from priority 2:
+- **D-04:** Prisma requires one side of a 1:1 relation to be optional, so the schema can't enforce a required location. Phase 3 enforces it by creating the incident and its location in one transaction.
+- **D-20:** the incident input schema. Rewritten in Phase 3.
+
 ---
 
 ## 11. Unresolved business questions

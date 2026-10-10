@@ -31,10 +31,50 @@ export const FireIncidentStatus = {
   FIRE_UNDER_CONTROL: 'FIRE_UNDER_CONTROL',
   FIRE_OUT: 'FIRE_OUT',
   FIRE_OUT_UPON_ARRIVAL: 'FIRE_OUT_UPON_ARRIVAL',
-  FALSE_ALARM: 'FALSE_ALARM'
+  FALSE_ALARM: 'FALSE_ALARM',
+  REKINDLE: 'REKINDLE'
 } as const
 
 export type FireIncidentStatus = (typeof FireIncidentStatus)[keyof typeof FireIncidentStatus]
+
+
+export const IncidentApprovalStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type IncidentApprovalStatus = (typeof IncidentApprovalStatus)[keyof typeof IncidentApprovalStatus]
+
+
+export const FireIncidentEventType = {
+  SUBMITTED: 'SUBMITTED',
+  RESUBMITTED: 'RESUBMITTED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  REMOVED: 'REMOVED',
+  DELETED: 'DELETED',
+  RESTORED: 'RESTORED'
+} as const
+
+export type FireIncidentEventType = (typeof FireIncidentEventType)[keyof typeof FireIncidentEventType]
+
+
+export const ReferralDirection = {
+  UP: 'UP',
+  DOWN: 'DOWN'
+} as const
+
+export type ReferralDirection = (typeof ReferralDirection)[keyof typeof ReferralDirection]
+
+
+export const ReportDecision = {
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type ReportDecision = (typeof ReportDecision)[keyof typeof ReportDecision]
 
 
 export const FireCaseClassification = {
@@ -148,7 +188,8 @@ export const ROLE = {
   CITY_MUNICIPALITY_OPERATION: 'CITY_MUNICIPALITY_OPERATION',
   CITY_MUNICIPALITY_OPERATION_STAFF: 'CITY_MUNICIPALITY_OPERATION_STAFF',
   CITY_MUNICIPALITY_INVESTIGATOR: 'CITY_MUNICIPALITY_INVESTIGATOR',
-  CITY_MUNICIPALITY_COMMEL: 'CITY_MUNICIPALITY_COMMEL'
+  CITY_MUNICIPALITY_COMMEL: 'CITY_MUNICIPALITY_COMMEL',
+  CITY_MUNICIPALITY_CHIEF_INVESTIGATOR: 'CITY_MUNICIPALITY_CHIEF_INVESTIGATOR'
 } as const
 
 export type ROLE = (typeof ROLE)[keyof typeof ROLE]

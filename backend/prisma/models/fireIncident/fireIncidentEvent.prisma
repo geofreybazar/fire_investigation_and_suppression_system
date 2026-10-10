@@ -1,0 +1,19 @@
+// History of an incident's approval, removal, deletion and restore.
+model FireIncidentEvent {
+  id String @id @default(uuid())
+
+  fireIncidentId String
+  fireIncident   FireIncident @relation(fields: [fireIncidentId], references: [id], onDelete: Cascade)
+
+  type FireIncidentEventType
+
+  actorId String
+  actor   User   @relation("FireIncidentEventActor", fields: [actorId], references: [id])
+
+  // e.g. rejection reason, or the memo reference for a deletion
+  remarks String?
+
+  createdAt DateTime @default(now())
+
+  @@index([fireIncidentId, createdAt])
+}

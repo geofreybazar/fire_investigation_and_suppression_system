@@ -1,10 +1,17 @@
 model IncidentLocation {
   id String @id @default(uuid())
 
-  placeOfOccurence  String
+  placeOfOccurence String
+  barangay         String
+
+  // Derived from the submitting station's office hierarchy
   region            String
-  province_district String?
-  city_municipality String?
+  province_district String
+  city_municipality String
+
+  // Optional, for future mapping
+  latitude  Decimal? @db.Decimal(9, 6)
+  longitude Decimal? @db.Decimal(9, 6)
 
   fireIncidentId String @unique
 

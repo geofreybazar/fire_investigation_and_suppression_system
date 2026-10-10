@@ -47,10 +47,20 @@ export { Prisma }
  */
 export type InvestigationReport = Prisma.InvestigationReportModel
 /**
+ * Model InvestigationReportReview
+ * 
+ */
+export type InvestigationReportReview = Prisma.InvestigationReportReviewModel
+/**
  * Model Investigation
  * 
  */
 export type Investigation = Prisma.InvestigationModel
+/**
+ * Model InvestigationReferral
+ * 
+ */
+export type InvestigationReferral = Prisma.InvestigationReferralModel
 /**
  * Model FireOpertaionResources
  * 
@@ -91,6 +101,11 @@ export type FireIncident = Prisma.FireIncidentModel
  * 
  */
 export type FireIncidentCategory = Prisma.FireIncidentCategoryModel
+/**
+ * Model FireIncidentEvent
+ * 
+ */
+export type FireIncidentEvent = Prisma.FireIncidentEventModel
 /**
  * Model FireIncidentSubcategory
  * 

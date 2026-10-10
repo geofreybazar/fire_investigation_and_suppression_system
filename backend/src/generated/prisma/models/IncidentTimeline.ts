@@ -33,6 +33,10 @@ export type IncidentTimelineMinAggregateOutputType = {
   remarks: string | null
   createdById: string | null
   createdAt: Date | null
+  voidedAt: Date | null
+  voidedById: string | null
+  voidReason: string | null
+  correctsEntryId: string | null
 }
 
 export type IncidentTimelineMaxAggregateOutputType = {
@@ -44,6 +48,10 @@ export type IncidentTimelineMaxAggregateOutputType = {
   remarks: string | null
   createdById: string | null
   createdAt: Date | null
+  voidedAt: Date | null
+  voidedById: string | null
+  voidReason: string | null
+  correctsEntryId: string | null
 }
 
 export type IncidentTimelineCountAggregateOutputType = {
@@ -55,6 +63,10 @@ export type IncidentTimelineCountAggregateOutputType = {
   remarks: number
   createdById: number
   createdAt: number
+  voidedAt: number
+  voidedById: number
+  voidReason: number
+  correctsEntryId: number
   _all: number
 }
 
@@ -68,6 +80,10 @@ export type IncidentTimelineMinAggregateInputType = {
   remarks?: true
   createdById?: true
   createdAt?: true
+  voidedAt?: true
+  voidedById?: true
+  voidReason?: true
+  correctsEntryId?: true
 }
 
 export type IncidentTimelineMaxAggregateInputType = {
@@ -79,6 +95,10 @@ export type IncidentTimelineMaxAggregateInputType = {
   remarks?: true
   createdById?: true
   createdAt?: true
+  voidedAt?: true
+  voidedById?: true
+  voidReason?: true
+  correctsEntryId?: true
 }
 
 export type IncidentTimelineCountAggregateInputType = {
@@ -90,6 +110,10 @@ export type IncidentTimelineCountAggregateInputType = {
   remarks?: true
   createdById?: true
   createdAt?: true
+  voidedAt?: true
+  voidedById?: true
+  voidReason?: true
+  correctsEntryId?: true
   _all?: true
 }
 
@@ -174,6 +198,10 @@ export type IncidentTimelineGroupByOutputType = {
   remarks: string | null
   createdById: string
   createdAt: Date
+  voidedAt: Date | null
+  voidedById: string | null
+  voidReason: string | null
+  correctsEntryId: string | null
   _count: IncidentTimelineCountAggregateOutputType | null
   _min: IncidentTimelineMinAggregateOutputType | null
   _max: IncidentTimelineMaxAggregateOutputType | null
@@ -206,7 +234,15 @@ export type IncidentTimelineWhereInput = {
   remarks?: Prisma.StringNullableFilter<"IncidentTimeline"> | string | null
   createdById?: Prisma.StringFilter<"IncidentTimeline"> | string
   createdAt?: Prisma.DateTimeFilter<"IncidentTimeline"> | Date | string
+  voidedAt?: Prisma.DateTimeNullableFilter<"IncidentTimeline"> | Date | string | null
+  voidedById?: Prisma.StringNullableFilter<"IncidentTimeline"> | string | null
+  voidReason?: Prisma.StringNullableFilter<"IncidentTimeline"> | string | null
+  correctsEntryId?: Prisma.StringNullableFilter<"IncidentTimeline"> | string | null
   fireIncident?: Prisma.XOR<Prisma.FireIncidentScalarRelationFilter, Prisma.FireIncidentWhereInput>
+  createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  voidedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  correctsEntry?: Prisma.XOR<Prisma.IncidentTimelineNullableScalarRelationFilter, Prisma.IncidentTimelineWhereInput> | null
+  correctedBy?: Prisma.XOR<Prisma.IncidentTimelineNullableScalarRelationFilter, Prisma.IncidentTimelineWhereInput> | null
 }
 
 export type IncidentTimelineOrderByWithRelationInput = {
@@ -218,11 +254,20 @@ export type IncidentTimelineOrderByWithRelationInput = {
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  voidedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  voidedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  voidReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  correctsEntryId?: Prisma.SortOrderInput | Prisma.SortOrder
   fireIncident?: Prisma.FireIncidentOrderByWithRelationInput
+  createdBy?: Prisma.UserOrderByWithRelationInput
+  voidedBy?: Prisma.UserOrderByWithRelationInput
+  correctsEntry?: Prisma.IncidentTimelineOrderByWithRelationInput
+  correctedBy?: Prisma.IncidentTimelineOrderByWithRelationInput
 }
 
 export type IncidentTimelineWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  correctsEntryId?: string
   AND?: Prisma.IncidentTimelineWhereInput | Prisma.IncidentTimelineWhereInput[]
   OR?: Prisma.IncidentTimelineWhereInput[]
   NOT?: Prisma.IncidentTimelineWhereInput | Prisma.IncidentTimelineWhereInput[]
@@ -233,8 +278,15 @@ export type IncidentTimelineWhereUniqueInput = Prisma.AtLeast<{
   remarks?: Prisma.StringNullableFilter<"IncidentTimeline"> | string | null
   createdById?: Prisma.StringFilter<"IncidentTimeline"> | string
   createdAt?: Prisma.DateTimeFilter<"IncidentTimeline"> | Date | string
+  voidedAt?: Prisma.DateTimeNullableFilter<"IncidentTimeline"> | Date | string | null
+  voidedById?: Prisma.StringNullableFilter<"IncidentTimeline"> | string | null
+  voidReason?: Prisma.StringNullableFilter<"IncidentTimeline"> | string | null
   fireIncident?: Prisma.XOR<Prisma.FireIncidentScalarRelationFilter, Prisma.FireIncidentWhereInput>
-}, "id">
+  createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  voidedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  correctsEntry?: Prisma.XOR<Prisma.IncidentTimelineNullableScalarRelationFilter, Prisma.IncidentTimelineWhereInput> | null
+  correctedBy?: Prisma.XOR<Prisma.IncidentTimelineNullableScalarRelationFilter, Prisma.IncidentTimelineWhereInput> | null
+}, "id" | "correctsEntryId">
 
 export type IncidentTimelineOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -245,6 +297,10 @@ export type IncidentTimelineOrderByWithAggregationInput = {
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  voidedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  voidedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  voidReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  correctsEntryId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.IncidentTimelineCountOrderByAggregateInput
   _max?: Prisma.IncidentTimelineMaxOrderByAggregateInput
   _min?: Prisma.IncidentTimelineMinOrderByAggregateInput
@@ -262,6 +318,10 @@ export type IncidentTimelineScalarWhereWithAggregatesInput = {
   remarks?: Prisma.StringNullableWithAggregatesFilter<"IncidentTimeline"> | string | null
   createdById?: Prisma.StringWithAggregatesFilter<"IncidentTimeline"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"IncidentTimeline"> | Date | string
+  voidedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"IncidentTimeline"> | Date | string | null
+  voidedById?: Prisma.StringNullableWithAggregatesFilter<"IncidentTimeline"> | string | null
+  voidReason?: Prisma.StringNullableWithAggregatesFilter<"IncidentTimeline"> | string | null
+  correctsEntryId?: Prisma.StringNullableWithAggregatesFilter<"IncidentTimeline"> | string | null
 }
 
 export type IncidentTimelineCreateInput = {
@@ -270,9 +330,14 @@ export type IncidentTimelineCreateInput = {
   alarmLevel?: $Enums.FireAlarmLevel | null
   occurredAt: Date | string
   remarks?: string | null
-  createdById: string
   createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidReason?: string | null
   fireIncident: Prisma.FireIncidentCreateNestedOneWithoutTimelineInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedTimelineEntriesInput
+  voidedBy?: Prisma.UserCreateNestedOneWithoutVoidedTimelineEntriesInput
+  correctsEntry?: Prisma.IncidentTimelineCreateNestedOneWithoutCorrectedByInput
+  correctedBy?: Prisma.IncidentTimelineCreateNestedOneWithoutCorrectsEntryInput
 }
 
 export type IncidentTimelineUncheckedCreateInput = {
@@ -284,6 +349,11 @@ export type IncidentTimelineUncheckedCreateInput = {
   remarks?: string | null
   createdById: string
   createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidedById?: string | null
+  voidReason?: string | null
+  correctsEntryId?: string | null
+  correctedBy?: Prisma.IncidentTimelineUncheckedCreateNestedOneWithoutCorrectsEntryInput
 }
 
 export type IncidentTimelineUpdateInput = {
@@ -292,9 +362,14 @@ export type IncidentTimelineUpdateInput = {
   alarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutTimelineNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedTimelineEntriesNestedInput
+  voidedBy?: Prisma.UserUpdateOneWithoutVoidedTimelineEntriesNestedInput
+  correctsEntry?: Prisma.IncidentTimelineUpdateOneWithoutCorrectedByNestedInput
+  correctedBy?: Prisma.IncidentTimelineUpdateOneWithoutCorrectsEntryNestedInput
 }
 
 export type IncidentTimelineUncheckedUpdateInput = {
@@ -306,6 +381,11 @@ export type IncidentTimelineUncheckedUpdateInput = {
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctsEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctedBy?: Prisma.IncidentTimelineUncheckedUpdateOneWithoutCorrectsEntryNestedInput
 }
 
 export type IncidentTimelineCreateManyInput = {
@@ -317,6 +397,10 @@ export type IncidentTimelineCreateManyInput = {
   remarks?: string | null
   createdById: string
   createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidedById?: string | null
+  voidReason?: string | null
+  correctsEntryId?: string | null
 }
 
 export type IncidentTimelineUpdateManyMutationInput = {
@@ -325,8 +409,9 @@ export type IncidentTimelineUpdateManyMutationInput = {
   alarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type IncidentTimelineUncheckedUpdateManyInput = {
@@ -338,6 +423,15 @@ export type IncidentTimelineUncheckedUpdateManyInput = {
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctsEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type IncidentTimelineNullableScalarRelationFilter = {
+  is?: Prisma.IncidentTimelineWhereInput | null
+  isNot?: Prisma.IncidentTimelineWhereInput | null
 }
 
 export type IncidentTimelineCountOrderByAggregateInput = {
@@ -349,6 +443,10 @@ export type IncidentTimelineCountOrderByAggregateInput = {
   remarks?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  voidedAt?: Prisma.SortOrder
+  voidedById?: Prisma.SortOrder
+  voidReason?: Prisma.SortOrder
+  correctsEntryId?: Prisma.SortOrder
 }
 
 export type IncidentTimelineMaxOrderByAggregateInput = {
@@ -360,6 +458,10 @@ export type IncidentTimelineMaxOrderByAggregateInput = {
   remarks?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  voidedAt?: Prisma.SortOrder
+  voidedById?: Prisma.SortOrder
+  voidReason?: Prisma.SortOrder
+  correctsEntryId?: Prisma.SortOrder
 }
 
 export type IncidentTimelineMinOrderByAggregateInput = {
@@ -371,6 +473,10 @@ export type IncidentTimelineMinOrderByAggregateInput = {
   remarks?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  voidedAt?: Prisma.SortOrder
+  voidedById?: Prisma.SortOrder
+  voidReason?: Prisma.SortOrder
+  correctsEntryId?: Prisma.SortOrder
 }
 
 export type IncidentTimelineListRelationFilter = {
@@ -383,12 +489,60 @@ export type IncidentTimelineOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type IncidentTimelineCreateNestedOneWithoutCorrectedByInput = {
+  create?: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCorrectedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutCorrectedByInput>
+  connectOrCreate?: Prisma.IncidentTimelineCreateOrConnectWithoutCorrectedByInput
+  connect?: Prisma.IncidentTimelineWhereUniqueInput
+}
+
+export type IncidentTimelineCreateNestedOneWithoutCorrectsEntryInput = {
+  create?: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCorrectsEntryInput, Prisma.IncidentTimelineUncheckedCreateWithoutCorrectsEntryInput>
+  connectOrCreate?: Prisma.IncidentTimelineCreateOrConnectWithoutCorrectsEntryInput
+  connect?: Prisma.IncidentTimelineWhereUniqueInput
+}
+
+export type IncidentTimelineUncheckedCreateNestedOneWithoutCorrectsEntryInput = {
+  create?: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCorrectsEntryInput, Prisma.IncidentTimelineUncheckedCreateWithoutCorrectsEntryInput>
+  connectOrCreate?: Prisma.IncidentTimelineCreateOrConnectWithoutCorrectsEntryInput
+  connect?: Prisma.IncidentTimelineWhereUniqueInput
+}
+
 export type EnumFireIncidentStatusFieldUpdateOperationsInput = {
   set?: $Enums.FireIncidentStatus
 }
 
 export type NullableEnumFireAlarmLevelFieldUpdateOperationsInput = {
   set?: $Enums.FireAlarmLevel | null
+}
+
+export type IncidentTimelineUpdateOneWithoutCorrectedByNestedInput = {
+  create?: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCorrectedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutCorrectedByInput>
+  connectOrCreate?: Prisma.IncidentTimelineCreateOrConnectWithoutCorrectedByInput
+  upsert?: Prisma.IncidentTimelineUpsertWithoutCorrectedByInput
+  disconnect?: Prisma.IncidentTimelineWhereInput | boolean
+  delete?: Prisma.IncidentTimelineWhereInput | boolean
+  connect?: Prisma.IncidentTimelineWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.IncidentTimelineUpdateToOneWithWhereWithoutCorrectedByInput, Prisma.IncidentTimelineUpdateWithoutCorrectedByInput>, Prisma.IncidentTimelineUncheckedUpdateWithoutCorrectedByInput>
+}
+
+export type IncidentTimelineUpdateOneWithoutCorrectsEntryNestedInput = {
+  create?: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCorrectsEntryInput, Prisma.IncidentTimelineUncheckedCreateWithoutCorrectsEntryInput>
+  connectOrCreate?: Prisma.IncidentTimelineCreateOrConnectWithoutCorrectsEntryInput
+  upsert?: Prisma.IncidentTimelineUpsertWithoutCorrectsEntryInput
+  disconnect?: Prisma.IncidentTimelineWhereInput | boolean
+  delete?: Prisma.IncidentTimelineWhereInput | boolean
+  connect?: Prisma.IncidentTimelineWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.IncidentTimelineUpdateToOneWithWhereWithoutCorrectsEntryInput, Prisma.IncidentTimelineUpdateWithoutCorrectsEntryInput>, Prisma.IncidentTimelineUncheckedUpdateWithoutCorrectsEntryInput>
+}
+
+export type IncidentTimelineUncheckedUpdateOneWithoutCorrectsEntryNestedInput = {
+  create?: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCorrectsEntryInput, Prisma.IncidentTimelineUncheckedCreateWithoutCorrectsEntryInput>
+  connectOrCreate?: Prisma.IncidentTimelineCreateOrConnectWithoutCorrectsEntryInput
+  upsert?: Prisma.IncidentTimelineUpsertWithoutCorrectsEntryInput
+  disconnect?: Prisma.IncidentTimelineWhereInput | boolean
+  delete?: Prisma.IncidentTimelineWhereInput | boolean
+  connect?: Prisma.IncidentTimelineWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.IncidentTimelineUpdateToOneWithWhereWithoutCorrectsEntryInput, Prisma.IncidentTimelineUpdateWithoutCorrectsEntryInput>, Prisma.IncidentTimelineUncheckedUpdateWithoutCorrectsEntryInput>
 }
 
 export type IncidentTimelineCreateNestedManyWithoutFireIncidentInput = {
@@ -433,14 +587,255 @@ export type IncidentTimelineUncheckedUpdateManyWithoutFireIncidentNestedInput = 
   deleteMany?: Prisma.IncidentTimelineScalarWhereInput | Prisma.IncidentTimelineScalarWhereInput[]
 }
 
-export type IncidentTimelineCreateWithoutFireIncidentInput = {
+export type IncidentTimelineCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCreatedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutCreatedByInput> | Prisma.IncidentTimelineCreateWithoutCreatedByInput[] | Prisma.IncidentTimelineUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.IncidentTimelineCreateOrConnectWithoutCreatedByInput | Prisma.IncidentTimelineCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.IncidentTimelineCreateManyCreatedByInputEnvelope
+  connect?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+}
+
+export type IncidentTimelineCreateNestedManyWithoutVoidedByInput = {
+  create?: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutVoidedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutVoidedByInput> | Prisma.IncidentTimelineCreateWithoutVoidedByInput[] | Prisma.IncidentTimelineUncheckedCreateWithoutVoidedByInput[]
+  connectOrCreate?: Prisma.IncidentTimelineCreateOrConnectWithoutVoidedByInput | Prisma.IncidentTimelineCreateOrConnectWithoutVoidedByInput[]
+  createMany?: Prisma.IncidentTimelineCreateManyVoidedByInputEnvelope
+  connect?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+}
+
+export type IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCreatedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutCreatedByInput> | Prisma.IncidentTimelineCreateWithoutCreatedByInput[] | Prisma.IncidentTimelineUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.IncidentTimelineCreateOrConnectWithoutCreatedByInput | Prisma.IncidentTimelineCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.IncidentTimelineCreateManyCreatedByInputEnvelope
+  connect?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+}
+
+export type IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput = {
+  create?: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutVoidedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutVoidedByInput> | Prisma.IncidentTimelineCreateWithoutVoidedByInput[] | Prisma.IncidentTimelineUncheckedCreateWithoutVoidedByInput[]
+  connectOrCreate?: Prisma.IncidentTimelineCreateOrConnectWithoutVoidedByInput | Prisma.IncidentTimelineCreateOrConnectWithoutVoidedByInput[]
+  createMany?: Prisma.IncidentTimelineCreateManyVoidedByInputEnvelope
+  connect?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+}
+
+export type IncidentTimelineUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCreatedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutCreatedByInput> | Prisma.IncidentTimelineCreateWithoutCreatedByInput[] | Prisma.IncidentTimelineUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.IncidentTimelineCreateOrConnectWithoutCreatedByInput | Prisma.IncidentTimelineCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.IncidentTimelineUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.IncidentTimelineUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.IncidentTimelineCreateManyCreatedByInputEnvelope
+  set?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  disconnect?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  delete?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  connect?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  update?: Prisma.IncidentTimelineUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.IncidentTimelineUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.IncidentTimelineUpdateManyWithWhereWithoutCreatedByInput | Prisma.IncidentTimelineUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.IncidentTimelineScalarWhereInput | Prisma.IncidentTimelineScalarWhereInput[]
+}
+
+export type IncidentTimelineUpdateManyWithoutVoidedByNestedInput = {
+  create?: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutVoidedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutVoidedByInput> | Prisma.IncidentTimelineCreateWithoutVoidedByInput[] | Prisma.IncidentTimelineUncheckedCreateWithoutVoidedByInput[]
+  connectOrCreate?: Prisma.IncidentTimelineCreateOrConnectWithoutVoidedByInput | Prisma.IncidentTimelineCreateOrConnectWithoutVoidedByInput[]
+  upsert?: Prisma.IncidentTimelineUpsertWithWhereUniqueWithoutVoidedByInput | Prisma.IncidentTimelineUpsertWithWhereUniqueWithoutVoidedByInput[]
+  createMany?: Prisma.IncidentTimelineCreateManyVoidedByInputEnvelope
+  set?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  disconnect?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  delete?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  connect?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  update?: Prisma.IncidentTimelineUpdateWithWhereUniqueWithoutVoidedByInput | Prisma.IncidentTimelineUpdateWithWhereUniqueWithoutVoidedByInput[]
+  updateMany?: Prisma.IncidentTimelineUpdateManyWithWhereWithoutVoidedByInput | Prisma.IncidentTimelineUpdateManyWithWhereWithoutVoidedByInput[]
+  deleteMany?: Prisma.IncidentTimelineScalarWhereInput | Prisma.IncidentTimelineScalarWhereInput[]
+}
+
+export type IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCreatedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutCreatedByInput> | Prisma.IncidentTimelineCreateWithoutCreatedByInput[] | Prisma.IncidentTimelineUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.IncidentTimelineCreateOrConnectWithoutCreatedByInput | Prisma.IncidentTimelineCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.IncidentTimelineUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.IncidentTimelineUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.IncidentTimelineCreateManyCreatedByInputEnvelope
+  set?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  disconnect?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  delete?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  connect?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  update?: Prisma.IncidentTimelineUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.IncidentTimelineUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.IncidentTimelineUpdateManyWithWhereWithoutCreatedByInput | Prisma.IncidentTimelineUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.IncidentTimelineScalarWhereInput | Prisma.IncidentTimelineScalarWhereInput[]
+}
+
+export type IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput = {
+  create?: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutVoidedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutVoidedByInput> | Prisma.IncidentTimelineCreateWithoutVoidedByInput[] | Prisma.IncidentTimelineUncheckedCreateWithoutVoidedByInput[]
+  connectOrCreate?: Prisma.IncidentTimelineCreateOrConnectWithoutVoidedByInput | Prisma.IncidentTimelineCreateOrConnectWithoutVoidedByInput[]
+  upsert?: Prisma.IncidentTimelineUpsertWithWhereUniqueWithoutVoidedByInput | Prisma.IncidentTimelineUpsertWithWhereUniqueWithoutVoidedByInput[]
+  createMany?: Prisma.IncidentTimelineCreateManyVoidedByInputEnvelope
+  set?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  disconnect?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  delete?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  connect?: Prisma.IncidentTimelineWhereUniqueInput | Prisma.IncidentTimelineWhereUniqueInput[]
+  update?: Prisma.IncidentTimelineUpdateWithWhereUniqueWithoutVoidedByInput | Prisma.IncidentTimelineUpdateWithWhereUniqueWithoutVoidedByInput[]
+  updateMany?: Prisma.IncidentTimelineUpdateManyWithWhereWithoutVoidedByInput | Prisma.IncidentTimelineUpdateManyWithWhereWithoutVoidedByInput[]
+  deleteMany?: Prisma.IncidentTimelineScalarWhereInput | Prisma.IncidentTimelineScalarWhereInput[]
+}
+
+export type IncidentTimelineCreateWithoutCorrectedByInput = {
   id?: string
+  status: $Enums.FireIncidentStatus
+  alarmLevel?: $Enums.FireAlarmLevel | null
+  occurredAt: Date | string
+  remarks?: string | null
+  createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidReason?: string | null
+  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutTimelineInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedTimelineEntriesInput
+  voidedBy?: Prisma.UserCreateNestedOneWithoutVoidedTimelineEntriesInput
+  correctsEntry?: Prisma.IncidentTimelineCreateNestedOneWithoutCorrectedByInput
+}
+
+export type IncidentTimelineUncheckedCreateWithoutCorrectedByInput = {
+  id?: string
+  fireIncidentId: string
   status: $Enums.FireIncidentStatus
   alarmLevel?: $Enums.FireAlarmLevel | null
   occurredAt: Date | string
   remarks?: string | null
   createdById: string
   createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidedById?: string | null
+  voidReason?: string | null
+  correctsEntryId?: string | null
+}
+
+export type IncidentTimelineCreateOrConnectWithoutCorrectedByInput = {
+  where: Prisma.IncidentTimelineWhereUniqueInput
+  create: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCorrectedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutCorrectedByInput>
+}
+
+export type IncidentTimelineCreateWithoutCorrectsEntryInput = {
+  id?: string
+  status: $Enums.FireIncidentStatus
+  alarmLevel?: $Enums.FireAlarmLevel | null
+  occurredAt: Date | string
+  remarks?: string | null
+  createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidReason?: string | null
+  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutTimelineInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedTimelineEntriesInput
+  voidedBy?: Prisma.UserCreateNestedOneWithoutVoidedTimelineEntriesInput
+  correctedBy?: Prisma.IncidentTimelineCreateNestedOneWithoutCorrectsEntryInput
+}
+
+export type IncidentTimelineUncheckedCreateWithoutCorrectsEntryInput = {
+  id?: string
+  fireIncidentId: string
+  status: $Enums.FireIncidentStatus
+  alarmLevel?: $Enums.FireAlarmLevel | null
+  occurredAt: Date | string
+  remarks?: string | null
+  createdById: string
+  createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidedById?: string | null
+  voidReason?: string | null
+  correctedBy?: Prisma.IncidentTimelineUncheckedCreateNestedOneWithoutCorrectsEntryInput
+}
+
+export type IncidentTimelineCreateOrConnectWithoutCorrectsEntryInput = {
+  where: Prisma.IncidentTimelineWhereUniqueInput
+  create: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCorrectsEntryInput, Prisma.IncidentTimelineUncheckedCreateWithoutCorrectsEntryInput>
+}
+
+export type IncidentTimelineUpsertWithoutCorrectedByInput = {
+  update: Prisma.XOR<Prisma.IncidentTimelineUpdateWithoutCorrectedByInput, Prisma.IncidentTimelineUncheckedUpdateWithoutCorrectedByInput>
+  create: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCorrectedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutCorrectedByInput>
+  where?: Prisma.IncidentTimelineWhereInput
+}
+
+export type IncidentTimelineUpdateToOneWithWhereWithoutCorrectedByInput = {
+  where?: Prisma.IncidentTimelineWhereInput
+  data: Prisma.XOR<Prisma.IncidentTimelineUpdateWithoutCorrectedByInput, Prisma.IncidentTimelineUncheckedUpdateWithoutCorrectedByInput>
+}
+
+export type IncidentTimelineUpdateWithoutCorrectedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  alarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutTimelineNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedTimelineEntriesNestedInput
+  voidedBy?: Prisma.UserUpdateOneWithoutVoidedTimelineEntriesNestedInput
+  correctsEntry?: Prisma.IncidentTimelineUpdateOneWithoutCorrectedByNestedInput
+}
+
+export type IncidentTimelineUncheckedUpdateWithoutCorrectedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  alarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctsEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type IncidentTimelineUpsertWithoutCorrectsEntryInput = {
+  update: Prisma.XOR<Prisma.IncidentTimelineUpdateWithoutCorrectsEntryInput, Prisma.IncidentTimelineUncheckedUpdateWithoutCorrectsEntryInput>
+  create: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCorrectsEntryInput, Prisma.IncidentTimelineUncheckedCreateWithoutCorrectsEntryInput>
+  where?: Prisma.IncidentTimelineWhereInput
+}
+
+export type IncidentTimelineUpdateToOneWithWhereWithoutCorrectsEntryInput = {
+  where?: Prisma.IncidentTimelineWhereInput
+  data: Prisma.XOR<Prisma.IncidentTimelineUpdateWithoutCorrectsEntryInput, Prisma.IncidentTimelineUncheckedUpdateWithoutCorrectsEntryInput>
+}
+
+export type IncidentTimelineUpdateWithoutCorrectsEntryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  alarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutTimelineNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedTimelineEntriesNestedInput
+  voidedBy?: Prisma.UserUpdateOneWithoutVoidedTimelineEntriesNestedInput
+  correctedBy?: Prisma.IncidentTimelineUpdateOneWithoutCorrectsEntryNestedInput
+}
+
+export type IncidentTimelineUncheckedUpdateWithoutCorrectsEntryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  alarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctedBy?: Prisma.IncidentTimelineUncheckedUpdateOneWithoutCorrectsEntryNestedInput
+}
+
+export type IncidentTimelineCreateWithoutFireIncidentInput = {
+  id?: string
+  status: $Enums.FireIncidentStatus
+  alarmLevel?: $Enums.FireAlarmLevel | null
+  occurredAt: Date | string
+  remarks?: string | null
+  createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidReason?: string | null
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedTimelineEntriesInput
+  voidedBy?: Prisma.UserCreateNestedOneWithoutVoidedTimelineEntriesInput
+  correctsEntry?: Prisma.IncidentTimelineCreateNestedOneWithoutCorrectedByInput
+  correctedBy?: Prisma.IncidentTimelineCreateNestedOneWithoutCorrectsEntryInput
 }
 
 export type IncidentTimelineUncheckedCreateWithoutFireIncidentInput = {
@@ -451,6 +846,11 @@ export type IncidentTimelineUncheckedCreateWithoutFireIncidentInput = {
   remarks?: string | null
   createdById: string
   createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidedById?: string | null
+  voidReason?: string | null
+  correctsEntryId?: string | null
+  correctedBy?: Prisma.IncidentTimelineUncheckedCreateNestedOneWithoutCorrectsEntryInput
 }
 
 export type IncidentTimelineCreateOrConnectWithoutFireIncidentInput = {
@@ -491,6 +891,122 @@ export type IncidentTimelineScalarWhereInput = {
   remarks?: Prisma.StringNullableFilter<"IncidentTimeline"> | string | null
   createdById?: Prisma.StringFilter<"IncidentTimeline"> | string
   createdAt?: Prisma.DateTimeFilter<"IncidentTimeline"> | Date | string
+  voidedAt?: Prisma.DateTimeNullableFilter<"IncidentTimeline"> | Date | string | null
+  voidedById?: Prisma.StringNullableFilter<"IncidentTimeline"> | string | null
+  voidReason?: Prisma.StringNullableFilter<"IncidentTimeline"> | string | null
+  correctsEntryId?: Prisma.StringNullableFilter<"IncidentTimeline"> | string | null
+}
+
+export type IncidentTimelineCreateWithoutCreatedByInput = {
+  id?: string
+  status: $Enums.FireIncidentStatus
+  alarmLevel?: $Enums.FireAlarmLevel | null
+  occurredAt: Date | string
+  remarks?: string | null
+  createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidReason?: string | null
+  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutTimelineInput
+  voidedBy?: Prisma.UserCreateNestedOneWithoutVoidedTimelineEntriesInput
+  correctsEntry?: Prisma.IncidentTimelineCreateNestedOneWithoutCorrectedByInput
+  correctedBy?: Prisma.IncidentTimelineCreateNestedOneWithoutCorrectsEntryInput
+}
+
+export type IncidentTimelineUncheckedCreateWithoutCreatedByInput = {
+  id?: string
+  fireIncidentId: string
+  status: $Enums.FireIncidentStatus
+  alarmLevel?: $Enums.FireAlarmLevel | null
+  occurredAt: Date | string
+  remarks?: string | null
+  createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidedById?: string | null
+  voidReason?: string | null
+  correctsEntryId?: string | null
+  correctedBy?: Prisma.IncidentTimelineUncheckedCreateNestedOneWithoutCorrectsEntryInput
+}
+
+export type IncidentTimelineCreateOrConnectWithoutCreatedByInput = {
+  where: Prisma.IncidentTimelineWhereUniqueInput
+  create: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCreatedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutCreatedByInput>
+}
+
+export type IncidentTimelineCreateManyCreatedByInputEnvelope = {
+  data: Prisma.IncidentTimelineCreateManyCreatedByInput | Prisma.IncidentTimelineCreateManyCreatedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type IncidentTimelineCreateWithoutVoidedByInput = {
+  id?: string
+  status: $Enums.FireIncidentStatus
+  alarmLevel?: $Enums.FireAlarmLevel | null
+  occurredAt: Date | string
+  remarks?: string | null
+  createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidReason?: string | null
+  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutTimelineInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedTimelineEntriesInput
+  correctsEntry?: Prisma.IncidentTimelineCreateNestedOneWithoutCorrectedByInput
+  correctedBy?: Prisma.IncidentTimelineCreateNestedOneWithoutCorrectsEntryInput
+}
+
+export type IncidentTimelineUncheckedCreateWithoutVoidedByInput = {
+  id?: string
+  fireIncidentId: string
+  status: $Enums.FireIncidentStatus
+  alarmLevel?: $Enums.FireAlarmLevel | null
+  occurredAt: Date | string
+  remarks?: string | null
+  createdById: string
+  createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidReason?: string | null
+  correctsEntryId?: string | null
+  correctedBy?: Prisma.IncidentTimelineUncheckedCreateNestedOneWithoutCorrectsEntryInput
+}
+
+export type IncidentTimelineCreateOrConnectWithoutVoidedByInput = {
+  where: Prisma.IncidentTimelineWhereUniqueInput
+  create: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutVoidedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutVoidedByInput>
+}
+
+export type IncidentTimelineCreateManyVoidedByInputEnvelope = {
+  data: Prisma.IncidentTimelineCreateManyVoidedByInput | Prisma.IncidentTimelineCreateManyVoidedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type IncidentTimelineUpsertWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.IncidentTimelineWhereUniqueInput
+  update: Prisma.XOR<Prisma.IncidentTimelineUpdateWithoutCreatedByInput, Prisma.IncidentTimelineUncheckedUpdateWithoutCreatedByInput>
+  create: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutCreatedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutCreatedByInput>
+}
+
+export type IncidentTimelineUpdateWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.IncidentTimelineWhereUniqueInput
+  data: Prisma.XOR<Prisma.IncidentTimelineUpdateWithoutCreatedByInput, Prisma.IncidentTimelineUncheckedUpdateWithoutCreatedByInput>
+}
+
+export type IncidentTimelineUpdateManyWithWhereWithoutCreatedByInput = {
+  where: Prisma.IncidentTimelineScalarWhereInput
+  data: Prisma.XOR<Prisma.IncidentTimelineUpdateManyMutationInput, Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByInput>
+}
+
+export type IncidentTimelineUpsertWithWhereUniqueWithoutVoidedByInput = {
+  where: Prisma.IncidentTimelineWhereUniqueInput
+  update: Prisma.XOR<Prisma.IncidentTimelineUpdateWithoutVoidedByInput, Prisma.IncidentTimelineUncheckedUpdateWithoutVoidedByInput>
+  create: Prisma.XOR<Prisma.IncidentTimelineCreateWithoutVoidedByInput, Prisma.IncidentTimelineUncheckedCreateWithoutVoidedByInput>
+}
+
+export type IncidentTimelineUpdateWithWhereUniqueWithoutVoidedByInput = {
+  where: Prisma.IncidentTimelineWhereUniqueInput
+  data: Prisma.XOR<Prisma.IncidentTimelineUpdateWithoutVoidedByInput, Prisma.IncidentTimelineUncheckedUpdateWithoutVoidedByInput>
+}
+
+export type IncidentTimelineUpdateManyWithWhereWithoutVoidedByInput = {
+  where: Prisma.IncidentTimelineScalarWhereInput
+  data: Prisma.XOR<Prisma.IncidentTimelineUpdateManyMutationInput, Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByInput>
 }
 
 export type IncidentTimelineCreateManyFireIncidentInput = {
@@ -501,6 +1017,10 @@ export type IncidentTimelineCreateManyFireIncidentInput = {
   remarks?: string | null
   createdById: string
   createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidedById?: string | null
+  voidReason?: string | null
+  correctsEntryId?: string | null
 }
 
 export type IncidentTimelineUpdateWithoutFireIncidentInput = {
@@ -509,8 +1029,13 @@ export type IncidentTimelineUpdateWithoutFireIncidentInput = {
   alarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedTimelineEntriesNestedInput
+  voidedBy?: Prisma.UserUpdateOneWithoutVoidedTimelineEntriesNestedInput
+  correctsEntry?: Prisma.IncidentTimelineUpdateOneWithoutCorrectedByNestedInput
+  correctedBy?: Prisma.IncidentTimelineUpdateOneWithoutCorrectsEntryNestedInput
 }
 
 export type IncidentTimelineUncheckedUpdateWithoutFireIncidentInput = {
@@ -521,6 +1046,11 @@ export type IncidentTimelineUncheckedUpdateWithoutFireIncidentInput = {
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctsEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctedBy?: Prisma.IncidentTimelineUncheckedUpdateOneWithoutCorrectsEntryNestedInput
 }
 
 export type IncidentTimelineUncheckedUpdateManyWithoutFireIncidentInput = {
@@ -531,6 +1061,126 @@ export type IncidentTimelineUncheckedUpdateManyWithoutFireIncidentInput = {
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctsEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type IncidentTimelineCreateManyCreatedByInput = {
+  id?: string
+  fireIncidentId: string
+  status: $Enums.FireIncidentStatus
+  alarmLevel?: $Enums.FireAlarmLevel | null
+  occurredAt: Date | string
+  remarks?: string | null
+  createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidedById?: string | null
+  voidReason?: string | null
+  correctsEntryId?: string | null
+}
+
+export type IncidentTimelineCreateManyVoidedByInput = {
+  id?: string
+  fireIncidentId: string
+  status: $Enums.FireIncidentStatus
+  alarmLevel?: $Enums.FireAlarmLevel | null
+  occurredAt: Date | string
+  remarks?: string | null
+  createdById: string
+  createdAt?: Date | string
+  voidedAt?: Date | string | null
+  voidReason?: string | null
+  correctsEntryId?: string | null
+}
+
+export type IncidentTimelineUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  alarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutTimelineNestedInput
+  voidedBy?: Prisma.UserUpdateOneWithoutVoidedTimelineEntriesNestedInput
+  correctsEntry?: Prisma.IncidentTimelineUpdateOneWithoutCorrectedByNestedInput
+  correctedBy?: Prisma.IncidentTimelineUpdateOneWithoutCorrectsEntryNestedInput
+}
+
+export type IncidentTimelineUncheckedUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  alarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctsEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctedBy?: Prisma.IncidentTimelineUncheckedUpdateOneWithoutCorrectsEntryNestedInput
+}
+
+export type IncidentTimelineUncheckedUpdateManyWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  alarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctsEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type IncidentTimelineUpdateWithoutVoidedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  alarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutTimelineNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedTimelineEntriesNestedInput
+  correctsEntry?: Prisma.IncidentTimelineUpdateOneWithoutCorrectedByNestedInput
+  correctedBy?: Prisma.IncidentTimelineUpdateOneWithoutCorrectsEntryNestedInput
+}
+
+export type IncidentTimelineUncheckedUpdateWithoutVoidedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  alarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctsEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctedBy?: Prisma.IncidentTimelineUncheckedUpdateOneWithoutCorrectsEntryNestedInput
+}
+
+export type IncidentTimelineUncheckedUpdateManyWithoutVoidedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  alarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctsEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -544,7 +1194,15 @@ export type IncidentTimelineSelect<ExtArgs extends runtime.Types.Extensions.Inte
   remarks?: boolean
   createdById?: boolean
   createdAt?: boolean
+  voidedAt?: boolean
+  voidedById?: boolean
+  voidReason?: boolean
+  correctsEntryId?: boolean
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  voidedBy?: boolean | Prisma.IncidentTimeline$voidedByArgs<ExtArgs>
+  correctsEntry?: boolean | Prisma.IncidentTimeline$correctsEntryArgs<ExtArgs>
+  correctedBy?: boolean | Prisma.IncidentTimeline$correctedByArgs<ExtArgs>
 }, ExtArgs["result"]["incidentTimeline"]>
 
 export type IncidentTimelineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -556,7 +1214,14 @@ export type IncidentTimelineSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   remarks?: boolean
   createdById?: boolean
   createdAt?: boolean
+  voidedAt?: boolean
+  voidedById?: boolean
+  voidReason?: boolean
+  correctsEntryId?: boolean
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  voidedBy?: boolean | Prisma.IncidentTimeline$voidedByArgs<ExtArgs>
+  correctsEntry?: boolean | Prisma.IncidentTimeline$correctsEntryArgs<ExtArgs>
 }, ExtArgs["result"]["incidentTimeline"]>
 
 export type IncidentTimelineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -568,7 +1233,14 @@ export type IncidentTimelineSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   remarks?: boolean
   createdById?: boolean
   createdAt?: boolean
+  voidedAt?: boolean
+  voidedById?: boolean
+  voidReason?: boolean
+  correctsEntryId?: boolean
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  voidedBy?: boolean | Prisma.IncidentTimeline$voidedByArgs<ExtArgs>
+  correctsEntry?: boolean | Prisma.IncidentTimeline$correctsEntryArgs<ExtArgs>
 }, ExtArgs["result"]["incidentTimeline"]>
 
 export type IncidentTimelineSelectScalar = {
@@ -580,23 +1252,41 @@ export type IncidentTimelineSelectScalar = {
   remarks?: boolean
   createdById?: boolean
   createdAt?: boolean
+  voidedAt?: boolean
+  voidedById?: boolean
+  voidReason?: boolean
+  correctsEntryId?: boolean
 }
 
-export type IncidentTimelineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fireIncidentId" | "status" | "alarmLevel" | "occurredAt" | "remarks" | "createdById" | "createdAt", ExtArgs["result"]["incidentTimeline"]>
+export type IncidentTimelineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fireIncidentId" | "status" | "alarmLevel" | "occurredAt" | "remarks" | "createdById" | "createdAt" | "voidedAt" | "voidedById" | "voidReason" | "correctsEntryId", ExtArgs["result"]["incidentTimeline"]>
 export type IncidentTimelineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  voidedBy?: boolean | Prisma.IncidentTimeline$voidedByArgs<ExtArgs>
+  correctsEntry?: boolean | Prisma.IncidentTimeline$correctsEntryArgs<ExtArgs>
+  correctedBy?: boolean | Prisma.IncidentTimeline$correctedByArgs<ExtArgs>
 }
 export type IncidentTimelineIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  voidedBy?: boolean | Prisma.IncidentTimeline$voidedByArgs<ExtArgs>
+  correctsEntry?: boolean | Prisma.IncidentTimeline$correctsEntryArgs<ExtArgs>
 }
 export type IncidentTimelineIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  voidedBy?: boolean | Prisma.IncidentTimeline$voidedByArgs<ExtArgs>
+  correctsEntry?: boolean | Prisma.IncidentTimeline$correctsEntryArgs<ExtArgs>
 }
 
 export type $IncidentTimelinePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "IncidentTimeline"
   objects: {
     fireIncident: Prisma.$FireIncidentPayload<ExtArgs>
+    createdBy: Prisma.$UserPayload<ExtArgs>
+    voidedBy: Prisma.$UserPayload<ExtArgs> | null
+    correctsEntry: Prisma.$IncidentTimelinePayload<ExtArgs> | null
+    correctedBy: Prisma.$IncidentTimelinePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -607,6 +1297,10 @@ export type $IncidentTimelinePayload<ExtArgs extends runtime.Types.Extensions.In
     remarks: string | null
     createdById: string
     createdAt: Date
+    voidedAt: Date | null
+    voidedById: string | null
+    voidReason: string | null
+    correctsEntryId: string | null
   }, ExtArgs["result"]["incidentTimeline"]>
   composites: {}
 }
@@ -1002,6 +1696,10 @@ readonly fields: IncidentTimelineFieldRefs;
 export interface Prisma__IncidentTimelineClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   fireIncident<T extends Prisma.FireIncidentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncidentDefaultArgs<ExtArgs>>): Prisma.Prisma__FireIncidentClient<runtime.Types.Result.GetResult<Prisma.$FireIncidentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  voidedBy<T extends Prisma.IncidentTimeline$voidedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IncidentTimeline$voidedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  correctsEntry<T extends Prisma.IncidentTimeline$correctsEntryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IncidentTimeline$correctsEntryArgs<ExtArgs>>): Prisma.Prisma__IncidentTimelineClient<runtime.Types.Result.GetResult<Prisma.$IncidentTimelinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  correctedBy<T extends Prisma.IncidentTimeline$correctedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IncidentTimeline$correctedByArgs<ExtArgs>>): Prisma.Prisma__IncidentTimelineClient<runtime.Types.Result.GetResult<Prisma.$IncidentTimelinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1039,6 +1737,10 @@ export interface IncidentTimelineFieldRefs {
   readonly remarks: Prisma.FieldRef<"IncidentTimeline", 'String'>
   readonly createdById: Prisma.FieldRef<"IncidentTimeline", 'String'>
   readonly createdAt: Prisma.FieldRef<"IncidentTimeline", 'DateTime'>
+  readonly voidedAt: Prisma.FieldRef<"IncidentTimeline", 'DateTime'>
+  readonly voidedById: Prisma.FieldRef<"IncidentTimeline", 'String'>
+  readonly voidReason: Prisma.FieldRef<"IncidentTimeline", 'String'>
+  readonly correctsEntryId: Prisma.FieldRef<"IncidentTimeline", 'String'>
 }
     
 
@@ -1437,6 +2139,63 @@ export type IncidentTimelineDeleteManyArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many IncidentTimelines to delete.
    */
   limit?: number
+}
+
+/**
+ * IncidentTimeline.voidedBy
+ */
+export type IncidentTimeline$voidedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * IncidentTimeline.correctsEntry
+ */
+export type IncidentTimeline$correctsEntryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the IncidentTimeline
+   */
+  select?: Prisma.IncidentTimelineSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the IncidentTimeline
+   */
+  omit?: Prisma.IncidentTimelineOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IncidentTimelineInclude<ExtArgs> | null
+  where?: Prisma.IncidentTimelineWhereInput
+}
+
+/**
+ * IncidentTimeline.correctedBy
+ */
+export type IncidentTimeline$correctedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the IncidentTimeline
+   */
+  select?: Prisma.IncidentTimelineSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the IncidentTimeline
+   */
+  omit?: Prisma.IncidentTimelineOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IncidentTimelineInclude<ExtArgs> | null
+  where?: Prisma.IncidentTimelineWhereInput
 }
 
 /**

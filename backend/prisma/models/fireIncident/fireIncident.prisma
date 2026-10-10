@@ -1,6 +1,7 @@
 model FireIncident {
-  id         String @id @default(uuid())
-  incidentNo String @unique
+  id         String  @id @default(uuid())
+  // Assigned when the incident is approved; null while pending or rejected.
+  incidentNo String? @unique
 
   // Incident information
   dateTimeReported     DateTime?
@@ -10,6 +11,9 @@ model FireIncident {
 
   fireIncidentStatus FireIncidentStatus
   currentAlarmLevel  FireAlarmLevel?
+
+  // Creation approval by the station's chief of operations
+  approvalStatus IncidentApprovalStatus @default(PENDING)
 
   // Classification
   categoryId    String
@@ -22,17 +26,33 @@ model FireIncident {
   establishmentId String?
   establishment   Establishment? @relation(fields: [establishmentId], references: [id])
 
+  // Owning station: the submitter's office
+  officeId String
+  office   Office @relation("IncidentOwnerOffice", fields: [officeId], references: [id])
+
+  // Office currently responsible for the investigation decision
+  investigationHandlingOfficeId String?
+  investigationHandlingOffice   Office? @relation("IncidentInvestigationHandlingOffice", fields: [investigationHandlingOfficeId], references: [id])
+
   // Creator
   createdById String
-  createdBy   User   @relation(fields: [createdById], references: [id])
+  createdBy   User   @relation("IncidentCreatedBy", fields: [createdById], references: [id])
+
+  // Soft delete: hides the incident and everything connected to it
+  deletedAt      DateTime?
+  deletedById    String?
+  deletedBy      User?     @relation("IncidentDeletedBy", fields: [deletedById], references: [id])
+  deletionReason String?
 
   // Related information
-  location      IncidentLocation?
-  timeline      IncidentTimeline[]
-  impact        IncidentImpact?
-  resources     FireOpertaionResources?
-  personnel     IncidentPersonnel?
-  investigation Investigation?
+  location       IncidentLocation?
+  timeline       IncidentTimeline[]
+  impact         IncidentImpact?
+  resources      FireOpertaionResources?
+  personnel      IncidentPersonnel?
+  investigations Investigation[]
+  referrals      InvestigationReferral[]
+  events         FireIncidentEvent[]
 
   remarks String?
 
@@ -44,4 +64,7 @@ model FireIncident {
   @@index([establishmentId])
   @@index([dateTimeFireIncident])
   @@index([fireIncidentStatus])
+  @@index([officeId])
+  @@index([investigationHandlingOfficeId])
+  @@index([approvalStatus])
 }

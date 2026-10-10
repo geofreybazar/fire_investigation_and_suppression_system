@@ -20,11 +20,18 @@ model Office {
 
   // Regional scope
   regionId        String?
-  regionCode      String? @unique
+  regionCode      String?  @unique
   region          Office?  @relation("OfficeRegion", fields: [regionId], references: [id])
   regionalOffices Office[] @relation("OfficeRegion")
 
   users User[]
+
+  // Fire incidents and investigations
+  fireIncidents                 FireIncident[]          @relation("IncidentOwnerOffice")
+  handledIncidentInvestigations FireIncident[]          @relation("IncidentInvestigationHandlingOffice")
+  conductedInvestigations       Investigation[]         @relation("InvestigationConductingOffice")
+  referralsFrom                 InvestigationReferral[] @relation("ReferralFromOffice")
+  referralsTo                   InvestigationReferral[] @relation("ReferralToOffice")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

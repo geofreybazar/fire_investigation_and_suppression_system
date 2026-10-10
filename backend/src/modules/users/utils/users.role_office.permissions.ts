@@ -66,4 +66,8 @@ export const role_officePermissions: Record<ROLE, OfficeType[]> = {
     OfficeType.CITY_FIRE_STATION,
     OfficeType.MUNICIPAL_FIRE_STATION,
   ],
+  [ROLE.CITY_MUNICIPALITY_CHIEF_INVESTIGATOR]: [
+    OfficeType.CITY_FIRE_STATION,
+    OfficeType.MUNICIPAL_FIRE_STATION,
+  ],
 };

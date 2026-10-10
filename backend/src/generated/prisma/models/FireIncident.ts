@@ -33,10 +33,16 @@ export type FireIncidentMinAggregateOutputType = {
   dateTimeUnresponded: Date | null
   fireIncidentStatus: $Enums.FireIncidentStatus | null
   currentAlarmLevel: $Enums.FireAlarmLevel | null
+  approvalStatus: $Enums.IncidentApprovalStatus | null
   categoryId: string | null
   subcategoryId: string | null
   establishmentId: string | null
+  officeId: string | null
+  investigationHandlingOfficeId: string | null
   createdById: string | null
+  deletedAt: Date | null
+  deletedById: string | null
+  deletionReason: string | null
   remarks: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -51,10 +57,16 @@ export type FireIncidentMaxAggregateOutputType = {
   dateTimeUnresponded: Date | null
   fireIncidentStatus: $Enums.FireIncidentStatus | null
   currentAlarmLevel: $Enums.FireAlarmLevel | null
+  approvalStatus: $Enums.IncidentApprovalStatus | null
   categoryId: string | null
   subcategoryId: string | null
   establishmentId: string | null
+  officeId: string | null
+  investigationHandlingOfficeId: string | null
   createdById: string | null
+  deletedAt: Date | null
+  deletedById: string | null
+  deletionReason: string | null
   remarks: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -69,10 +81,16 @@ export type FireIncidentCountAggregateOutputType = {
   dateTimeUnresponded: number
   fireIncidentStatus: number
   currentAlarmLevel: number
+  approvalStatus: number
   categoryId: number
   subcategoryId: number
   establishmentId: number
+  officeId: number
+  investigationHandlingOfficeId: number
   createdById: number
+  deletedAt: number
+  deletedById: number
+  deletionReason: number
   remarks: number
   createdAt: number
   updatedAt: number
@@ -89,10 +107,16 @@ export type FireIncidentMinAggregateInputType = {
   dateTimeUnresponded?: true
   fireIncidentStatus?: true
   currentAlarmLevel?: true
+  approvalStatus?: true
   categoryId?: true
   subcategoryId?: true
   establishmentId?: true
+  officeId?: true
+  investigationHandlingOfficeId?: true
   createdById?: true
+  deletedAt?: true
+  deletedById?: true
+  deletionReason?: true
   remarks?: true
   createdAt?: true
   updatedAt?: true
@@ -107,10 +131,16 @@ export type FireIncidentMaxAggregateInputType = {
   dateTimeUnresponded?: true
   fireIncidentStatus?: true
   currentAlarmLevel?: true
+  approvalStatus?: true
   categoryId?: true
   subcategoryId?: true
   establishmentId?: true
+  officeId?: true
+  investigationHandlingOfficeId?: true
   createdById?: true
+  deletedAt?: true
+  deletedById?: true
+  deletionReason?: true
   remarks?: true
   createdAt?: true
   updatedAt?: true
@@ -125,10 +155,16 @@ export type FireIncidentCountAggregateInputType = {
   dateTimeUnresponded?: true
   fireIncidentStatus?: true
   currentAlarmLevel?: true
+  approvalStatus?: true
   categoryId?: true
   subcategoryId?: true
   establishmentId?: true
+  officeId?: true
+  investigationHandlingOfficeId?: true
   createdById?: true
+  deletedAt?: true
+  deletedById?: true
+  deletionReason?: true
   remarks?: true
   createdAt?: true
   updatedAt?: true
@@ -209,17 +245,23 @@ export type FireIncidentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 
 export type FireIncidentGroupByOutputType = {
   id: string
-  incidentNo: string
+  incidentNo: string | null
   dateTimeReported: Date | null
   dateTimeFireIncident: Date | null
   dateTimeCallReceived: Date | null
   dateTimeUnresponded: Date | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel: $Enums.FireAlarmLevel | null
+  approvalStatus: $Enums.IncidentApprovalStatus
   categoryId: string
   subcategoryId: string | null
   establishmentId: string | null
+  officeId: string
+  investigationHandlingOfficeId: string | null
   createdById: string
+  deletedAt: Date | null
+  deletedById: string | null
+  deletionReason: string | null
   remarks: string | null
   createdAt: Date
   updatedAt: Date
@@ -248,58 +290,80 @@ export type FireIncidentWhereInput = {
   OR?: Prisma.FireIncidentWhereInput[]
   NOT?: Prisma.FireIncidentWhereInput | Prisma.FireIncidentWhereInput[]
   id?: Prisma.StringFilter<"FireIncident"> | string
-  incidentNo?: Prisma.StringFilter<"FireIncident"> | string
+  incidentNo?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   dateTimeReported?: Prisma.DateTimeNullableFilter<"FireIncident"> | Date | string | null
   dateTimeFireIncident?: Prisma.DateTimeNullableFilter<"FireIncident"> | Date | string | null
   dateTimeCallReceived?: Prisma.DateTimeNullableFilter<"FireIncident"> | Date | string | null
   dateTimeUnresponded?: Prisma.DateTimeNullableFilter<"FireIncident"> | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFilter<"FireIncident"> | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.EnumFireAlarmLevelNullableFilter<"FireIncident"> | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFilter<"FireIncident"> | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFilter<"FireIncident"> | string
   subcategoryId?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   establishmentId?: Prisma.StringNullableFilter<"FireIncident"> | string | null
+  officeId?: Prisma.StringFilter<"FireIncident"> | string
+  investigationHandlingOfficeId?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   createdById?: Prisma.StringFilter<"FireIncident"> | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"FireIncident"> | Date | string | null
+  deletedById?: Prisma.StringNullableFilter<"FireIncident"> | string | null
+  deletionReason?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   remarks?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   createdAt?: Prisma.DateTimeFilter<"FireIncident"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FireIncident"> | Date | string
   category?: Prisma.XOR<Prisma.FireIncidentCategoryScalarRelationFilter, Prisma.FireIncidentCategoryWhereInput>
   subcategory?: Prisma.XOR<Prisma.FireIncidentSubcategoryNullableScalarRelationFilter, Prisma.FireIncidentSubcategoryWhereInput> | null
   establishment?: Prisma.XOR<Prisma.EstablishmentNullableScalarRelationFilter, Prisma.EstablishmentWhereInput> | null
+  office?: Prisma.XOR<Prisma.OfficeScalarRelationFilter, Prisma.OfficeWhereInput>
+  investigationHandlingOffice?: Prisma.XOR<Prisma.OfficeNullableScalarRelationFilter, Prisma.OfficeWhereInput> | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  deletedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   location?: Prisma.XOR<Prisma.IncidentLocationNullableScalarRelationFilter, Prisma.IncidentLocationWhereInput> | null
   timeline?: Prisma.IncidentTimelineListRelationFilter
   impact?: Prisma.XOR<Prisma.IncidentImpactNullableScalarRelationFilter, Prisma.IncidentImpactWhereInput> | null
   resources?: Prisma.XOR<Prisma.FireOpertaionResourcesNullableScalarRelationFilter, Prisma.FireOpertaionResourcesWhereInput> | null
   personnel?: Prisma.XOR<Prisma.IncidentPersonnelNullableScalarRelationFilter, Prisma.IncidentPersonnelWhereInput> | null
-  investigation?: Prisma.XOR<Prisma.InvestigationNullableScalarRelationFilter, Prisma.InvestigationWhereInput> | null
+  investigations?: Prisma.InvestigationListRelationFilter
+  referrals?: Prisma.InvestigationReferralListRelationFilter
+  events?: Prisma.FireIncidentEventListRelationFilter
 }
 
 export type FireIncidentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  incidentNo?: Prisma.SortOrder
+  incidentNo?: Prisma.SortOrderInput | Prisma.SortOrder
   dateTimeReported?: Prisma.SortOrderInput | Prisma.SortOrder
   dateTimeFireIncident?: Prisma.SortOrderInput | Prisma.SortOrder
   dateTimeCallReceived?: Prisma.SortOrderInput | Prisma.SortOrder
   dateTimeUnresponded?: Prisma.SortOrderInput | Prisma.SortOrder
   fireIncidentStatus?: Prisma.SortOrder
   currentAlarmLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvalStatus?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   subcategoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   establishmentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  officeId?: Prisma.SortOrder
+  investigationHandlingOfficeId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdById?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletionReason?: Prisma.SortOrderInput | Prisma.SortOrder
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   category?: Prisma.FireIncidentCategoryOrderByWithRelationInput
   subcategory?: Prisma.FireIncidentSubcategoryOrderByWithRelationInput
   establishment?: Prisma.EstablishmentOrderByWithRelationInput
+  office?: Prisma.OfficeOrderByWithRelationInput
+  investigationHandlingOffice?: Prisma.OfficeOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
+  deletedBy?: Prisma.UserOrderByWithRelationInput
   location?: Prisma.IncidentLocationOrderByWithRelationInput
   timeline?: Prisma.IncidentTimelineOrderByRelationAggregateInput
   impact?: Prisma.IncidentImpactOrderByWithRelationInput
   resources?: Prisma.FireOpertaionResourcesOrderByWithRelationInput
   personnel?: Prisma.IncidentPersonnelOrderByWithRelationInput
-  investigation?: Prisma.InvestigationOrderByWithRelationInput
+  investigations?: Prisma.InvestigationOrderByRelationAggregateInput
+  referrals?: Prisma.InvestigationReferralOrderByRelationAggregateInput
+  events?: Prisma.FireIncidentEventOrderByRelationAggregateInput
 }
 
 export type FireIncidentWhereUniqueInput = Prisma.AtLeast<{
@@ -314,38 +378,55 @@ export type FireIncidentWhereUniqueInput = Prisma.AtLeast<{
   dateTimeUnresponded?: Prisma.DateTimeNullableFilter<"FireIncident"> | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFilter<"FireIncident"> | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.EnumFireAlarmLevelNullableFilter<"FireIncident"> | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFilter<"FireIncident"> | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFilter<"FireIncident"> | string
   subcategoryId?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   establishmentId?: Prisma.StringNullableFilter<"FireIncident"> | string | null
+  officeId?: Prisma.StringFilter<"FireIncident"> | string
+  investigationHandlingOfficeId?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   createdById?: Prisma.StringFilter<"FireIncident"> | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"FireIncident"> | Date | string | null
+  deletedById?: Prisma.StringNullableFilter<"FireIncident"> | string | null
+  deletionReason?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   remarks?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   createdAt?: Prisma.DateTimeFilter<"FireIncident"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FireIncident"> | Date | string
   category?: Prisma.XOR<Prisma.FireIncidentCategoryScalarRelationFilter, Prisma.FireIncidentCategoryWhereInput>
   subcategory?: Prisma.XOR<Prisma.FireIncidentSubcategoryNullableScalarRelationFilter, Prisma.FireIncidentSubcategoryWhereInput> | null
   establishment?: Prisma.XOR<Prisma.EstablishmentNullableScalarRelationFilter, Prisma.EstablishmentWhereInput> | null
+  office?: Prisma.XOR<Prisma.OfficeScalarRelationFilter, Prisma.OfficeWhereInput>
+  investigationHandlingOffice?: Prisma.XOR<Prisma.OfficeNullableScalarRelationFilter, Prisma.OfficeWhereInput> | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  deletedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   location?: Prisma.XOR<Prisma.IncidentLocationNullableScalarRelationFilter, Prisma.IncidentLocationWhereInput> | null
   timeline?: Prisma.IncidentTimelineListRelationFilter
   impact?: Prisma.XOR<Prisma.IncidentImpactNullableScalarRelationFilter, Prisma.IncidentImpactWhereInput> | null
   resources?: Prisma.XOR<Prisma.FireOpertaionResourcesNullableScalarRelationFilter, Prisma.FireOpertaionResourcesWhereInput> | null
   personnel?: Prisma.XOR<Prisma.IncidentPersonnelNullableScalarRelationFilter, Prisma.IncidentPersonnelWhereInput> | null
-  investigation?: Prisma.XOR<Prisma.InvestigationNullableScalarRelationFilter, Prisma.InvestigationWhereInput> | null
+  investigations?: Prisma.InvestigationListRelationFilter
+  referrals?: Prisma.InvestigationReferralListRelationFilter
+  events?: Prisma.FireIncidentEventListRelationFilter
 }, "id" | "incidentNo">
 
 export type FireIncidentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  incidentNo?: Prisma.SortOrder
+  incidentNo?: Prisma.SortOrderInput | Prisma.SortOrder
   dateTimeReported?: Prisma.SortOrderInput | Prisma.SortOrder
   dateTimeFireIncident?: Prisma.SortOrderInput | Prisma.SortOrder
   dateTimeCallReceived?: Prisma.SortOrderInput | Prisma.SortOrder
   dateTimeUnresponded?: Prisma.SortOrderInput | Prisma.SortOrder
   fireIncidentStatus?: Prisma.SortOrder
   currentAlarmLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvalStatus?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   subcategoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   establishmentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  officeId?: Prisma.SortOrder
+  investigationHandlingOfficeId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdById?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletionReason?: Prisma.SortOrderInput | Prisma.SortOrder
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -359,17 +440,23 @@ export type FireIncidentScalarWhereWithAggregatesInput = {
   OR?: Prisma.FireIncidentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.FireIncidentScalarWhereWithAggregatesInput | Prisma.FireIncidentScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"FireIncident"> | string
-  incidentNo?: Prisma.StringWithAggregatesFilter<"FireIncident"> | string
+  incidentNo?: Prisma.StringNullableWithAggregatesFilter<"FireIncident"> | string | null
   dateTimeReported?: Prisma.DateTimeNullableWithAggregatesFilter<"FireIncident"> | Date | string | null
   dateTimeFireIncident?: Prisma.DateTimeNullableWithAggregatesFilter<"FireIncident"> | Date | string | null
   dateTimeCallReceived?: Prisma.DateTimeNullableWithAggregatesFilter<"FireIncident"> | Date | string | null
   dateTimeUnresponded?: Prisma.DateTimeNullableWithAggregatesFilter<"FireIncident"> | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusWithAggregatesFilter<"FireIncident"> | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.EnumFireAlarmLevelNullableWithAggregatesFilter<"FireIncident"> | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusWithAggregatesFilter<"FireIncident"> | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringWithAggregatesFilter<"FireIncident"> | string
   subcategoryId?: Prisma.StringNullableWithAggregatesFilter<"FireIncident"> | string | null
   establishmentId?: Prisma.StringNullableWithAggregatesFilter<"FireIncident"> | string | null
+  officeId?: Prisma.StringWithAggregatesFilter<"FireIncident"> | string
+  investigationHandlingOfficeId?: Prisma.StringNullableWithAggregatesFilter<"FireIncident"> | string | null
   createdById?: Prisma.StringWithAggregatesFilter<"FireIncident"> | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"FireIncident"> | Date | string | null
+  deletedById?: Prisma.StringNullableWithAggregatesFilter<"FireIncident"> | string | null
+  deletionReason?: Prisma.StringNullableWithAggregatesFilter<"FireIncident"> | string | null
   remarks?: Prisma.StringNullableWithAggregatesFilter<"FireIncident"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FireIncident"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FireIncident"> | Date | string
@@ -377,41 +464,55 @@ export type FireIncidentScalarWhereWithAggregatesInput = {
 
 export type FireIncidentCreateInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
   subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
   establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
   createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
   location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
   timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
   impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   categoryId: string
   subcategoryId?: string | null
   establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
   createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -420,46 +521,62 @@ export type FireIncidentUncheckedCreateInput = {
   impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
   subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
   establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
   location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
   timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
   impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -468,22 +585,30 @@ export type FireIncidentUncheckedUpdateInput = {
   impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentCreateManyInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   categoryId: string
   subcategoryId?: string | null
   establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
   createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -491,13 +616,16 @@ export type FireIncidentCreateManyInput = {
 
 export type FireIncidentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -505,17 +633,23 @@ export type FireIncidentUpdateManyMutationInput = {
 
 export type FireIncidentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -545,10 +679,16 @@ export type FireIncidentCountOrderByAggregateInput = {
   dateTimeUnresponded?: Prisma.SortOrder
   fireIncidentStatus?: Prisma.SortOrder
   currentAlarmLevel?: Prisma.SortOrder
+  approvalStatus?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   subcategoryId?: Prisma.SortOrder
   establishmentId?: Prisma.SortOrder
+  officeId?: Prisma.SortOrder
+  investigationHandlingOfficeId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletedById?: Prisma.SortOrder
+  deletionReason?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -563,10 +703,16 @@ export type FireIncidentMaxOrderByAggregateInput = {
   dateTimeUnresponded?: Prisma.SortOrder
   fireIncidentStatus?: Prisma.SortOrder
   currentAlarmLevel?: Prisma.SortOrder
+  approvalStatus?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   subcategoryId?: Prisma.SortOrder
   establishmentId?: Prisma.SortOrder
+  officeId?: Prisma.SortOrder
+  investigationHandlingOfficeId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletedById?: Prisma.SortOrder
+  deletionReason?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -581,27 +727,47 @@ export type FireIncidentMinOrderByAggregateInput = {
   dateTimeUnresponded?: Prisma.SortOrder
   fireIncidentStatus?: Prisma.SortOrder
   currentAlarmLevel?: Prisma.SortOrder
+  approvalStatus?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   subcategoryId?: Prisma.SortOrder
   establishmentId?: Prisma.SortOrder
+  officeId?: Prisma.SortOrder
+  investigationHandlingOfficeId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletedById?: Prisma.SortOrder
+  deletionReason?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
-export type FireIncidentCreateNestedOneWithoutInvestigationInput = {
-  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutInvestigationInput, Prisma.FireIncidentUncheckedCreateWithoutInvestigationInput>
-  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutInvestigationInput
+export type FireIncidentCreateNestedOneWithoutInvestigationsInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutInvestigationsInput, Prisma.FireIncidentUncheckedCreateWithoutInvestigationsInput>
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutInvestigationsInput
   connect?: Prisma.FireIncidentWhereUniqueInput
 }
 
-export type FireIncidentUpdateOneRequiredWithoutInvestigationNestedInput = {
-  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutInvestigationInput, Prisma.FireIncidentUncheckedCreateWithoutInvestigationInput>
-  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutInvestigationInput
-  upsert?: Prisma.FireIncidentUpsertWithoutInvestigationInput
+export type FireIncidentUpdateOneRequiredWithoutInvestigationsNestedInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutInvestigationsInput, Prisma.FireIncidentUncheckedCreateWithoutInvestigationsInput>
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutInvestigationsInput
+  upsert?: Prisma.FireIncidentUpsertWithoutInvestigationsInput
   connect?: Prisma.FireIncidentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.FireIncidentUpdateToOneWithWhereWithoutInvestigationInput, Prisma.FireIncidentUpdateWithoutInvestigationInput>, Prisma.FireIncidentUncheckedUpdateWithoutInvestigationInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FireIncidentUpdateToOneWithWhereWithoutInvestigationsInput, Prisma.FireIncidentUpdateWithoutInvestigationsInput>, Prisma.FireIncidentUncheckedUpdateWithoutInvestigationsInput>
+}
+
+export type FireIncidentCreateNestedOneWithoutReferralsInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutReferralsInput, Prisma.FireIncidentUncheckedCreateWithoutReferralsInput>
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutReferralsInput
+  connect?: Prisma.FireIncidentWhereUniqueInput
+}
+
+export type FireIncidentUpdateOneRequiredWithoutReferralsNestedInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutReferralsInput, Prisma.FireIncidentUncheckedCreateWithoutReferralsInput>
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutReferralsInput
+  upsert?: Prisma.FireIncidentUpsertWithoutReferralsInput
+  connect?: Prisma.FireIncidentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FireIncidentUpdateToOneWithWhereWithoutReferralsInput, Prisma.FireIncidentUpdateWithoutReferralsInput>, Prisma.FireIncidentUncheckedUpdateWithoutReferralsInput>
 }
 
 export type FireIncidentCreateNestedOneWithoutResourcesInput = {
@@ -716,6 +882,10 @@ export type FireIncidentUncheckedUpdateManyWithoutEstablishmentNestedInput = {
   deleteMany?: Prisma.FireIncidentScalarWhereInput | Prisma.FireIncidentScalarWhereInput[]
 }
 
+export type EnumIncidentApprovalStatusFieldUpdateOperationsInput = {
+  set?: $Enums.IncidentApprovalStatus
+}
+
 export type FireIncidentCreateNestedManyWithoutCategoryInput = {
   create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutCategoryInput, Prisma.FireIncidentUncheckedCreateWithoutCategoryInput> | Prisma.FireIncidentCreateWithoutCategoryInput[] | Prisma.FireIncidentUncheckedCreateWithoutCategoryInput[]
   connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutCategoryInput | Prisma.FireIncidentCreateOrConnectWithoutCategoryInput[]
@@ -756,6 +926,20 @@ export type FireIncidentUncheckedUpdateManyWithoutCategoryNestedInput = {
   update?: Prisma.FireIncidentUpdateWithWhereUniqueWithoutCategoryInput | Prisma.FireIncidentUpdateWithWhereUniqueWithoutCategoryInput[]
   updateMany?: Prisma.FireIncidentUpdateManyWithWhereWithoutCategoryInput | Prisma.FireIncidentUpdateManyWithWhereWithoutCategoryInput[]
   deleteMany?: Prisma.FireIncidentScalarWhereInput | Prisma.FireIncidentScalarWhereInput[]
+}
+
+export type FireIncidentCreateNestedOneWithoutEventsInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutEventsInput, Prisma.FireIncidentUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutEventsInput
+  connect?: Prisma.FireIncidentWhereUniqueInput
+}
+
+export type FireIncidentUpdateOneRequiredWithoutEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutEventsInput, Prisma.FireIncidentUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutEventsInput
+  upsert?: Prisma.FireIncidentUpsertWithoutEventsInput
+  connect?: Prisma.FireIncidentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FireIncidentUpdateToOneWithWhereWithoutEventsInput, Prisma.FireIncidentUpdateWithoutEventsInput>, Prisma.FireIncidentUncheckedUpdateWithoutEventsInput>
 }
 
 export type FireIncidentCreateNestedManyWithoutSubcategoryInput = {
@@ -800,6 +984,90 @@ export type FireIncidentUncheckedUpdateManyWithoutSubcategoryNestedInput = {
   deleteMany?: Prisma.FireIncidentScalarWhereInput | Prisma.FireIncidentScalarWhereInput[]
 }
 
+export type FireIncidentCreateNestedManyWithoutOfficeInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutOfficeInput, Prisma.FireIncidentUncheckedCreateWithoutOfficeInput> | Prisma.FireIncidentCreateWithoutOfficeInput[] | Prisma.FireIncidentUncheckedCreateWithoutOfficeInput[]
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutOfficeInput | Prisma.FireIncidentCreateOrConnectWithoutOfficeInput[]
+  createMany?: Prisma.FireIncidentCreateManyOfficeInputEnvelope
+  connect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+}
+
+export type FireIncidentCreateNestedManyWithoutInvestigationHandlingOfficeInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutInvestigationHandlingOfficeInput, Prisma.FireIncidentUncheckedCreateWithoutInvestigationHandlingOfficeInput> | Prisma.FireIncidentCreateWithoutInvestigationHandlingOfficeInput[] | Prisma.FireIncidentUncheckedCreateWithoutInvestigationHandlingOfficeInput[]
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutInvestigationHandlingOfficeInput | Prisma.FireIncidentCreateOrConnectWithoutInvestigationHandlingOfficeInput[]
+  createMany?: Prisma.FireIncidentCreateManyInvestigationHandlingOfficeInputEnvelope
+  connect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+}
+
+export type FireIncidentUncheckedCreateNestedManyWithoutOfficeInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutOfficeInput, Prisma.FireIncidentUncheckedCreateWithoutOfficeInput> | Prisma.FireIncidentCreateWithoutOfficeInput[] | Prisma.FireIncidentUncheckedCreateWithoutOfficeInput[]
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutOfficeInput | Prisma.FireIncidentCreateOrConnectWithoutOfficeInput[]
+  createMany?: Prisma.FireIncidentCreateManyOfficeInputEnvelope
+  connect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+}
+
+export type FireIncidentUncheckedCreateNestedManyWithoutInvestigationHandlingOfficeInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutInvestigationHandlingOfficeInput, Prisma.FireIncidentUncheckedCreateWithoutInvestigationHandlingOfficeInput> | Prisma.FireIncidentCreateWithoutInvestigationHandlingOfficeInput[] | Prisma.FireIncidentUncheckedCreateWithoutInvestigationHandlingOfficeInput[]
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutInvestigationHandlingOfficeInput | Prisma.FireIncidentCreateOrConnectWithoutInvestigationHandlingOfficeInput[]
+  createMany?: Prisma.FireIncidentCreateManyInvestigationHandlingOfficeInputEnvelope
+  connect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+}
+
+export type FireIncidentUpdateManyWithoutOfficeNestedInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutOfficeInput, Prisma.FireIncidentUncheckedCreateWithoutOfficeInput> | Prisma.FireIncidentCreateWithoutOfficeInput[] | Prisma.FireIncidentUncheckedCreateWithoutOfficeInput[]
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutOfficeInput | Prisma.FireIncidentCreateOrConnectWithoutOfficeInput[]
+  upsert?: Prisma.FireIncidentUpsertWithWhereUniqueWithoutOfficeInput | Prisma.FireIncidentUpsertWithWhereUniqueWithoutOfficeInput[]
+  createMany?: Prisma.FireIncidentCreateManyOfficeInputEnvelope
+  set?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  disconnect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  delete?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  connect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  update?: Prisma.FireIncidentUpdateWithWhereUniqueWithoutOfficeInput | Prisma.FireIncidentUpdateWithWhereUniqueWithoutOfficeInput[]
+  updateMany?: Prisma.FireIncidentUpdateManyWithWhereWithoutOfficeInput | Prisma.FireIncidentUpdateManyWithWhereWithoutOfficeInput[]
+  deleteMany?: Prisma.FireIncidentScalarWhereInput | Prisma.FireIncidentScalarWhereInput[]
+}
+
+export type FireIncidentUpdateManyWithoutInvestigationHandlingOfficeNestedInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutInvestigationHandlingOfficeInput, Prisma.FireIncidentUncheckedCreateWithoutInvestigationHandlingOfficeInput> | Prisma.FireIncidentCreateWithoutInvestigationHandlingOfficeInput[] | Prisma.FireIncidentUncheckedCreateWithoutInvestigationHandlingOfficeInput[]
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutInvestigationHandlingOfficeInput | Prisma.FireIncidentCreateOrConnectWithoutInvestigationHandlingOfficeInput[]
+  upsert?: Prisma.FireIncidentUpsertWithWhereUniqueWithoutInvestigationHandlingOfficeInput | Prisma.FireIncidentUpsertWithWhereUniqueWithoutInvestigationHandlingOfficeInput[]
+  createMany?: Prisma.FireIncidentCreateManyInvestigationHandlingOfficeInputEnvelope
+  set?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  disconnect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  delete?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  connect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  update?: Prisma.FireIncidentUpdateWithWhereUniqueWithoutInvestigationHandlingOfficeInput | Prisma.FireIncidentUpdateWithWhereUniqueWithoutInvestigationHandlingOfficeInput[]
+  updateMany?: Prisma.FireIncidentUpdateManyWithWhereWithoutInvestigationHandlingOfficeInput | Prisma.FireIncidentUpdateManyWithWhereWithoutInvestigationHandlingOfficeInput[]
+  deleteMany?: Prisma.FireIncidentScalarWhereInput | Prisma.FireIncidentScalarWhereInput[]
+}
+
+export type FireIncidentUncheckedUpdateManyWithoutOfficeNestedInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutOfficeInput, Prisma.FireIncidentUncheckedCreateWithoutOfficeInput> | Prisma.FireIncidentCreateWithoutOfficeInput[] | Prisma.FireIncidentUncheckedCreateWithoutOfficeInput[]
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutOfficeInput | Prisma.FireIncidentCreateOrConnectWithoutOfficeInput[]
+  upsert?: Prisma.FireIncidentUpsertWithWhereUniqueWithoutOfficeInput | Prisma.FireIncidentUpsertWithWhereUniqueWithoutOfficeInput[]
+  createMany?: Prisma.FireIncidentCreateManyOfficeInputEnvelope
+  set?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  disconnect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  delete?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  connect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  update?: Prisma.FireIncidentUpdateWithWhereUniqueWithoutOfficeInput | Prisma.FireIncidentUpdateWithWhereUniqueWithoutOfficeInput[]
+  updateMany?: Prisma.FireIncidentUpdateManyWithWhereWithoutOfficeInput | Prisma.FireIncidentUpdateManyWithWhereWithoutOfficeInput[]
+  deleteMany?: Prisma.FireIncidentScalarWhereInput | Prisma.FireIncidentScalarWhereInput[]
+}
+
+export type FireIncidentUncheckedUpdateManyWithoutInvestigationHandlingOfficeNestedInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutInvestigationHandlingOfficeInput, Prisma.FireIncidentUncheckedCreateWithoutInvestigationHandlingOfficeInput> | Prisma.FireIncidentCreateWithoutInvestigationHandlingOfficeInput[] | Prisma.FireIncidentUncheckedCreateWithoutInvestigationHandlingOfficeInput[]
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutInvestigationHandlingOfficeInput | Prisma.FireIncidentCreateOrConnectWithoutInvestigationHandlingOfficeInput[]
+  upsert?: Prisma.FireIncidentUpsertWithWhereUniqueWithoutInvestigationHandlingOfficeInput | Prisma.FireIncidentUpsertWithWhereUniqueWithoutInvestigationHandlingOfficeInput[]
+  createMany?: Prisma.FireIncidentCreateManyInvestigationHandlingOfficeInputEnvelope
+  set?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  disconnect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  delete?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  connect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  update?: Prisma.FireIncidentUpdateWithWhereUniqueWithoutInvestigationHandlingOfficeInput | Prisma.FireIncidentUpdateWithWhereUniqueWithoutInvestigationHandlingOfficeInput[]
+  updateMany?: Prisma.FireIncidentUpdateManyWithWhereWithoutInvestigationHandlingOfficeInput | Prisma.FireIncidentUpdateManyWithWhereWithoutInvestigationHandlingOfficeInput[]
+  deleteMany?: Prisma.FireIncidentScalarWhereInput | Prisma.FireIncidentScalarWhereInput[]
+}
+
 export type FireIncidentCreateNestedManyWithoutCreatedByInput = {
   create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutCreatedByInput, Prisma.FireIncidentUncheckedCreateWithoutCreatedByInput> | Prisma.FireIncidentCreateWithoutCreatedByInput[] | Prisma.FireIncidentUncheckedCreateWithoutCreatedByInput[]
   connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutCreatedByInput | Prisma.FireIncidentCreateOrConnectWithoutCreatedByInput[]
@@ -807,10 +1075,24 @@ export type FireIncidentCreateNestedManyWithoutCreatedByInput = {
   connect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
 }
 
+export type FireIncidentCreateNestedManyWithoutDeletedByInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutDeletedByInput, Prisma.FireIncidentUncheckedCreateWithoutDeletedByInput> | Prisma.FireIncidentCreateWithoutDeletedByInput[] | Prisma.FireIncidentUncheckedCreateWithoutDeletedByInput[]
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutDeletedByInput | Prisma.FireIncidentCreateOrConnectWithoutDeletedByInput[]
+  createMany?: Prisma.FireIncidentCreateManyDeletedByInputEnvelope
+  connect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+}
+
 export type FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput = {
   create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutCreatedByInput, Prisma.FireIncidentUncheckedCreateWithoutCreatedByInput> | Prisma.FireIncidentCreateWithoutCreatedByInput[] | Prisma.FireIncidentUncheckedCreateWithoutCreatedByInput[]
   connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutCreatedByInput | Prisma.FireIncidentCreateOrConnectWithoutCreatedByInput[]
   createMany?: Prisma.FireIncidentCreateManyCreatedByInputEnvelope
+  connect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+}
+
+export type FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutDeletedByInput, Prisma.FireIncidentUncheckedCreateWithoutDeletedByInput> | Prisma.FireIncidentCreateWithoutDeletedByInput[] | Prisma.FireIncidentUncheckedCreateWithoutDeletedByInput[]
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutDeletedByInput | Prisma.FireIncidentCreateOrConnectWithoutDeletedByInput[]
+  createMany?: Prisma.FireIncidentCreateManyDeletedByInputEnvelope
   connect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
 }
 
@@ -828,6 +1110,20 @@ export type FireIncidentUpdateManyWithoutCreatedByNestedInput = {
   deleteMany?: Prisma.FireIncidentScalarWhereInput | Prisma.FireIncidentScalarWhereInput[]
 }
 
+export type FireIncidentUpdateManyWithoutDeletedByNestedInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutDeletedByInput, Prisma.FireIncidentUncheckedCreateWithoutDeletedByInput> | Prisma.FireIncidentCreateWithoutDeletedByInput[] | Prisma.FireIncidentUncheckedCreateWithoutDeletedByInput[]
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutDeletedByInput | Prisma.FireIncidentCreateOrConnectWithoutDeletedByInput[]
+  upsert?: Prisma.FireIncidentUpsertWithWhereUniqueWithoutDeletedByInput | Prisma.FireIncidentUpsertWithWhereUniqueWithoutDeletedByInput[]
+  createMany?: Prisma.FireIncidentCreateManyDeletedByInputEnvelope
+  set?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  disconnect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  delete?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  connect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  update?: Prisma.FireIncidentUpdateWithWhereUniqueWithoutDeletedByInput | Prisma.FireIncidentUpdateWithWhereUniqueWithoutDeletedByInput[]
+  updateMany?: Prisma.FireIncidentUpdateManyWithWhereWithoutDeletedByInput | Prisma.FireIncidentUpdateManyWithWhereWithoutDeletedByInput[]
+  deleteMany?: Prisma.FireIncidentScalarWhereInput | Prisma.FireIncidentScalarWhereInput[]
+}
+
 export type FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput = {
   create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutCreatedByInput, Prisma.FireIncidentUncheckedCreateWithoutCreatedByInput> | Prisma.FireIncidentCreateWithoutCreatedByInput[] | Prisma.FireIncidentUncheckedCreateWithoutCreatedByInput[]
   connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutCreatedByInput | Prisma.FireIncidentCreateOrConnectWithoutCreatedByInput[]
@@ -842,42 +1138,70 @@ export type FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput = {
   deleteMany?: Prisma.FireIncidentScalarWhereInput | Prisma.FireIncidentScalarWhereInput[]
 }
 
-export type FireIncidentCreateWithoutInvestigationInput = {
+export type FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutDeletedByInput, Prisma.FireIncidentUncheckedCreateWithoutDeletedByInput> | Prisma.FireIncidentCreateWithoutDeletedByInput[] | Prisma.FireIncidentUncheckedCreateWithoutDeletedByInput[]
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutDeletedByInput | Prisma.FireIncidentCreateOrConnectWithoutDeletedByInput[]
+  upsert?: Prisma.FireIncidentUpsertWithWhereUniqueWithoutDeletedByInput | Prisma.FireIncidentUpsertWithWhereUniqueWithoutDeletedByInput[]
+  createMany?: Prisma.FireIncidentCreateManyDeletedByInputEnvelope
+  set?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  disconnect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  delete?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  connect?: Prisma.FireIncidentWhereUniqueInput | Prisma.FireIncidentWhereUniqueInput[]
+  update?: Prisma.FireIncidentUpdateWithWhereUniqueWithoutDeletedByInput | Prisma.FireIncidentUpdateWithWhereUniqueWithoutDeletedByInput[]
+  updateMany?: Prisma.FireIncidentUpdateManyWithWhereWithoutDeletedByInput | Prisma.FireIncidentUpdateManyWithWhereWithoutDeletedByInput[]
+  deleteMany?: Prisma.FireIncidentScalarWhereInput | Prisma.FireIncidentScalarWhereInput[]
+}
+
+export type FireIncidentCreateWithoutInvestigationsInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
   subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
   establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
   createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
   location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
   timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
   impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
 }
 
-export type FireIncidentUncheckedCreateWithoutInvestigationInput = {
+export type FireIncidentUncheckedCreateWithoutInvestigationsInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   categoryId: string
   subcategoryId?: string | null
   establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
   createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -886,60 +1210,76 @@ export type FireIncidentUncheckedCreateWithoutInvestigationInput = {
   impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
-export type FireIncidentCreateOrConnectWithoutInvestigationInput = {
+export type FireIncidentCreateOrConnectWithoutInvestigationsInput = {
   where: Prisma.FireIncidentWhereUniqueInput
-  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutInvestigationInput, Prisma.FireIncidentUncheckedCreateWithoutInvestigationInput>
+  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutInvestigationsInput, Prisma.FireIncidentUncheckedCreateWithoutInvestigationsInput>
 }
 
-export type FireIncidentUpsertWithoutInvestigationInput = {
-  update: Prisma.XOR<Prisma.FireIncidentUpdateWithoutInvestigationInput, Prisma.FireIncidentUncheckedUpdateWithoutInvestigationInput>
-  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutInvestigationInput, Prisma.FireIncidentUncheckedCreateWithoutInvestigationInput>
+export type FireIncidentUpsertWithoutInvestigationsInput = {
+  update: Prisma.XOR<Prisma.FireIncidentUpdateWithoutInvestigationsInput, Prisma.FireIncidentUncheckedUpdateWithoutInvestigationsInput>
+  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutInvestigationsInput, Prisma.FireIncidentUncheckedCreateWithoutInvestigationsInput>
   where?: Prisma.FireIncidentWhereInput
 }
 
-export type FireIncidentUpdateToOneWithWhereWithoutInvestigationInput = {
+export type FireIncidentUpdateToOneWithWhereWithoutInvestigationsInput = {
   where?: Prisma.FireIncidentWhereInput
-  data: Prisma.XOR<Prisma.FireIncidentUpdateWithoutInvestigationInput, Prisma.FireIncidentUncheckedUpdateWithoutInvestigationInput>
+  data: Prisma.XOR<Prisma.FireIncidentUpdateWithoutInvestigationsInput, Prisma.FireIncidentUncheckedUpdateWithoutInvestigationsInput>
 }
 
-export type FireIncidentUpdateWithoutInvestigationInput = {
+export type FireIncidentUpdateWithoutInvestigationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
   subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
   establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
   location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
   timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
   impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
 }
 
-export type FireIncidentUncheckedUpdateWithoutInvestigationInput = {
+export type FireIncidentUncheckedUpdateWithoutInvestigationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -948,44 +1288,200 @@ export type FireIncidentUncheckedUpdateWithoutInvestigationInput = {
   impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
-export type FireIncidentCreateWithoutResourcesInput = {
+export type FireIncidentCreateWithoutReferralsInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
   subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
   establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
   createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
   location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
   timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
   impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
+  resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
 }
 
-export type FireIncidentUncheckedCreateWithoutResourcesInput = {
+export type FireIncidentUncheckedCreateWithoutReferralsInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   categoryId: string
   subcategoryId?: string | null
   establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
   createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  location?: Prisma.IncidentLocationUncheckedCreateNestedOneWithoutFireIncidentInput
+  timeline?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutFireIncidentInput
+  impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
+  resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
+  personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+}
+
+export type FireIncidentCreateOrConnectWithoutReferralsInput = {
+  where: Prisma.FireIncidentWhereUniqueInput
+  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutReferralsInput, Prisma.FireIncidentUncheckedCreateWithoutReferralsInput>
+}
+
+export type FireIncidentUpsertWithoutReferralsInput = {
+  update: Prisma.XOR<Prisma.FireIncidentUpdateWithoutReferralsInput, Prisma.FireIncidentUncheckedUpdateWithoutReferralsInput>
+  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutReferralsInput, Prisma.FireIncidentUncheckedCreateWithoutReferralsInput>
+  where?: Prisma.FireIncidentWhereInput
+}
+
+export type FireIncidentUpdateToOneWithWhereWithoutReferralsInput = {
+  where?: Prisma.FireIncidentWhereInput
+  data: Prisma.XOR<Prisma.FireIncidentUpdateWithoutReferralsInput, Prisma.FireIncidentUncheckedUpdateWithoutReferralsInput>
+}
+
+export type FireIncidentUpdateWithoutReferralsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
+  subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
+  establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
+  location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
+  timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
+  impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
+  resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
+  personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+}
+
+export type FireIncidentUncheckedUpdateWithoutReferralsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  location?: Prisma.IncidentLocationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  timeline?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutFireIncidentNestedInput
+  impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
+  resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
+  personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+}
+
+export type FireIncidentCreateWithoutResourcesInput = {
+  id?: string
+  incidentNo?: string | null
+  dateTimeReported?: Date | string | null
+  dateTimeFireIncident?: Date | string | null
+  dateTimeCallReceived?: Date | string | null
+  dateTimeUnresponded?: Date | string | null
+  fireIncidentStatus: $Enums.FireIncidentStatus
+  currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
+  subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
+  establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
+  createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
+  location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
+  timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
+  impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
+  personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+}
+
+export type FireIncidentUncheckedCreateWithoutResourcesInput = {
+  id?: string
+  incidentNo?: string | null
+  dateTimeReported?: Date | string | null
+  dateTimeFireIncident?: Date | string | null
+  dateTimeCallReceived?: Date | string | null
+  dateTimeUnresponded?: Date | string | null
+  fireIncidentStatus: $Enums.FireIncidentStatus
+  currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  categoryId: string
+  subcategoryId?: string | null
+  establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
+  createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -993,7 +1489,9 @@ export type FireIncidentUncheckedCreateWithoutResourcesInput = {
   timeline?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutFireIncidentInput
   impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutResourcesInput = {
@@ -1014,40 +1512,54 @@ export type FireIncidentUpdateToOneWithWhereWithoutResourcesInput = {
 
 export type FireIncidentUpdateWithoutResourcesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
   subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
   establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
   location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
   timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
   impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutResourcesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1055,45 +1567,61 @@ export type FireIncidentUncheckedUpdateWithoutResourcesInput = {
   timeline?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutFireIncidentNestedInput
   impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentCreateWithoutImpactInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
   subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
   establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
   createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
   location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
   timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutImpactInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   categoryId: string
   subcategoryId?: string | null
   establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
   createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1101,7 +1629,9 @@ export type FireIncidentUncheckedCreateWithoutImpactInput = {
   timeline?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutImpactInput = {
@@ -1122,40 +1652,54 @@ export type FireIncidentUpdateToOneWithWhereWithoutImpactInput = {
 
 export type FireIncidentUpdateWithoutImpactInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
   subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
   establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
   location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
   timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutImpactInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1163,45 +1707,61 @@ export type FireIncidentUncheckedUpdateWithoutImpactInput = {
   timeline?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentCreateWithoutLocationInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
   subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
   establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
   createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
   timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
   impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutLocationInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   categoryId: string
   subcategoryId?: string | null
   establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
   createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1209,7 +1769,9 @@ export type FireIncidentUncheckedCreateWithoutLocationInput = {
   impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutLocationInput = {
@@ -1230,40 +1792,54 @@ export type FireIncidentUpdateToOneWithWhereWithoutLocationInput = {
 
 export type FireIncidentUpdateWithoutLocationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
   subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
   establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
   timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
   impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutLocationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1271,45 +1847,61 @@ export type FireIncidentUncheckedUpdateWithoutLocationInput = {
   impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentCreateWithoutPersonnelInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
   subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
   establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
   createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
   location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
   timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
   impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutPersonnelInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   categoryId: string
   subcategoryId?: string | null
   establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
   createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1317,7 +1909,9 @@ export type FireIncidentUncheckedCreateWithoutPersonnelInput = {
   timeline?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutFireIncidentInput
   impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutPersonnelInput = {
@@ -1338,40 +1932,54 @@ export type FireIncidentUpdateToOneWithWhereWithoutPersonnelInput = {
 
 export type FireIncidentUpdateWithoutPersonnelInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
   subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
   establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
   location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
   timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
   impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutPersonnelInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1379,45 +1987,61 @@ export type FireIncidentUncheckedUpdateWithoutPersonnelInput = {
   timeline?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutFireIncidentNestedInput
   impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentCreateWithoutTimelineInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
   subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
   establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
   createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
   location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
   impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutTimelineInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   categoryId: string
   subcategoryId?: string | null
   establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
   createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1425,7 +2049,9 @@ export type FireIncidentUncheckedCreateWithoutTimelineInput = {
   impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutTimelineInput = {
@@ -1446,40 +2072,54 @@ export type FireIncidentUpdateToOneWithWhereWithoutTimelineInput = {
 
 export type FireIncidentUpdateWithoutTimelineInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
   subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
   establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
   location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
   impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutTimelineInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1487,44 +2127,60 @@ export type FireIncidentUncheckedUpdateWithoutTimelineInput = {
   impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentCreateWithoutEstablishmentInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
   subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
   createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
   location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
   timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
   impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutEstablishmentInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   categoryId: string
   subcategoryId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
   createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1533,7 +2189,9 @@ export type FireIncidentUncheckedCreateWithoutEstablishmentInput = {
   impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutEstablishmentInput = {
@@ -1567,17 +2225,23 @@ export type FireIncidentScalarWhereInput = {
   OR?: Prisma.FireIncidentScalarWhereInput[]
   NOT?: Prisma.FireIncidentScalarWhereInput | Prisma.FireIncidentScalarWhereInput[]
   id?: Prisma.StringFilter<"FireIncident"> | string
-  incidentNo?: Prisma.StringFilter<"FireIncident"> | string
+  incidentNo?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   dateTimeReported?: Prisma.DateTimeNullableFilter<"FireIncident"> | Date | string | null
   dateTimeFireIncident?: Prisma.DateTimeNullableFilter<"FireIncident"> | Date | string | null
   dateTimeCallReceived?: Prisma.DateTimeNullableFilter<"FireIncident"> | Date | string | null
   dateTimeUnresponded?: Prisma.DateTimeNullableFilter<"FireIncident"> | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFilter<"FireIncident"> | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.EnumFireAlarmLevelNullableFilter<"FireIncident"> | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFilter<"FireIncident"> | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFilter<"FireIncident"> | string
   subcategoryId?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   establishmentId?: Prisma.StringNullableFilter<"FireIncident"> | string | null
+  officeId?: Prisma.StringFilter<"FireIncident"> | string
+  investigationHandlingOfficeId?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   createdById?: Prisma.StringFilter<"FireIncident"> | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"FireIncident"> | Date | string | null
+  deletedById?: Prisma.StringNullableFilter<"FireIncident"> | string | null
+  deletionReason?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   remarks?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   createdAt?: Prisma.DateTimeFilter<"FireIncident"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FireIncident"> | Date | string
@@ -1585,39 +2249,53 @@ export type FireIncidentScalarWhereInput = {
 
 export type FireIncidentCreateWithoutCategoryInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
   establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
   createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
   location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
   timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
   impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutCategoryInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   subcategoryId?: string | null
   establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
   createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1626,7 +2304,9 @@ export type FireIncidentUncheckedCreateWithoutCategoryInput = {
   impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutCategoryInput = {
@@ -1655,41 +2335,56 @@ export type FireIncidentUpdateManyWithWhereWithoutCategoryInput = {
   data: Prisma.XOR<Prisma.FireIncidentUpdateManyMutationInput, Prisma.FireIncidentUncheckedUpdateManyWithoutCategoryInput>
 }
 
-export type FireIncidentCreateWithoutSubcategoryInput = {
+export type FireIncidentCreateWithoutEventsInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
+  subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
   establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
   createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
   location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
   timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
   impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
 }
 
-export type FireIncidentUncheckedCreateWithoutSubcategoryInput = {
+export type FireIncidentUncheckedCreateWithoutEventsInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   categoryId: string
+  subcategoryId?: string | null
   establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
   createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1698,7 +2393,148 @@ export type FireIncidentUncheckedCreateWithoutSubcategoryInput = {
   impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+}
+
+export type FireIncidentCreateOrConnectWithoutEventsInput = {
+  where: Prisma.FireIncidentWhereUniqueInput
+  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutEventsInput, Prisma.FireIncidentUncheckedCreateWithoutEventsInput>
+}
+
+export type FireIncidentUpsertWithoutEventsInput = {
+  update: Prisma.XOR<Prisma.FireIncidentUpdateWithoutEventsInput, Prisma.FireIncidentUncheckedUpdateWithoutEventsInput>
+  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutEventsInput, Prisma.FireIncidentUncheckedCreateWithoutEventsInput>
+  where?: Prisma.FireIncidentWhereInput
+}
+
+export type FireIncidentUpdateToOneWithWhereWithoutEventsInput = {
+  where?: Prisma.FireIncidentWhereInput
+  data: Prisma.XOR<Prisma.FireIncidentUpdateWithoutEventsInput, Prisma.FireIncidentUncheckedUpdateWithoutEventsInput>
+}
+
+export type FireIncidentUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
+  subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
+  establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
+  location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
+  timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
+  impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
+  resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
+  personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+}
+
+export type FireIncidentUncheckedUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  location?: Prisma.IncidentLocationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  timeline?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutFireIncidentNestedInput
+  impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
+  resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
+  personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+}
+
+export type FireIncidentCreateWithoutSubcategoryInput = {
+  id?: string
+  incidentNo?: string | null
+  dateTimeReported?: Date | string | null
+  dateTimeFireIncident?: Date | string | null
+  dateTimeCallReceived?: Date | string | null
+  dateTimeUnresponded?: Date | string | null
+  fireIncidentStatus: $Enums.FireIncidentStatus
+  currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
+  establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
+  createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
+  location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
+  timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
+  impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
+  resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
+  personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+}
+
+export type FireIncidentUncheckedCreateWithoutSubcategoryInput = {
+  id?: string
+  incidentNo?: string | null
+  dateTimeReported?: Date | string | null
+  dateTimeFireIncident?: Date | string | null
+  dateTimeCallReceived?: Date | string | null
+  dateTimeUnresponded?: Date | string | null
+  fireIncidentStatus: $Enums.FireIncidentStatus
+  currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  categoryId: string
+  establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
+  createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  location?: Prisma.IncidentLocationUncheckedCreateNestedOneWithoutFireIncidentInput
+  timeline?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutFireIncidentInput
+  impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
+  resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
+  personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutSubcategoryInput = {
@@ -1727,41 +2563,55 @@ export type FireIncidentUpdateManyWithWhereWithoutSubcategoryInput = {
   data: Prisma.XOR<Prisma.FireIncidentUpdateManyMutationInput, Prisma.FireIncidentUncheckedUpdateManyWithoutSubcategoryInput>
 }
 
-export type FireIncidentCreateWithoutCreatedByInput = {
+export type FireIncidentCreateWithoutOfficeInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
   subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
   establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
+  createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
   location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
   timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
   impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
 }
 
-export type FireIncidentUncheckedCreateWithoutCreatedByInput = {
+export type FireIncidentUncheckedCreateWithoutOfficeInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   categoryId: string
   subcategoryId?: string | null
   establishmentId?: string | null
+  investigationHandlingOfficeId?: string | null
+  createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1770,7 +2620,185 @@ export type FireIncidentUncheckedCreateWithoutCreatedByInput = {
   impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
   resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
   personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
-  investigation?: Prisma.InvestigationUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+}
+
+export type FireIncidentCreateOrConnectWithoutOfficeInput = {
+  where: Prisma.FireIncidentWhereUniqueInput
+  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutOfficeInput, Prisma.FireIncidentUncheckedCreateWithoutOfficeInput>
+}
+
+export type FireIncidentCreateManyOfficeInputEnvelope = {
+  data: Prisma.FireIncidentCreateManyOfficeInput | Prisma.FireIncidentCreateManyOfficeInput[]
+  skipDuplicates?: boolean
+}
+
+export type FireIncidentCreateWithoutInvestigationHandlingOfficeInput = {
+  id?: string
+  incidentNo?: string | null
+  dateTimeReported?: Date | string | null
+  dateTimeFireIncident?: Date | string | null
+  dateTimeCallReceived?: Date | string | null
+  dateTimeUnresponded?: Date | string | null
+  fireIncidentStatus: $Enums.FireIncidentStatus
+  currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
+  subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
+  establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
+  location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
+  timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
+  impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
+  resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
+  personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+}
+
+export type FireIncidentUncheckedCreateWithoutInvestigationHandlingOfficeInput = {
+  id?: string
+  incidentNo?: string | null
+  dateTimeReported?: Date | string | null
+  dateTimeFireIncident?: Date | string | null
+  dateTimeCallReceived?: Date | string | null
+  dateTimeUnresponded?: Date | string | null
+  fireIncidentStatus: $Enums.FireIncidentStatus
+  currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  categoryId: string
+  subcategoryId?: string | null
+  establishmentId?: string | null
+  officeId: string
+  createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  location?: Prisma.IncidentLocationUncheckedCreateNestedOneWithoutFireIncidentInput
+  timeline?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutFireIncidentInput
+  impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
+  resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
+  personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+}
+
+export type FireIncidentCreateOrConnectWithoutInvestigationHandlingOfficeInput = {
+  where: Prisma.FireIncidentWhereUniqueInput
+  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutInvestigationHandlingOfficeInput, Prisma.FireIncidentUncheckedCreateWithoutInvestigationHandlingOfficeInput>
+}
+
+export type FireIncidentCreateManyInvestigationHandlingOfficeInputEnvelope = {
+  data: Prisma.FireIncidentCreateManyInvestigationHandlingOfficeInput | Prisma.FireIncidentCreateManyInvestigationHandlingOfficeInput[]
+  skipDuplicates?: boolean
+}
+
+export type FireIncidentUpsertWithWhereUniqueWithoutOfficeInput = {
+  where: Prisma.FireIncidentWhereUniqueInput
+  update: Prisma.XOR<Prisma.FireIncidentUpdateWithoutOfficeInput, Prisma.FireIncidentUncheckedUpdateWithoutOfficeInput>
+  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutOfficeInput, Prisma.FireIncidentUncheckedCreateWithoutOfficeInput>
+}
+
+export type FireIncidentUpdateWithWhereUniqueWithoutOfficeInput = {
+  where: Prisma.FireIncidentWhereUniqueInput
+  data: Prisma.XOR<Prisma.FireIncidentUpdateWithoutOfficeInput, Prisma.FireIncidentUncheckedUpdateWithoutOfficeInput>
+}
+
+export type FireIncidentUpdateManyWithWhereWithoutOfficeInput = {
+  where: Prisma.FireIncidentScalarWhereInput
+  data: Prisma.XOR<Prisma.FireIncidentUpdateManyMutationInput, Prisma.FireIncidentUncheckedUpdateManyWithoutOfficeInput>
+}
+
+export type FireIncidentUpsertWithWhereUniqueWithoutInvestigationHandlingOfficeInput = {
+  where: Prisma.FireIncidentWhereUniqueInput
+  update: Prisma.XOR<Prisma.FireIncidentUpdateWithoutInvestigationHandlingOfficeInput, Prisma.FireIncidentUncheckedUpdateWithoutInvestigationHandlingOfficeInput>
+  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutInvestigationHandlingOfficeInput, Prisma.FireIncidentUncheckedCreateWithoutInvestigationHandlingOfficeInput>
+}
+
+export type FireIncidentUpdateWithWhereUniqueWithoutInvestigationHandlingOfficeInput = {
+  where: Prisma.FireIncidentWhereUniqueInput
+  data: Prisma.XOR<Prisma.FireIncidentUpdateWithoutInvestigationHandlingOfficeInput, Prisma.FireIncidentUncheckedUpdateWithoutInvestigationHandlingOfficeInput>
+}
+
+export type FireIncidentUpdateManyWithWhereWithoutInvestigationHandlingOfficeInput = {
+  where: Prisma.FireIncidentScalarWhereInput
+  data: Prisma.XOR<Prisma.FireIncidentUpdateManyMutationInput, Prisma.FireIncidentUncheckedUpdateManyWithoutInvestigationHandlingOfficeInput>
+}
+
+export type FireIncidentCreateWithoutCreatedByInput = {
+  id?: string
+  incidentNo?: string | null
+  dateTimeReported?: Date | string | null
+  dateTimeFireIncident?: Date | string | null
+  dateTimeCallReceived?: Date | string | null
+  dateTimeUnresponded?: Date | string | null
+  fireIncidentStatus: $Enums.FireIncidentStatus
+  currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
+  subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
+  establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
+  location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
+  timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
+  impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
+  resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
+  personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+}
+
+export type FireIncidentUncheckedCreateWithoutCreatedByInput = {
+  id?: string
+  incidentNo?: string | null
+  dateTimeReported?: Date | string | null
+  dateTimeFireIncident?: Date | string | null
+  dateTimeCallReceived?: Date | string | null
+  dateTimeUnresponded?: Date | string | null
+  fireIncidentStatus: $Enums.FireIncidentStatus
+  currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  categoryId: string
+  subcategoryId?: string | null
+  establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  location?: Prisma.IncidentLocationUncheckedCreateNestedOneWithoutFireIncidentInput
+  timeline?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutFireIncidentInput
+  impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
+  resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
+  personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutCreatedByInput = {
@@ -1780,6 +2808,78 @@ export type FireIncidentCreateOrConnectWithoutCreatedByInput = {
 
 export type FireIncidentCreateManyCreatedByInputEnvelope = {
   data: Prisma.FireIncidentCreateManyCreatedByInput | Prisma.FireIncidentCreateManyCreatedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type FireIncidentCreateWithoutDeletedByInput = {
+  id?: string
+  incidentNo?: string | null
+  dateTimeReported?: Date | string | null
+  dateTimeFireIncident?: Date | string | null
+  dateTimeCallReceived?: Date | string | null
+  dateTimeUnresponded?: Date | string | null
+  fireIncidentStatus: $Enums.FireIncidentStatus
+  currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
+  subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
+  establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
+  createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
+  timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
+  impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
+  resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
+  personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+}
+
+export type FireIncidentUncheckedCreateWithoutDeletedByInput = {
+  id?: string
+  incidentNo?: string | null
+  dateTimeReported?: Date | string | null
+  dateTimeFireIncident?: Date | string | null
+  dateTimeCallReceived?: Date | string | null
+  dateTimeUnresponded?: Date | string | null
+  fireIncidentStatus: $Enums.FireIncidentStatus
+  currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  categoryId: string
+  subcategoryId?: string | null
+  establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
+  createdById: string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  location?: Prisma.IncidentLocationUncheckedCreateNestedOneWithoutFireIncidentInput
+  timeline?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutFireIncidentInput
+  impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
+  resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
+  personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+}
+
+export type FireIncidentCreateOrConnectWithoutDeletedByInput = {
+  where: Prisma.FireIncidentWhereUniqueInput
+  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutDeletedByInput, Prisma.FireIncidentUncheckedCreateWithoutDeletedByInput>
+}
+
+export type FireIncidentCreateManyDeletedByInputEnvelope = {
+  data: Prisma.FireIncidentCreateManyDeletedByInput | Prisma.FireIncidentCreateManyDeletedByInput[]
   skipDuplicates?: boolean
 }
 
@@ -1799,18 +2899,40 @@ export type FireIncidentUpdateManyWithWhereWithoutCreatedByInput = {
   data: Prisma.XOR<Prisma.FireIncidentUpdateManyMutationInput, Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByInput>
 }
 
+export type FireIncidentUpsertWithWhereUniqueWithoutDeletedByInput = {
+  where: Prisma.FireIncidentWhereUniqueInput
+  update: Prisma.XOR<Prisma.FireIncidentUpdateWithoutDeletedByInput, Prisma.FireIncidentUncheckedUpdateWithoutDeletedByInput>
+  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutDeletedByInput, Prisma.FireIncidentUncheckedCreateWithoutDeletedByInput>
+}
+
+export type FireIncidentUpdateWithWhereUniqueWithoutDeletedByInput = {
+  where: Prisma.FireIncidentWhereUniqueInput
+  data: Prisma.XOR<Prisma.FireIncidentUpdateWithoutDeletedByInput, Prisma.FireIncidentUncheckedUpdateWithoutDeletedByInput>
+}
+
+export type FireIncidentUpdateManyWithWhereWithoutDeletedByInput = {
+  where: Prisma.FireIncidentScalarWhereInput
+  data: Prisma.XOR<Prisma.FireIncidentUpdateManyMutationInput, Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByInput>
+}
+
 export type FireIncidentCreateManyEstablishmentInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   categoryId: string
   subcategoryId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
   createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1818,39 +2940,53 @@ export type FireIncidentCreateManyEstablishmentInput = {
 
 export type FireIncidentUpdateWithoutEstablishmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
   subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
   location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
   timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
   impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutEstablishmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1859,21 +2995,29 @@ export type FireIncidentUncheckedUpdateWithoutEstablishmentInput = {
   impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateManyWithoutEstablishmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1881,16 +3025,22 @@ export type FireIncidentUncheckedUpdateManyWithoutEstablishmentInput = {
 
 export type FireIncidentCreateManyCategoryInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   subcategoryId?: string | null
   establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
   createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1898,39 +3048,53 @@ export type FireIncidentCreateManyCategoryInput = {
 
 export type FireIncidentUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
   establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
   location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
   timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
   impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1939,21 +3103,29 @@ export type FireIncidentUncheckedUpdateWithoutCategoryInput = {
   impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateManyWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1961,16 +3133,22 @@ export type FireIncidentUncheckedUpdateManyWithoutCategoryInput = {
 
 export type FireIncidentCreateManySubcategoryInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   categoryId: string
   establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
   createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1978,39 +3156,53 @@ export type FireIncidentCreateManySubcategoryInput = {
 
 export type FireIncidentUpdateWithoutSubcategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
   establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
   location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
   timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
   impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutSubcategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2019,21 +3211,245 @@ export type FireIncidentUncheckedUpdateWithoutSubcategoryInput = {
   impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateManyWithoutSubcategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type FireIncidentCreateManyOfficeInput = {
+  id?: string
+  incidentNo?: string | null
+  dateTimeReported?: Date | string | null
+  dateTimeFireIncident?: Date | string | null
+  dateTimeCallReceived?: Date | string | null
+  dateTimeUnresponded?: Date | string | null
+  fireIncidentStatus: $Enums.FireIncidentStatus
+  currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  categoryId: string
+  subcategoryId?: string | null
+  establishmentId?: string | null
+  investigationHandlingOfficeId?: string | null
+  createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FireIncidentCreateManyInvestigationHandlingOfficeInput = {
+  id?: string
+  incidentNo?: string | null
+  dateTimeReported?: Date | string | null
+  dateTimeFireIncident?: Date | string | null
+  dateTimeCallReceived?: Date | string | null
+  dateTimeUnresponded?: Date | string | null
+  fireIncidentStatus: $Enums.FireIncidentStatus
+  currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  categoryId: string
+  subcategoryId?: string | null
+  establishmentId?: string | null
+  officeId: string
+  createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FireIncidentUpdateWithoutOfficeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
+  subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
+  establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
+  location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
+  timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
+  impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
+  resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
+  personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+}
+
+export type FireIncidentUncheckedUpdateWithoutOfficeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  location?: Prisma.IncidentLocationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  timeline?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutFireIncidentNestedInput
+  impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
+  resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
+  personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+}
+
+export type FireIncidentUncheckedUpdateManyWithoutOfficeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type FireIncidentUpdateWithoutInvestigationHandlingOfficeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
+  subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
+  establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
+  location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
+  timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
+  impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
+  resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
+  personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+}
+
+export type FireIncidentUncheckedUpdateWithoutInvestigationHandlingOfficeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  location?: Prisma.IncidentLocationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  timeline?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutFireIncidentNestedInput
+  impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
+  resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
+  personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+}
+
+export type FireIncidentUncheckedUpdateManyWithoutInvestigationHandlingOfficeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2041,16 +3457,45 @@ export type FireIncidentUncheckedUpdateManyWithoutSubcategoryInput = {
 
 export type FireIncidentCreateManyCreatedByInput = {
   id?: string
-  incidentNo: string
+  incidentNo?: string | null
   dateTimeReported?: Date | string | null
   dateTimeFireIncident?: Date | string | null
   dateTimeCallReceived?: Date | string | null
   dateTimeUnresponded?: Date | string | null
   fireIncidentStatus: $Enums.FireIncidentStatus
   currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
   categoryId: string
   subcategoryId?: string | null
   establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FireIncidentCreateManyDeletedByInput = {
+  id?: string
+  incidentNo?: string | null
+  dateTimeReported?: Date | string | null
+  dateTimeFireIncident?: Date | string | null
+  dateTimeCallReceived?: Date | string | null
+  dateTimeUnresponded?: Date | string | null
+  fireIncidentStatus: $Enums.FireIncidentStatus
+  currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  categoryId: string
+  subcategoryId?: string | null
+  establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
+  createdById: string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2058,39 +3503,53 @@ export type FireIncidentCreateManyCreatedByInput = {
 
 export type FireIncidentUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
   subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
   establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
   location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
   timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
   impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2099,21 +3558,114 @@ export type FireIncidentUncheckedUpdateWithoutCreatedByInput = {
   impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
   resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
-  investigation?: Prisma.InvestigationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateManyWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  incidentNo?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
   currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type FireIncidentUpdateWithoutDeletedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
+  subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
+  establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
+  timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
+  impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
+  resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
+  personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+}
+
+export type FireIncidentUncheckedUpdateWithoutDeletedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  location?: Prisma.IncidentLocationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  timeline?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutFireIncidentNestedInput
+  impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
+  resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
+  personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+}
+
+export type FireIncidentUncheckedUpdateManyWithoutDeletedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2126,10 +3678,16 @@ export type FireIncidentUncheckedUpdateManyWithoutCreatedByInput = {
 
 export type FireIncidentCountOutputType = {
   timeline: number
+  investigations: number
+  referrals: number
+  events: number
 }
 
 export type FireIncidentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   timeline?: boolean | FireIncidentCountOutputTypeCountTimelineArgs
+  investigations?: boolean | FireIncidentCountOutputTypeCountInvestigationsArgs
+  referrals?: boolean | FireIncidentCountOutputTypeCountReferralsArgs
+  events?: boolean | FireIncidentCountOutputTypeCountEventsArgs
 }
 
 /**
@@ -2149,6 +3707,27 @@ export type FireIncidentCountOutputTypeCountTimelineArgs<ExtArgs extends runtime
   where?: Prisma.IncidentTimelineWhereInput
 }
 
+/**
+ * FireIncidentCountOutputType without action
+ */
+export type FireIncidentCountOutputTypeCountInvestigationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvestigationWhereInput
+}
+
+/**
+ * FireIncidentCountOutputType without action
+ */
+export type FireIncidentCountOutputTypeCountReferralsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvestigationReferralWhereInput
+}
+
+/**
+ * FireIncidentCountOutputType without action
+ */
+export type FireIncidentCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FireIncidentEventWhereInput
+}
+
 
 export type FireIncidentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2159,23 +3738,34 @@ export type FireIncidentSelect<ExtArgs extends runtime.Types.Extensions.Internal
   dateTimeUnresponded?: boolean
   fireIncidentStatus?: boolean
   currentAlarmLevel?: boolean
+  approvalStatus?: boolean
   categoryId?: boolean
   subcategoryId?: boolean
   establishmentId?: boolean
+  officeId?: boolean
+  investigationHandlingOfficeId?: boolean
   createdById?: boolean
+  deletedAt?: boolean
+  deletedById?: boolean
+  deletionReason?: boolean
   remarks?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   category?: boolean | Prisma.FireIncidentCategoryDefaultArgs<ExtArgs>
   subcategory?: boolean | Prisma.FireIncident$subcategoryArgs<ExtArgs>
   establishment?: boolean | Prisma.FireIncident$establishmentArgs<ExtArgs>
+  office?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
+  investigationHandlingOffice?: boolean | Prisma.FireIncident$investigationHandlingOfficeArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  deletedBy?: boolean | Prisma.FireIncident$deletedByArgs<ExtArgs>
   location?: boolean | Prisma.FireIncident$locationArgs<ExtArgs>
   timeline?: boolean | Prisma.FireIncident$timelineArgs<ExtArgs>
   impact?: boolean | Prisma.FireIncident$impactArgs<ExtArgs>
   resources?: boolean | Prisma.FireIncident$resourcesArgs<ExtArgs>
   personnel?: boolean | Prisma.FireIncident$personnelArgs<ExtArgs>
-  investigation?: boolean | Prisma.FireIncident$investigationArgs<ExtArgs>
+  investigations?: boolean | Prisma.FireIncident$investigationsArgs<ExtArgs>
+  referrals?: boolean | Prisma.FireIncident$referralsArgs<ExtArgs>
+  events?: boolean | Prisma.FireIncident$eventsArgs<ExtArgs>
   _count?: boolean | Prisma.FireIncidentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["fireIncident"]>
 
@@ -2188,17 +3778,26 @@ export type FireIncidentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   dateTimeUnresponded?: boolean
   fireIncidentStatus?: boolean
   currentAlarmLevel?: boolean
+  approvalStatus?: boolean
   categoryId?: boolean
   subcategoryId?: boolean
   establishmentId?: boolean
+  officeId?: boolean
+  investigationHandlingOfficeId?: boolean
   createdById?: boolean
+  deletedAt?: boolean
+  deletedById?: boolean
+  deletionReason?: boolean
   remarks?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   category?: boolean | Prisma.FireIncidentCategoryDefaultArgs<ExtArgs>
   subcategory?: boolean | Prisma.FireIncident$subcategoryArgs<ExtArgs>
   establishment?: boolean | Prisma.FireIncident$establishmentArgs<ExtArgs>
+  office?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
+  investigationHandlingOffice?: boolean | Prisma.FireIncident$investigationHandlingOfficeArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  deletedBy?: boolean | Prisma.FireIncident$deletedByArgs<ExtArgs>
 }, ExtArgs["result"]["fireIncident"]>
 
 export type FireIncidentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2210,17 +3809,26 @@ export type FireIncidentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   dateTimeUnresponded?: boolean
   fireIncidentStatus?: boolean
   currentAlarmLevel?: boolean
+  approvalStatus?: boolean
   categoryId?: boolean
   subcategoryId?: boolean
   establishmentId?: boolean
+  officeId?: boolean
+  investigationHandlingOfficeId?: boolean
   createdById?: boolean
+  deletedAt?: boolean
+  deletedById?: boolean
+  deletionReason?: boolean
   remarks?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   category?: boolean | Prisma.FireIncidentCategoryDefaultArgs<ExtArgs>
   subcategory?: boolean | Prisma.FireIncident$subcategoryArgs<ExtArgs>
   establishment?: boolean | Prisma.FireIncident$establishmentArgs<ExtArgs>
+  office?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
+  investigationHandlingOffice?: boolean | Prisma.FireIncident$investigationHandlingOfficeArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  deletedBy?: boolean | Prisma.FireIncident$deletedByArgs<ExtArgs>
 }, ExtArgs["result"]["fireIncident"]>
 
 export type FireIncidentSelectScalar = {
@@ -2232,40 +3840,57 @@ export type FireIncidentSelectScalar = {
   dateTimeUnresponded?: boolean
   fireIncidentStatus?: boolean
   currentAlarmLevel?: boolean
+  approvalStatus?: boolean
   categoryId?: boolean
   subcategoryId?: boolean
   establishmentId?: boolean
+  officeId?: boolean
+  investigationHandlingOfficeId?: boolean
   createdById?: boolean
+  deletedAt?: boolean
+  deletedById?: boolean
+  deletionReason?: boolean
   remarks?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FireIncidentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "incidentNo" | "dateTimeReported" | "dateTimeFireIncident" | "dateTimeCallReceived" | "dateTimeUnresponded" | "fireIncidentStatus" | "currentAlarmLevel" | "categoryId" | "subcategoryId" | "establishmentId" | "createdById" | "remarks" | "createdAt" | "updatedAt", ExtArgs["result"]["fireIncident"]>
+export type FireIncidentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "incidentNo" | "dateTimeReported" | "dateTimeFireIncident" | "dateTimeCallReceived" | "dateTimeUnresponded" | "fireIncidentStatus" | "currentAlarmLevel" | "approvalStatus" | "categoryId" | "subcategoryId" | "establishmentId" | "officeId" | "investigationHandlingOfficeId" | "createdById" | "deletedAt" | "deletedById" | "deletionReason" | "remarks" | "createdAt" | "updatedAt", ExtArgs["result"]["fireIncident"]>
 export type FireIncidentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.FireIncidentCategoryDefaultArgs<ExtArgs>
   subcategory?: boolean | Prisma.FireIncident$subcategoryArgs<ExtArgs>
   establishment?: boolean | Prisma.FireIncident$establishmentArgs<ExtArgs>
+  office?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
+  investigationHandlingOffice?: boolean | Prisma.FireIncident$investigationHandlingOfficeArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  deletedBy?: boolean | Prisma.FireIncident$deletedByArgs<ExtArgs>
   location?: boolean | Prisma.FireIncident$locationArgs<ExtArgs>
   timeline?: boolean | Prisma.FireIncident$timelineArgs<ExtArgs>
   impact?: boolean | Prisma.FireIncident$impactArgs<ExtArgs>
   resources?: boolean | Prisma.FireIncident$resourcesArgs<ExtArgs>
   personnel?: boolean | Prisma.FireIncident$personnelArgs<ExtArgs>
-  investigation?: boolean | Prisma.FireIncident$investigationArgs<ExtArgs>
+  investigations?: boolean | Prisma.FireIncident$investigationsArgs<ExtArgs>
+  referrals?: boolean | Prisma.FireIncident$referralsArgs<ExtArgs>
+  events?: boolean | Prisma.FireIncident$eventsArgs<ExtArgs>
   _count?: boolean | Prisma.FireIncidentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FireIncidentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.FireIncidentCategoryDefaultArgs<ExtArgs>
   subcategory?: boolean | Prisma.FireIncident$subcategoryArgs<ExtArgs>
   establishment?: boolean | Prisma.FireIncident$establishmentArgs<ExtArgs>
+  office?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
+  investigationHandlingOffice?: boolean | Prisma.FireIncident$investigationHandlingOfficeArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  deletedBy?: boolean | Prisma.FireIncident$deletedByArgs<ExtArgs>
 }
 export type FireIncidentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.FireIncidentCategoryDefaultArgs<ExtArgs>
   subcategory?: boolean | Prisma.FireIncident$subcategoryArgs<ExtArgs>
   establishment?: boolean | Prisma.FireIncident$establishmentArgs<ExtArgs>
+  office?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
+  investigationHandlingOffice?: boolean | Prisma.FireIncident$investigationHandlingOfficeArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  deletedBy?: boolean | Prisma.FireIncident$deletedByArgs<ExtArgs>
 }
 
 export type $FireIncidentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2274,27 +3899,38 @@ export type $FireIncidentPayload<ExtArgs extends runtime.Types.Extensions.Intern
     category: Prisma.$FireIncidentCategoryPayload<ExtArgs>
     subcategory: Prisma.$FireIncidentSubcategoryPayload<ExtArgs> | null
     establishment: Prisma.$EstablishmentPayload<ExtArgs> | null
+    office: Prisma.$OfficePayload<ExtArgs>
+    investigationHandlingOffice: Prisma.$OfficePayload<ExtArgs> | null
     createdBy: Prisma.$UserPayload<ExtArgs>
+    deletedBy: Prisma.$UserPayload<ExtArgs> | null
     location: Prisma.$IncidentLocationPayload<ExtArgs> | null
     timeline: Prisma.$IncidentTimelinePayload<ExtArgs>[]
     impact: Prisma.$IncidentImpactPayload<ExtArgs> | null
     resources: Prisma.$FireOpertaionResourcesPayload<ExtArgs> | null
     personnel: Prisma.$IncidentPersonnelPayload<ExtArgs> | null
-    investigation: Prisma.$InvestigationPayload<ExtArgs> | null
+    investigations: Prisma.$InvestigationPayload<ExtArgs>[]
+    referrals: Prisma.$InvestigationReferralPayload<ExtArgs>[]
+    events: Prisma.$FireIncidentEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    incidentNo: string
+    incidentNo: string | null
     dateTimeReported: Date | null
     dateTimeFireIncident: Date | null
     dateTimeCallReceived: Date | null
     dateTimeUnresponded: Date | null
     fireIncidentStatus: $Enums.FireIncidentStatus
     currentAlarmLevel: $Enums.FireAlarmLevel | null
+    approvalStatus: $Enums.IncidentApprovalStatus
     categoryId: string
     subcategoryId: string | null
     establishmentId: string | null
+    officeId: string
+    investigationHandlingOfficeId: string | null
     createdById: string
+    deletedAt: Date | null
+    deletedById: string | null
+    deletionReason: string | null
     remarks: string | null
     createdAt: Date
     updatedAt: Date
@@ -2695,13 +4331,18 @@ export interface Prisma__FireIncidentClient<T, Null = never, ExtArgs extends run
   category<T extends Prisma.FireIncidentCategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncidentCategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__FireIncidentCategoryClient<runtime.Types.Result.GetResult<Prisma.$FireIncidentCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   subcategory<T extends Prisma.FireIncident$subcategoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$subcategoryArgs<ExtArgs>>): Prisma.Prisma__FireIncidentSubcategoryClient<runtime.Types.Result.GetResult<Prisma.$FireIncidentSubcategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   establishment<T extends Prisma.FireIncident$establishmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$establishmentArgs<ExtArgs>>): Prisma.Prisma__EstablishmentClient<runtime.Types.Result.GetResult<Prisma.$EstablishmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  office<T extends Prisma.OfficeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OfficeDefaultArgs<ExtArgs>>): Prisma.Prisma__OfficeClient<runtime.Types.Result.GetResult<Prisma.$OfficePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  investigationHandlingOffice<T extends Prisma.FireIncident$investigationHandlingOfficeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$investigationHandlingOfficeArgs<ExtArgs>>): Prisma.Prisma__OfficeClient<runtime.Types.Result.GetResult<Prisma.$OfficePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  deletedBy<T extends Prisma.FireIncident$deletedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$deletedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   location<T extends Prisma.FireIncident$locationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$locationArgs<ExtArgs>>): Prisma.Prisma__IncidentLocationClient<runtime.Types.Result.GetResult<Prisma.$IncidentLocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   timeline<T extends Prisma.FireIncident$timelineArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$timelineArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncidentTimelinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   impact<T extends Prisma.FireIncident$impactArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$impactArgs<ExtArgs>>): Prisma.Prisma__IncidentImpactClient<runtime.Types.Result.GetResult<Prisma.$IncidentImpactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   resources<T extends Prisma.FireIncident$resourcesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$resourcesArgs<ExtArgs>>): Prisma.Prisma__FireOpertaionResourcesClient<runtime.Types.Result.GetResult<Prisma.$FireOpertaionResourcesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   personnel<T extends Prisma.FireIncident$personnelArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$personnelArgs<ExtArgs>>): Prisma.Prisma__IncidentPersonnelClient<runtime.Types.Result.GetResult<Prisma.$IncidentPersonnelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  investigation<T extends Prisma.FireIncident$investigationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$investigationArgs<ExtArgs>>): Prisma.Prisma__InvestigationClient<runtime.Types.Result.GetResult<Prisma.$InvestigationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  investigations<T extends Prisma.FireIncident$investigationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$investigationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestigationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  referrals<T extends Prisma.FireIncident$referralsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$referralsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestigationReferralPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  events<T extends Prisma.FireIncident$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FireIncidentEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2739,10 +4380,16 @@ export interface FireIncidentFieldRefs {
   readonly dateTimeUnresponded: Prisma.FieldRef<"FireIncident", 'DateTime'>
   readonly fireIncidentStatus: Prisma.FieldRef<"FireIncident", 'FireIncidentStatus'>
   readonly currentAlarmLevel: Prisma.FieldRef<"FireIncident", 'FireAlarmLevel'>
+  readonly approvalStatus: Prisma.FieldRef<"FireIncident", 'IncidentApprovalStatus'>
   readonly categoryId: Prisma.FieldRef<"FireIncident", 'String'>
   readonly subcategoryId: Prisma.FieldRef<"FireIncident", 'String'>
   readonly establishmentId: Prisma.FieldRef<"FireIncident", 'String'>
+  readonly officeId: Prisma.FieldRef<"FireIncident", 'String'>
+  readonly investigationHandlingOfficeId: Prisma.FieldRef<"FireIncident", 'String'>
   readonly createdById: Prisma.FieldRef<"FireIncident", 'String'>
+  readonly deletedAt: Prisma.FieldRef<"FireIncident", 'DateTime'>
+  readonly deletedById: Prisma.FieldRef<"FireIncident", 'String'>
+  readonly deletionReason: Prisma.FieldRef<"FireIncident", 'String'>
   readonly remarks: Prisma.FieldRef<"FireIncident", 'String'>
   readonly createdAt: Prisma.FieldRef<"FireIncident", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FireIncident", 'DateTime'>
@@ -3185,6 +4832,44 @@ export type FireIncident$establishmentArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
+ * FireIncident.investigationHandlingOffice
+ */
+export type FireIncident$investigationHandlingOfficeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Office
+   */
+  select?: Prisma.OfficeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Office
+   */
+  omit?: Prisma.OfficeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OfficeInclude<ExtArgs> | null
+  where?: Prisma.OfficeWhereInput
+}
+
+/**
+ * FireIncident.deletedBy
+ */
+export type FireIncident$deletedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
  * FireIncident.location
  */
 export type FireIncident$locationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3285,9 +4970,9 @@ export type FireIncident$personnelArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 /**
- * FireIncident.investigation
+ * FireIncident.investigations
  */
-export type FireIncident$investigationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type FireIncident$investigationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Investigation
    */
@@ -3301,6 +4986,59 @@ export type FireIncident$investigationArgs<ExtArgs extends runtime.Types.Extensi
    */
   include?: Prisma.InvestigationInclude<ExtArgs> | null
   where?: Prisma.InvestigationWhereInput
+  orderBy?: Prisma.InvestigationOrderByWithRelationInput | Prisma.InvestigationOrderByWithRelationInput[]
+  cursor?: Prisma.InvestigationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvestigationScalarFieldEnum | Prisma.InvestigationScalarFieldEnum[]
+}
+
+/**
+ * FireIncident.referrals
+ */
+export type FireIncident$referralsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InvestigationReferral
+   */
+  select?: Prisma.InvestigationReferralSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InvestigationReferral
+   */
+  omit?: Prisma.InvestigationReferralOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvestigationReferralInclude<ExtArgs> | null
+  where?: Prisma.InvestigationReferralWhereInput
+  orderBy?: Prisma.InvestigationReferralOrderByWithRelationInput | Prisma.InvestigationReferralOrderByWithRelationInput[]
+  cursor?: Prisma.InvestigationReferralWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvestigationReferralScalarFieldEnum | Prisma.InvestigationReferralScalarFieldEnum[]
+}
+
+/**
+ * FireIncident.events
+ */
+export type FireIncident$eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FireIncidentEvent
+   */
+  select?: Prisma.FireIncidentEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FireIncidentEvent
+   */
+  omit?: Prisma.FireIncidentEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FireIncidentEventInclude<ExtArgs> | null
+  where?: Prisma.FireIncidentEventWhereInput
+  orderBy?: Prisma.FireIncidentEventOrderByWithRelationInput | Prisma.FireIncidentEventOrderByWithRelationInput[]
+  cursor?: Prisma.FireIncidentEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FireIncidentEventScalarFieldEnum | Prisma.FireIncidentEventScalarFieldEnum[]
 }
 
 /**

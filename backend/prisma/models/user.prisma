@@ -24,6 +24,7 @@ enum ROLE {
   CITY_MUNICIPALITY_OPERATION_STAFF
   CITY_MUNICIPALITY_INVESTIGATOR
   CITY_MUNICIPALITY_COMMEL
+  CITY_MUNICIPALITY_CHIEF_INVESTIGATOR
 }
 
 enum RANK {
@@ -63,8 +64,21 @@ model User {
   position   Position @relation(fields: [positionId], references: [id])
   role       ROLE
 
-  notification  NotificationPreference?
-  fireIncidents FireIncident[]
+  notification NotificationPreference?
+
+  // Fire incidents
+  fireIncidents          FireIncident[]      @relation("IncidentCreatedBy")
+  deletedFireIncidents   FireIncident[]      @relation("IncidentDeletedBy")
+  fireIncidentEvents     FireIncidentEvent[] @relation("FireIncidentEventActor")
+  createdTimelineEntries IncidentTimeline[]  @relation("TimelineCreatedBy")
+  voidedTimelineEntries  IncidentTimeline[]  @relation("TimelineVoidedBy")
+
+  // Investigations
+  assignedInvestigations Investigation[]             @relation("InvestigationAssignee")
+  investigationsAssigned Investigation[]             @relation("InvestigationAssigner")
+  investigationReferrals InvestigationReferral[]     @relation("ReferralReferredBy")
+  reviewedReports        InvestigationReport[]       @relation("ReportReviewedBy")
+  reportReviews          InvestigationReportReview[] @relation("ReportReviewReviewer")
 
   @@index([officeId])
   @@index([positionId])

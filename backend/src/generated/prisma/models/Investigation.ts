@@ -33,6 +33,9 @@ export type InvestigationMinAggregateOutputType = {
   startedAt: Date | null
   completedAt: Date | null
   fireIncidentId: string | null
+  conductingOfficeId: string | null
+  assignedInvestigatorId: string | null
+  assignedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -46,6 +49,9 @@ export type InvestigationMaxAggregateOutputType = {
   startedAt: Date | null
   completedAt: Date | null
   fireIncidentId: string | null
+  conductingOfficeId: string | null
+  assignedInvestigatorId: string | null
+  assignedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -59,6 +65,9 @@ export type InvestigationCountAggregateOutputType = {
   startedAt: number
   completedAt: number
   fireIncidentId: number
+  conductingOfficeId: number
+  assignedInvestigatorId: number
+  assignedById: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -74,6 +83,9 @@ export type InvestigationMinAggregateInputType = {
   startedAt?: true
   completedAt?: true
   fireIncidentId?: true
+  conductingOfficeId?: true
+  assignedInvestigatorId?: true
+  assignedById?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -87,6 +99,9 @@ export type InvestigationMaxAggregateInputType = {
   startedAt?: true
   completedAt?: true
   fireIncidentId?: true
+  conductingOfficeId?: true
+  assignedInvestigatorId?: true
+  assignedById?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -100,6 +115,9 @@ export type InvestigationCountAggregateInputType = {
   startedAt?: true
   completedAt?: true
   fireIncidentId?: true
+  conductingOfficeId?: true
+  assignedInvestigatorId?: true
+  assignedById?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -183,9 +201,12 @@ export type InvestigationGroupByOutputType = {
   causeOfFire: $Enums.CauseOfFire | null
   classification: $Enums.FireCaseClassification | null
   originOfFire: string | null
-  startedAt: Date | null
+  startedAt: Date
   completedAt: Date | null
   fireIncidentId: string
+  conductingOfficeId: string
+  assignedInvestigatorId: string
+  assignedById: string
   createdAt: Date
   updatedAt: Date
   _count: InvestigationCountAggregateOutputType | null
@@ -217,12 +238,18 @@ export type InvestigationWhereInput = {
   causeOfFire?: Prisma.EnumCauseOfFireNullableFilter<"Investigation"> | $Enums.CauseOfFire | null
   classification?: Prisma.EnumFireCaseClassificationNullableFilter<"Investigation"> | $Enums.FireCaseClassification | null
   originOfFire?: Prisma.StringNullableFilter<"Investigation"> | string | null
-  startedAt?: Prisma.DateTimeNullableFilter<"Investigation"> | Date | string | null
+  startedAt?: Prisma.DateTimeFilter<"Investigation"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"Investigation"> | Date | string | null
   fireIncidentId?: Prisma.StringFilter<"Investigation"> | string
+  conductingOfficeId?: Prisma.StringFilter<"Investigation"> | string
+  assignedInvestigatorId?: Prisma.StringFilter<"Investigation"> | string
+  assignedById?: Prisma.StringFilter<"Investigation"> | string
   createdAt?: Prisma.DateTimeFilter<"Investigation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Investigation"> | Date | string
   fireIncident?: Prisma.XOR<Prisma.FireIncidentScalarRelationFilter, Prisma.FireIncidentWhereInput>
+  conductingOffice?: Prisma.XOR<Prisma.OfficeScalarRelationFilter, Prisma.OfficeWhereInput>
+  assignedInvestigator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  assignedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   report?: Prisma.XOR<Prisma.InvestigationReportNullableScalarRelationFilter, Prisma.InvestigationReportWhereInput> | null
 }
 
@@ -232,32 +259,44 @@ export type InvestigationOrderByWithRelationInput = {
   causeOfFire?: Prisma.SortOrderInput | Prisma.SortOrder
   classification?: Prisma.SortOrderInput | Prisma.SortOrder
   originOfFire?: Prisma.SortOrderInput | Prisma.SortOrder
-  startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   fireIncidentId?: Prisma.SortOrder
+  conductingOfficeId?: Prisma.SortOrder
+  assignedInvestigatorId?: Prisma.SortOrder
+  assignedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   fireIncident?: Prisma.FireIncidentOrderByWithRelationInput
+  conductingOffice?: Prisma.OfficeOrderByWithRelationInput
+  assignedInvestigator?: Prisma.UserOrderByWithRelationInput
+  assignedBy?: Prisma.UserOrderByWithRelationInput
   report?: Prisma.InvestigationReportOrderByWithRelationInput
 }
 
 export type InvestigationWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   investigationNo?: string
-  fireIncidentId?: string
   AND?: Prisma.InvestigationWhereInput | Prisma.InvestigationWhereInput[]
   OR?: Prisma.InvestigationWhereInput[]
   NOT?: Prisma.InvestigationWhereInput | Prisma.InvestigationWhereInput[]
   causeOfFire?: Prisma.EnumCauseOfFireNullableFilter<"Investigation"> | $Enums.CauseOfFire | null
   classification?: Prisma.EnumFireCaseClassificationNullableFilter<"Investigation"> | $Enums.FireCaseClassification | null
   originOfFire?: Prisma.StringNullableFilter<"Investigation"> | string | null
-  startedAt?: Prisma.DateTimeNullableFilter<"Investigation"> | Date | string | null
+  startedAt?: Prisma.DateTimeFilter<"Investigation"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"Investigation"> | Date | string | null
+  fireIncidentId?: Prisma.StringFilter<"Investigation"> | string
+  conductingOfficeId?: Prisma.StringFilter<"Investigation"> | string
+  assignedInvestigatorId?: Prisma.StringFilter<"Investigation"> | string
+  assignedById?: Prisma.StringFilter<"Investigation"> | string
   createdAt?: Prisma.DateTimeFilter<"Investigation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Investigation"> | Date | string
   fireIncident?: Prisma.XOR<Prisma.FireIncidentScalarRelationFilter, Prisma.FireIncidentWhereInput>
+  conductingOffice?: Prisma.XOR<Prisma.OfficeScalarRelationFilter, Prisma.OfficeWhereInput>
+  assignedInvestigator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  assignedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   report?: Prisma.XOR<Prisma.InvestigationReportNullableScalarRelationFilter, Prisma.InvestigationReportWhereInput> | null
-}, "id" | "investigationNo" | "fireIncidentId">
+}, "id" | "investigationNo">
 
 export type InvestigationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -265,9 +304,12 @@ export type InvestigationOrderByWithAggregationInput = {
   causeOfFire?: Prisma.SortOrderInput | Prisma.SortOrder
   classification?: Prisma.SortOrderInput | Prisma.SortOrder
   originOfFire?: Prisma.SortOrderInput | Prisma.SortOrder
-  startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   fireIncidentId?: Prisma.SortOrder
+  conductingOfficeId?: Prisma.SortOrder
+  assignedInvestigatorId?: Prisma.SortOrder
+  assignedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.InvestigationCountOrderByAggregateInput
@@ -284,9 +326,12 @@ export type InvestigationScalarWhereWithAggregatesInput = {
   causeOfFire?: Prisma.EnumCauseOfFireNullableWithAggregatesFilter<"Investigation"> | $Enums.CauseOfFire | null
   classification?: Prisma.EnumFireCaseClassificationNullableWithAggregatesFilter<"Investigation"> | $Enums.FireCaseClassification | null
   originOfFire?: Prisma.StringNullableWithAggregatesFilter<"Investigation"> | string | null
-  startedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Investigation"> | Date | string | null
+  startedAt?: Prisma.DateTimeWithAggregatesFilter<"Investigation"> | Date | string
   completedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Investigation"> | Date | string | null
   fireIncidentId?: Prisma.StringWithAggregatesFilter<"Investigation"> | string
+  conductingOfficeId?: Prisma.StringWithAggregatesFilter<"Investigation"> | string
+  assignedInvestigatorId?: Prisma.StringWithAggregatesFilter<"Investigation"> | string
+  assignedById?: Prisma.StringWithAggregatesFilter<"Investigation"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Investigation"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Investigation"> | Date | string
 }
@@ -297,11 +342,14 @@ export type InvestigationCreateInput = {
   causeOfFire?: $Enums.CauseOfFire | null
   classification?: $Enums.FireCaseClassification | null
   originOfFire?: string | null
-  startedAt?: Date | string | null
+  startedAt: Date | string
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutInvestigationInput
+  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutInvestigationsInput
+  conductingOffice: Prisma.OfficeCreateNestedOneWithoutConductedInvestigationsInput
+  assignedInvestigator: Prisma.UserCreateNestedOneWithoutAssignedInvestigationsInput
+  assignedBy: Prisma.UserCreateNestedOneWithoutInvestigationsAssignedInput
   report?: Prisma.InvestigationReportCreateNestedOneWithoutInvestigationInput
 }
 
@@ -311,9 +359,12 @@ export type InvestigationUncheckedCreateInput = {
   causeOfFire?: $Enums.CauseOfFire | null
   classification?: $Enums.FireCaseClassification | null
   originOfFire?: string | null
-  startedAt?: Date | string | null
+  startedAt: Date | string
   completedAt?: Date | string | null
   fireIncidentId: string
+  conductingOfficeId: string
+  assignedInvestigatorId: string
+  assignedById: string
   createdAt?: Date | string
   updatedAt?: Date | string
   report?: Prisma.InvestigationReportUncheckedCreateNestedOneWithoutInvestigationInput
@@ -325,11 +376,14 @@ export type InvestigationUpdateInput = {
   causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
   classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
   originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutInvestigationNestedInput
+  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutInvestigationsNestedInput
+  conductingOffice?: Prisma.OfficeUpdateOneRequiredWithoutConductedInvestigationsNestedInput
+  assignedInvestigator?: Prisma.UserUpdateOneRequiredWithoutAssignedInvestigationsNestedInput
+  assignedBy?: Prisma.UserUpdateOneRequiredWithoutInvestigationsAssignedNestedInput
   report?: Prisma.InvestigationReportUpdateOneWithoutInvestigationNestedInput
 }
 
@@ -339,9 +393,12 @@ export type InvestigationUncheckedUpdateInput = {
   causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
   classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
   originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  conductingOfficeId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedInvestigatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   report?: Prisma.InvestigationReportUncheckedUpdateOneWithoutInvestigationNestedInput
@@ -353,9 +410,12 @@ export type InvestigationCreateManyInput = {
   causeOfFire?: $Enums.CauseOfFire | null
   classification?: $Enums.FireCaseClassification | null
   originOfFire?: string | null
-  startedAt?: Date | string | null
+  startedAt: Date | string
   completedAt?: Date | string | null
   fireIncidentId: string
+  conductingOfficeId: string
+  assignedInvestigatorId: string
+  assignedById: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -366,7 +426,7 @@ export type InvestigationUpdateManyMutationInput = {
   causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
   classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
   originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -378,9 +438,12 @@ export type InvestigationUncheckedUpdateManyInput = {
   causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
   classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
   originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  conductingOfficeId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedInvestigatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -399,6 +462,9 @@ export type InvestigationCountOrderByAggregateInput = {
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   fireIncidentId?: Prisma.SortOrder
+  conductingOfficeId?: Prisma.SortOrder
+  assignedInvestigatorId?: Prisma.SortOrder
+  assignedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -412,6 +478,9 @@ export type InvestigationMaxOrderByAggregateInput = {
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   fireIncidentId?: Prisma.SortOrder
+  conductingOfficeId?: Prisma.SortOrder
+  assignedInvestigatorId?: Prisma.SortOrder
+  assignedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -425,13 +494,21 @@ export type InvestigationMinOrderByAggregateInput = {
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   fireIncidentId?: Prisma.SortOrder
+  conductingOfficeId?: Prisma.SortOrder
+  assignedInvestigatorId?: Prisma.SortOrder
+  assignedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
-export type InvestigationNullableScalarRelationFilter = {
-  is?: Prisma.InvestigationWhereInput | null
-  isNot?: Prisma.InvestigationWhereInput | null
+export type InvestigationListRelationFilter = {
+  every?: Prisma.InvestigationWhereInput
+  some?: Prisma.InvestigationWhereInput
+  none?: Prisma.InvestigationWhereInput
+}
+
+export type InvestigationOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type InvestigationCreateNestedOneWithoutReportInput = {
@@ -456,36 +533,172 @@ export type NullableEnumFireCaseClassificationFieldUpdateOperationsInput = {
   set?: $Enums.FireCaseClassification | null
 }
 
-export type InvestigationCreateNestedOneWithoutFireIncidentInput = {
-  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutFireIncidentInput, Prisma.InvestigationUncheckedCreateWithoutFireIncidentInput>
-  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutFireIncidentInput
-  connect?: Prisma.InvestigationWhereUniqueInput
+export type InvestigationCreateNestedManyWithoutFireIncidentInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutFireIncidentInput, Prisma.InvestigationUncheckedCreateWithoutFireIncidentInput> | Prisma.InvestigationCreateWithoutFireIncidentInput[] | Prisma.InvestigationUncheckedCreateWithoutFireIncidentInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutFireIncidentInput | Prisma.InvestigationCreateOrConnectWithoutFireIncidentInput[]
+  createMany?: Prisma.InvestigationCreateManyFireIncidentInputEnvelope
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
 }
 
-export type InvestigationUncheckedCreateNestedOneWithoutFireIncidentInput = {
-  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutFireIncidentInput, Prisma.InvestigationUncheckedCreateWithoutFireIncidentInput>
-  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutFireIncidentInput
-  connect?: Prisma.InvestigationWhereUniqueInput
+export type InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutFireIncidentInput, Prisma.InvestigationUncheckedCreateWithoutFireIncidentInput> | Prisma.InvestigationCreateWithoutFireIncidentInput[] | Prisma.InvestigationUncheckedCreateWithoutFireIncidentInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutFireIncidentInput | Prisma.InvestigationCreateOrConnectWithoutFireIncidentInput[]
+  createMany?: Prisma.InvestigationCreateManyFireIncidentInputEnvelope
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
 }
 
-export type InvestigationUpdateOneWithoutFireIncidentNestedInput = {
-  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutFireIncidentInput, Prisma.InvestigationUncheckedCreateWithoutFireIncidentInput>
-  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutFireIncidentInput
-  upsert?: Prisma.InvestigationUpsertWithoutFireIncidentInput
-  disconnect?: Prisma.InvestigationWhereInput | boolean
-  delete?: Prisma.InvestigationWhereInput | boolean
-  connect?: Prisma.InvestigationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.InvestigationUpdateToOneWithWhereWithoutFireIncidentInput, Prisma.InvestigationUpdateWithoutFireIncidentInput>, Prisma.InvestigationUncheckedUpdateWithoutFireIncidentInput>
+export type InvestigationUpdateManyWithoutFireIncidentNestedInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutFireIncidentInput, Prisma.InvestigationUncheckedCreateWithoutFireIncidentInput> | Prisma.InvestigationCreateWithoutFireIncidentInput[] | Prisma.InvestigationUncheckedCreateWithoutFireIncidentInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutFireIncidentInput | Prisma.InvestigationCreateOrConnectWithoutFireIncidentInput[]
+  upsert?: Prisma.InvestigationUpsertWithWhereUniqueWithoutFireIncidentInput | Prisma.InvestigationUpsertWithWhereUniqueWithoutFireIncidentInput[]
+  createMany?: Prisma.InvestigationCreateManyFireIncidentInputEnvelope
+  set?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  disconnect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  delete?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  update?: Prisma.InvestigationUpdateWithWhereUniqueWithoutFireIncidentInput | Prisma.InvestigationUpdateWithWhereUniqueWithoutFireIncidentInput[]
+  updateMany?: Prisma.InvestigationUpdateManyWithWhereWithoutFireIncidentInput | Prisma.InvestigationUpdateManyWithWhereWithoutFireIncidentInput[]
+  deleteMany?: Prisma.InvestigationScalarWhereInput | Prisma.InvestigationScalarWhereInput[]
 }
 
-export type InvestigationUncheckedUpdateOneWithoutFireIncidentNestedInput = {
-  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutFireIncidentInput, Prisma.InvestigationUncheckedCreateWithoutFireIncidentInput>
-  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutFireIncidentInput
-  upsert?: Prisma.InvestigationUpsertWithoutFireIncidentInput
-  disconnect?: Prisma.InvestigationWhereInput | boolean
-  delete?: Prisma.InvestigationWhereInput | boolean
-  connect?: Prisma.InvestigationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.InvestigationUpdateToOneWithWhereWithoutFireIncidentInput, Prisma.InvestigationUpdateWithoutFireIncidentInput>, Prisma.InvestigationUncheckedUpdateWithoutFireIncidentInput>
+export type InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutFireIncidentInput, Prisma.InvestigationUncheckedCreateWithoutFireIncidentInput> | Prisma.InvestigationCreateWithoutFireIncidentInput[] | Prisma.InvestigationUncheckedCreateWithoutFireIncidentInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutFireIncidentInput | Prisma.InvestigationCreateOrConnectWithoutFireIncidentInput[]
+  upsert?: Prisma.InvestigationUpsertWithWhereUniqueWithoutFireIncidentInput | Prisma.InvestigationUpsertWithWhereUniqueWithoutFireIncidentInput[]
+  createMany?: Prisma.InvestigationCreateManyFireIncidentInputEnvelope
+  set?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  disconnect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  delete?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  update?: Prisma.InvestigationUpdateWithWhereUniqueWithoutFireIncidentInput | Prisma.InvestigationUpdateWithWhereUniqueWithoutFireIncidentInput[]
+  updateMany?: Prisma.InvestigationUpdateManyWithWhereWithoutFireIncidentInput | Prisma.InvestigationUpdateManyWithWhereWithoutFireIncidentInput[]
+  deleteMany?: Prisma.InvestigationScalarWhereInput | Prisma.InvestigationScalarWhereInput[]
+}
+
+export type InvestigationCreateNestedManyWithoutConductingOfficeInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutConductingOfficeInput, Prisma.InvestigationUncheckedCreateWithoutConductingOfficeInput> | Prisma.InvestigationCreateWithoutConductingOfficeInput[] | Prisma.InvestigationUncheckedCreateWithoutConductingOfficeInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutConductingOfficeInput | Prisma.InvestigationCreateOrConnectWithoutConductingOfficeInput[]
+  createMany?: Prisma.InvestigationCreateManyConductingOfficeInputEnvelope
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+}
+
+export type InvestigationUncheckedCreateNestedManyWithoutConductingOfficeInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutConductingOfficeInput, Prisma.InvestigationUncheckedCreateWithoutConductingOfficeInput> | Prisma.InvestigationCreateWithoutConductingOfficeInput[] | Prisma.InvestigationUncheckedCreateWithoutConductingOfficeInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutConductingOfficeInput | Prisma.InvestigationCreateOrConnectWithoutConductingOfficeInput[]
+  createMany?: Prisma.InvestigationCreateManyConductingOfficeInputEnvelope
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+}
+
+export type InvestigationUpdateManyWithoutConductingOfficeNestedInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutConductingOfficeInput, Prisma.InvestigationUncheckedCreateWithoutConductingOfficeInput> | Prisma.InvestigationCreateWithoutConductingOfficeInput[] | Prisma.InvestigationUncheckedCreateWithoutConductingOfficeInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutConductingOfficeInput | Prisma.InvestigationCreateOrConnectWithoutConductingOfficeInput[]
+  upsert?: Prisma.InvestigationUpsertWithWhereUniqueWithoutConductingOfficeInput | Prisma.InvestigationUpsertWithWhereUniqueWithoutConductingOfficeInput[]
+  createMany?: Prisma.InvestigationCreateManyConductingOfficeInputEnvelope
+  set?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  disconnect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  delete?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  update?: Prisma.InvestigationUpdateWithWhereUniqueWithoutConductingOfficeInput | Prisma.InvestigationUpdateWithWhereUniqueWithoutConductingOfficeInput[]
+  updateMany?: Prisma.InvestigationUpdateManyWithWhereWithoutConductingOfficeInput | Prisma.InvestigationUpdateManyWithWhereWithoutConductingOfficeInput[]
+  deleteMany?: Prisma.InvestigationScalarWhereInput | Prisma.InvestigationScalarWhereInput[]
+}
+
+export type InvestigationUncheckedUpdateManyWithoutConductingOfficeNestedInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutConductingOfficeInput, Prisma.InvestigationUncheckedCreateWithoutConductingOfficeInput> | Prisma.InvestigationCreateWithoutConductingOfficeInput[] | Prisma.InvestigationUncheckedCreateWithoutConductingOfficeInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutConductingOfficeInput | Prisma.InvestigationCreateOrConnectWithoutConductingOfficeInput[]
+  upsert?: Prisma.InvestigationUpsertWithWhereUniqueWithoutConductingOfficeInput | Prisma.InvestigationUpsertWithWhereUniqueWithoutConductingOfficeInput[]
+  createMany?: Prisma.InvestigationCreateManyConductingOfficeInputEnvelope
+  set?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  disconnect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  delete?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  update?: Prisma.InvestigationUpdateWithWhereUniqueWithoutConductingOfficeInput | Prisma.InvestigationUpdateWithWhereUniqueWithoutConductingOfficeInput[]
+  updateMany?: Prisma.InvestigationUpdateManyWithWhereWithoutConductingOfficeInput | Prisma.InvestigationUpdateManyWithWhereWithoutConductingOfficeInput[]
+  deleteMany?: Prisma.InvestigationScalarWhereInput | Prisma.InvestigationScalarWhereInput[]
+}
+
+export type InvestigationCreateNestedManyWithoutAssignedInvestigatorInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutAssignedInvestigatorInput, Prisma.InvestigationUncheckedCreateWithoutAssignedInvestigatorInput> | Prisma.InvestigationCreateWithoutAssignedInvestigatorInput[] | Prisma.InvestigationUncheckedCreateWithoutAssignedInvestigatorInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutAssignedInvestigatorInput | Prisma.InvestigationCreateOrConnectWithoutAssignedInvestigatorInput[]
+  createMany?: Prisma.InvestigationCreateManyAssignedInvestigatorInputEnvelope
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+}
+
+export type InvestigationCreateNestedManyWithoutAssignedByInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutAssignedByInput, Prisma.InvestigationUncheckedCreateWithoutAssignedByInput> | Prisma.InvestigationCreateWithoutAssignedByInput[] | Prisma.InvestigationUncheckedCreateWithoutAssignedByInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutAssignedByInput | Prisma.InvestigationCreateOrConnectWithoutAssignedByInput[]
+  createMany?: Prisma.InvestigationCreateManyAssignedByInputEnvelope
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+}
+
+export type InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutAssignedInvestigatorInput, Prisma.InvestigationUncheckedCreateWithoutAssignedInvestigatorInput> | Prisma.InvestigationCreateWithoutAssignedInvestigatorInput[] | Prisma.InvestigationUncheckedCreateWithoutAssignedInvestigatorInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutAssignedInvestigatorInput | Prisma.InvestigationCreateOrConnectWithoutAssignedInvestigatorInput[]
+  createMany?: Prisma.InvestigationCreateManyAssignedInvestigatorInputEnvelope
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+}
+
+export type InvestigationUncheckedCreateNestedManyWithoutAssignedByInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutAssignedByInput, Prisma.InvestigationUncheckedCreateWithoutAssignedByInput> | Prisma.InvestigationCreateWithoutAssignedByInput[] | Prisma.InvestigationUncheckedCreateWithoutAssignedByInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutAssignedByInput | Prisma.InvestigationCreateOrConnectWithoutAssignedByInput[]
+  createMany?: Prisma.InvestigationCreateManyAssignedByInputEnvelope
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+}
+
+export type InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutAssignedInvestigatorInput, Prisma.InvestigationUncheckedCreateWithoutAssignedInvestigatorInput> | Prisma.InvestigationCreateWithoutAssignedInvestigatorInput[] | Prisma.InvestigationUncheckedCreateWithoutAssignedInvestigatorInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutAssignedInvestigatorInput | Prisma.InvestigationCreateOrConnectWithoutAssignedInvestigatorInput[]
+  upsert?: Prisma.InvestigationUpsertWithWhereUniqueWithoutAssignedInvestigatorInput | Prisma.InvestigationUpsertWithWhereUniqueWithoutAssignedInvestigatorInput[]
+  createMany?: Prisma.InvestigationCreateManyAssignedInvestigatorInputEnvelope
+  set?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  disconnect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  delete?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  update?: Prisma.InvestigationUpdateWithWhereUniqueWithoutAssignedInvestigatorInput | Prisma.InvestigationUpdateWithWhereUniqueWithoutAssignedInvestigatorInput[]
+  updateMany?: Prisma.InvestigationUpdateManyWithWhereWithoutAssignedInvestigatorInput | Prisma.InvestigationUpdateManyWithWhereWithoutAssignedInvestigatorInput[]
+  deleteMany?: Prisma.InvestigationScalarWhereInput | Prisma.InvestigationScalarWhereInput[]
+}
+
+export type InvestigationUpdateManyWithoutAssignedByNestedInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutAssignedByInput, Prisma.InvestigationUncheckedCreateWithoutAssignedByInput> | Prisma.InvestigationCreateWithoutAssignedByInput[] | Prisma.InvestigationUncheckedCreateWithoutAssignedByInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutAssignedByInput | Prisma.InvestigationCreateOrConnectWithoutAssignedByInput[]
+  upsert?: Prisma.InvestigationUpsertWithWhereUniqueWithoutAssignedByInput | Prisma.InvestigationUpsertWithWhereUniqueWithoutAssignedByInput[]
+  createMany?: Prisma.InvestigationCreateManyAssignedByInputEnvelope
+  set?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  disconnect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  delete?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  update?: Prisma.InvestigationUpdateWithWhereUniqueWithoutAssignedByInput | Prisma.InvestigationUpdateWithWhereUniqueWithoutAssignedByInput[]
+  updateMany?: Prisma.InvestigationUpdateManyWithWhereWithoutAssignedByInput | Prisma.InvestigationUpdateManyWithWhereWithoutAssignedByInput[]
+  deleteMany?: Prisma.InvestigationScalarWhereInput | Prisma.InvestigationScalarWhereInput[]
+}
+
+export type InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutAssignedInvestigatorInput, Prisma.InvestigationUncheckedCreateWithoutAssignedInvestigatorInput> | Prisma.InvestigationCreateWithoutAssignedInvestigatorInput[] | Prisma.InvestigationUncheckedCreateWithoutAssignedInvestigatorInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutAssignedInvestigatorInput | Prisma.InvestigationCreateOrConnectWithoutAssignedInvestigatorInput[]
+  upsert?: Prisma.InvestigationUpsertWithWhereUniqueWithoutAssignedInvestigatorInput | Prisma.InvestigationUpsertWithWhereUniqueWithoutAssignedInvestigatorInput[]
+  createMany?: Prisma.InvestigationCreateManyAssignedInvestigatorInputEnvelope
+  set?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  disconnect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  delete?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  update?: Prisma.InvestigationUpdateWithWhereUniqueWithoutAssignedInvestigatorInput | Prisma.InvestigationUpdateWithWhereUniqueWithoutAssignedInvestigatorInput[]
+  updateMany?: Prisma.InvestigationUpdateManyWithWhereWithoutAssignedInvestigatorInput | Prisma.InvestigationUpdateManyWithWhereWithoutAssignedInvestigatorInput[]
+  deleteMany?: Prisma.InvestigationScalarWhereInput | Prisma.InvestigationScalarWhereInput[]
+}
+
+export type InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutAssignedByInput, Prisma.InvestigationUncheckedCreateWithoutAssignedByInput> | Prisma.InvestigationCreateWithoutAssignedByInput[] | Prisma.InvestigationUncheckedCreateWithoutAssignedByInput[]
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutAssignedByInput | Prisma.InvestigationCreateOrConnectWithoutAssignedByInput[]
+  upsert?: Prisma.InvestigationUpsertWithWhereUniqueWithoutAssignedByInput | Prisma.InvestigationUpsertWithWhereUniqueWithoutAssignedByInput[]
+  createMany?: Prisma.InvestigationCreateManyAssignedByInputEnvelope
+  set?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  disconnect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  delete?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  connect?: Prisma.InvestigationWhereUniqueInput | Prisma.InvestigationWhereUniqueInput[]
+  update?: Prisma.InvestigationUpdateWithWhereUniqueWithoutAssignedByInput | Prisma.InvestigationUpdateWithWhereUniqueWithoutAssignedByInput[]
+  updateMany?: Prisma.InvestigationUpdateManyWithWhereWithoutAssignedByInput | Prisma.InvestigationUpdateManyWithWhereWithoutAssignedByInput[]
+  deleteMany?: Prisma.InvestigationScalarWhereInput | Prisma.InvestigationScalarWhereInput[]
 }
 
 export type InvestigationCreateWithoutReportInput = {
@@ -494,11 +707,14 @@ export type InvestigationCreateWithoutReportInput = {
   causeOfFire?: $Enums.CauseOfFire | null
   classification?: $Enums.FireCaseClassification | null
   originOfFire?: string | null
-  startedAt?: Date | string | null
+  startedAt: Date | string
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutInvestigationInput
+  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutInvestigationsInput
+  conductingOffice: Prisma.OfficeCreateNestedOneWithoutConductedInvestigationsInput
+  assignedInvestigator: Prisma.UserCreateNestedOneWithoutAssignedInvestigationsInput
+  assignedBy: Prisma.UserCreateNestedOneWithoutInvestigationsAssignedInput
 }
 
 export type InvestigationUncheckedCreateWithoutReportInput = {
@@ -507,9 +723,12 @@ export type InvestigationUncheckedCreateWithoutReportInput = {
   causeOfFire?: $Enums.CauseOfFire | null
   classification?: $Enums.FireCaseClassification | null
   originOfFire?: string | null
-  startedAt?: Date | string | null
+  startedAt: Date | string
   completedAt?: Date | string | null
   fireIncidentId: string
+  conductingOfficeId: string
+  assignedInvestigatorId: string
+  assignedById: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -536,11 +755,14 @@ export type InvestigationUpdateWithoutReportInput = {
   causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
   classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
   originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutInvestigationNestedInput
+  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutInvestigationsNestedInput
+  conductingOffice?: Prisma.OfficeUpdateOneRequiredWithoutConductedInvestigationsNestedInput
+  assignedInvestigator?: Prisma.UserUpdateOneRequiredWithoutAssignedInvestigationsNestedInput
+  assignedBy?: Prisma.UserUpdateOneRequiredWithoutInvestigationsAssignedNestedInput
 }
 
 export type InvestigationUncheckedUpdateWithoutReportInput = {
@@ -549,9 +771,12 @@ export type InvestigationUncheckedUpdateWithoutReportInput = {
   causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
   classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
   originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  conductingOfficeId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedInvestigatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -562,10 +787,13 @@ export type InvestigationCreateWithoutFireIncidentInput = {
   causeOfFire?: $Enums.CauseOfFire | null
   classification?: $Enums.FireCaseClassification | null
   originOfFire?: string | null
-  startedAt?: Date | string | null
+  startedAt: Date | string
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  conductingOffice: Prisma.OfficeCreateNestedOneWithoutConductedInvestigationsInput
+  assignedInvestigator: Prisma.UserCreateNestedOneWithoutAssignedInvestigationsInput
+  assignedBy: Prisma.UserCreateNestedOneWithoutInvestigationsAssignedInput
   report?: Prisma.InvestigationReportCreateNestedOneWithoutInvestigationInput
 }
 
@@ -575,8 +803,11 @@ export type InvestigationUncheckedCreateWithoutFireIncidentInput = {
   causeOfFire?: $Enums.CauseOfFire | null
   classification?: $Enums.FireCaseClassification | null
   originOfFire?: string | null
-  startedAt?: Date | string | null
+  startedAt: Date | string
   completedAt?: Date | string | null
+  conductingOfficeId: string
+  assignedInvestigatorId: string
+  assignedById: string
   createdAt?: Date | string
   updatedAt?: Date | string
   report?: Prisma.InvestigationReportUncheckedCreateNestedOneWithoutInvestigationInput
@@ -587,15 +818,233 @@ export type InvestigationCreateOrConnectWithoutFireIncidentInput = {
   create: Prisma.XOR<Prisma.InvestigationCreateWithoutFireIncidentInput, Prisma.InvestigationUncheckedCreateWithoutFireIncidentInput>
 }
 
-export type InvestigationUpsertWithoutFireIncidentInput = {
-  update: Prisma.XOR<Prisma.InvestigationUpdateWithoutFireIncidentInput, Prisma.InvestigationUncheckedUpdateWithoutFireIncidentInput>
-  create: Prisma.XOR<Prisma.InvestigationCreateWithoutFireIncidentInput, Prisma.InvestigationUncheckedCreateWithoutFireIncidentInput>
-  where?: Prisma.InvestigationWhereInput
+export type InvestigationCreateManyFireIncidentInputEnvelope = {
+  data: Prisma.InvestigationCreateManyFireIncidentInput | Prisma.InvestigationCreateManyFireIncidentInput[]
+  skipDuplicates?: boolean
 }
 
-export type InvestigationUpdateToOneWithWhereWithoutFireIncidentInput = {
-  where?: Prisma.InvestigationWhereInput
+export type InvestigationUpsertWithWhereUniqueWithoutFireIncidentInput = {
+  where: Prisma.InvestigationWhereUniqueInput
+  update: Prisma.XOR<Prisma.InvestigationUpdateWithoutFireIncidentInput, Prisma.InvestigationUncheckedUpdateWithoutFireIncidentInput>
+  create: Prisma.XOR<Prisma.InvestigationCreateWithoutFireIncidentInput, Prisma.InvestigationUncheckedCreateWithoutFireIncidentInput>
+}
+
+export type InvestigationUpdateWithWhereUniqueWithoutFireIncidentInput = {
+  where: Prisma.InvestigationWhereUniqueInput
   data: Prisma.XOR<Prisma.InvestigationUpdateWithoutFireIncidentInput, Prisma.InvestigationUncheckedUpdateWithoutFireIncidentInput>
+}
+
+export type InvestigationUpdateManyWithWhereWithoutFireIncidentInput = {
+  where: Prisma.InvestigationScalarWhereInput
+  data: Prisma.XOR<Prisma.InvestigationUpdateManyMutationInput, Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentInput>
+}
+
+export type InvestigationScalarWhereInput = {
+  AND?: Prisma.InvestigationScalarWhereInput | Prisma.InvestigationScalarWhereInput[]
+  OR?: Prisma.InvestigationScalarWhereInput[]
+  NOT?: Prisma.InvestigationScalarWhereInput | Prisma.InvestigationScalarWhereInput[]
+  id?: Prisma.StringFilter<"Investigation"> | string
+  investigationNo?: Prisma.StringFilter<"Investigation"> | string
+  causeOfFire?: Prisma.EnumCauseOfFireNullableFilter<"Investigation"> | $Enums.CauseOfFire | null
+  classification?: Prisma.EnumFireCaseClassificationNullableFilter<"Investigation"> | $Enums.FireCaseClassification | null
+  originOfFire?: Prisma.StringNullableFilter<"Investigation"> | string | null
+  startedAt?: Prisma.DateTimeFilter<"Investigation"> | Date | string
+  completedAt?: Prisma.DateTimeNullableFilter<"Investigation"> | Date | string | null
+  fireIncidentId?: Prisma.StringFilter<"Investigation"> | string
+  conductingOfficeId?: Prisma.StringFilter<"Investigation"> | string
+  assignedInvestigatorId?: Prisma.StringFilter<"Investigation"> | string
+  assignedById?: Prisma.StringFilter<"Investigation"> | string
+  createdAt?: Prisma.DateTimeFilter<"Investigation"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Investigation"> | Date | string
+}
+
+export type InvestigationCreateWithoutConductingOfficeInput = {
+  id?: string
+  investigationNo: string
+  causeOfFire?: $Enums.CauseOfFire | null
+  classification?: $Enums.FireCaseClassification | null
+  originOfFire?: string | null
+  startedAt: Date | string
+  completedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutInvestigationsInput
+  assignedInvestigator: Prisma.UserCreateNestedOneWithoutAssignedInvestigationsInput
+  assignedBy: Prisma.UserCreateNestedOneWithoutInvestigationsAssignedInput
+  report?: Prisma.InvestigationReportCreateNestedOneWithoutInvestigationInput
+}
+
+export type InvestigationUncheckedCreateWithoutConductingOfficeInput = {
+  id?: string
+  investigationNo: string
+  causeOfFire?: $Enums.CauseOfFire | null
+  classification?: $Enums.FireCaseClassification | null
+  originOfFire?: string | null
+  startedAt: Date | string
+  completedAt?: Date | string | null
+  fireIncidentId: string
+  assignedInvestigatorId: string
+  assignedById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  report?: Prisma.InvestigationReportUncheckedCreateNestedOneWithoutInvestigationInput
+}
+
+export type InvestigationCreateOrConnectWithoutConductingOfficeInput = {
+  where: Prisma.InvestigationWhereUniqueInput
+  create: Prisma.XOR<Prisma.InvestigationCreateWithoutConductingOfficeInput, Prisma.InvestigationUncheckedCreateWithoutConductingOfficeInput>
+}
+
+export type InvestigationCreateManyConductingOfficeInputEnvelope = {
+  data: Prisma.InvestigationCreateManyConductingOfficeInput | Prisma.InvestigationCreateManyConductingOfficeInput[]
+  skipDuplicates?: boolean
+}
+
+export type InvestigationUpsertWithWhereUniqueWithoutConductingOfficeInput = {
+  where: Prisma.InvestigationWhereUniqueInput
+  update: Prisma.XOR<Prisma.InvestigationUpdateWithoutConductingOfficeInput, Prisma.InvestigationUncheckedUpdateWithoutConductingOfficeInput>
+  create: Prisma.XOR<Prisma.InvestigationCreateWithoutConductingOfficeInput, Prisma.InvestigationUncheckedCreateWithoutConductingOfficeInput>
+}
+
+export type InvestigationUpdateWithWhereUniqueWithoutConductingOfficeInput = {
+  where: Prisma.InvestigationWhereUniqueInput
+  data: Prisma.XOR<Prisma.InvestigationUpdateWithoutConductingOfficeInput, Prisma.InvestigationUncheckedUpdateWithoutConductingOfficeInput>
+}
+
+export type InvestigationUpdateManyWithWhereWithoutConductingOfficeInput = {
+  where: Prisma.InvestigationScalarWhereInput
+  data: Prisma.XOR<Prisma.InvestigationUpdateManyMutationInput, Prisma.InvestigationUncheckedUpdateManyWithoutConductingOfficeInput>
+}
+
+export type InvestigationCreateWithoutAssignedInvestigatorInput = {
+  id?: string
+  investigationNo: string
+  causeOfFire?: $Enums.CauseOfFire | null
+  classification?: $Enums.FireCaseClassification | null
+  originOfFire?: string | null
+  startedAt: Date | string
+  completedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutInvestigationsInput
+  conductingOffice: Prisma.OfficeCreateNestedOneWithoutConductedInvestigationsInput
+  assignedBy: Prisma.UserCreateNestedOneWithoutInvestigationsAssignedInput
+  report?: Prisma.InvestigationReportCreateNestedOneWithoutInvestigationInput
+}
+
+export type InvestigationUncheckedCreateWithoutAssignedInvestigatorInput = {
+  id?: string
+  investigationNo: string
+  causeOfFire?: $Enums.CauseOfFire | null
+  classification?: $Enums.FireCaseClassification | null
+  originOfFire?: string | null
+  startedAt: Date | string
+  completedAt?: Date | string | null
+  fireIncidentId: string
+  conductingOfficeId: string
+  assignedById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  report?: Prisma.InvestigationReportUncheckedCreateNestedOneWithoutInvestigationInput
+}
+
+export type InvestigationCreateOrConnectWithoutAssignedInvestigatorInput = {
+  where: Prisma.InvestigationWhereUniqueInput
+  create: Prisma.XOR<Prisma.InvestigationCreateWithoutAssignedInvestigatorInput, Prisma.InvestigationUncheckedCreateWithoutAssignedInvestigatorInput>
+}
+
+export type InvestigationCreateManyAssignedInvestigatorInputEnvelope = {
+  data: Prisma.InvestigationCreateManyAssignedInvestigatorInput | Prisma.InvestigationCreateManyAssignedInvestigatorInput[]
+  skipDuplicates?: boolean
+}
+
+export type InvestigationCreateWithoutAssignedByInput = {
+  id?: string
+  investigationNo: string
+  causeOfFire?: $Enums.CauseOfFire | null
+  classification?: $Enums.FireCaseClassification | null
+  originOfFire?: string | null
+  startedAt: Date | string
+  completedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutInvestigationsInput
+  conductingOffice: Prisma.OfficeCreateNestedOneWithoutConductedInvestigationsInput
+  assignedInvestigator: Prisma.UserCreateNestedOneWithoutAssignedInvestigationsInput
+  report?: Prisma.InvestigationReportCreateNestedOneWithoutInvestigationInput
+}
+
+export type InvestigationUncheckedCreateWithoutAssignedByInput = {
+  id?: string
+  investigationNo: string
+  causeOfFire?: $Enums.CauseOfFire | null
+  classification?: $Enums.FireCaseClassification | null
+  originOfFire?: string | null
+  startedAt: Date | string
+  completedAt?: Date | string | null
+  fireIncidentId: string
+  conductingOfficeId: string
+  assignedInvestigatorId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  report?: Prisma.InvestigationReportUncheckedCreateNestedOneWithoutInvestigationInput
+}
+
+export type InvestigationCreateOrConnectWithoutAssignedByInput = {
+  where: Prisma.InvestigationWhereUniqueInput
+  create: Prisma.XOR<Prisma.InvestigationCreateWithoutAssignedByInput, Prisma.InvestigationUncheckedCreateWithoutAssignedByInput>
+}
+
+export type InvestigationCreateManyAssignedByInputEnvelope = {
+  data: Prisma.InvestigationCreateManyAssignedByInput | Prisma.InvestigationCreateManyAssignedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type InvestigationUpsertWithWhereUniqueWithoutAssignedInvestigatorInput = {
+  where: Prisma.InvestigationWhereUniqueInput
+  update: Prisma.XOR<Prisma.InvestigationUpdateWithoutAssignedInvestigatorInput, Prisma.InvestigationUncheckedUpdateWithoutAssignedInvestigatorInput>
+  create: Prisma.XOR<Prisma.InvestigationCreateWithoutAssignedInvestigatorInput, Prisma.InvestigationUncheckedCreateWithoutAssignedInvestigatorInput>
+}
+
+export type InvestigationUpdateWithWhereUniqueWithoutAssignedInvestigatorInput = {
+  where: Prisma.InvestigationWhereUniqueInput
+  data: Prisma.XOR<Prisma.InvestigationUpdateWithoutAssignedInvestigatorInput, Prisma.InvestigationUncheckedUpdateWithoutAssignedInvestigatorInput>
+}
+
+export type InvestigationUpdateManyWithWhereWithoutAssignedInvestigatorInput = {
+  where: Prisma.InvestigationScalarWhereInput
+  data: Prisma.XOR<Prisma.InvestigationUpdateManyMutationInput, Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorInput>
+}
+
+export type InvestigationUpsertWithWhereUniqueWithoutAssignedByInput = {
+  where: Prisma.InvestigationWhereUniqueInput
+  update: Prisma.XOR<Prisma.InvestigationUpdateWithoutAssignedByInput, Prisma.InvestigationUncheckedUpdateWithoutAssignedByInput>
+  create: Prisma.XOR<Prisma.InvestigationCreateWithoutAssignedByInput, Prisma.InvestigationUncheckedCreateWithoutAssignedByInput>
+}
+
+export type InvestigationUpdateWithWhereUniqueWithoutAssignedByInput = {
+  where: Prisma.InvestigationWhereUniqueInput
+  data: Prisma.XOR<Prisma.InvestigationUpdateWithoutAssignedByInput, Prisma.InvestigationUncheckedUpdateWithoutAssignedByInput>
+}
+
+export type InvestigationUpdateManyWithWhereWithoutAssignedByInput = {
+  where: Prisma.InvestigationScalarWhereInput
+  data: Prisma.XOR<Prisma.InvestigationUpdateManyMutationInput, Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByInput>
+}
+
+export type InvestigationCreateManyFireIncidentInput = {
+  id?: string
+  investigationNo: string
+  causeOfFire?: $Enums.CauseOfFire | null
+  classification?: $Enums.FireCaseClassification | null
+  originOfFire?: string | null
+  startedAt: Date | string
+  completedAt?: Date | string | null
+  conductingOfficeId: string
+  assignedInvestigatorId: string
+  assignedById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type InvestigationUpdateWithoutFireIncidentInput = {
@@ -604,10 +1053,13 @@ export type InvestigationUpdateWithoutFireIncidentInput = {
   causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
   classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
   originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  conductingOffice?: Prisma.OfficeUpdateOneRequiredWithoutConductedInvestigationsNestedInput
+  assignedInvestigator?: Prisma.UserUpdateOneRequiredWithoutAssignedInvestigationsNestedInput
+  assignedBy?: Prisma.UserUpdateOneRequiredWithoutInvestigationsAssignedNestedInput
   report?: Prisma.InvestigationReportUpdateOneWithoutInvestigationNestedInput
 }
 
@@ -617,11 +1069,215 @@ export type InvestigationUncheckedUpdateWithoutFireIncidentInput = {
   causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
   classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
   originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conductingOfficeId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedInvestigatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   report?: Prisma.InvestigationReportUncheckedUpdateOneWithoutInvestigationNestedInput
+}
+
+export type InvestigationUncheckedUpdateManyWithoutFireIncidentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationNo?: Prisma.StringFieldUpdateOperationsInput | string
+  causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
+  classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
+  originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conductingOfficeId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedInvestigatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type InvestigationCreateManyConductingOfficeInput = {
+  id?: string
+  investigationNo: string
+  causeOfFire?: $Enums.CauseOfFire | null
+  classification?: $Enums.FireCaseClassification | null
+  originOfFire?: string | null
+  startedAt: Date | string
+  completedAt?: Date | string | null
+  fireIncidentId: string
+  assignedInvestigatorId: string
+  assignedById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type InvestigationUpdateWithoutConductingOfficeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationNo?: Prisma.StringFieldUpdateOperationsInput | string
+  causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
+  classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
+  originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutInvestigationsNestedInput
+  assignedInvestigator?: Prisma.UserUpdateOneRequiredWithoutAssignedInvestigationsNestedInput
+  assignedBy?: Prisma.UserUpdateOneRequiredWithoutInvestigationsAssignedNestedInput
+  report?: Prisma.InvestigationReportUpdateOneWithoutInvestigationNestedInput
+}
+
+export type InvestigationUncheckedUpdateWithoutConductingOfficeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationNo?: Prisma.StringFieldUpdateOperationsInput | string
+  causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
+  classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
+  originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedInvestigatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  report?: Prisma.InvestigationReportUncheckedUpdateOneWithoutInvestigationNestedInput
+}
+
+export type InvestigationUncheckedUpdateManyWithoutConductingOfficeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationNo?: Prisma.StringFieldUpdateOperationsInput | string
+  causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
+  classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
+  originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedInvestigatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type InvestigationCreateManyAssignedInvestigatorInput = {
+  id?: string
+  investigationNo: string
+  causeOfFire?: $Enums.CauseOfFire | null
+  classification?: $Enums.FireCaseClassification | null
+  originOfFire?: string | null
+  startedAt: Date | string
+  completedAt?: Date | string | null
+  fireIncidentId: string
+  conductingOfficeId: string
+  assignedById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type InvestigationCreateManyAssignedByInput = {
+  id?: string
+  investigationNo: string
+  causeOfFire?: $Enums.CauseOfFire | null
+  classification?: $Enums.FireCaseClassification | null
+  originOfFire?: string | null
+  startedAt: Date | string
+  completedAt?: Date | string | null
+  fireIncidentId: string
+  conductingOfficeId: string
+  assignedInvestigatorId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type InvestigationUpdateWithoutAssignedInvestigatorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationNo?: Prisma.StringFieldUpdateOperationsInput | string
+  causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
+  classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
+  originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutInvestigationsNestedInput
+  conductingOffice?: Prisma.OfficeUpdateOneRequiredWithoutConductedInvestigationsNestedInput
+  assignedBy?: Prisma.UserUpdateOneRequiredWithoutInvestigationsAssignedNestedInput
+  report?: Prisma.InvestigationReportUpdateOneWithoutInvestigationNestedInput
+}
+
+export type InvestigationUncheckedUpdateWithoutAssignedInvestigatorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationNo?: Prisma.StringFieldUpdateOperationsInput | string
+  causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
+  classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
+  originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  conductingOfficeId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  report?: Prisma.InvestigationReportUncheckedUpdateOneWithoutInvestigationNestedInput
+}
+
+export type InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationNo?: Prisma.StringFieldUpdateOperationsInput | string
+  causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
+  classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
+  originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  conductingOfficeId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type InvestigationUpdateWithoutAssignedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationNo?: Prisma.StringFieldUpdateOperationsInput | string
+  causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
+  classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
+  originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutInvestigationsNestedInput
+  conductingOffice?: Prisma.OfficeUpdateOneRequiredWithoutConductedInvestigationsNestedInput
+  assignedInvestigator?: Prisma.UserUpdateOneRequiredWithoutAssignedInvestigationsNestedInput
+  report?: Prisma.InvestigationReportUpdateOneWithoutInvestigationNestedInput
+}
+
+export type InvestigationUncheckedUpdateWithoutAssignedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationNo?: Prisma.StringFieldUpdateOperationsInput | string
+  causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
+  classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
+  originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  conductingOfficeId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedInvestigatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  report?: Prisma.InvestigationReportUncheckedUpdateOneWithoutInvestigationNestedInput
+}
+
+export type InvestigationUncheckedUpdateManyWithoutAssignedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationNo?: Prisma.StringFieldUpdateOperationsInput | string
+  causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
+  classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
+  originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  conductingOfficeId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedInvestigatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -635,9 +1291,15 @@ export type InvestigationSelect<ExtArgs extends runtime.Types.Extensions.Interna
   startedAt?: boolean
   completedAt?: boolean
   fireIncidentId?: boolean
+  conductingOfficeId?: boolean
+  assignedInvestigatorId?: boolean
+  assignedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  conductingOffice?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
+  assignedInvestigator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  assignedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   report?: boolean | Prisma.Investigation$reportArgs<ExtArgs>
 }, ExtArgs["result"]["investigation"]>
 
@@ -650,9 +1312,15 @@ export type InvestigationSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   startedAt?: boolean
   completedAt?: boolean
   fireIncidentId?: boolean
+  conductingOfficeId?: boolean
+  assignedInvestigatorId?: boolean
+  assignedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  conductingOffice?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
+  assignedInvestigator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  assignedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["investigation"]>
 
 export type InvestigationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -664,9 +1332,15 @@ export type InvestigationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   startedAt?: boolean
   completedAt?: boolean
   fireIncidentId?: boolean
+  conductingOfficeId?: boolean
+  assignedInvestigatorId?: boolean
+  assignedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  conductingOffice?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
+  assignedInvestigator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  assignedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["investigation"]>
 
 export type InvestigationSelectScalar = {
@@ -678,26 +1352,41 @@ export type InvestigationSelectScalar = {
   startedAt?: boolean
   completedAt?: boolean
   fireIncidentId?: boolean
+  conductingOfficeId?: boolean
+  assignedInvestigatorId?: boolean
+  assignedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type InvestigationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "investigationNo" | "causeOfFire" | "classification" | "originOfFire" | "startedAt" | "completedAt" | "fireIncidentId" | "createdAt" | "updatedAt", ExtArgs["result"]["investigation"]>
+export type InvestigationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "investigationNo" | "causeOfFire" | "classification" | "originOfFire" | "startedAt" | "completedAt" | "fireIncidentId" | "conductingOfficeId" | "assignedInvestigatorId" | "assignedById" | "createdAt" | "updatedAt", ExtArgs["result"]["investigation"]>
 export type InvestigationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  conductingOffice?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
+  assignedInvestigator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  assignedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   report?: boolean | Prisma.Investigation$reportArgs<ExtArgs>
 }
 export type InvestigationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  conductingOffice?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
+  assignedInvestigator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  assignedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type InvestigationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  conductingOffice?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
+  assignedInvestigator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  assignedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $InvestigationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Investigation"
   objects: {
     fireIncident: Prisma.$FireIncidentPayload<ExtArgs>
+    conductingOffice: Prisma.$OfficePayload<ExtArgs>
+    assignedInvestigator: Prisma.$UserPayload<ExtArgs>
+    assignedBy: Prisma.$UserPayload<ExtArgs>
     report: Prisma.$InvestigationReportPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -706,9 +1395,12 @@ export type $InvestigationPayload<ExtArgs extends runtime.Types.Extensions.Inter
     causeOfFire: $Enums.CauseOfFire | null
     classification: $Enums.FireCaseClassification | null
     originOfFire: string | null
-    startedAt: Date | null
+    startedAt: Date
     completedAt: Date | null
     fireIncidentId: string
+    conductingOfficeId: string
+    assignedInvestigatorId: string
+    assignedById: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["investigation"]>
@@ -1106,6 +1798,9 @@ readonly fields: InvestigationFieldRefs;
 export interface Prisma__InvestigationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   fireIncident<T extends Prisma.FireIncidentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncidentDefaultArgs<ExtArgs>>): Prisma.Prisma__FireIncidentClient<runtime.Types.Result.GetResult<Prisma.$FireIncidentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  conductingOffice<T extends Prisma.OfficeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OfficeDefaultArgs<ExtArgs>>): Prisma.Prisma__OfficeClient<runtime.Types.Result.GetResult<Prisma.$OfficePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  assignedInvestigator<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  assignedBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   report<T extends Prisma.Investigation$reportArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Investigation$reportArgs<ExtArgs>>): Prisma.Prisma__InvestigationReportClient<runtime.Types.Result.GetResult<Prisma.$InvestigationReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1144,6 +1839,9 @@ export interface InvestigationFieldRefs {
   readonly startedAt: Prisma.FieldRef<"Investigation", 'DateTime'>
   readonly completedAt: Prisma.FieldRef<"Investigation", 'DateTime'>
   readonly fireIncidentId: Prisma.FieldRef<"Investigation", 'String'>
+  readonly conductingOfficeId: Prisma.FieldRef<"Investigation", 'String'>
+  readonly assignedInvestigatorId: Prisma.FieldRef<"Investigation", 'String'>
+  readonly assignedById: Prisma.FieldRef<"Investigation", 'String'>
   readonly createdAt: Prisma.FieldRef<"Investigation", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Investigation", 'DateTime'>
 }

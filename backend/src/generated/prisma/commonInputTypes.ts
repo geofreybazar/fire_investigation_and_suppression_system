@@ -152,6 +152,23 @@ export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
 }
 
+export type EnumReportDecisionFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReportDecision | Prisma.EnumReportDecisionFieldRefInput<$PrismaModel>
+  in?: $Enums.ReportDecision[] | Prisma.ListEnumReportDecisionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReportDecision[] | Prisma.ListEnumReportDecisionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReportDecisionFilter<$PrismaModel> | $Enums.ReportDecision
+}
+
+export type EnumReportDecisionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReportDecision | Prisma.EnumReportDecisionFieldRefInput<$PrismaModel>
+  in?: $Enums.ReportDecision[] | Prisma.ListEnumReportDecisionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReportDecision[] | Prisma.ListEnumReportDecisionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReportDecisionWithAggregatesFilter<$PrismaModel> | $Enums.ReportDecision
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReportDecisionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReportDecisionFilter<$PrismaModel>
+}
+
 export type EnumCauseOfFireNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.CauseOfFire | Prisma.EnumCauseOfFireFieldRefInput<$PrismaModel> | null
   in?: $Enums.CauseOfFire[] | Prisma.ListEnumCauseOfFireFieldRefInput<$PrismaModel> | null
@@ -184,6 +201,23 @@ export type EnumFireCaseClassificationNullableWithAggregatesFilter<$PrismaModel 
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumFireCaseClassificationNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumFireCaseClassificationNullableFilter<$PrismaModel>
+}
+
+export type EnumReferralDirectionFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReferralDirection | Prisma.EnumReferralDirectionFieldRefInput<$PrismaModel>
+  in?: $Enums.ReferralDirection[] | Prisma.ListEnumReferralDirectionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReferralDirection[] | Prisma.ListEnumReferralDirectionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReferralDirectionFilter<$PrismaModel> | $Enums.ReferralDirection
+}
+
+export type EnumReferralDirectionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReferralDirection | Prisma.EnumReferralDirectionFieldRefInput<$PrismaModel>
+  in?: $Enums.ReferralDirection[] | Prisma.ListEnumReferralDirectionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReferralDirection[] | Prisma.ListEnumReferralDirectionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReferralDirectionWithAggregatesFilter<$PrismaModel> | $Enums.ReferralDirection
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReferralDirectionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReferralDirectionFilter<$PrismaModel>
 }
 
 export type IntFilter<$PrismaModel = never> = {
@@ -301,6 +335,23 @@ export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
 }
 
+export type EnumIncidentApprovalStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.IncidentApprovalStatus | Prisma.EnumIncidentApprovalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IncidentApprovalStatus[] | Prisma.ListEnumIncidentApprovalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IncidentApprovalStatus[] | Prisma.ListEnumIncidentApprovalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIncidentApprovalStatusFilter<$PrismaModel> | $Enums.IncidentApprovalStatus
+}
+
+export type EnumIncidentApprovalStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.IncidentApprovalStatus | Prisma.EnumIncidentApprovalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IncidentApprovalStatus[] | Prisma.ListEnumIncidentApprovalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IncidentApprovalStatus[] | Prisma.ListEnumIncidentApprovalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIncidentApprovalStatusWithAggregatesFilter<$PrismaModel> | $Enums.IncidentApprovalStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumIncidentApprovalStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumIncidentApprovalStatusFilter<$PrismaModel>
+}
+
 export type EnumCATEGORY_TYPEFilter<$PrismaModel = never> = {
   equals?: $Enums.CATEGORY_TYPE | Prisma.EnumCATEGORY_TYPEFieldRefInput<$PrismaModel>
   in?: $Enums.CATEGORY_TYPE[] | Prisma.ListEnumCATEGORY_TYPEFieldRefInput<$PrismaModel>
@@ -316,6 +367,23 @@ export type EnumCATEGORY_TYPEWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCATEGORY_TYPEFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCATEGORY_TYPEFilter<$PrismaModel>
+}
+
+export type EnumFireIncidentEventTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.FireIncidentEventType | Prisma.EnumFireIncidentEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.FireIncidentEventType[] | Prisma.ListEnumFireIncidentEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FireIncidentEventType[] | Prisma.ListEnumFireIncidentEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFireIncidentEventTypeFilter<$PrismaModel> | $Enums.FireIncidentEventType
+}
+
+export type EnumFireIncidentEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FireIncidentEventType | Prisma.EnumFireIncidentEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.FireIncidentEventType[] | Prisma.ListEnumFireIncidentEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FireIncidentEventType[] | Prisma.ListEnumFireIncidentEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFireIncidentEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.FireIncidentEventType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFireIncidentEventTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFireIncidentEventTypeFilter<$PrismaModel>
 }
 
 export type BoolFilter<$PrismaModel = never> = {
@@ -533,6 +601,23 @@ export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
 }
 
+export type NestedEnumReportDecisionFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReportDecision | Prisma.EnumReportDecisionFieldRefInput<$PrismaModel>
+  in?: $Enums.ReportDecision[] | Prisma.ListEnumReportDecisionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReportDecision[] | Prisma.ListEnumReportDecisionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReportDecisionFilter<$PrismaModel> | $Enums.ReportDecision
+}
+
+export type NestedEnumReportDecisionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReportDecision | Prisma.EnumReportDecisionFieldRefInput<$PrismaModel>
+  in?: $Enums.ReportDecision[] | Prisma.ListEnumReportDecisionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReportDecision[] | Prisma.ListEnumReportDecisionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReportDecisionWithAggregatesFilter<$PrismaModel> | $Enums.ReportDecision
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReportDecisionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReportDecisionFilter<$PrismaModel>
+}
+
 export type NestedEnumCauseOfFireNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.CauseOfFire | Prisma.EnumCauseOfFireFieldRefInput<$PrismaModel> | null
   in?: $Enums.CauseOfFire[] | Prisma.ListEnumCauseOfFireFieldRefInput<$PrismaModel> | null
@@ -565,6 +650,23 @@ export type NestedEnumFireCaseClassificationNullableWithAggregatesFilter<$Prisma
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumFireCaseClassificationNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumFireCaseClassificationNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumReferralDirectionFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReferralDirection | Prisma.EnumReferralDirectionFieldRefInput<$PrismaModel>
+  in?: $Enums.ReferralDirection[] | Prisma.ListEnumReferralDirectionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReferralDirection[] | Prisma.ListEnumReferralDirectionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReferralDirectionFilter<$PrismaModel> | $Enums.ReferralDirection
+}
+
+export type NestedEnumReferralDirectionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReferralDirection | Prisma.EnumReferralDirectionFieldRefInput<$PrismaModel>
+  in?: $Enums.ReferralDirection[] | Prisma.ListEnumReferralDirectionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReferralDirection[] | Prisma.ListEnumReferralDirectionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReferralDirectionWithAggregatesFilter<$PrismaModel> | $Enums.ReferralDirection
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReferralDirectionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReferralDirectionFilter<$PrismaModel>
 }
 
 export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -682,6 +784,23 @@ export type NestedFloatNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
 }
 
+export type NestedEnumIncidentApprovalStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.IncidentApprovalStatus | Prisma.EnumIncidentApprovalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IncidentApprovalStatus[] | Prisma.ListEnumIncidentApprovalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IncidentApprovalStatus[] | Prisma.ListEnumIncidentApprovalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIncidentApprovalStatusFilter<$PrismaModel> | $Enums.IncidentApprovalStatus
+}
+
+export type NestedEnumIncidentApprovalStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.IncidentApprovalStatus | Prisma.EnumIncidentApprovalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IncidentApprovalStatus[] | Prisma.ListEnumIncidentApprovalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IncidentApprovalStatus[] | Prisma.ListEnumIncidentApprovalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIncidentApprovalStatusWithAggregatesFilter<$PrismaModel> | $Enums.IncidentApprovalStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumIncidentApprovalStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumIncidentApprovalStatusFilter<$PrismaModel>
+}
+
 export type NestedEnumCATEGORY_TYPEFilter<$PrismaModel = never> = {
   equals?: $Enums.CATEGORY_TYPE | Prisma.EnumCATEGORY_TYPEFieldRefInput<$PrismaModel>
   in?: $Enums.CATEGORY_TYPE[] | Prisma.ListEnumCATEGORY_TYPEFieldRefInput<$PrismaModel>
@@ -697,6 +816,23 @@ export type NestedEnumCATEGORY_TYPEWithAggregatesFilter<$PrismaModel = never> = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCATEGORY_TYPEFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCATEGORY_TYPEFilter<$PrismaModel>
+}
+
+export type NestedEnumFireIncidentEventTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.FireIncidentEventType | Prisma.EnumFireIncidentEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.FireIncidentEventType[] | Prisma.ListEnumFireIncidentEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FireIncidentEventType[] | Prisma.ListEnumFireIncidentEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFireIncidentEventTypeFilter<$PrismaModel> | $Enums.FireIncidentEventType
+}
+
+export type NestedEnumFireIncidentEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FireIncidentEventType | Prisma.EnumFireIncidentEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.FireIncidentEventType[] | Prisma.ListEnumFireIncidentEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FireIncidentEventType[] | Prisma.ListEnumFireIncidentEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFireIncidentEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.FireIncidentEventType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFireIncidentEventTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFireIncidentEventTypeFilter<$PrismaModel>
 }
 
 export type NestedBoolFilter<$PrismaModel = never> = {

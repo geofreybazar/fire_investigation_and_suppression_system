@@ -11,7 +11,18 @@ model IncidentTimeline {
   remarks    String?
 
   createdById String
+  createdBy   User     @relation("TimelineCreatedBy", fields: [createdById], references: [id])
   createdAt   DateTime @default(now())
+
+  // Corrections never overwrite history: the original is voided and kept.
+  voidedAt   DateTime?
+  voidedById String?
+  voidedBy   User?     @relation("TimelineVoidedBy", fields: [voidedById], references: [id])
+  voidReason String?
+
+  correctsEntryId String?           @unique
+  correctsEntry   IncidentTimeline? @relation("TimelineCorrection", fields: [correctsEntryId], references: [id])
+  correctedBy     IncidentTimeline? @relation("TimelineCorrection")
 
   @@index([fireIncidentId, occurredAt])
 }

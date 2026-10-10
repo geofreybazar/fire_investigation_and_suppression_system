@@ -18,6 +18,34 @@ enum FireIncidentStatus {
   FIRE_OUT
   FIRE_OUT_UPON_ARRIVAL
   FALSE_ALARM
+  REKINDLE
+}
+
+enum IncidentApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum FireIncidentEventType {
+  SUBMITTED
+  RESUBMITTED
+  APPROVED
+  REJECTED
+  REMOVED
+  DELETED
+  RESTORED
+}
+
+enum ReferralDirection {
+  UP
+  DOWN
+}
+
+enum ReportDecision {
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
 }
 
 enum FireCaseClassification {
