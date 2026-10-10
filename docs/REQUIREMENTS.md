@@ -907,10 +907,9 @@ Severity: **H** = security or data-integrity risk, **M** = rule not enforced, **
 |---|---|---|
 | 2026-10-10 | Phase 1 (security, branch `phase-1-security-fixes`) | D-01, D-03, D-06, D-07, D-08, D-09, D-10, D-12 |
 | 2026-10-10 | Phase 2 (schema, migration `20261010120000_add_incident_workflow_schema`) | Schema level: D-02, D-15, D-25, D-26 (enum, permission maps and frontend role list), D-28, D-29, D-30, D-31. Each still needs its Phase 3/4 service logic. |
+| 2026-10-10 | Phase 3 (fire-incident backend) | D-04 (incident and location created in one write), D-20 (new input schemas), D-18 (category edits validated), D-19 (incident roles can read categories). Service logic for D-02, D-15, D-25, D-28, D-30, D-31. |
 
-Still open from priority 2:
-- **D-04:** Prisma requires one side of a 1:1 relation to be optional, so the schema can't enforce a required location. Phase 3 enforces it by creating the incident and its location in one transaction.
-- **D-20:** the incident input schema. Rewritten in Phase 3.
+Still open from priority 2: none for incidents. D-29 (several investigations per incident) needs its Phase 4 service logic.
 
 ---
 

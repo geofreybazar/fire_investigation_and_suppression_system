@@ -32,7 +32,7 @@ export class FireIncidentCategoriesRepository {
         where,
         include: {
           subCategories: true,
-          incidents: true,
+          _count: { select: { incidents: true } },
         },
         take: limit,
         skip: skip,
@@ -61,7 +61,7 @@ export class FireIncidentCategoriesRepository {
       where: { id },
       include: {
         subCategories: true,
-        incidents: true,
+        _count: { select: { incidents: true } },
       },
     });
   }

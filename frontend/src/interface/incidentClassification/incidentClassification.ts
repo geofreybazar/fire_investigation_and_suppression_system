@@ -21,7 +21,7 @@ export interface FireIncidentCategory extends FireIncidentCategoriesInput {
   createdAt: string;
   updatedAt: string;
   subCategories: FireIncidentSubCategory[];
-  incidents: any[];
+  _count: { incidents: number };
 }
 
 export interface GetAllFireIncidentCategories {
