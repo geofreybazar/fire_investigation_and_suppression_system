@@ -19,6 +19,7 @@ import { NotificationModule } from './modules/notification/notification.module.j
 import { FireIncidentCategoriesModule } from './modules/fire-incident-categories/fire-incident-categories.module.js';
 import { FireIncidentSubcategoriesModule } from './modules/fire-incident-subcategories/fire-incident-subcategories.module.js';
 import { FireIncidentModule } from './modules/fire-incident/fire-incident.module.js';
+import { InvestigationModule } from './modules/investigation/investigation.module.js';
 
 // Built React app. Only served when it exists, so `start:dev` alongside the
 // Vite dev server keeps working without a frontend build.
@@ -53,6 +54,7 @@ const serveFrontend = existsSync(join(frontendDist, 'index.html'))
     FireIncidentCategoriesModule,
     FireIncidentSubcategoriesModule,
     FireIncidentModule,
+    InvestigationModule,
     ...serveFrontend,
   ],
   controllers: [AppController],

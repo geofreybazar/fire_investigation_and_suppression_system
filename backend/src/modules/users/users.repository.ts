@@ -38,6 +38,13 @@ export class UsersRepository {
     });
   }
 
+  // Investigations assigned to the user that are not yet approved.
+  async countOpenAssignedInvestigations(userId: UUID) {
+    return this.prismaService.investigation.count({
+      where: { assignedInvestigatorId: userId, completedAt: null },
+    });
+  }
+
   // No isActive filter: inactive users must still be found to be reactivated.
   async findUserRoleById(userId: UUID) {
     return this.prismaService.user.findUnique({

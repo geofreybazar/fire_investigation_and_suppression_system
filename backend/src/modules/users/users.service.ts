@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   ForbiddenException,
   Injectable,
   Logger,
@@ -207,6 +208,10 @@ export class UsersService {
 
     await this.assertCanManageUser(userId, currentUser);
 
+    if (!isActive.isActive) {
+      await this.assertNoOpenInvestigation(userId);
+    }
+
     const user = await this.usersRepository.deactivateUser(
       userId,
       isActive.isActive,
@@ -271,6 +276,8 @@ export class UsersService {
       USER_SCOPE_MESSAGE,
     );
 
+    await this.assertNoOpenInvestigation(userId);
+
     // edit user info
     const editedUser = await this.usersRepository.editUser(userId, userData);
 
@@ -283,6 +290,19 @@ export class UsersService {
     return {
       message: 'user successfully updated',
     };
+  }
+
+  // An investigator with an open investigation can't be deactivated, moved or
+  // edited until it is finished (FR-USR-013/014).
+  private async assertNoOpenInvestigation(userId: UUID) {
+    const open =
+      await this.usersRepository.countOpenAssignedInvestigations(userId);
+
+    if (open > 0) {
+      throw new ConflictException(
+        'This user has an open investigation and cannot be changed until it is finished.',
+      );
+    }
   }
 
   // An admin may only manage users whose current role they could grant;

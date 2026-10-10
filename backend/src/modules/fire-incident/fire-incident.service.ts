@@ -35,6 +35,7 @@ import {
 import {
   assertValidTimeline,
   currentTimelineState,
+  INVESTIGABLE_STATUSES,
   sortTimeline,
   type TimelineEntryState,
 } from './utils/incident-rules.js';
@@ -50,13 +51,6 @@ const PAGE_SIZE = 10;
 const STATION_TYPES: OfficeType[] = [
   OfficeType.CITY_FIRE_STATION,
   OfficeType.MUNICIPAL_FIRE_STATION,
-];
-
-// Statuses an investigation depends on; a correction may not move an
-// investigated incident out of them.
-const INVESTIGABLE_STATUSES: FireIncidentStatus[] = [
-  FireIncidentStatus.FIRE_OUT,
-  FireIncidentStatus.FIRE_OUT_UPON_ARRIVAL,
 ];
 
 type AccessIncident = NonNullable<

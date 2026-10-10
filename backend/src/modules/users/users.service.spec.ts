@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import {
+  ConflictException,
   ForbiddenException,
   NotFoundException,
   UnauthorizedException,
@@ -64,6 +65,7 @@ describe('UsersService', () => {
     createUser: ReturnType<typeof vi.fn>;
     findUserById: ReturnType<typeof vi.fn>;
     findUserRoleById: ReturnType<typeof vi.fn>;
+    countOpenAssignedInvestigations: ReturnType<typeof vi.fn>;
     findUserForChangePassword: ReturnType<typeof vi.fn>;
     changePassowrd: ReturnType<typeof vi.fn>;
     findPaginatedUsers: ReturnType<typeof vi.fn>;
@@ -86,6 +88,8 @@ describe('UsersService', () => {
         role: 'REGIONAL_INVESTIGATOR',
         office: { id: officeId, regionId: null },
       }),
+      // By default the user has no open investigation.
+      countOpenAssignedInvestigations: vi.fn().mockResolvedValue(0),
       findUserForChangePassword: vi.fn(),
       changePassowrd: vi.fn(),
       findPaginatedUsers: vi.fn(),
@@ -499,6 +503,24 @@ describe('UsersService', () => {
       expect(usersRepository.deactivateUser).not.toHaveBeenCalled();
     });
 
+    it('forbids deactivating an investigator with an open investigation', async () => {
+      usersRepository.countOpenAssignedInvestigations.mockResolvedValue(1);
+
+      await expect(
+        service.changeUserStatus(userId, { isActive: false }, superAdmin),
+      ).rejects.toThrow(ConflictException);
+      expect(usersRepository.deactivateUser).not.toHaveBeenCalled();
+    });
+
+    it('still allows activating an investigator with an open investigation', async () => {
+      usersRepository.countOpenAssignedInvestigations.mockResolvedValue(1);
+      usersRepository.deactivateUser.mockResolvedValue({ id: userId });
+
+      await expect(
+        service.changeUserStatus(userId, { isActive: true }, superAdmin),
+      ).resolves.toEqual({ message: 'User activated successfully.' });
+    });
+
     it('allows REGIONAL_ADMIN to deactivate a user whose role they can grant', async () => {
       usersRepository.deactivateUser.mockResolvedValue({ id: userId });
 
@@ -592,6 +614,21 @@ describe('UsersService', () => {
       await expect(
         service.editUser(userId, newInvestigator, actor),
       ).rejects.toThrow(ForbiddenException);
+      expect(usersRepository.editUser).not.toHaveBeenCalled();
+    });
+
+    it('forbids editing or moving an investigator with an open investigation', async () => {
+      officeRepository.findById.mockResolvedValue({
+        id: officeId,
+        type: 'REGIONAL_OFFICE',
+      });
+      usersRepository.countOpenAssignedInvestigations.mockResolvedValue(2);
+
+      await expect(
+        service.editUser(userId, newInvestigator, superAdmin),
+      ).rejects.toThrow(
+        'This user has an open investigation and cannot be changed until it is finished.',
+      );
       expect(usersRepository.editUser).not.toHaveBeenCalled();
     });
 

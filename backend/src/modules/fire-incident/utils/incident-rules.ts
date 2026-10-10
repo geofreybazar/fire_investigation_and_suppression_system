@@ -23,6 +23,12 @@ export const ALARM_ORDER: FireAlarmLevel[] = [
   FireAlarmLevel.GENERAL_ALARM,
 ];
 
+// Completed statuses an investigation can be started from (§5.1).
+export const INVESTIGABLE_STATUSES: FireIncidentStatus[] = [
+  S.FIRE_OUT,
+  S.FIRE_OUT_UPON_ARRIVAL,
+];
+
 export const INITIAL_STATUSES: FireIncidentStatus[] = [
   S.VERIFICATION,
   S.FALSE_ALARM,
