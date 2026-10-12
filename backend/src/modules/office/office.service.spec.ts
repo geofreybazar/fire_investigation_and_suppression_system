@@ -65,6 +65,7 @@ describe('OfficeService', () => {
   let service: OfficeService;
   let repository: {
     findById: ReturnType<typeof vi.fn>;
+    findByNameUnderParent: ReturnType<typeof vi.fn>;
     findByIdForDeletion: ReturnType<typeof vi.fn>;
     findAllOffices: ReturnType<typeof vi.fn>;
     findPaginatedOffices: ReturnType<typeof vi.fn>;
@@ -76,6 +77,8 @@ describe('OfficeService', () => {
   beforeEach(async () => {
     repository = {
       findById: vi.fn(),
+      // By default no other office has the name.
+      findByNameUnderParent: vi.fn().mockResolvedValue(null),
       findByIdForDeletion: vi.fn(),
       findAllOffices: vi.fn(),
       findPaginatedOffices: vi.fn(),
@@ -231,6 +234,24 @@ describe('OfficeService', () => {
       expect(repository.createOffice).toHaveBeenCalled();
     });
 
+    it('rejects a name already used under the same parent', async () => {
+      repository.findById.mockResolvedValue(offices[districtId]);
+      repository.findByNameUnderParent.mockResolvedValue({ id: officeId });
+
+      await expect(
+        service.createOffice(
+          { ...cityStation, parentId: districtId },
+          superAdmin,
+        ),
+      ).rejects.toThrow(ConflictException);
+      expect(repository.findByNameUnderParent).toHaveBeenCalledWith(
+        cityStation.name,
+        districtId,
+        undefined,
+      );
+      expect(repository.createOffice).not.toHaveBeenCalled();
+    });
+
     it('forbids REGIONAL_ADMIN from creating an office under a parent in another region', async () => {
       repository.findById.mockResolvedValue(offices[otherDistrictId]);
 
@@ -365,6 +386,31 @@ describe('OfficeService', () => {
           superAdmin,
         ),
       ).rejects.toThrow('Parent office not found');
+      expect(repository.updateOffice).not.toHaveBeenCalled();
+    });
+
+    it('ignores the office itself when checking the name', async () => {
+      repository.updateOffice.mockResolvedValue({ id: officeId });
+
+      await service.updateOffice(officeId, station, regionalAdmin);
+
+      expect(repository.findByNameUnderParent).toHaveBeenCalledWith(
+        station.name,
+        districtId,
+        officeId,
+      );
+    });
+
+    it('rejects renaming to a name another office under the parent uses', async () => {
+      repository.findByNameUnderParent.mockResolvedValue({
+        id: 'other-office',
+      });
+
+      await expect(
+        service.updateOffice(officeId, station, regionalAdmin),
+      ).rejects.toThrow(
+        `An office named "${station.name}" already exists under the same parent office.`,
+      );
       expect(repository.updateOffice).not.toHaveBeenCalled();
     });
 

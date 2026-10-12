@@ -251,6 +251,7 @@ export type OfficeOrderByWithRelationInput = {
 export type OfficeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   regionCode?: string
+  parentId_name?: Prisma.OfficeParentIdNameCompoundUniqueInput
   AND?: Prisma.OfficeWhereInput | Prisma.OfficeWhereInput[]
   OR?: Prisma.OfficeWhereInput[]
   NOT?: Prisma.OfficeWhereInput | Prisma.OfficeWhereInput[]
@@ -271,7 +272,7 @@ export type OfficeWhereUniqueInput = Prisma.AtLeast<{
   conductedInvestigations?: Prisma.InvestigationListRelationFilter
   referralsFrom?: Prisma.InvestigationReferralListRelationFilter
   referralsTo?: Prisma.InvestigationReferralListRelationFilter
-}, "id" | "regionCode">
+}, "id" | "regionCode" | "parentId_name">
 
 export type OfficeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -435,6 +436,11 @@ export type OfficeListRelationFilter = {
 
 export type OfficeOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type OfficeParentIdNameCompoundUniqueInput = {
+  parentId: string
+  name: string
 }
 
 export type OfficeCountOrderByAggregateInput = {

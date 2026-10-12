@@ -1,7 +1,12 @@
 import { z } from 'zod';
 
 export const officeSchema = z.object({
-  name: z.string().min(5, 'Office name is required'),
+  // Trimmed, with repeated spaces collapsed, so near-identical names match.
+  name: z
+    .string()
+    .trim()
+    .min(5, 'Office name is required')
+    .transform((name) => name.replace(/\s+/g, ' ')),
   type: z.enum([
     'NATIONAL_HEADQUARTERS',
     'REGIONAL_OFFICE',

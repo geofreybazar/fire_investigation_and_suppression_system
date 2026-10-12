@@ -9,6 +9,7 @@ import { Spinner } from "@/components/ui/spinner";
 import Name from "../addOffice/Name";
 import OfficeType from "../addOffice/OfficeType";
 import ParentId from "../addOffice/ParentId";
+import RegionCode from "../addOffice/RegionCode";
 
 import {
   officeSchema,
@@ -29,10 +30,13 @@ const EditForm = ({
 }: EditFormProps) => {
   const { updateOffice, isPending } = useUpdateOffice();
 
+  // Only regional offices have a region code; leaving the key out for the
+  // rest keeps the "nothing changed" comparison below accurate.
   const defaultValues = {
     name: selectedOffice.name,
     parentId: selectedOffice.parentId,
     type: selectedOffice.type,
+    ...(selectedOffice.regionCode && { regionCode: selectedOffice.regionCode }),
   };
 
   const methods = useForm<OfficeInput>({
@@ -69,6 +73,9 @@ const EditForm = ({
 
         {/* Office Type*/}
         <OfficeType />
+
+        {/* region code */}
+        <RegionCode />
 
         {/* parent office */}
         <ParentId />

@@ -25,6 +25,22 @@ export class OfficeRepository {
     });
   }
 
+  // Another office with the same name (any case) under the same parent.
+  async findByNameUnderParent(
+    name: string,
+    parentId: string | null,
+    excludeId?: string,
+  ) {
+    return this.prismaService.office.findFirst({
+      where: {
+        name: { equals: name, mode: 'insensitive' },
+        parentId,
+        ...(excludeId && { id: { not: excludeId } }),
+      },
+      select: { id: true },
+    });
+  }
+
   async findByIdForDeletion(id: string) {
     return this.prismaService.office.findUnique({
       where: { id },

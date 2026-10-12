@@ -44,6 +44,8 @@ export class OfficeService {
 
     validateRegionCode(officeData.type, officeData.regionCode);
 
+    await this.assertNameAvailable(officeData);
+
     const office = await this.officeRepository.createOffice({
       name: officeData.name,
       type: officeData.type,
@@ -122,6 +124,8 @@ export class OfficeService {
 
     validateRegionCode(officeData.type, officeData.regionCode);
 
+    await this.assertNameAvailable(officeData, id);
+
     const updatedOffice = await this.officeRepository.updateOffice(
       id,
       officeData,
@@ -159,5 +163,20 @@ export class OfficeService {
     return {
       message: 'Office deleted successfully.',
     };
+  }
+
+  // Office names are unique under the same parent office (case-insensitive).
+  private async assertNameAvailable(officeData: OfficeInput, excludeId?: UUID) {
+    const existing = await this.officeRepository.findByNameUnderParent(
+      officeData.name,
+      officeData.parentId ?? null,
+      excludeId,
+    );
+
+    if (existing) {
+      throw new ConflictException(
+        `An office named "${officeData.name}" already exists under the same parent office.`,
+      );
+    }
   }
 }

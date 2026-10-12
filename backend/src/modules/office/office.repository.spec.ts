@@ -12,6 +12,7 @@ describe('OfficeRepository', () => {
   let prisma: {
     office: {
       findUnique: ReturnType<typeof vi.fn>;
+      findFirst: ReturnType<typeof vi.fn>;
       create: ReturnType<typeof vi.fn>;
       update: ReturnType<typeof vi.fn>;
     };
@@ -19,7 +20,12 @@ describe('OfficeRepository', () => {
 
   beforeEach(async () => {
     prisma = {
-      office: { findUnique: vi.fn(), create: vi.fn(), update: vi.fn() },
+      office: {
+        findUnique: vi.fn(),
+        findFirst: vi.fn(),
+        create: vi.fn(),
+        update: vi.fn(),
+      },
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -118,6 +124,25 @@ describe('OfficeRepository', () => {
       expect(prisma.office.update).toHaveBeenCalledWith({
         data: expect.objectContaining({ regionCode: null }),
         where: { id: officeId },
+      });
+    });
+  });
+
+  describe('findByNameUnderParent', () => {
+    it('matches the name case-insensitively under the same parent, excluding the office itself', async () => {
+      await repository.findByNameUnderParent(
+        'quezon city fire station',
+        regionalId,
+        officeId,
+      );
+
+      expect(prisma.office.findFirst).toHaveBeenCalledWith({
+        where: {
+          name: { equals: 'quezon city fire station', mode: 'insensitive' },
+          parentId: regionalId,
+          id: { not: officeId },
+        },
+        select: { id: true },
       });
     });
   });
