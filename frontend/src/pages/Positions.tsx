@@ -29,7 +29,6 @@ const Positions = () => {
         setSearch={setSearch}
         setCurrentPage={setCurrentPage}
       />
-
       {/* Table */}
       <ErrorBoundary FallbackComponent={ErrorFallbackComponent}>
         <PositionsTable

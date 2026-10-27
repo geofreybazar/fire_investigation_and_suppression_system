@@ -45,15 +45,13 @@ const PositionsTable = ({
         <MobileView positions={positions.data} />
       </div>
 
-      {positions.pagination.totalPages > 1 && (
-        <div className='self-end'>
-          <PaginationComponent
-            totalPages={positions.pagination.totalPages}
-            setCurrentPage={setCurrentPage}
-            currentPage={currentPage}
-          />
-        </div>
-      )}
+      <div className='self-end'>
+        <PaginationComponent
+          totalPages={positions.pagination.totalPages}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+        />
+      </div>
     </div>
   );
 };

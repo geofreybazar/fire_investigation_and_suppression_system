@@ -9,6 +9,7 @@ import {
 
 import { ConfigService } from '@nestjs/config';
 import { UsersRepository } from './users.repository.js';
+import { UsersAuthorizationService } from './service/users.authorization.service.js';
 import { OfficeRepository } from '../office/office.repository.js';
 
 import {
@@ -43,6 +44,7 @@ export class UsersService {
     private officeRepository: OfficeRepository,
     private configService: ConfigService,
     private officeAuthorizationService: OfficeAuthorizationService,
+    private usersAuthorizationService: UsersAuthorizationService,
   ) {}
 
   async createUser(userData: UserInput, user: CurrentUserJwtPayload) {
@@ -206,7 +208,10 @@ export class UsersService {
       throw new ForbiddenException('You cannot deactivate your own account.');
     }
 
-    await this.assertCanManageUser(userId, currentUser);
+    await this.usersAuthorizationService.assertCanManageUser(
+      userId,
+      currentUser,
+    );
 
     if (!isActive.isActive) {
       await this.assertNoOpenInvestigation(userId);
@@ -235,7 +240,10 @@ export class UsersService {
   ) {
     this.logger.log(`Creating user: ${userData.email}`);
 
-    const targetRole = await this.assertCanManageUser(userId, user);
+    const targetRole = await this.usersAuthorizationService.assertCanManageUser(
+      userId,
+      user,
+    );
 
     // The SUPER_ADMIN account keeps its role: the API can neither grant nor remove it.
     if (targetRole === ROLE.SUPER_ADMIN || userData.role === ROLE.SUPER_ADMIN) {
@@ -303,37 +311,5 @@ export class UsersService {
         'This user has an open investigation and cannot be changed until it is finished.',
       );
     }
-  }
-
-  // An admin may only manage users whose current role they could grant;
-  // SUPER_ADMIN may additionally manage the SUPER_ADMIN account.
-  private async assertCanManageUser(
-    userId: UUID,
-    currentUser: CurrentUserJwtPayload,
-  ) {
-    const target = await this.usersRepository.findUserRoleById(userId);
-
-    if (!target) {
-      throw new NotFoundException('User not found.');
-    }
-
-    const canManage =
-      rolePermissions[currentUser.role]?.includes(target.role) ||
-      (currentUser.role === ROLE.SUPER_ADMIN &&
-        target.role === ROLE.SUPER_ADMIN);
-
-    if (!canManage) {
-      throw new ForbiddenException(
-        `${currentUser.role} is not allowed to manage a user with role ${target.role}`,
-      );
-    }
-
-    this.officeAuthorizationService.assertOfficeInScope(
-      currentUser,
-      target.office,
-      USER_SCOPE_MESSAGE,
-    );
-
-    return target.role;
   }
 }

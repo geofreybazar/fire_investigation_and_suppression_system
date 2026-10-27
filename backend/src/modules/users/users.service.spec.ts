@@ -12,6 +12,7 @@ import { UsersService } from './users.service.js';
 import { UsersRepository } from './users.repository.js';
 import { OfficeRepository } from '../office/office.repository.js';
 import { OfficeAuthorizationService } from '../office/services/office.authorization.service.js';
+import { UsersAuthorizationService } from './service/users.authorization.service.js';
 import { type UserInput } from './schema/user.schema.js';
 import { type CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 
@@ -107,6 +108,7 @@ describe('UsersService', () => {
         { provide: ConfigService, useValue: configService },
         // Real service, so the region rules are exercised with the user rules.
         OfficeAuthorizationService,
+        UsersAuthorizationService,
       ],
     }).compile();
 
