@@ -135,8 +135,10 @@ export type RejectFireIncidentInput = z.infer<typeof rejectFireIncidentSchema>;
 // The body is optional: staff removals need no reason.
 export const deleteFireIncidentSchema = z
   .object({
-    // Required for SUPER_ADMIN: the memo reference and Chief BFP approval.
+    // Both required for SUPER_ADMIN: the reason, and the reference of the
+    // memo approved by the Chief, BFP. Ignored for staff removals.
     reason: optionalText(1000),
+    memoReference: optionalText(200),
   })
   .default({});
 export type DeleteFireIncidentInput = z.infer<typeof deleteFireIncidentSchema>;

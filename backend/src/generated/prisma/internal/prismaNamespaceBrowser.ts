@@ -265,6 +265,7 @@ export const FireIncidentScalarFieldEnum = {
   deletedAt: 'deletedAt',
   deletedById: 'deletedById',
   deletionReason: 'deletionReason',
+  deletionMemoReference: 'deletionMemoReference',
   remarks: 'remarks',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

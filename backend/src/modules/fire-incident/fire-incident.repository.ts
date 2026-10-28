@@ -295,9 +295,11 @@ export class FireIncidentRepository {
     id: string,
     actorId: string,
     eventType: FireIncidentEventType,
-    reason: string | null,
+    deletion: { reason: string | null; memoReference?: string | null },
     requiredApprovalStatus?: IncidentApprovalStatus,
   ) {
+    const memoReference = deletion.memoReference ?? null;
+
     return this.prismaService.$transaction(async (tx) => {
       const { count } = await tx.fireIncident.updateMany({
         where: {
@@ -310,7 +312,8 @@ export class FireIncidentRepository {
         data: {
           deletedAt: new Date(),
           deletedById: actorId,
-          deletionReason: reason,
+          deletionReason: deletion.reason,
+          deletionMemoReference: memoReference,
         },
       });
 
@@ -323,7 +326,10 @@ export class FireIncidentRepository {
           fireIncidentId: id,
           type: eventType,
           actorId,
-          remarks: reason,
+          // Restore clears the deletion fields, so the event keeps the memo.
+          remarks: memoReference
+            ? `Memo ${memoReference}: ${deletion.reason}`
+            : deletion.reason,
         },
       });
 
@@ -335,7 +341,12 @@ export class FireIncidentRepository {
     return this.prismaService.$transaction(async (tx) => {
       const { count } = await tx.fireIncident.updateMany({
         where: { id, deletedAt: { not: null } },
-        data: { deletedAt: null, deletedById: null, deletionReason: null },
+        data: {
+          deletedAt: null,
+          deletedById: null,
+          deletionReason: null,
+          deletionMemoReference: null,
+        },
       });
 
       if (count === 0) {
@@ -364,6 +375,7 @@ export class FireIncidentRepository {
           ...listSelect,
           deletedAt: true,
           deletionReason: true,
+          deletionMemoReference: true,
           deletedBy: userSummary,
         },
         orderBy: { deletedAt: 'desc' },

@@ -106,6 +106,7 @@ describe('FireIncidentCategoriesService', () => {
       repository.getCategoryById.mockResolvedValue({
         id: categoryId,
         subCategories: [],
+        _count: { incidents: 0 },
       });
 
       await expect(service.deleteCategory(categoryId)).resolves.toEqual({
@@ -127,10 +128,24 @@ describe('FireIncidentCategoriesService', () => {
       repository.getCategoryById.mockResolvedValue({
         id: categoryId,
         subCategories: [{ id: 'sub-1' }],
+        _count: { incidents: 0 },
       });
 
       await expect(service.deleteCategory(categoryId)).rejects.toThrow(
         ConflictException,
+      );
+      expect(repository.deleteById).not.toHaveBeenCalled();
+    });
+
+    it('throws ConflictException when incidents use the category', async () => {
+      repository.getCategoryById.mockResolvedValue({
+        id: categoryId,
+        subCategories: [],
+        _count: { incidents: 2 },
+      });
+
+      await expect(service.deleteCategory(categoryId)).rejects.toThrow(
+        'This category cannot be deleted because fire incidents use it.',
       );
       expect(repository.deleteById).not.toHaveBeenCalled();
     });

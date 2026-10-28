@@ -22,10 +22,9 @@ export class UsersAuthorizationService {
 
   // An admin may only manage users whose current role they could grant;
   // SUPER_ADMIN may additionally manage the SUPER_ADMIN account.
-  async assertCanManageUser(
-    userId: UUID,
-    currentUser: CurrentUserJwtPayload,
-  ): Promise<ROLE> {
+  // Returns the target's current role and office, which callers need to
+  // compare against the change they are about to make.
+  async assertCanManageUser(userId: UUID, currentUser: CurrentUserJwtPayload) {
     const target = await this.usersRepository.findUserRoleById(userId);
 
     if (!target) {
@@ -49,6 +48,6 @@ export class UsersAuthorizationService {
       USER_SCOPE_MESSAGE,
     );
 
-    return target.role;
+    return target;
   }
 }

@@ -1,17 +1,32 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Res,
-  Req,
-} from '@nestjs/common';
+import { Controller, Post, Body, Res, Req } from '@nestjs/common';
 import { loginSchema, type LoginInput } from '../users/schema/user.schema.js';
 import { AuthService } from './auth.service.js';
-import { type Response, type Request } from 'express';
+import { type Response, type Request, type CookieOptions } from 'express';
+
+const ACCESS_TOKEN_MAX_AGE = 15 * 60 * 1000;
+const REFRESH_TOKEN_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
+
+// clearCookie only removes a cookie when these options match the ones it was set with.
+const baseCookieOptions: CookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'strict',
+};
+
+function setAuthCookies(
+  response: Response,
+  accessToken: string,
+  refreshToken: string,
+) {
+  response.cookie('access_token', accessToken, {
+    ...baseCookieOptions,
+    maxAge: ACCESS_TOKEN_MAX_AGE,
+  });
+  response.cookie('refresh_token', refreshToken, {
+    ...baseCookieOptions,
+    maxAge: REFRESH_TOKEN_MAX_AGE,
+  });
+}
 
 @Controller('auth')
 export class AuthController {
@@ -26,26 +41,23 @@ export class AuthController {
     const { user, accessToken, refreshToken } =
       await this.authService.login(loginData);
 
-    response.cookie('access_token', accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 15 * 60 * 1000,
-    });
-
-    response.cookie('refresh_token', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    setAuthCookies(response, accessToken, refreshToken);
 
     return user;
   }
 
   @Post('logout')
-  async logout(@Req() request: Request) {
+  async logout(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
     const refreshToken = request.cookies.refresh_token;
+
+    // Cleared before the token check, so the browser drops them even when the
+    // stored token is already gone.
+    response.clearCookie('access_token', baseCookieOptions);
+    response.clearCookie('refresh_token', baseCookieOptions);
+
     await this.authService.logout(refreshToken);
     return;
   }
@@ -59,19 +71,7 @@ export class AuthController {
     const { newAccessToken, newRefreshToken } =
       await this.authService.refresh(refreshToken);
 
-    response.cookie('access_token', newAccessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 15 * 60 * 1000,
-    });
-
-    response.cookie('refresh_token', newRefreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    setAuthCookies(response, newAccessToken, newRefreshToken);
 
     return;
   }

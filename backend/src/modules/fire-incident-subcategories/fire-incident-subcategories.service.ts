@@ -1,5 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { FireIncidentSubCategoriesInput } from './schema/fire-incident-subcategories.schema.js';
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import {
+  type EditFireIncidentSubCategoryInput,
+  FireIncidentSubCategoriesInput,
+} from './schema/fire-incident-subcategories.schema.js';
 import { FireIncidentSubCategoriesRepository } from './fire-incident-subcategories.repository.js';
 
 @Injectable()
@@ -19,19 +27,45 @@ export class FireIncidentSubcategoriesService {
     );
   }
 
-  // findAll() {
-  //   return `This action returns all fireIncidentSubcategories`;
-  // }
+  async getSubcategoryById(id: string) {
+    const subcategory =
+      await this.fireIncidentSubCategoriesRepository.getSubcategoryById(id);
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} fireIncidentSubcategory`;
-  // }
+    if (!subcategory) {
+      throw new NotFoundException('Sub category not found.');
+    }
 
-  // update(id: number, updateFireIncidentSubcategoryDto: any) {
-  //   return `This action updates a #${id} fireIncidentSubcategory`;
-  // }
+    return subcategory;
+  }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} fireIncidentSubcategory`;
-  // }
+  async editFireIncidentSubcategory(
+    id: string,
+    input: EditFireIncidentSubCategoryInput,
+  ) {
+    await this.getSubcategoryById(id);
+
+    this.logger.log(`Editing fire incident sub-category: ${id}`);
+    return this.fireIncidentSubCategoriesRepository.editFireIncidentSubcategory(
+      id,
+      input,
+    );
+  }
+
+  async deleteSubcategory(id: string) {
+    const subcategory = await this.getSubcategoryById(id);
+
+    // The foreign key would silently null the incidents' subcategory, so the
+    // check has to happen here. The count includes soft-deleted incidents.
+    if (subcategory._count.incidents > 0) {
+      throw new ConflictException(
+        'This sub category cannot be deleted because fire incidents use it.',
+      );
+    }
+
+    await this.fireIncidentSubCategoriesRepository.deleteById(id);
+
+    return {
+      message: 'Sub category deleted successfully.',
+    };
+  }
 }

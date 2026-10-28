@@ -9,20 +9,20 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-import { INVESTIGATION_LINKS } from "@/constants/links";
+import type { NavLinkItem } from "@/constants/links";
 
 const iconMap: Record<string, React.ReactNode> = {
   Search: <Search />,
   Shield: <Shield />,
 };
 
-const Investigation = () => {
+const Investigation = ({ links }: { links: NavLinkItem[] }) => {
   const { toggleSidebar, isMobile } = useSidebar();
 
   return (
     <SidebarGroupContent>
       <SidebarMenu>
-        {INVESTIGATION_LINKS.map((link) => (
+        {links.map((link) => (
           <NavLink to={link.link} key={link.link}>
             {({ isActive }) => (
               <SidebarMenuItem>

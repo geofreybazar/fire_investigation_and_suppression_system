@@ -13,7 +13,16 @@ const useChangeUserStatus = () => {
     isSuccess,
   } = useMutation({
     mutationFn: userService.changeUserStatus,
-    onSuccess: () => {
+    onSuccess: (result?: { warning?: string }) => {
+      // FR-USR-015: allowed, but the station may now lack a required role.
+      if (result?.warning) {
+        showToast({
+          title: "Station needs a replacement",
+          description: result.warning,
+          type: "warning",
+          priority: "high",
+        });
+      }
       queryClient.invalidateQueries({
         queryKey: ["user"],
       });

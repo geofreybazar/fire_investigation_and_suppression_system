@@ -23,7 +23,6 @@ function getDriverCause(meta: unknown): DriverAdapterErrorCause | undefined {
 }
 
 function getConstraintName(cause?: DriverAdapterErrorCause): string {
-  console.log(cause);
   if (!cause) return 'field';
 
   if (cause.constraint) {
@@ -42,7 +41,6 @@ function getConstraintName(cause?: DriverAdapterErrorCause): string {
 
 // Prisma default naming convention: ModelName_columnName_key
 function humanize(constraint: string): string {
-  console.log('Constraint:', constraint);
   const match = constraint.match(/^[A-Za-z]+_(.+)_key$/);
   return match ? match[1] : constraint;
 }

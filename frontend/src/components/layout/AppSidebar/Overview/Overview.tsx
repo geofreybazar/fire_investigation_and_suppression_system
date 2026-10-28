@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { Flame, LayoutDashboard, Map } from "lucide-react";
-import { OVERVIEW_LINKS } from "@/constants/links";
+import type { NavLinkItem } from "@/constants/links";
 
 const iconMap: Record<string, React.ReactNode> = {
   Dashboard: <LayoutDashboard />,
@@ -16,12 +16,12 @@ const iconMap: Record<string, React.ReactNode> = {
   Flame: <Flame />,
 };
 
-const Overview = () => {
+const Overview = ({ links }: { links: NavLinkItem[] }) => {
   const { toggleSidebar, isMobile } = useSidebar();
   return (
     <SidebarGroupContent>
       <SidebarMenu>
-        {OVERVIEW_LINKS.map((link) => (
+        {links.map((link) => (
           <NavLink to={link.link} key={link.link}>
             {({ isActive }) => (
               <SidebarMenuItem>

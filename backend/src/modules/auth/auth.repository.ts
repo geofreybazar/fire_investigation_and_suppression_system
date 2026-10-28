@@ -1,5 +1,11 @@
+import { createHash } from 'crypto';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service.js';
+
+// Refresh tokens are stored as SHA-256 hashes, so a leaked table can't be replayed.
+function hashToken(refreshToken: string): string {
+  return createHash('sha256').update(refreshToken).digest('hex');
+}
 
 @Injectable()
 export class AuthRepository {
@@ -27,7 +33,7 @@ export class AuthRepository {
 
     return this.prismaService.refreshToken.create({
       data: {
-        refreshToken: refreshToken,
+        refreshToken: hashToken(refreshToken),
         userId: userId,
         expiresAt,
       },
@@ -37,7 +43,7 @@ export class AuthRepository {
   async findRefreshToken(refreshToken: string) {
     return this.prismaService.refreshToken.findUnique({
       where: {
-        refreshToken,
+        refreshToken: hashToken(refreshToken),
       },
       include: {
         user: true,

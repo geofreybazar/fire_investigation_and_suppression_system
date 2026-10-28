@@ -44,7 +44,7 @@ export class PositionRepository {
         },
       }),
 
-      this.prismaService.office.count({
+      this.prismaService.position.count({
         where,
       }),
     ]);

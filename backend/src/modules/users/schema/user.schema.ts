@@ -31,7 +31,8 @@ export const loginSchema = z.object({
 export type LoginInput = z.infer<typeof loginSchema>;
 
 export const changePasswordSchema = z.object({
-  currentPassword: z.string().min(12),
+  // Only checked against the stored hash; the policy applies to the new password.
+  currentPassword: z.string().min(1),
   newPassword: z
     .string()
     .min(12, 'Password must be at least 12 characters long.')

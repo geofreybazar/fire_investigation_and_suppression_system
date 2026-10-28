@@ -43,6 +43,8 @@ model FireIncident {
   deletedById    String?
   deletedBy      User?     @relation("IncidentDeletedBy", fields: [deletedById], references: [id])
   deletionReason String?
+  // Reference of the Chief, BFP-approved memo authorizing a SUPER_ADMIN deletion.
+  deletionMemoReference String?
 
   // Related information
   location       IncidentLocation?

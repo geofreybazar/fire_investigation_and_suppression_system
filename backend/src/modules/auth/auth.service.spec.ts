@@ -93,7 +93,10 @@ describe('AuthService', () => {
 
       const result = await service.login(credentials);
 
-      expect(bcrypt.compare).toHaveBeenCalledWith('Password123!', 'stored-hash');
+      expect(bcrypt.compare).toHaveBeenCalledWith(
+        'Password123!',
+        'stored-hash',
+      );
       expect(jwtService.signAsync).toHaveBeenCalledWith(tokenPayload, {
         secret: 'access-secret',
         expiresIn: '15m',
@@ -101,6 +104,7 @@ describe('AuthService', () => {
       expect(jwtService.signAsync).toHaveBeenCalledWith(tokenPayload, {
         secret: 'refresh-secret',
         expiresIn: '7d',
+        jwtid: expect.any(String),
       });
       expect(repository.createRefreshToken).toHaveBeenCalledWith(
         user.id,
@@ -112,6 +116,20 @@ describe('AuthService', () => {
         accessToken: 'token-signed-with-access-secret',
         refreshToken: 'token-signed-with-refresh-secret',
       });
+    });
+
+    it('gives every refresh token a unique jti', async () => {
+      repository.findUserByAccountNumber.mockResolvedValue(user);
+      vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
+
+      await service.login(credentials);
+      await service.login(credentials);
+
+      const jwtids = jwtService.signAsync.mock.calls
+        .map(([, options]) => options.jwtid)
+        .filter(Boolean);
+      expect(jwtids).toHaveLength(2);
+      expect(new Set(jwtids).size).toBe(2);
     });
 
     it('never returns the password hash', async () => {
@@ -201,6 +219,13 @@ describe('AuthService', () => {
         secret: 'refresh-secret',
       });
       expect(repository.findUserById).toHaveBeenCalledWith(user.id);
+      expect(jwtService.signAsync).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          secret: 'refresh-secret',
+          jwtid: expect.any(String),
+        }),
+      );
       expect(repository.createRefreshToken).toHaveBeenCalledWith(
         user.id,
         'token-signed-with-refresh-secret',

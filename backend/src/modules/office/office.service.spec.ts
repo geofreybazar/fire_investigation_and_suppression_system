@@ -72,6 +72,7 @@ describe('OfficeService', () => {
     createOffice: ReturnType<typeof vi.fn>;
     updateOffice: ReturnType<typeof vi.fn>;
     deleteById: ReturnType<typeof vi.fn>;
+    isRegionCodeUsed: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(async () => {
@@ -85,6 +86,7 @@ describe('OfficeService', () => {
       createOffice: vi.fn(),
       updateOffice: vi.fn(),
       deleteById: vi.fn(),
+      isRegionCodeUsed: vi.fn().mockResolvedValue(false),
     };
 
     // The real authorization service is used so role/office-type rules are
@@ -427,9 +429,23 @@ describe('OfficeService', () => {
   });
 
   describe('deleteOffice', () => {
-    const forDeletion = (id: string, users = 0, children = 0) => ({
+    const forDeletion = (
+      id: string,
+      users = 0,
+      children = 0,
+      records: Partial<Record<string, number>> = {},
+    ) => ({
       ...offices[id],
-      _count: { users, children },
+      _count: {
+        users,
+        children,
+        fireIncidents: 0,
+        handledIncidentInvestigations: 0,
+        conductedInvestigations: 0,
+        referralsFrom: 0,
+        referralsTo: 0,
+        ...records,
+      },
     });
 
     it('deletes an office with no users or child offices', async () => {
@@ -509,6 +525,73 @@ describe('OfficeService', () => {
         ConflictException,
       );
       expect(repository.deleteById).not.toHaveBeenCalled();
+    });
+
+    it.each([
+      'fireIncidents',
+      'handledIncidentInvestigations',
+      'conductedInvestigations',
+      'referralsFrom',
+      'referralsTo',
+    ])('throws ConflictException when the office has %s', async (record) => {
+      repository.findByIdForDeletion.mockResolvedValue(
+        forDeletion(officeId, 0, 0, { [record]: 1 }),
+      );
+
+      await expect(service.deleteOffice(officeId, superAdmin)).rejects.toThrow(
+        'This office cannot be deleted because it has fire incident or investigation records.',
+      );
+      expect(repository.deleteById).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('updateOffice region code', () => {
+    const regional = {
+      id: regionalId,
+      type: 'REGIONAL_OFFICE',
+      regionId: null,
+      regionCode: 'NCR',
+    };
+    const regionalInput: OfficeInput = {
+      name: 'Regional Office NCR',
+      type: 'REGIONAL_OFFICE',
+      parentId: nhqId,
+      regionCode: 'NCR2',
+    };
+
+    beforeEach(() => {
+      repository.findById.mockImplementation((id: string) =>
+        Promise.resolve(id === regionalId ? regional : (offices[id] ?? null)),
+      );
+    });
+
+    it('blocks changing a region code that incident numbers use', async () => {
+      repository.isRegionCodeUsed.mockResolvedValue(true);
+
+      await expect(
+        service.updateOffice(regionalId as UUID, regionalInput, superAdmin),
+      ).rejects.toThrow(
+        'The region code cannot be changed because incident numbers already use it.',
+      );
+      expect(repository.isRegionCodeUsed).toHaveBeenCalledWith('NCR');
+      expect(repository.updateOffice).not.toHaveBeenCalled();
+    });
+
+    it('allows changing an unused region code', async () => {
+      await service.updateOffice(regionalId as UUID, regionalInput, superAdmin);
+
+      expect(repository.updateOffice).toHaveBeenCalled();
+    });
+
+    it('does not check usage when the code is unchanged apart from case', async () => {
+      await service.updateOffice(
+        regionalId as UUID,
+        { ...regionalInput, regionCode: ' ncr ' },
+        superAdmin,
+      );
+
+      expect(repository.isRegionCodeUsed).not.toHaveBeenCalled();
+      expect(repository.updateOffice).toHaveBeenCalled();
     });
   });
 });

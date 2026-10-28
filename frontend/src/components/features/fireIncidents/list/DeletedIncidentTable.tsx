@@ -41,6 +41,7 @@ const DeletedIncidentTable = () => {
             <TableHead>Station</TableHead>
             <TableHead>Deleted</TableHead>
             <TableHead>By</TableHead>
+            <TableHead>Memo</TableHead>
             <TableHead>Reason</TableHead>
             <TableHead className='w-12' />
           </TableRow>
@@ -54,6 +55,7 @@ const DeletedIncidentTable = () => {
               <TableCell>{incident.office.name}</TableCell>
               <TableCell>{formatDateTime(incident.deletedAt)}</TableCell>
               <TableCell>{personName(incident.deletedBy)}</TableCell>
+              <TableCell>{incident.deletionMemoReference ?? "—"}</TableCell>
               <TableCell className='max-w-xs truncate text-muted-foreground'>
                 {incident.deletionReason ?? "—"}
               </TableCell>

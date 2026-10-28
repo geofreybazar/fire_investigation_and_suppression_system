@@ -1,6 +1,12 @@
 import { BadRequestException } from '@nestjs/common';
 import { OfficeType } from '../../../generated/prisma/enums.js';
 
+// Stored trimmed and upper-cased to match generateIncidentNumber; blank
+// (non-regional offices) is stored as null so the unique index allows many.
+export function normalizeRegionCode(regionCode?: string | null): string | null {
+  return regionCode?.trim().toUpperCase() || null;
+}
+
 export function validateRegionCode(
   type: OfficeType,
   regionCode?: string | null,

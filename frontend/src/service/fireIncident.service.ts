@@ -21,6 +21,9 @@ const getFireIncidents = async (
       ...(filters.status && { status: filters.status }),
       ...(filters.approvalStatus && { approvalStatus: filters.approvalStatus }),
       ...(filters.search && { search: filters.search }),
+      ...(filters.categoryId && { categoryId: filters.categoryId }),
+      ...(filters.from && { from: filters.from }),
+      ...(filters.to && { to: filters.to }),
     },
   });
   return response.data;
@@ -78,17 +81,23 @@ const resubmitFireIncident = async (id: string) => {
   return response.data;
 };
 
-// Staff remove their own rejected incidents; SUPER_ADMIN deletes with a reason.
+// Staff remove their own rejected incidents; SUPER_ADMIN deletes with a
+// reason and the memo reference.
 const removeFireIncident = async ({
   id,
   reason,
+  memoReference,
 }: {
   id: string;
   reason?: string;
+  memoReference?: string;
 }) => {
   const apiClient = await axiosJWT(BASE_URL);
   const response = await apiClient.delete(`/${id}`, {
-    data: reason ? { reason } : {},
+    data: {
+      ...(reason && { reason }),
+      ...(memoReference && { memoReference }),
+    },
   });
   return response.data;
 };

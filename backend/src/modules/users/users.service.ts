@@ -27,6 +27,15 @@ import { role_officePermissions } from './utils/users.role_office.permissions.js
 import { OfficeAuthorizationService } from '../office/services/office.authorization.service.js';
 import { CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 
+// Station roles the system can't work without (FR-USR-015). Losing the last
+// active one is allowed, but the admin is warned about the consequence.
+const STATION_LEADER_ROLES: Partial<Record<ROLE, string>> = {
+  [ROLE.CITY_MUNICIPALITY_OPERATION]:
+    'chief of operations, so its pending incidents cannot be approved until one is assigned',
+  [ROLE.CITY_MUNICIPALITY_CHIEF_INVESTIGATOR]:
+    'chief investigator, so its investigation cases cannot be decided until one is assigned',
+};
+
 const USER_SCOPE_MESSAGE = 'You can only manage users within your own region';
 
 const ADMIN_ROLES: ROLE[] = [
@@ -208,7 +217,7 @@ export class UsersService {
       throw new ForbiddenException('You cannot deactivate your own account.');
     }
 
-    await this.usersAuthorizationService.assertCanManageUser(
+    const target = await this.usersAuthorizationService.assertCanManageUser(
       userId,
       currentUser,
     );
@@ -226,10 +235,15 @@ export class UsersService {
       throw new NotFoundException('User not found.');
     }
 
+    const warning = isActive.isActive
+      ? undefined
+      : await this.stationLeaderWarning(target.role, target.office.id);
+
     return {
       message: isActive.isActive
         ? 'User activated successfully.'
         : 'User deactivated successfully.',
+      ...(warning && { warning }),
     };
   }
 
@@ -240,10 +254,11 @@ export class UsersService {
   ) {
     this.logger.log(`Creating user: ${userData.email}`);
 
-    const targetRole = await this.usersAuthorizationService.assertCanManageUser(
+    const target = await this.usersAuthorizationService.assertCanManageUser(
       userId,
       user,
     );
+    const targetRole = target.role;
 
     // The SUPER_ADMIN account keeps its role: the API can neither grant nor remove it.
     if (targetRole === ROLE.SUPER_ADMIN || userData.role === ROLE.SUPER_ADMIN) {
@@ -295,9 +310,38 @@ export class UsersService {
 
     this.logger.log(`User edited: ${editedUser.id}`);
 
+    const leftOldRole =
+      targetRole !== userData.role || target.office.id !== userData.officeId;
+    const warning = leftOldRole
+      ? await this.stationLeaderWarning(targetRole, target.office.id)
+      : undefined;
+
     return {
       message: 'user successfully updated',
+      ...(warning && { warning }),
     };
+  }
+
+  // Called after the change, so the count no longer includes the edited user.
+  private async stationLeaderWarning(role: ROLE, officeId: string) {
+    const consequence = STATION_LEADER_ROLES[role];
+
+    if (!consequence) {
+      return undefined;
+    }
+
+    const remaining = await this.usersRepository.countActiveUsersWithRole(
+      officeId,
+      role,
+    );
+
+    if (remaining > 0) {
+      return undefined;
+    }
+
+    const office = await this.officeRepository.findById(officeId);
+
+    return `${office?.name ?? 'The station'} now has no active ${consequence}.`;
   }
 
   // An investigator with an open investigation can't be deactivated, moved or

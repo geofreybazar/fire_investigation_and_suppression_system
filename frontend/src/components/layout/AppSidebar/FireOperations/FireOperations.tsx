@@ -7,7 +7,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-import { FIRE_OPERATIONS_LINKS } from "@/constants/links";
+import type { NavLinkItem } from "@/constants/links";
 import { Radio, Truck, Building2 } from "lucide-react";
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -16,12 +16,12 @@ const iconMap: Record<string, React.ReactNode> = {
   Truck: <Truck />,
 };
 
-const FireOperations = () => {
+const FireOperations = ({ links }: { links: NavLinkItem[] }) => {
   const { toggleSidebar, isMobile } = useSidebar();
   return (
     <SidebarGroupContent>
       <SidebarMenu>
-        {FIRE_OPERATIONS_LINKS.map((link) => (
+        {links.map((link) => (
           <NavLink to={link.link} key={link.link}>
             {({ isActive }) => (
               <SidebarMenuItem>

@@ -72,6 +72,7 @@ describe('UsersService', () => {
     findPaginatedUsers: ReturnType<typeof vi.fn>;
     deactivateUser: ReturnType<typeof vi.fn>;
     editUser: ReturnType<typeof vi.fn>;
+    countActiveUsersWithRole: ReturnType<typeof vi.fn>;
   };
   let officeRepository: { findById: ReturnType<typeof vi.fn> };
   let configService: { get: ReturnType<typeof vi.fn> };
@@ -96,6 +97,8 @@ describe('UsersService', () => {
       findPaginatedUsers: vi.fn(),
       deactivateUser: vi.fn(),
       editUser: vi.fn(),
+      // By default other users with the same role remain.
+      countActiveUsersWithRole: vi.fn().mockResolvedValue(1),
     };
     officeRepository = { findById: vi.fn() };
     configService = { get: vi.fn().mockReturnValue('DefaultPass123!') };
@@ -456,6 +459,52 @@ describe('UsersService', () => {
       );
     });
 
+    describe('station leader warning (FR-USR-015)', () => {
+      beforeEach(() => {
+        usersRepository.findUserRoleById.mockResolvedValue({
+          id: userId,
+          role: 'CITY_MUNICIPALITY_OPERATION',
+          office: { id: officeId, regionId: null },
+        });
+        usersRepository.deactivateUser.mockResolvedValue({ id: userId });
+        officeRepository.findById.mockResolvedValue({
+          id: officeId,
+          name: 'Quezon City Fire Station',
+        });
+      });
+
+      it('warns when the last active chief of operations is deactivated', async () => {
+        usersRepository.countActiveUsersWithRole.mockResolvedValue(0);
+
+        await expect(
+          service.changeUserStatus(userId, { isActive: false }, superAdmin),
+        ).resolves.toEqual({
+          message: 'User deactivated successfully.',
+          warning:
+            'Quezon City Fire Station now has no active chief of operations, so its pending incidents cannot be approved until one is assigned.',
+        });
+        expect(usersRepository.countActiveUsersWithRole).toHaveBeenCalledWith(
+          officeId,
+          'CITY_MUNICIPALITY_OPERATION',
+        );
+      });
+
+      it('does not warn while another chief of operations remains', async () => {
+        await expect(
+          service.changeUserStatus(userId, { isActive: false }, superAdmin),
+        ).resolves.toEqual({ message: 'User deactivated successfully.' });
+      });
+
+      it('does not warn on activation', async () => {
+        usersRepository.countActiveUsersWithRole.mockResolvedValue(0);
+
+        await expect(
+          service.changeUserStatus(userId, { isActive: true }, superAdmin),
+        ).resolves.toEqual({ message: 'User activated successfully.' });
+        expect(usersRepository.countActiveUsersWithRole).not.toHaveBeenCalled();
+      });
+    });
+
     it('throws NotFoundException when the user does not exist', async () => {
       usersRepository.findUserRoleById.mockResolvedValue(null);
 
@@ -533,6 +582,33 @@ describe('UsersService', () => {
   });
 
   describe('editUser', () => {
+    it('warns when the last chief investigator of a station changes role', async () => {
+      usersRepository.findUserRoleById.mockResolvedValue({
+        id: userId,
+        role: 'CITY_MUNICIPALITY_CHIEF_INVESTIGATOR',
+        office: { id: officeId, regionId: null },
+      });
+      usersRepository.countActiveUsersWithRole.mockResolvedValue(0);
+      officeRepository.findById.mockResolvedValue({
+        id: officeId,
+        name: 'Quezon City Fire Station',
+        type: 'CITY_FIRE_STATION',
+      });
+      usersRepository.editUser.mockResolvedValue({ id: userId });
+
+      await expect(
+        service.editUser(
+          userId,
+          { ...newInvestigator, role: 'CITY_MUNICIPALITY_INVESTIGATOR' },
+          superAdmin,
+        ),
+      ).resolves.toEqual({
+        message: 'user successfully updated',
+        warning:
+          'Quezon City Fire Station now has no active chief investigator, so its investigation cases cannot be decided until one is assigned.',
+      });
+    });
+
     it('edits a user that passes the permission checks', async () => {
       officeRepository.findById.mockResolvedValue({
         id: officeId,
@@ -686,6 +762,7 @@ describe('UsersService', () => {
       usersRepository.findUserRoleById.mockResolvedValue({
         id: userId,
         role: 'SUPER_ADMIN',
+        office: { id: officeId, regionId: null },
       });
       officeRepository.findById.mockResolvedValue({
         id: officeId,

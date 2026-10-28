@@ -14,6 +14,18 @@ export type FireIncidentSubCategoriesInput = z.infer<
   typeof fireIncidentSubCategoriesSchema
 >;
 
+// A subcategory stays under its category; only the name can change.
+export const editFireIncidentSubCategorySchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: "Name is required" })
+    .transform(normalizeInput),
+});
+
+export type EditFireIncidentSubCategoryInput = z.infer<
+  typeof editFireIncidentSubCategorySchema
+>;
+
 export interface FireIncidentSubCategory extends FireIncidentSubCategoriesInput {
   id: string;
   categoryId: string;

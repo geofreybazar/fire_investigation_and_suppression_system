@@ -293,7 +293,19 @@ describe('FireIncidentService', () => {
             },
             {
               fireIncidentStatus: 'FIRE_OUT',
-              incidentNo: { contains: 'NCR', mode: 'insensitive' },
+              OR: [
+                { incidentNo: { contains: 'NCR', mode: 'insensitive' } },
+                {
+                  location: {
+                    placeOfOccurence: { contains: 'NCR', mode: 'insensitive' },
+                  },
+                },
+                {
+                  location: {
+                    barangay: { contains: 'NCR', mode: 'insensitive' },
+                  },
+                },
+              ],
             },
           ],
         },
@@ -454,7 +466,7 @@ describe('FireIncidentService', () => {
         incidentId,
         staff.sub,
         'REMOVED',
-        null,
+        { reason: null },
         'REJECTED',
       );
     });
@@ -473,17 +485,24 @@ describe('FireIncidentService', () => {
       },
     );
 
-    it('requires SUPER_ADMIN to give a reason', async () => {
-      await expect(service.remove(incidentId, {}, superAdmin)).rejects.toThrow(
-        BadRequestException,
-      );
-      expect(repository.softDelete).not.toHaveBeenCalled();
-    });
+    it.each([
+      [{}],
+      [{ reason: 'Duplicate entry' }],
+      [{ memoReference: '2026-114' }],
+    ])(
+      'requires SUPER_ADMIN to give a reason and memo reference (%o)',
+      async (input) => {
+        await expect(
+          service.remove(incidentId, input, superAdmin),
+        ).rejects.toThrow(BadRequestException);
+        expect(repository.softDelete).not.toHaveBeenCalled();
+      },
+    );
 
     it('lets SUPER_ADMIN delete an approved incident with the memo reference', async () => {
       await service.remove(
         incidentId,
-        { reason: 'Memo 2026-114, approved by the Chief, BFP' },
+        { reason: 'Duplicate entry', memoReference: '2026-114' },
         superAdmin,
       );
 
@@ -491,7 +510,7 @@ describe('FireIncidentService', () => {
         incidentId,
         superAdmin.sub,
         'DELETED',
-        'Memo 2026-114, approved by the Chief, BFP',
+        { reason: 'Duplicate entry', memoReference: '2026-114' },
       );
     });
   });

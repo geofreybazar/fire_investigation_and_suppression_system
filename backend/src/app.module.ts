@@ -10,7 +10,6 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './modules/users/users.module.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './modules/auth/constans.js';
 import { OfficeModule } from './modules/office/office.module.js';
 import configuration from './config/configuration.js';
 import { PrismaModule } from './prisma.module.js';
@@ -40,11 +39,8 @@ const serveFrontend = existsSync(join(frontendDist, 'index.html'))
       isGlobal: true,
       load: [configuration],
     }),
-    JwtModule.register({
-      global: true,
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
-    }),
+    // Every sign/verify call passes its own secret and expiry (auth.service.ts, auth.guard.ts).
+    JwtModule.register({ global: true }),
     PrismaModule,
     UsersModule,
     AuthModule,
