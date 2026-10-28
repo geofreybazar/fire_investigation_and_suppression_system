@@ -4,6 +4,7 @@ import useGetFireIncidents from "@/hooks/fireIncidents/useGetFireIncidents";
 import type { FireIncidentListFilters } from "@/interface/fireIncident/fireIncident";
 import { formatEnum } from "@/utils/formatEnum";
 import { formatDateTime } from "@/utils/dateTime";
+import { rowLinkProps } from "@/utils/rowLink";
 import {
   Table,
   TableBody,
@@ -31,7 +32,12 @@ const IncidentTable = ({
   const navigate = useNavigate();
   const { fireIncidents } = useGetFireIncidents(filters);
   const hasFilters = Boolean(
-    filters.search || filters.status || filters.approvalStatus,
+    filters.search ||
+    filters.status ||
+    filters.approvalStatus ||
+    filters.categoryId ||
+    filters.from ||
+    filters.to,
   );
 
   if (fireIncidents.data.length === 0) {
@@ -81,8 +87,8 @@ const IncidentTable = ({
             {fireIncidents.data.map((incident) => (
               <TableRow
                 key={incident.id}
-                className='cursor-pointer'
-                onClick={() => open(incident.id)}
+                className='cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring'
+                {...rowLinkProps(() => open(incident.id))}
               >
                 <TableCell className='font-medium'>
                   {incident.incidentNo ?? (
@@ -121,8 +127,8 @@ const IncidentTable = ({
         {fireIncidents.data.map((incident) => (
           <Card
             key={incident.id}
-            className='cursor-pointer'
-            onClick={() => open(incident.id)}
+            className='cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring'
+            {...rowLinkProps(() => open(incident.id))}
           >
             <CardContent className='space-y-2 p-4'>
               <div className='flex items-center justify-between gap-2'>

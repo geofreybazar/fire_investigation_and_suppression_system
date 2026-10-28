@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DialogComponent from "@/components/common/DialogComponent";
+import PageHeader from "@/components/common/PageHeader";
 import ErrorFallbackComponent from "@/components/common/ErrorFallbackComponent";
 import TableSkeleton from "@/components/common/TableSkeleton";
 import IncidentTable from "@/components/features/fireIncidents/list/IncidentTable";
@@ -207,21 +208,11 @@ const FireIncidents = () => {
 
   return (
     <div className='space-y-6'>
-      <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-        <div className='flex items-center gap-3'>
-          <div className='flex size-10 items-center justify-center rounded-lg border bg-muted/50'>
-            <Flame className='size-5' />
-          </div>
-          <div>
-            <h1 className='text-2xl font-semibold tracking-tight'>
-              Fire Incidents
-            </h1>
-            <p className='text-sm text-muted-foreground'>
-              Record, approve and monitor fire incidents.
-            </p>
-          </div>
-        </div>
-
+      <PageHeader
+        icon={<Flame />}
+        title='Fire Incidents'
+        description='Record, approve and monitor fire incidents.'
+      >
         {isIncidentEditor(user) && (
           <DialogComponent
             open={openSubmit}
@@ -235,7 +226,7 @@ const FireIncidents = () => {
             <SubmitIncidentForm onDone={() => setOpenSubmit(false)} />
           </DialogComponent>
         )}
-      </div>
+      </PageHeader>
 
       {isSuperAdmin(user) ? (
         <Tabs defaultValue='incidents'>

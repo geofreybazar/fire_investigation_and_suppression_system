@@ -10,7 +10,11 @@ const SideHeader = () => {
     <SidebarMenu>
       <SidebarMenuItem>
         <SidebarMenuButton className='h-auto'>
-          <img src={logo} alt='GEO + Me Bridal' className='w-15' />
+          <img
+            src={logo}
+            alt='Bureau of Fire Protection logo'
+            className='w-15'
+          />
 
           <div className='grid flex-1 text-left text-sm leading-tight'>
             <span className=' font-semibold'>BUREAU OF FIRE PROTECTION</span>

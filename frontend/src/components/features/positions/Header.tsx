@@ -2,6 +2,7 @@ import { useState } from "react";
 import DialogComponent from "@/components/common/DialogComponent";
 import { BriefcaseBusiness, Plus } from "lucide-react";
 import AddPosition from "./addPosition/AddPosition";
+import PageHeader from "@/components/common/PageHeader";
 
 const Header = () => {
   const [openAddOffice, setOpenAddOffice] = useState(false);
@@ -10,20 +11,11 @@ const Header = () => {
   };
 
   return (
-    <div className='flex items-center justify-between'>
-      <div className='flex items-center gap-3'>
-        <div className='flex h-10 w-10 items-center justify-center rounded-lg border bg-muted/50'>
-          <BriefcaseBusiness className='h-5 w-5' />
-        </div>
-
-        <div>
-          <h1 className='text-2xl font-semibold tracking-tight'>Positions</h1>
-          <p className='text-sm text-muted-foreground'>
-            Manage personnel positions and their assignments.
-          </p>
-        </div>
-      </div>
-
+    <PageHeader
+      icon={<BriefcaseBusiness />}
+      title='Positions'
+      description='Manage personnel positions and their assignments.'
+    >
       <DialogComponent
         open={openAddOffice}
         modalOnChange={modalOnchange}
@@ -34,7 +26,7 @@ const Header = () => {
       >
         <AddPosition setOpenAddOffice={setOpenAddOffice} />
       </DialogComponent>
-    </div>
+    </PageHeader>
   );
 };
 

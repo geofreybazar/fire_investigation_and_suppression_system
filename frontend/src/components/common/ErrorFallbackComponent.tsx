@@ -5,6 +5,16 @@ import { Button } from "@/components/ui/button";
 import type { ApiErrorResponse } from "@/interface/error";
 import axios from "axios";
 
+// Plain-language titles instead of raw HTTP error names.
+const STATUS_TITLES: Record<number, string> = {
+  400: "The request couldn't be processed",
+  401: "Your session has ended",
+  403: "You don't have access to this",
+  404: "Not found",
+  409: "This was changed by someone else",
+  500: "The server ran into a problem",
+};
+
 interface OfficeTableErrorProps {
   error: unknown;
   resetErrorBoundary?: () => void;
@@ -14,15 +24,19 @@ const ErrorFallbackComponent = ({
   error,
   resetErrorBoundary,
 }: OfficeTableErrorProps) => {
-  console.log(error);
-
   let title = "Something went wrong";
   let message = "An unexpected error occurred.";
 
   if (axios.isAxiosError<ApiErrorResponse>(error)) {
-    title = error.response?.data?.error ?? "Request Error";
-    message =
-      error.response?.data?.message ?? "Unable to complete the request.";
+    if (!error.response) {
+      title = "Can't reach the server";
+      message = "Check your connection and try again.";
+    } else {
+      const status = error.response.status;
+      title = STATUS_TITLES[status] ?? "The request failed";
+      message =
+        error.response.data?.message ?? "Unable to complete the request.";
+    }
   } else if (error instanceof Error) {
     message = error.message;
   }
