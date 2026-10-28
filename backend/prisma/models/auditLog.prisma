@@ -18,6 +18,7 @@ enum AuditAction {
   SUBCATEGORY_DELETED
   INCIDENT_DELETED
   INCIDENT_RESTORED
+  ATTACHMENT_DOWNLOADED
 }
 
 enum AuditEntityType {
@@ -27,6 +28,7 @@ enum AuditEntityType {
   FIRE_INCIDENT_CATEGORY
   FIRE_INCIDENT_SUBCATEGORY
   FIRE_INCIDENT
+  ATTACHMENT
 }
 
 // General audit trail (REQUIREMENTS.md Q-23). Incident and investigation

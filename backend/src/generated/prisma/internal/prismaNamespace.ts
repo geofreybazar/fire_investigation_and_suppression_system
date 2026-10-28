@@ -401,6 +401,7 @@ export const ModelName = {
   InvestigationReportReview: 'InvestigationReportReview',
   Investigation: 'Investigation',
   InvestigationReferral: 'InvestigationReferral',
+  Attachment: 'Attachment',
   AuditLog: 'AuditLog',
   FireOpertaionResources: 'FireOpertaionResources',
   IncidentImpact: 'IncidentImpact',
@@ -434,7 +435,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "investigationReport" | "investigationReportReview" | "investigation" | "investigationReferral" | "auditLog" | "fireOpertaionResources" | "incidentImpact" | "incidentLocation" | "incidentPersonnel" | "incidentTimeline" | "establishment" | "fireIncident" | "fireIncidentCategory" | "fireIncidentEvent" | "fireIncidentSubcategory" | "incidentNumberCounter" | "notificationPreference" | "notification" | "office" | "position" | "refreshToken" | "user"
+    modelProps: "investigationReport" | "investigationReportReview" | "investigation" | "investigationReferral" | "attachment" | "auditLog" | "fireOpertaionResources" | "incidentImpact" | "incidentLocation" | "incidentPersonnel" | "incidentTimeline" | "establishment" | "fireIncident" | "fireIncidentCategory" | "fireIncidentEvent" | "fireIncidentSubcategory" | "incidentNumberCounter" | "notificationPreference" | "notification" | "office" | "position" | "refreshToken" | "user"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -731,6 +732,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.InvestigationReferralCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.InvestigationReferralCountAggregateOutputType> | number
+        }
+      }
+    }
+    Attachment: {
+      payload: Prisma.$AttachmentPayload<ExtArgs>
+      fields: Prisma.AttachmentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AttachmentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttachmentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AttachmentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttachmentPayload>
+        }
+        findFirst: {
+          args: Prisma.AttachmentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttachmentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AttachmentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttachmentPayload>
+        }
+        findMany: {
+          args: Prisma.AttachmentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttachmentPayload>[]
+        }
+        create: {
+          args: Prisma.AttachmentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttachmentPayload>
+        }
+        createMany: {
+          args: Prisma.AttachmentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AttachmentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttachmentPayload>[]
+        }
+        delete: {
+          args: Prisma.AttachmentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttachmentPayload>
+        }
+        update: {
+          args: Prisma.AttachmentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttachmentPayload>
+        }
+        deleteMany: {
+          args: Prisma.AttachmentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AttachmentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AttachmentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttachmentPayload>[]
+        }
+        upsert: {
+          args: Prisma.AttachmentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttachmentPayload>
+        }
+        aggregate: {
+          args: Prisma.AttachmentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAttachment>
+        }
+        groupBy: {
+          args: Prisma.AttachmentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AttachmentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AttachmentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AttachmentCountAggregateOutputType> | number
         }
       }
     }
@@ -2168,6 +2243,25 @@ export const InvestigationReferralScalarFieldEnum = {
 export type InvestigationReferralScalarFieldEnum = (typeof InvestigationReferralScalarFieldEnum)[keyof typeof InvestigationReferralScalarFieldEnum]
 
 
+export const AttachmentScalarFieldEnum = {
+  id: 'id',
+  fireIncidentId: 'fireIncidentId',
+  investigationId: 'investigationId',
+  uploadedById: 'uploadedById',
+  originalName: 'originalName',
+  mimeType: 'mimeType',
+  sizeBytes: 'sizeBytes',
+  storageKey: 'storageKey',
+  sha256: 'sha256',
+  description: 'description',
+  createdAt: 'createdAt',
+  removedAt: 'removedAt',
+  removedById: 'removedById'
+} as const
+
+export type AttachmentScalarFieldEnum = (typeof AttachmentScalarFieldEnum)[keyof typeof AttachmentScalarFieldEnum]
+
+
 export const AuditLogScalarFieldEnum = {
   id: 'id',
   actorId: 'actorId',
@@ -2578,6 +2672,20 @@ export type ListEnumReferralDirectionFieldRefInput<$PrismaModel> = FieldRefInput
 
 
 /**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
  * Reference to a field of type 'AuditAction'
  */
 export type EnumAuditActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuditAction'>
@@ -2616,20 +2724,6 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-/**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -2962,6 +3056,7 @@ export type GlobalOmitConfig = {
   investigationReportReview?: Prisma.InvestigationReportReviewOmit
   investigation?: Prisma.InvestigationOmit
   investigationReferral?: Prisma.InvestigationReferralOmit
+  attachment?: Prisma.AttachmentOmit
   auditLog?: Prisma.AuditLogOmit
   fireOpertaionResources?: Prisma.FireOpertaionResourcesOmit
   incidentImpact?: Prisma.IncidentImpactOmit

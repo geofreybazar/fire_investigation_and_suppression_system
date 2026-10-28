@@ -43,7 +43,7 @@ npx prisma migrate dev --name <name> --config prisma7.config.ts
 npx prisma generate --config prisma7.config.ts    # regenerates src/generated/prisma
 ```
 
-Required env vars (see `src/config/configuration.ts` and `auth.service.ts`): `DATABASE_URL`, `JWT_SECRET`, `REFRESH_SECRET`, `DEFAULT_PASSWORD`, `PORT`. Optional `FRONTEND_DIST` overrides the frontend build location (default `../frontend/dist` relative to the backend's cwd).
+Required env vars (see `src/config/configuration.ts` and `auth.service.ts`): `DATABASE_URL`, `JWT_SECRET`, `REFRESH_SECRET`, `DEFAULT_PASSWORD`, `PORT`. Optional `FRONTEND_DIST` overrides the frontend build location (default `../frontend/dist` relative to the backend's cwd). Optional `UPLOAD_DIR` sets where attachment files are stored (default `./uploads` relative to the backend's cwd, git-ignored; keep it outside any web root and include it in backups).
 
 ### Frontend (`cd frontend`)
 
@@ -68,7 +68,7 @@ There is no frontend test setup.
   2. Role × office-type permission maps (`users/utils/*.permissions.ts`, `office/utils/office.permissions.ts`, `OfficeAuthorizationService`) restrict which office types a role may manage/assign. Roles (`ROLE` enum in `prisma/models/user.prisma`) are tiered NHQ / REGIONAL / DISTRICT_PROVINCE / station; `REGIONAL_ADMIN` queries are scoped to their own office and offices whose `regionId` is theirs.
 - **Office hierarchy** is enforced in `office/utils/office-heirarchy.validator.ts`: NHQ → Regional → District/Provincial → City/Municipal stations.
 - **Incident numbers** are generated inside a transaction via `fire-incident/utils/generate-incident-number.ts`, using the `IncidentNumberCounter` table keyed by (year, month, regionCode) in Asia/Manila time; regional offices carry a unique `regionCode`.
-- **Known gaps:** `docs/REQUIREMENTS.md` §10 lists past discrepancies between code and requirements; §10.1 records which were resolved in Phases 1–5 (D-24 renames are deferred, D-05 accepted). Not built yet: Evidence (roadmap phase 5, needs Q-22) and the unscoped FireStations, Monitoring and ResponseUnits pages, which show "Coming soon".
+- **Known gaps:** `docs/REQUIREMENTS.md` §10 lists past discrepancies between code and requirements; §10.1 records which were resolved in Phases 1–5 (D-24 renames are deferred, D-05 accepted). Not built yet: the unscoped FireStations, Monitoring and ResponseUnits pages (Q-01), which show "Coming soon"; official BFP report forms (Q-20) and attachment retention (Q-22) are still open.
 - **Further docs:** `docs/ARCHITECTURE.md` (modules, request lifecycle, auth, workflows) and `docs/DATA_MODEL.md` (ER diagram, models, enums, migrations).
 
 ## Frontend architecture

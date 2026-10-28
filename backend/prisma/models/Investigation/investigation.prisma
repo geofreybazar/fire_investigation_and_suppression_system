@@ -25,7 +25,8 @@ model Investigation {
   assignedById String
   assignedBy   User   @relation("InvestigationAssigner", fields: [assignedById], references: [id])
 
-  report InvestigationReport?
+  report      InvestigationReport?
+  attachments Attachment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -333,6 +333,7 @@ export type FireIncidentWhereInput = {
   investigations?: Prisma.InvestigationListRelationFilter
   referrals?: Prisma.InvestigationReferralListRelationFilter
   events?: Prisma.FireIncidentEventListRelationFilter
+  attachments?: Prisma.AttachmentListRelationFilter
 }
 
 export type FireIncidentOrderByWithRelationInput = {
@@ -373,6 +374,7 @@ export type FireIncidentOrderByWithRelationInput = {
   investigations?: Prisma.InvestigationOrderByRelationAggregateInput
   referrals?: Prisma.InvestigationReferralOrderByRelationAggregateInput
   events?: Prisma.FireIncidentEventOrderByRelationAggregateInput
+  attachments?: Prisma.AttachmentOrderByRelationAggregateInput
 }
 
 export type FireIncidentWhereUniqueInput = Prisma.AtLeast<{
@@ -416,6 +418,7 @@ export type FireIncidentWhereUniqueInput = Prisma.AtLeast<{
   investigations?: Prisma.InvestigationListRelationFilter
   referrals?: Prisma.InvestigationReferralListRelationFilter
   events?: Prisma.FireIncidentEventListRelationFilter
+  attachments?: Prisma.AttachmentListRelationFilter
 }, "id" | "incidentNo">
 
 export type FireIncidentOrderByWithAggregationInput = {
@@ -505,6 +508,7 @@ export type FireIncidentCreateInput = {
   investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateInput = {
@@ -538,6 +542,7 @@ export type FireIncidentUncheckedCreateInput = {
   investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUpdateInput = {
@@ -571,6 +576,7 @@ export type FireIncidentUpdateInput = {
   investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateInput = {
@@ -604,6 +610,7 @@ export type FireIncidentUncheckedUpdateInput = {
   investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentCreateManyInput = {
@@ -790,6 +797,20 @@ export type FireIncidentUpdateOneRequiredWithoutReferralsNestedInput = {
   upsert?: Prisma.FireIncidentUpsertWithoutReferralsInput
   connect?: Prisma.FireIncidentWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.FireIncidentUpdateToOneWithWhereWithoutReferralsInput, Prisma.FireIncidentUpdateWithoutReferralsInput>, Prisma.FireIncidentUncheckedUpdateWithoutReferralsInput>
+}
+
+export type FireIncidentCreateNestedOneWithoutAttachmentsInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutAttachmentsInput, Prisma.FireIncidentUncheckedCreateWithoutAttachmentsInput>
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutAttachmentsInput
+  connect?: Prisma.FireIncidentWhereUniqueInput
+}
+
+export type FireIncidentUpdateOneRequiredWithoutAttachmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.FireIncidentCreateWithoutAttachmentsInput, Prisma.FireIncidentUncheckedCreateWithoutAttachmentsInput>
+  connectOrCreate?: Prisma.FireIncidentCreateOrConnectWithoutAttachmentsInput
+  upsert?: Prisma.FireIncidentUpsertWithoutAttachmentsInput
+  connect?: Prisma.FireIncidentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FireIncidentUpdateToOneWithWhereWithoutAttachmentsInput, Prisma.FireIncidentUpdateWithoutAttachmentsInput>, Prisma.FireIncidentUncheckedUpdateWithoutAttachmentsInput>
 }
 
 export type FireIncidentCreateNestedOneWithoutResourcesInput = {
@@ -1204,6 +1225,7 @@ export type FireIncidentCreateWithoutInvestigationsInput = {
   personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutInvestigationsInput = {
@@ -1236,6 +1258,7 @@ export type FireIncidentUncheckedCreateWithoutInvestigationsInput = {
   personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutInvestigationsInput = {
@@ -1284,6 +1307,7 @@ export type FireIncidentUpdateWithoutInvestigationsInput = {
   personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutInvestigationsInput = {
@@ -1316,6 +1340,7 @@ export type FireIncidentUncheckedUpdateWithoutInvestigationsInput = {
   personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentCreateWithoutReferralsInput = {
@@ -1348,6 +1373,7 @@ export type FireIncidentCreateWithoutReferralsInput = {
   personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
   investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutReferralsInput = {
@@ -1380,6 +1406,7 @@ export type FireIncidentUncheckedCreateWithoutReferralsInput = {
   personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
   investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutReferralsInput = {
@@ -1428,6 +1455,7 @@ export type FireIncidentUpdateWithoutReferralsInput = {
   personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
   investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutReferralsInput = {
@@ -1459,6 +1487,155 @@ export type FireIncidentUncheckedUpdateWithoutReferralsInput = {
   resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
   personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
   investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
+}
+
+export type FireIncidentCreateWithoutAttachmentsInput = {
+  id?: string
+  incidentNo?: string | null
+  dateTimeReported?: Date | string | null
+  dateTimeFireIncident?: Date | string | null
+  dateTimeCallReceived?: Date | string | null
+  dateTimeUnresponded?: Date | string | null
+  fireIncidentStatus: $Enums.FireIncidentStatus
+  currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  deletionMemoReference?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  category: Prisma.FireIncidentCategoryCreateNestedOneWithoutIncidentsInput
+  subcategory?: Prisma.FireIncidentSubcategoryCreateNestedOneWithoutIncidentsInput
+  establishment?: Prisma.EstablishmentCreateNestedOneWithoutFireIncidentsInput
+  office: Prisma.OfficeCreateNestedOneWithoutFireIncidentsInput
+  investigationHandlingOffice?: Prisma.OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput
+  createdBy: Prisma.UserCreateNestedOneWithoutFireIncidentsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFireIncidentsInput
+  location?: Prisma.IncidentLocationCreateNestedOneWithoutFireIncidentInput
+  timeline?: Prisma.IncidentTimelineCreateNestedManyWithoutFireIncidentInput
+  impact?: Prisma.IncidentImpactCreateNestedOneWithoutFireIncidentInput
+  resources?: Prisma.FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput
+  personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+}
+
+export type FireIncidentUncheckedCreateWithoutAttachmentsInput = {
+  id?: string
+  incidentNo?: string | null
+  dateTimeReported?: Date | string | null
+  dateTimeFireIncident?: Date | string | null
+  dateTimeCallReceived?: Date | string | null
+  dateTimeUnresponded?: Date | string | null
+  fireIncidentStatus: $Enums.FireIncidentStatus
+  currentAlarmLevel?: $Enums.FireAlarmLevel | null
+  approvalStatus?: $Enums.IncidentApprovalStatus
+  categoryId: string
+  subcategoryId?: string | null
+  establishmentId?: string | null
+  officeId: string
+  investigationHandlingOfficeId?: string | null
+  createdById: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  deletionReason?: string | null
+  deletionMemoReference?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  location?: Prisma.IncidentLocationUncheckedCreateNestedOneWithoutFireIncidentInput
+  timeline?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutFireIncidentInput
+  impact?: Prisma.IncidentImpactUncheckedCreateNestedOneWithoutFireIncidentInput
+  resources?: Prisma.FireOpertaionResourcesUncheckedCreateNestedOneWithoutFireIncidentInput
+  personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
+  investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
+  referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+}
+
+export type FireIncidentCreateOrConnectWithoutAttachmentsInput = {
+  where: Prisma.FireIncidentWhereUniqueInput
+  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutAttachmentsInput, Prisma.FireIncidentUncheckedCreateWithoutAttachmentsInput>
+}
+
+export type FireIncidentUpsertWithoutAttachmentsInput = {
+  update: Prisma.XOR<Prisma.FireIncidentUpdateWithoutAttachmentsInput, Prisma.FireIncidentUncheckedUpdateWithoutAttachmentsInput>
+  create: Prisma.XOR<Prisma.FireIncidentCreateWithoutAttachmentsInput, Prisma.FireIncidentUncheckedCreateWithoutAttachmentsInput>
+  where?: Prisma.FireIncidentWhereInput
+}
+
+export type FireIncidentUpdateToOneWithWhereWithoutAttachmentsInput = {
+  where?: Prisma.FireIncidentWhereInput
+  data: Prisma.XOR<Prisma.FireIncidentUpdateWithoutAttachmentsInput, Prisma.FireIncidentUncheckedUpdateWithoutAttachmentsInput>
+}
+
+export type FireIncidentUpdateWithoutAttachmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.FireIncidentCategoryUpdateOneRequiredWithoutIncidentsNestedInput
+  subcategory?: Prisma.FireIncidentSubcategoryUpdateOneWithoutIncidentsNestedInput
+  establishment?: Prisma.EstablishmentUpdateOneWithoutFireIncidentsNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput
+  investigationHandlingOffice?: Prisma.OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutFireIncidentsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFireIncidentsNestedInput
+  location?: Prisma.IncidentLocationUpdateOneWithoutFireIncidentNestedInput
+  timeline?: Prisma.IncidentTimelineUpdateManyWithoutFireIncidentNestedInput
+  impact?: Prisma.IncidentImpactUpdateOneWithoutFireIncidentNestedInput
+  resources?: Prisma.FireOpertaionResourcesUpdateOneWithoutFireIncidentNestedInput
+  personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+}
+
+export type FireIncidentUncheckedUpdateWithoutAttachmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTimeReported?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeFireIncident?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeCallReceived?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateTimeUnresponded?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentStatus?: Prisma.EnumFireIncidentStatusFieldUpdateOperationsInput | $Enums.FireIncidentStatus
+  currentAlarmLevel?: Prisma.NullableEnumFireAlarmLevelFieldUpdateOperationsInput | $Enums.FireAlarmLevel | null
+  approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  establishmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationHandlingOfficeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  location?: Prisma.IncidentLocationUncheckedUpdateOneWithoutFireIncidentNestedInput
+  timeline?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutFireIncidentNestedInput
+  impact?: Prisma.IncidentImpactUncheckedUpdateOneWithoutFireIncidentNestedInput
+  resources?: Prisma.FireOpertaionResourcesUncheckedUpdateOneWithoutFireIncidentNestedInput
+  personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
+  investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
+  referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
@@ -1492,6 +1669,7 @@ export type FireIncidentCreateWithoutResourcesInput = {
   investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutResourcesInput = {
@@ -1524,6 +1702,7 @@ export type FireIncidentUncheckedCreateWithoutResourcesInput = {
   investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutResourcesInput = {
@@ -1572,6 +1751,7 @@ export type FireIncidentUpdateWithoutResourcesInput = {
   investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutResourcesInput = {
@@ -1604,6 +1784,7 @@ export type FireIncidentUncheckedUpdateWithoutResourcesInput = {
   investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentCreateWithoutImpactInput = {
@@ -1636,6 +1817,7 @@ export type FireIncidentCreateWithoutImpactInput = {
   investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutImpactInput = {
@@ -1668,6 +1850,7 @@ export type FireIncidentUncheckedCreateWithoutImpactInput = {
   investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutImpactInput = {
@@ -1716,6 +1899,7 @@ export type FireIncidentUpdateWithoutImpactInput = {
   investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutImpactInput = {
@@ -1748,6 +1932,7 @@ export type FireIncidentUncheckedUpdateWithoutImpactInput = {
   investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentCreateWithoutLocationInput = {
@@ -1780,6 +1965,7 @@ export type FireIncidentCreateWithoutLocationInput = {
   investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutLocationInput = {
@@ -1812,6 +1998,7 @@ export type FireIncidentUncheckedCreateWithoutLocationInput = {
   investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutLocationInput = {
@@ -1860,6 +2047,7 @@ export type FireIncidentUpdateWithoutLocationInput = {
   investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutLocationInput = {
@@ -1892,6 +2080,7 @@ export type FireIncidentUncheckedUpdateWithoutLocationInput = {
   investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentCreateWithoutPersonnelInput = {
@@ -1924,6 +2113,7 @@ export type FireIncidentCreateWithoutPersonnelInput = {
   investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutPersonnelInput = {
@@ -1956,6 +2146,7 @@ export type FireIncidentUncheckedCreateWithoutPersonnelInput = {
   investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutPersonnelInput = {
@@ -2004,6 +2195,7 @@ export type FireIncidentUpdateWithoutPersonnelInput = {
   investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutPersonnelInput = {
@@ -2036,6 +2228,7 @@ export type FireIncidentUncheckedUpdateWithoutPersonnelInput = {
   investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentCreateWithoutTimelineInput = {
@@ -2068,6 +2261,7 @@ export type FireIncidentCreateWithoutTimelineInput = {
   investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutTimelineInput = {
@@ -2100,6 +2294,7 @@ export type FireIncidentUncheckedCreateWithoutTimelineInput = {
   investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutTimelineInput = {
@@ -2148,6 +2343,7 @@ export type FireIncidentUpdateWithoutTimelineInput = {
   investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutTimelineInput = {
@@ -2180,6 +2376,7 @@ export type FireIncidentUncheckedUpdateWithoutTimelineInput = {
   investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentCreateWithoutEstablishmentInput = {
@@ -2212,6 +2409,7 @@ export type FireIncidentCreateWithoutEstablishmentInput = {
   investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutEstablishmentInput = {
@@ -2244,6 +2442,7 @@ export type FireIncidentUncheckedCreateWithoutEstablishmentInput = {
   investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutEstablishmentInput = {
@@ -2330,6 +2529,7 @@ export type FireIncidentCreateWithoutCategoryInput = {
   investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutCategoryInput = {
@@ -2362,6 +2562,7 @@ export type FireIncidentUncheckedCreateWithoutCategoryInput = {
   investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutCategoryInput = {
@@ -2420,6 +2621,7 @@ export type FireIncidentCreateWithoutEventsInput = {
   personnel?: Prisma.IncidentPersonnelCreateNestedOneWithoutFireIncidentInput
   investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutEventsInput = {
@@ -2452,6 +2654,7 @@ export type FireIncidentUncheckedCreateWithoutEventsInput = {
   personnel?: Prisma.IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput
   investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutEventsInput = {
@@ -2500,6 +2703,7 @@ export type FireIncidentUpdateWithoutEventsInput = {
   personnel?: Prisma.IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput
   investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutEventsInput = {
@@ -2532,6 +2736,7 @@ export type FireIncidentUncheckedUpdateWithoutEventsInput = {
   personnel?: Prisma.IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput
   investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentCreateWithoutSubcategoryInput = {
@@ -2564,6 +2769,7 @@ export type FireIncidentCreateWithoutSubcategoryInput = {
   investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutSubcategoryInput = {
@@ -2596,6 +2802,7 @@ export type FireIncidentUncheckedCreateWithoutSubcategoryInput = {
   investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutSubcategoryInput = {
@@ -2654,6 +2861,7 @@ export type FireIncidentCreateWithoutOfficeInput = {
   investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutOfficeInput = {
@@ -2686,6 +2894,7 @@ export type FireIncidentUncheckedCreateWithoutOfficeInput = {
   investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutOfficeInput = {
@@ -2728,6 +2937,7 @@ export type FireIncidentCreateWithoutInvestigationHandlingOfficeInput = {
   investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutInvestigationHandlingOfficeInput = {
@@ -2760,6 +2970,7 @@ export type FireIncidentUncheckedCreateWithoutInvestigationHandlingOfficeInput =
   investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutInvestigationHandlingOfficeInput = {
@@ -2834,6 +3045,7 @@ export type FireIncidentCreateWithoutCreatedByInput = {
   investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutCreatedByInput = {
@@ -2866,6 +3078,7 @@ export type FireIncidentUncheckedCreateWithoutCreatedByInput = {
   investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutCreatedByInput = {
@@ -2908,6 +3121,7 @@ export type FireIncidentCreateWithoutDeletedByInput = {
   investigations?: Prisma.InvestigationCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentUncheckedCreateWithoutDeletedByInput = {
@@ -2940,6 +3154,7 @@ export type FireIncidentUncheckedCreateWithoutDeletedByInput = {
   investigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutFireIncidentInput
   referrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFireIncidentInput
   events?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutFireIncidentInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput
 }
 
 export type FireIncidentCreateOrConnectWithoutDeletedByInput = {
@@ -3038,6 +3253,7 @@ export type FireIncidentUpdateWithoutEstablishmentInput = {
   investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutEstablishmentInput = {
@@ -3070,6 +3286,7 @@ export type FireIncidentUncheckedUpdateWithoutEstablishmentInput = {
   investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateManyWithoutEstablishmentInput = {
@@ -3150,6 +3367,7 @@ export type FireIncidentUpdateWithoutCategoryInput = {
   investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutCategoryInput = {
@@ -3182,6 +3400,7 @@ export type FireIncidentUncheckedUpdateWithoutCategoryInput = {
   investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateManyWithoutCategoryInput = {
@@ -3262,6 +3481,7 @@ export type FireIncidentUpdateWithoutSubcategoryInput = {
   investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutSubcategoryInput = {
@@ -3294,6 +3514,7 @@ export type FireIncidentUncheckedUpdateWithoutSubcategoryInput = {
   investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateManyWithoutSubcategoryInput = {
@@ -3398,6 +3619,7 @@ export type FireIncidentUpdateWithoutOfficeInput = {
   investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutOfficeInput = {
@@ -3430,6 +3652,7 @@ export type FireIncidentUncheckedUpdateWithoutOfficeInput = {
   investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateManyWithoutOfficeInput = {
@@ -3486,6 +3709,7 @@ export type FireIncidentUpdateWithoutInvestigationHandlingOfficeInput = {
   investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutInvestigationHandlingOfficeInput = {
@@ -3518,6 +3742,7 @@ export type FireIncidentUncheckedUpdateWithoutInvestigationHandlingOfficeInput =
   investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateManyWithoutInvestigationHandlingOfficeInput = {
@@ -3622,6 +3847,7 @@ export type FireIncidentUpdateWithoutCreatedByInput = {
   investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutCreatedByInput = {
@@ -3654,6 +3880,7 @@ export type FireIncidentUncheckedUpdateWithoutCreatedByInput = {
   investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateManyWithoutCreatedByInput = {
@@ -3710,6 +3937,7 @@ export type FireIncidentUpdateWithoutDeletedByInput = {
   investigations?: Prisma.InvestigationUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateWithoutDeletedByInput = {
@@ -3742,6 +3970,7 @@ export type FireIncidentUncheckedUpdateWithoutDeletedByInput = {
   investigations?: Prisma.InvestigationUncheckedUpdateManyWithoutFireIncidentNestedInput
   referrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFireIncidentNestedInput
   events?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutFireIncidentNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput
 }
 
 export type FireIncidentUncheckedUpdateManyWithoutDeletedByInput = {
@@ -3778,6 +4007,7 @@ export type FireIncidentCountOutputType = {
   investigations: number
   referrals: number
   events: number
+  attachments: number
 }
 
 export type FireIncidentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3785,6 +4015,7 @@ export type FireIncidentCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   investigations?: boolean | FireIncidentCountOutputTypeCountInvestigationsArgs
   referrals?: boolean | FireIncidentCountOutputTypeCountReferralsArgs
   events?: boolean | FireIncidentCountOutputTypeCountEventsArgs
+  attachments?: boolean | FireIncidentCountOutputTypeCountAttachmentsArgs
 }
 
 /**
@@ -3823,6 +4054,13 @@ export type FireIncidentCountOutputTypeCountReferralsArgs<ExtArgs extends runtim
  */
 export type FireIncidentCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.FireIncidentEventWhereInput
+}
+
+/**
+ * FireIncidentCountOutputType without action
+ */
+export type FireIncidentCountOutputTypeCountAttachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AttachmentWhereInput
 }
 
 
@@ -3864,6 +4102,7 @@ export type FireIncidentSelect<ExtArgs extends runtime.Types.Extensions.Internal
   investigations?: boolean | Prisma.FireIncident$investigationsArgs<ExtArgs>
   referrals?: boolean | Prisma.FireIncident$referralsArgs<ExtArgs>
   events?: boolean | Prisma.FireIncident$eventsArgs<ExtArgs>
+  attachments?: boolean | Prisma.FireIncident$attachmentsArgs<ExtArgs>
   _count?: boolean | Prisma.FireIncidentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["fireIncident"]>
 
@@ -3973,6 +4212,7 @@ export type FireIncidentInclude<ExtArgs extends runtime.Types.Extensions.Interna
   investigations?: boolean | Prisma.FireIncident$investigationsArgs<ExtArgs>
   referrals?: boolean | Prisma.FireIncident$referralsArgs<ExtArgs>
   events?: boolean | Prisma.FireIncident$eventsArgs<ExtArgs>
+  attachments?: boolean | Prisma.FireIncident$attachmentsArgs<ExtArgs>
   _count?: boolean | Prisma.FireIncidentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FireIncidentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4012,6 +4252,7 @@ export type $FireIncidentPayload<ExtArgs extends runtime.Types.Extensions.Intern
     investigations: Prisma.$InvestigationPayload<ExtArgs>[]
     referrals: Prisma.$InvestigationReferralPayload<ExtArgs>[]
     events: Prisma.$FireIncidentEventPayload<ExtArgs>[]
+    attachments: Prisma.$AttachmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4445,6 +4686,7 @@ export interface Prisma__FireIncidentClient<T, Null = never, ExtArgs extends run
   investigations<T extends Prisma.FireIncident$investigationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$investigationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestigationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   referrals<T extends Prisma.FireIncident$referralsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$referralsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestigationReferralPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   events<T extends Prisma.FireIncident$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FireIncidentEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  attachments<T extends Prisma.FireIncident$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncident$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5142,6 +5384,30 @@ export type FireIncident$eventsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.FireIncidentEventScalarFieldEnum | Prisma.FireIncidentEventScalarFieldEnum[]
+}
+
+/**
+ * FireIncident.attachments
+ */
+export type FireIncident$attachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Attachment
+   */
+  select?: Prisma.AttachmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Attachment
+   */
+  omit?: Prisma.AttachmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AttachmentInclude<ExtArgs> | null
+  where?: Prisma.AttachmentWhereInput
+  orderBy?: Prisma.AttachmentOrderByWithRelationInput | Prisma.AttachmentOrderByWithRelationInput[]
+  cursor?: Prisma.AttachmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AttachmentScalarFieldEnum | Prisma.AttachmentScalarFieldEnum[]
 }
 
 /**

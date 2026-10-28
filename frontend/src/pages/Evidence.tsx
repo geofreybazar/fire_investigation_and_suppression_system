@@ -1,17 +1,53 @@
+import { Suspense, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { Shield } from "lucide-react";
-import ComingSoon from "@/components/common/ComingSoon";
+import PageHeader from "@/components/common/PageHeader";
+import ErrorFallbackComponent from "@/components/common/ErrorFallbackComponent";
+import TableSkeleton from "@/components/common/TableSkeleton";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import EvidenceTable from "@/components/features/attachments/EvidenceTable";
 
-const Evidence = () => (
-  <ComingSoon
-    icon={<Shield />}
-    title='Evidence'
-    description='Photos and documents attached to incidents and investigations.'
-    planned={[
-      "Upload images and PDFs to an incident or investigation",
-      "Access limited to the offices that can see the incident",
-      "Every download recorded in the audit log",
-    ]}
-  />
-);
+type Kind = "all" | "incident" | "investigation";
+
+const Evidence = () => {
+  const [kind, setKind] = useState<Kind>("all");
+  const [page, setPage] = useState(1);
+
+  return (
+    <div className='space-y-6'>
+      <PageHeader
+        icon={<Shield />}
+        title='Evidence'
+        description='Files attached to the incidents and investigations you can see. Every download is recorded.'
+      />
+
+      <Tabs
+        value={kind}
+        onValueChange={(value) => {
+          setKind(value as Kind);
+          setPage(1);
+        }}
+      >
+        <TabsList>
+          <TabsTrigger value='all'>All files</TabsTrigger>
+          <TabsTrigger value='investigation'>
+            Investigation evidence
+          </TabsTrigger>
+          <TabsTrigger value='incident'>Incident attachments</TabsTrigger>
+        </TabsList>
+      </Tabs>
+
+      <ErrorBoundary FallbackComponent={ErrorFallbackComponent}>
+        <Suspense fallback={<TableSkeleton />}>
+          <EvidenceTable
+            page={page}
+            setPage={setPage}
+            kind={kind === "all" ? undefined : kind}
+          />
+        </Suspense>
+      </ErrorBoundary>
+    </div>
+  );
+};
 
 export default Evidence;

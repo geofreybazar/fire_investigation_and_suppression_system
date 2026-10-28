@@ -4,7 +4,6 @@ import Dashboard from "@/pages/Dashboard";
 import FireStations from "@/pages/FireStations";
 import Monitoring from "@/pages/Monitoring";
 import ResponseUnits from "@/pages/ResponseUnits";
-import Evidence from "@/pages/Evidence";
 import Personnel from "@/pages/Personnel";
 import Offices from "@/pages/Offices";
 import Settings from "@/pages/Settings";
@@ -33,6 +32,7 @@ const AuditLog = loadable(() => import("@/pages/AuditLog"));
 const Statistics = loadable(() => import("@/pages/Statistics"));
 const IncidentReports = loadable(() => import("@/pages/IncidentReports"));
 const IncidentMap = loadable(() => import("@/pages/IncidentMap"));
+const Evidence = loadable(() => import("@/pages/Evidence"));
 
 const routes = [
   { path: "/", element: <Dashboard /> },

@@ -251,6 +251,7 @@ export type InvestigationWhereInput = {
   assignedInvestigator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   assignedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   report?: Prisma.XOR<Prisma.InvestigationReportNullableScalarRelationFilter, Prisma.InvestigationReportWhereInput> | null
+  attachments?: Prisma.AttachmentListRelationFilter
 }
 
 export type InvestigationOrderByWithRelationInput = {
@@ -272,6 +273,7 @@ export type InvestigationOrderByWithRelationInput = {
   assignedInvestigator?: Prisma.UserOrderByWithRelationInput
   assignedBy?: Prisma.UserOrderByWithRelationInput
   report?: Prisma.InvestigationReportOrderByWithRelationInput
+  attachments?: Prisma.AttachmentOrderByRelationAggregateInput
 }
 
 export type InvestigationWhereUniqueInput = Prisma.AtLeast<{
@@ -296,6 +298,7 @@ export type InvestigationWhereUniqueInput = Prisma.AtLeast<{
   assignedInvestigator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   assignedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   report?: Prisma.XOR<Prisma.InvestigationReportNullableScalarRelationFilter, Prisma.InvestigationReportWhereInput> | null
+  attachments?: Prisma.AttachmentListRelationFilter
 }, "id" | "investigationNo">
 
 export type InvestigationOrderByWithAggregationInput = {
@@ -351,6 +354,7 @@ export type InvestigationCreateInput = {
   assignedInvestigator: Prisma.UserCreateNestedOneWithoutAssignedInvestigationsInput
   assignedBy: Prisma.UserCreateNestedOneWithoutInvestigationsAssignedInput
   report?: Prisma.InvestigationReportCreateNestedOneWithoutInvestigationInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutInvestigationInput
 }
 
 export type InvestigationUncheckedCreateInput = {
@@ -368,6 +372,7 @@ export type InvestigationUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   report?: Prisma.InvestigationReportUncheckedCreateNestedOneWithoutInvestigationInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutInvestigationInput
 }
 
 export type InvestigationUpdateInput = {
@@ -385,6 +390,7 @@ export type InvestigationUpdateInput = {
   assignedInvestigator?: Prisma.UserUpdateOneRequiredWithoutAssignedInvestigationsNestedInput
   assignedBy?: Prisma.UserUpdateOneRequiredWithoutInvestigationsAssignedNestedInput
   report?: Prisma.InvestigationReportUpdateOneWithoutInvestigationNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutInvestigationNestedInput
 }
 
 export type InvestigationUncheckedUpdateInput = {
@@ -402,6 +408,7 @@ export type InvestigationUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   report?: Prisma.InvestigationReportUncheckedUpdateOneWithoutInvestigationNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutInvestigationNestedInput
 }
 
 export type InvestigationCreateManyInput = {
@@ -501,6 +508,11 @@ export type InvestigationMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type InvestigationNullableScalarRelationFilter = {
+  is?: Prisma.InvestigationWhereInput | null
+  isNot?: Prisma.InvestigationWhereInput | null
+}
+
 export type InvestigationListRelationFilter = {
   every?: Prisma.InvestigationWhereInput
   some?: Prisma.InvestigationWhereInput
@@ -531,6 +543,22 @@ export type NullableEnumCauseOfFireFieldUpdateOperationsInput = {
 
 export type NullableEnumFireCaseClassificationFieldUpdateOperationsInput = {
   set?: $Enums.FireCaseClassification | null
+}
+
+export type InvestigationCreateNestedOneWithoutAttachmentsInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutAttachmentsInput, Prisma.InvestigationUncheckedCreateWithoutAttachmentsInput>
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutAttachmentsInput
+  connect?: Prisma.InvestigationWhereUniqueInput
+}
+
+export type InvestigationUpdateOneWithoutAttachmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.InvestigationCreateWithoutAttachmentsInput, Prisma.InvestigationUncheckedCreateWithoutAttachmentsInput>
+  connectOrCreate?: Prisma.InvestigationCreateOrConnectWithoutAttachmentsInput
+  upsert?: Prisma.InvestigationUpsertWithoutAttachmentsInput
+  disconnect?: Prisma.InvestigationWhereInput | boolean
+  delete?: Prisma.InvestigationWhereInput | boolean
+  connect?: Prisma.InvestigationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InvestigationUpdateToOneWithWhereWithoutAttachmentsInput, Prisma.InvestigationUpdateWithoutAttachmentsInput>, Prisma.InvestigationUncheckedUpdateWithoutAttachmentsInput>
 }
 
 export type InvestigationCreateNestedManyWithoutFireIncidentInput = {
@@ -715,6 +743,7 @@ export type InvestigationCreateWithoutReportInput = {
   conductingOffice: Prisma.OfficeCreateNestedOneWithoutConductedInvestigationsInput
   assignedInvestigator: Prisma.UserCreateNestedOneWithoutAssignedInvestigationsInput
   assignedBy: Prisma.UserCreateNestedOneWithoutInvestigationsAssignedInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutInvestigationInput
 }
 
 export type InvestigationUncheckedCreateWithoutReportInput = {
@@ -731,6 +760,7 @@ export type InvestigationUncheckedCreateWithoutReportInput = {
   assignedById: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutInvestigationInput
 }
 
 export type InvestigationCreateOrConnectWithoutReportInput = {
@@ -763,6 +793,7 @@ export type InvestigationUpdateWithoutReportInput = {
   conductingOffice?: Prisma.OfficeUpdateOneRequiredWithoutConductedInvestigationsNestedInput
   assignedInvestigator?: Prisma.UserUpdateOneRequiredWithoutAssignedInvestigationsNestedInput
   assignedBy?: Prisma.UserUpdateOneRequiredWithoutInvestigationsAssignedNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutInvestigationNestedInput
 }
 
 export type InvestigationUncheckedUpdateWithoutReportInput = {
@@ -779,6 +810,91 @@ export type InvestigationUncheckedUpdateWithoutReportInput = {
   assignedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutInvestigationNestedInput
+}
+
+export type InvestigationCreateWithoutAttachmentsInput = {
+  id?: string
+  investigationNo: string
+  causeOfFire?: $Enums.CauseOfFire | null
+  classification?: $Enums.FireCaseClassification | null
+  originOfFire?: string | null
+  startedAt: Date | string
+  completedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutInvestigationsInput
+  conductingOffice: Prisma.OfficeCreateNestedOneWithoutConductedInvestigationsInput
+  assignedInvestigator: Prisma.UserCreateNestedOneWithoutAssignedInvestigationsInput
+  assignedBy: Prisma.UserCreateNestedOneWithoutInvestigationsAssignedInput
+  report?: Prisma.InvestigationReportCreateNestedOneWithoutInvestigationInput
+}
+
+export type InvestigationUncheckedCreateWithoutAttachmentsInput = {
+  id?: string
+  investigationNo: string
+  causeOfFire?: $Enums.CauseOfFire | null
+  classification?: $Enums.FireCaseClassification | null
+  originOfFire?: string | null
+  startedAt: Date | string
+  completedAt?: Date | string | null
+  fireIncidentId: string
+  conductingOfficeId: string
+  assignedInvestigatorId: string
+  assignedById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  report?: Prisma.InvestigationReportUncheckedCreateNestedOneWithoutInvestigationInput
+}
+
+export type InvestigationCreateOrConnectWithoutAttachmentsInput = {
+  where: Prisma.InvestigationWhereUniqueInput
+  create: Prisma.XOR<Prisma.InvestigationCreateWithoutAttachmentsInput, Prisma.InvestigationUncheckedCreateWithoutAttachmentsInput>
+}
+
+export type InvestigationUpsertWithoutAttachmentsInput = {
+  update: Prisma.XOR<Prisma.InvestigationUpdateWithoutAttachmentsInput, Prisma.InvestigationUncheckedUpdateWithoutAttachmentsInput>
+  create: Prisma.XOR<Prisma.InvestigationCreateWithoutAttachmentsInput, Prisma.InvestigationUncheckedCreateWithoutAttachmentsInput>
+  where?: Prisma.InvestigationWhereInput
+}
+
+export type InvestigationUpdateToOneWithWhereWithoutAttachmentsInput = {
+  where?: Prisma.InvestigationWhereInput
+  data: Prisma.XOR<Prisma.InvestigationUpdateWithoutAttachmentsInput, Prisma.InvestigationUncheckedUpdateWithoutAttachmentsInput>
+}
+
+export type InvestigationUpdateWithoutAttachmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationNo?: Prisma.StringFieldUpdateOperationsInput | string
+  causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
+  classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
+  originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutInvestigationsNestedInput
+  conductingOffice?: Prisma.OfficeUpdateOneRequiredWithoutConductedInvestigationsNestedInput
+  assignedInvestigator?: Prisma.UserUpdateOneRequiredWithoutAssignedInvestigationsNestedInput
+  assignedBy?: Prisma.UserUpdateOneRequiredWithoutInvestigationsAssignedNestedInput
+  report?: Prisma.InvestigationReportUpdateOneWithoutInvestigationNestedInput
+}
+
+export type InvestigationUncheckedUpdateWithoutAttachmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  investigationNo?: Prisma.StringFieldUpdateOperationsInput | string
+  causeOfFire?: Prisma.NullableEnumCauseOfFireFieldUpdateOperationsInput | $Enums.CauseOfFire | null
+  classification?: Prisma.NullableEnumFireCaseClassificationFieldUpdateOperationsInput | $Enums.FireCaseClassification | null
+  originOfFire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  conductingOfficeId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedInvestigatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  report?: Prisma.InvestigationReportUncheckedUpdateOneWithoutInvestigationNestedInput
 }
 
 export type InvestigationCreateWithoutFireIncidentInput = {
@@ -795,6 +911,7 @@ export type InvestigationCreateWithoutFireIncidentInput = {
   assignedInvestigator: Prisma.UserCreateNestedOneWithoutAssignedInvestigationsInput
   assignedBy: Prisma.UserCreateNestedOneWithoutInvestigationsAssignedInput
   report?: Prisma.InvestigationReportCreateNestedOneWithoutInvestigationInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutInvestigationInput
 }
 
 export type InvestigationUncheckedCreateWithoutFireIncidentInput = {
@@ -811,6 +928,7 @@ export type InvestigationUncheckedCreateWithoutFireIncidentInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   report?: Prisma.InvestigationReportUncheckedCreateNestedOneWithoutInvestigationInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutInvestigationInput
 }
 
 export type InvestigationCreateOrConnectWithoutFireIncidentInput = {
@@ -872,6 +990,7 @@ export type InvestigationCreateWithoutConductingOfficeInput = {
   assignedInvestigator: Prisma.UserCreateNestedOneWithoutAssignedInvestigationsInput
   assignedBy: Prisma.UserCreateNestedOneWithoutInvestigationsAssignedInput
   report?: Prisma.InvestigationReportCreateNestedOneWithoutInvestigationInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutInvestigationInput
 }
 
 export type InvestigationUncheckedCreateWithoutConductingOfficeInput = {
@@ -888,6 +1007,7 @@ export type InvestigationUncheckedCreateWithoutConductingOfficeInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   report?: Prisma.InvestigationReportUncheckedCreateNestedOneWithoutInvestigationInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutInvestigationInput
 }
 
 export type InvestigationCreateOrConnectWithoutConductingOfficeInput = {
@@ -930,6 +1050,7 @@ export type InvestigationCreateWithoutAssignedInvestigatorInput = {
   conductingOffice: Prisma.OfficeCreateNestedOneWithoutConductedInvestigationsInput
   assignedBy: Prisma.UserCreateNestedOneWithoutInvestigationsAssignedInput
   report?: Prisma.InvestigationReportCreateNestedOneWithoutInvestigationInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutInvestigationInput
 }
 
 export type InvestigationUncheckedCreateWithoutAssignedInvestigatorInput = {
@@ -946,6 +1067,7 @@ export type InvestigationUncheckedCreateWithoutAssignedInvestigatorInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   report?: Prisma.InvestigationReportUncheckedCreateNestedOneWithoutInvestigationInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutInvestigationInput
 }
 
 export type InvestigationCreateOrConnectWithoutAssignedInvestigatorInput = {
@@ -972,6 +1094,7 @@ export type InvestigationCreateWithoutAssignedByInput = {
   conductingOffice: Prisma.OfficeCreateNestedOneWithoutConductedInvestigationsInput
   assignedInvestigator: Prisma.UserCreateNestedOneWithoutAssignedInvestigationsInput
   report?: Prisma.InvestigationReportCreateNestedOneWithoutInvestigationInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutInvestigationInput
 }
 
 export type InvestigationUncheckedCreateWithoutAssignedByInput = {
@@ -988,6 +1111,7 @@ export type InvestigationUncheckedCreateWithoutAssignedByInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   report?: Prisma.InvestigationReportUncheckedCreateNestedOneWithoutInvestigationInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutInvestigationInput
 }
 
 export type InvestigationCreateOrConnectWithoutAssignedByInput = {
@@ -1061,6 +1185,7 @@ export type InvestigationUpdateWithoutFireIncidentInput = {
   assignedInvestigator?: Prisma.UserUpdateOneRequiredWithoutAssignedInvestigationsNestedInput
   assignedBy?: Prisma.UserUpdateOneRequiredWithoutInvestigationsAssignedNestedInput
   report?: Prisma.InvestigationReportUpdateOneWithoutInvestigationNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutInvestigationNestedInput
 }
 
 export type InvestigationUncheckedUpdateWithoutFireIncidentInput = {
@@ -1077,6 +1202,7 @@ export type InvestigationUncheckedUpdateWithoutFireIncidentInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   report?: Prisma.InvestigationReportUncheckedUpdateOneWithoutInvestigationNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutInvestigationNestedInput
 }
 
 export type InvestigationUncheckedUpdateManyWithoutFireIncidentInput = {
@@ -1123,6 +1249,7 @@ export type InvestigationUpdateWithoutConductingOfficeInput = {
   assignedInvestigator?: Prisma.UserUpdateOneRequiredWithoutAssignedInvestigationsNestedInput
   assignedBy?: Prisma.UserUpdateOneRequiredWithoutInvestigationsAssignedNestedInput
   report?: Prisma.InvestigationReportUpdateOneWithoutInvestigationNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutInvestigationNestedInput
 }
 
 export type InvestigationUncheckedUpdateWithoutConductingOfficeInput = {
@@ -1139,6 +1266,7 @@ export type InvestigationUncheckedUpdateWithoutConductingOfficeInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   report?: Prisma.InvestigationReportUncheckedUpdateOneWithoutInvestigationNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutInvestigationNestedInput
 }
 
 export type InvestigationUncheckedUpdateManyWithoutConductingOfficeInput = {
@@ -1200,6 +1328,7 @@ export type InvestigationUpdateWithoutAssignedInvestigatorInput = {
   conductingOffice?: Prisma.OfficeUpdateOneRequiredWithoutConductedInvestigationsNestedInput
   assignedBy?: Prisma.UserUpdateOneRequiredWithoutInvestigationsAssignedNestedInput
   report?: Prisma.InvestigationReportUpdateOneWithoutInvestigationNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutInvestigationNestedInput
 }
 
 export type InvestigationUncheckedUpdateWithoutAssignedInvestigatorInput = {
@@ -1216,6 +1345,7 @@ export type InvestigationUncheckedUpdateWithoutAssignedInvestigatorInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   report?: Prisma.InvestigationReportUncheckedUpdateOneWithoutInvestigationNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutInvestigationNestedInput
 }
 
 export type InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorInput = {
@@ -1247,6 +1377,7 @@ export type InvestigationUpdateWithoutAssignedByInput = {
   conductingOffice?: Prisma.OfficeUpdateOneRequiredWithoutConductedInvestigationsNestedInput
   assignedInvestigator?: Prisma.UserUpdateOneRequiredWithoutAssignedInvestigationsNestedInput
   report?: Prisma.InvestigationReportUpdateOneWithoutInvestigationNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutInvestigationNestedInput
 }
 
 export type InvestigationUncheckedUpdateWithoutAssignedByInput = {
@@ -1263,6 +1394,7 @@ export type InvestigationUncheckedUpdateWithoutAssignedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   report?: Prisma.InvestigationReportUncheckedUpdateOneWithoutInvestigationNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutInvestigationNestedInput
 }
 
 export type InvestigationUncheckedUpdateManyWithoutAssignedByInput = {
@@ -1280,6 +1412,35 @@ export type InvestigationUncheckedUpdateManyWithoutAssignedByInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type InvestigationCountOutputType
+ */
+
+export type InvestigationCountOutputType = {
+  attachments: number
+}
+
+export type InvestigationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  attachments?: boolean | InvestigationCountOutputTypeCountAttachmentsArgs
+}
+
+/**
+ * InvestigationCountOutputType without action
+ */
+export type InvestigationCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InvestigationCountOutputType
+   */
+  select?: Prisma.InvestigationCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * InvestigationCountOutputType without action
+ */
+export type InvestigationCountOutputTypeCountAttachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AttachmentWhereInput
+}
 
 
 export type InvestigationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1301,6 +1462,8 @@ export type InvestigationSelect<ExtArgs extends runtime.Types.Extensions.Interna
   assignedInvestigator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   report?: boolean | Prisma.Investigation$reportArgs<ExtArgs>
+  attachments?: boolean | Prisma.Investigation$attachmentsArgs<ExtArgs>
+  _count?: boolean | Prisma.InvestigationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["investigation"]>
 
 export type InvestigationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1366,6 +1529,8 @@ export type InvestigationInclude<ExtArgs extends runtime.Types.Extensions.Intern
   assignedInvestigator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   report?: boolean | Prisma.Investigation$reportArgs<ExtArgs>
+  attachments?: boolean | Prisma.Investigation$attachmentsArgs<ExtArgs>
+  _count?: boolean | Prisma.InvestigationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type InvestigationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
@@ -1388,6 +1553,7 @@ export type $InvestigationPayload<ExtArgs extends runtime.Types.Extensions.Inter
     assignedInvestigator: Prisma.$UserPayload<ExtArgs>
     assignedBy: Prisma.$UserPayload<ExtArgs>
     report: Prisma.$InvestigationReportPayload<ExtArgs> | null
+    attachments: Prisma.$AttachmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1802,6 +1968,7 @@ export interface Prisma__InvestigationClient<T, Null = never, ExtArgs extends ru
   assignedInvestigator<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   assignedBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   report<T extends Prisma.Investigation$reportArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Investigation$reportArgs<ExtArgs>>): Prisma.Prisma__InvestigationReportClient<runtime.Types.Result.GetResult<Prisma.$InvestigationReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  attachments<T extends Prisma.Investigation$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Investigation$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2261,6 +2428,30 @@ export type Investigation$reportArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   include?: Prisma.InvestigationReportInclude<ExtArgs> | null
   where?: Prisma.InvestigationReportWhereInput
+}
+
+/**
+ * Investigation.attachments
+ */
+export type Investigation$attachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Attachment
+   */
+  select?: Prisma.AttachmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Attachment
+   */
+  omit?: Prisma.AttachmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AttachmentInclude<ExtArgs> | null
+  where?: Prisma.AttachmentWhereInput
+  orderBy?: Prisma.AttachmentOrderByWithRelationInput | Prisma.AttachmentOrderByWithRelationInput[]
+  cursor?: Prisma.AttachmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AttachmentScalarFieldEnum | Prisma.AttachmentScalarFieldEnum[]
 }
 
 /**
