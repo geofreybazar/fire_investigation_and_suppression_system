@@ -12,7 +12,10 @@ import { UUID } from 'crypto';
 import { OfficeAuthorizationService } from './services/office.authorization.service.js';
 import { OfficeRepository } from './office.repository.js';
 import { CurrentUserJwtPayload } from '../../types/jwt.payload.js';
-import { validateRegionCode } from './utils/validateRegionCode.js';
+import {
+  normalizeRegionCode,
+  validateRegionCode,
+} from './utils/validateRegionCode.js';
 
 @Injectable()
 export class OfficeService {
@@ -126,6 +129,17 @@ export class OfficeService {
 
     await this.assertNameAvailable(officeData, id);
 
+    // Issued incident numbers embed the code, so it is frozen once used.
+    if (
+      office.regionCode &&
+      office.regionCode !== normalizeRegionCode(officeData.regionCode) &&
+      (await this.officeRepository.isRegionCodeUsed(office.regionCode))
+    ) {
+      throw new ConflictException(
+        'The region code cannot be changed because incident numbers already use it.',
+      );
+    }
+
     const updatedOffice = await this.officeRepository.updateOffice(
       id,
       officeData,
@@ -155,6 +169,22 @@ export class OfficeService {
     if (office._count.children > 0) {
       throw new ConflictException(
         'This office cannot be deleted because it has child offices.',
+      );
+    }
+
+    // Incident ownership, case handling and investigation history must keep
+    // their office, including for soft-deleted incidents.
+    const { _count: counts } = office;
+    if (
+      counts.fireIncidents +
+        counts.handledIncidentInvestigations +
+        counts.conductedInvestigations +
+        counts.referralsFrom +
+        counts.referralsTo >
+      0
+    ) {
+      throw new ConflictException(
+        'This office cannot be deleted because it has fire incident or investigation records.',
       );
     }
 

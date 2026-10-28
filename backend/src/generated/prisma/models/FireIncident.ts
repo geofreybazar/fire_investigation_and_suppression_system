@@ -43,6 +43,7 @@ export type FireIncidentMinAggregateOutputType = {
   deletedAt: Date | null
   deletedById: string | null
   deletionReason: string | null
+  deletionMemoReference: string | null
   remarks: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -67,6 +68,7 @@ export type FireIncidentMaxAggregateOutputType = {
   deletedAt: Date | null
   deletedById: string | null
   deletionReason: string | null
+  deletionMemoReference: string | null
   remarks: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -91,6 +93,7 @@ export type FireIncidentCountAggregateOutputType = {
   deletedAt: number
   deletedById: number
   deletionReason: number
+  deletionMemoReference: number
   remarks: number
   createdAt: number
   updatedAt: number
@@ -117,6 +120,7 @@ export type FireIncidentMinAggregateInputType = {
   deletedAt?: true
   deletedById?: true
   deletionReason?: true
+  deletionMemoReference?: true
   remarks?: true
   createdAt?: true
   updatedAt?: true
@@ -141,6 +145,7 @@ export type FireIncidentMaxAggregateInputType = {
   deletedAt?: true
   deletedById?: true
   deletionReason?: true
+  deletionMemoReference?: true
   remarks?: true
   createdAt?: true
   updatedAt?: true
@@ -165,6 +170,7 @@ export type FireIncidentCountAggregateInputType = {
   deletedAt?: true
   deletedById?: true
   deletionReason?: true
+  deletionMemoReference?: true
   remarks?: true
   createdAt?: true
   updatedAt?: true
@@ -262,6 +268,7 @@ export type FireIncidentGroupByOutputType = {
   deletedAt: Date | null
   deletedById: string | null
   deletionReason: string | null
+  deletionMemoReference: string | null
   remarks: string | null
   createdAt: Date
   updatedAt: Date
@@ -307,6 +314,7 @@ export type FireIncidentWhereInput = {
   deletedAt?: Prisma.DateTimeNullableFilter<"FireIncident"> | Date | string | null
   deletedById?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   deletionReason?: Prisma.StringNullableFilter<"FireIncident"> | string | null
+  deletionMemoReference?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   remarks?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   createdAt?: Prisma.DateTimeFilter<"FireIncident"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FireIncident"> | Date | string
@@ -346,6 +354,7 @@ export type FireIncidentOrderByWithRelationInput = {
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
   deletionReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletionMemoReference?: Prisma.SortOrderInput | Prisma.SortOrder
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -388,6 +397,7 @@ export type FireIncidentWhereUniqueInput = Prisma.AtLeast<{
   deletedAt?: Prisma.DateTimeNullableFilter<"FireIncident"> | Date | string | null
   deletedById?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   deletionReason?: Prisma.StringNullableFilter<"FireIncident"> | string | null
+  deletionMemoReference?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   remarks?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   createdAt?: Prisma.DateTimeFilter<"FireIncident"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FireIncident"> | Date | string
@@ -427,6 +437,7 @@ export type FireIncidentOrderByWithAggregationInput = {
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
   deletionReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletionMemoReference?: Prisma.SortOrderInput | Prisma.SortOrder
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -457,6 +468,7 @@ export type FireIncidentScalarWhereWithAggregatesInput = {
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"FireIncident"> | Date | string | null
   deletedById?: Prisma.StringNullableWithAggregatesFilter<"FireIncident"> | string | null
   deletionReason?: Prisma.StringNullableWithAggregatesFilter<"FireIncident"> | string | null
+  deletionMemoReference?: Prisma.StringNullableWithAggregatesFilter<"FireIncident"> | string | null
   remarks?: Prisma.StringNullableWithAggregatesFilter<"FireIncident"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FireIncident"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FireIncident"> | Date | string
@@ -474,6 +486,7 @@ export type FireIncidentCreateInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -513,6 +526,7 @@ export type FireIncidentUncheckedCreateInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -538,6 +552,7 @@ export type FireIncidentUpdateInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -577,6 +592,7 @@ export type FireIncidentUncheckedUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -609,6 +625,7 @@ export type FireIncidentCreateManyInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -626,6 +643,7 @@ export type FireIncidentUpdateManyMutationInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -650,6 +668,7 @@ export type FireIncidentUncheckedUpdateManyInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -689,6 +708,7 @@ export type FireIncidentCountOrderByAggregateInput = {
   deletedAt?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
   deletionReason?: Prisma.SortOrder
+  deletionMemoReference?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -713,6 +733,7 @@ export type FireIncidentMaxOrderByAggregateInput = {
   deletedAt?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
   deletionReason?: Prisma.SortOrder
+  deletionMemoReference?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -737,6 +758,7 @@ export type FireIncidentMinOrderByAggregateInput = {
   deletedAt?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
   deletionReason?: Prisma.SortOrder
+  deletionMemoReference?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -1164,6 +1186,7 @@ export type FireIncidentCreateWithoutInvestigationsInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1202,6 +1225,7 @@ export type FireIncidentUncheckedCreateWithoutInvestigationsInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1242,6 +1266,7 @@ export type FireIncidentUpdateWithoutInvestigationsInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1280,6 +1305,7 @@ export type FireIncidentUncheckedUpdateWithoutInvestigationsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1304,6 +1330,7 @@ export type FireIncidentCreateWithoutReferralsInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1342,6 +1369,7 @@ export type FireIncidentUncheckedCreateWithoutReferralsInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1382,6 +1410,7 @@ export type FireIncidentUpdateWithoutReferralsInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1420,6 +1449,7 @@ export type FireIncidentUncheckedUpdateWithoutReferralsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1444,6 +1474,7 @@ export type FireIncidentCreateWithoutResourcesInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1482,6 +1513,7 @@ export type FireIncidentUncheckedCreateWithoutResourcesInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1522,6 +1554,7 @@ export type FireIncidentUpdateWithoutResourcesInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1560,6 +1593,7 @@ export type FireIncidentUncheckedUpdateWithoutResourcesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1584,6 +1618,7 @@ export type FireIncidentCreateWithoutImpactInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1622,6 +1657,7 @@ export type FireIncidentUncheckedCreateWithoutImpactInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1662,6 +1698,7 @@ export type FireIncidentUpdateWithoutImpactInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1700,6 +1737,7 @@ export type FireIncidentUncheckedUpdateWithoutImpactInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1724,6 +1762,7 @@ export type FireIncidentCreateWithoutLocationInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1762,6 +1801,7 @@ export type FireIncidentUncheckedCreateWithoutLocationInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1802,6 +1842,7 @@ export type FireIncidentUpdateWithoutLocationInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1840,6 +1881,7 @@ export type FireIncidentUncheckedUpdateWithoutLocationInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1864,6 +1906,7 @@ export type FireIncidentCreateWithoutPersonnelInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1902,6 +1945,7 @@ export type FireIncidentUncheckedCreateWithoutPersonnelInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1942,6 +1986,7 @@ export type FireIncidentUpdateWithoutPersonnelInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1980,6 +2025,7 @@ export type FireIncidentUncheckedUpdateWithoutPersonnelInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2004,6 +2050,7 @@ export type FireIncidentCreateWithoutTimelineInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2042,6 +2089,7 @@ export type FireIncidentUncheckedCreateWithoutTimelineInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2082,6 +2130,7 @@ export type FireIncidentUpdateWithoutTimelineInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2120,6 +2169,7 @@ export type FireIncidentUncheckedUpdateWithoutTimelineInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2144,6 +2194,7 @@ export type FireIncidentCreateWithoutEstablishmentInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2181,6 +2232,7 @@ export type FireIncidentUncheckedCreateWithoutEstablishmentInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2242,6 +2294,7 @@ export type FireIncidentScalarWhereInput = {
   deletedAt?: Prisma.DateTimeNullableFilter<"FireIncident"> | Date | string | null
   deletedById?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   deletionReason?: Prisma.StringNullableFilter<"FireIncident"> | string | null
+  deletionMemoReference?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   remarks?: Prisma.StringNullableFilter<"FireIncident"> | string | null
   createdAt?: Prisma.DateTimeFilter<"FireIncident"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FireIncident"> | Date | string
@@ -2259,6 +2312,7 @@ export type FireIncidentCreateWithoutCategoryInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2296,6 +2350,7 @@ export type FireIncidentUncheckedCreateWithoutCategoryInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2347,6 +2402,7 @@ export type FireIncidentCreateWithoutEventsInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2385,6 +2441,7 @@ export type FireIncidentUncheckedCreateWithoutEventsInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2425,6 +2482,7 @@ export type FireIncidentUpdateWithoutEventsInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2463,6 +2521,7 @@ export type FireIncidentUncheckedUpdateWithoutEventsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2487,6 +2546,7 @@ export type FireIncidentCreateWithoutSubcategoryInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2524,6 +2584,7 @@ export type FireIncidentUncheckedCreateWithoutSubcategoryInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2575,6 +2636,7 @@ export type FireIncidentCreateWithoutOfficeInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2612,6 +2674,7 @@ export type FireIncidentUncheckedCreateWithoutOfficeInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2647,6 +2710,7 @@ export type FireIncidentCreateWithoutInvestigationHandlingOfficeInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2684,6 +2748,7 @@ export type FireIncidentUncheckedCreateWithoutInvestigationHandlingOfficeInput =
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2751,6 +2816,7 @@ export type FireIncidentCreateWithoutCreatedByInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2788,6 +2854,7 @@ export type FireIncidentUncheckedCreateWithoutCreatedByInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2823,6 +2890,7 @@ export type FireIncidentCreateWithoutDeletedByInput = {
   approvalStatus?: $Enums.IncidentApprovalStatus
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2860,6 +2928,7 @@ export type FireIncidentUncheckedCreateWithoutDeletedByInput = {
   createdById: string
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2933,6 +3002,7 @@ export type FireIncidentCreateManyEstablishmentInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2950,6 +3020,7 @@ export type FireIncidentUpdateWithoutEstablishmentInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2987,6 +3058,7 @@ export type FireIncidentUncheckedUpdateWithoutEstablishmentInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3018,6 +3090,7 @@ export type FireIncidentUncheckedUpdateManyWithoutEstablishmentInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3041,6 +3114,7 @@ export type FireIncidentCreateManyCategoryInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3058,6 +3132,7 @@ export type FireIncidentUpdateWithoutCategoryInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3095,6 +3170,7 @@ export type FireIncidentUncheckedUpdateWithoutCategoryInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3126,6 +3202,7 @@ export type FireIncidentUncheckedUpdateManyWithoutCategoryInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3149,6 +3226,7 @@ export type FireIncidentCreateManySubcategoryInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3166,6 +3244,7 @@ export type FireIncidentUpdateWithoutSubcategoryInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3203,6 +3282,7 @@ export type FireIncidentUncheckedUpdateWithoutSubcategoryInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3234,6 +3314,7 @@ export type FireIncidentUncheckedUpdateManyWithoutSubcategoryInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3257,6 +3338,7 @@ export type FireIncidentCreateManyOfficeInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3280,6 +3362,7 @@ export type FireIncidentCreateManyInvestigationHandlingOfficeInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3297,6 +3380,7 @@ export type FireIncidentUpdateWithoutOfficeInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3334,6 +3418,7 @@ export type FireIncidentUncheckedUpdateWithoutOfficeInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3365,6 +3450,7 @@ export type FireIncidentUncheckedUpdateManyWithoutOfficeInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3382,6 +3468,7 @@ export type FireIncidentUpdateWithoutInvestigationHandlingOfficeInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3419,6 +3506,7 @@ export type FireIncidentUncheckedUpdateWithoutInvestigationHandlingOfficeInput =
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3450,6 +3538,7 @@ export type FireIncidentUncheckedUpdateManyWithoutInvestigationHandlingOfficeInp
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3473,6 +3562,7 @@ export type FireIncidentCreateManyCreatedByInput = {
   deletedAt?: Date | string | null
   deletedById?: string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3496,6 +3586,7 @@ export type FireIncidentCreateManyDeletedByInput = {
   createdById: string
   deletedAt?: Date | string | null
   deletionReason?: string | null
+  deletionMemoReference?: string | null
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3513,6 +3604,7 @@ export type FireIncidentUpdateWithoutCreatedByInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3550,6 +3642,7 @@ export type FireIncidentUncheckedUpdateWithoutCreatedByInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3581,6 +3674,7 @@ export type FireIncidentUncheckedUpdateManyWithoutCreatedByInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3598,6 +3692,7 @@ export type FireIncidentUpdateWithoutDeletedByInput = {
   approvalStatus?: Prisma.EnumIncidentApprovalStatusFieldUpdateOperationsInput | $Enums.IncidentApprovalStatus
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3635,6 +3730,7 @@ export type FireIncidentUncheckedUpdateWithoutDeletedByInput = {
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3666,6 +3762,7 @@ export type FireIncidentUncheckedUpdateManyWithoutDeletedByInput = {
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletionMemoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3748,6 +3845,7 @@ export type FireIncidentSelect<ExtArgs extends runtime.Types.Extensions.Internal
   deletedAt?: boolean
   deletedById?: boolean
   deletionReason?: boolean
+  deletionMemoReference?: boolean
   remarks?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -3788,6 +3886,7 @@ export type FireIncidentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   deletedAt?: boolean
   deletedById?: boolean
   deletionReason?: boolean
+  deletionMemoReference?: boolean
   remarks?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -3819,6 +3918,7 @@ export type FireIncidentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   deletedAt?: boolean
   deletedById?: boolean
   deletionReason?: boolean
+  deletionMemoReference?: boolean
   remarks?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -3850,12 +3950,13 @@ export type FireIncidentSelectScalar = {
   deletedAt?: boolean
   deletedById?: boolean
   deletionReason?: boolean
+  deletionMemoReference?: boolean
   remarks?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FireIncidentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "incidentNo" | "dateTimeReported" | "dateTimeFireIncident" | "dateTimeCallReceived" | "dateTimeUnresponded" | "fireIncidentStatus" | "currentAlarmLevel" | "approvalStatus" | "categoryId" | "subcategoryId" | "establishmentId" | "officeId" | "investigationHandlingOfficeId" | "createdById" | "deletedAt" | "deletedById" | "deletionReason" | "remarks" | "createdAt" | "updatedAt", ExtArgs["result"]["fireIncident"]>
+export type FireIncidentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "incidentNo" | "dateTimeReported" | "dateTimeFireIncident" | "dateTimeCallReceived" | "dateTimeUnresponded" | "fireIncidentStatus" | "currentAlarmLevel" | "approvalStatus" | "categoryId" | "subcategoryId" | "establishmentId" | "officeId" | "investigationHandlingOfficeId" | "createdById" | "deletedAt" | "deletedById" | "deletionReason" | "deletionMemoReference" | "remarks" | "createdAt" | "updatedAt", ExtArgs["result"]["fireIncident"]>
 export type FireIncidentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.FireIncidentCategoryDefaultArgs<ExtArgs>
   subcategory?: boolean | Prisma.FireIncident$subcategoryArgs<ExtArgs>
@@ -3931,6 +4032,7 @@ export type $FireIncidentPayload<ExtArgs extends runtime.Types.Extensions.Intern
     deletedAt: Date | null
     deletedById: string | null
     deletionReason: string | null
+    deletionMemoReference: string | null
     remarks: string | null
     createdAt: Date
     updatedAt: Date
@@ -4390,6 +4492,7 @@ export interface FireIncidentFieldRefs {
   readonly deletedAt: Prisma.FieldRef<"FireIncident", 'DateTime'>
   readonly deletedById: Prisma.FieldRef<"FireIncident", 'String'>
   readonly deletionReason: Prisma.FieldRef<"FireIncident", 'String'>
+  readonly deletionMemoReference: Prisma.FieldRef<"FireIncident", 'String'>
   readonly remarks: Prisma.FieldRef<"FireIncident", 'String'>
   readonly createdAt: Prisma.FieldRef<"FireIncident", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FireIncident", 'DateTime'>

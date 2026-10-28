@@ -157,9 +157,12 @@ describe('FireIncidentRepository', () => {
   });
 
   describe('softDelete and restore', () => {
-    it('hides the incident and records the reason', async () => {
+    it('hides the incident and records the reason and memo', async () => {
       await expect(
-        repository.softDelete(incidentId, actorId, 'DELETED', 'Memo 114'),
+        repository.softDelete(incidentId, actorId, 'DELETED', {
+          reason: 'Duplicate entry',
+          memoReference: '2026-114',
+        }),
       ).resolves.toBe(true);
 
       expect(tx.fireIncident.updateMany).toHaveBeenCalledWith({
@@ -167,7 +170,8 @@ describe('FireIncidentRepository', () => {
         data: {
           deletedAt: expect.any(Date),
           deletedById: actorId,
-          deletionReason: 'Memo 114',
+          deletionReason: 'Duplicate entry',
+          deletionMemoReference: '2026-114',
         },
       });
       expect(tx.fireIncidentEvent.create).toHaveBeenCalledWith({
@@ -175,8 +179,26 @@ describe('FireIncidentRepository', () => {
           fireIncidentId: incidentId,
           type: 'DELETED',
           actorId,
-          remarks: 'Memo 114',
+          remarks: 'Memo 2026-114: Duplicate entry',
         },
+      });
+    });
+
+    it('records a staff removal without a memo', async () => {
+      await repository.softDelete(
+        incidentId,
+        actorId,
+        'REMOVED',
+        { reason: null },
+        'REJECTED',
+      );
+
+      expect(tx.fireIncident.updateMany).toHaveBeenCalledWith({
+        where: { id: incidentId, deletedAt: null, approvalStatus: 'REJECTED' },
+        data: expect.objectContaining({ deletionMemoReference: null }),
+      });
+      expect(tx.fireIncidentEvent.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({ remarks: null }),
       });
     });
 
@@ -188,7 +210,12 @@ describe('FireIncidentRepository', () => {
       );
       expect(tx.fireIncident.updateMany).toHaveBeenCalledWith({
         where: { id: incidentId, deletedAt: { not: null } },
-        data: { deletedAt: null, deletedById: null, deletionReason: null },
+        data: {
+          deletedAt: null,
+          deletedById: null,
+          deletionReason: null,
+          deletionMemoReference: null,
+        },
       });
     });
   });

@@ -43,3 +43,22 @@ export const isChiefInvestigator = (user?: CurrentUser | null) =>
 
 export const isInvestigator = (user?: CurrentUser | null) =>
   !!user && INVESTIGATOR_ROLES.includes(user.role);
+
+// Mirrors @Roles on the users, offices and positions controllers.
+const ADMIN_ROLES = ["SUPER_ADMIN", "NHQ_ADMIN", "REGIONAL_ADMIN"];
+
+// Mirrors @Roles on the categories controller for writes.
+const CLASSIFICATION_MANAGER_ROLES = [
+  "SUPER_ADMIN",
+  "NHQ_ADMIN",
+  "NHQ_CHIEF_INVESTIGATOR",
+  "NHQ_INVESTIGATOR",
+  "NHQ_OPERATION",
+  "NHQ_OPERATION_STAFF",
+];
+
+export const isAdmin = (user?: CurrentUser | null) =>
+  !!user && ADMIN_ROLES.includes(user.role);
+
+export const canManageClassifications = (user?: CurrentUser | null) =>
+  !!user && CLASSIFICATION_MANAGER_ROLES.includes(user.role);

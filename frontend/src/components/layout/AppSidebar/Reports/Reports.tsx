@@ -1,7 +1,7 @@
 import { NavLink } from "react-router";
 
 import { FileText, BarChart3 } from "lucide-react";
-import { REPORTS_LINKS } from "@/constants/links";
+import type { NavLinkItem } from "@/constants/links";
 
 import {
   useSidebar,
@@ -16,13 +16,13 @@ const iconMap: Record<string, React.ReactNode> = {
   BarChart3: <BarChart3 />,
 };
 
-const Reports = () => {
+const Reports = ({ links }: { links: NavLinkItem[] }) => {
   const { toggleSidebar, isMobile } = useSidebar();
 
   return (
     <SidebarGroupContent>
       <SidebarMenu>
-        {REPORTS_LINKS.map((link) => (
+        {links.map((link) => (
           <NavLink to={link.link} key={link.link}>
             {({ isActive }) => (
               <SidebarMenuItem>

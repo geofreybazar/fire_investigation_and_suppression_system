@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import NoButtonDialogComponent from "@/components/common/NoButtonDialogComponent";
 import AlertDialogComponent from "@/components/common/AlertDialogComponent";
 import ReasonForm from "../form/ReasonForm";
+import DeleteIncidentForm from "../form/DeleteIncidentForm";
 import EditIncidentForm from "../form/EditIncidentForm";
 
 type OpenDialog = "edit" | "reject" | "delete" | "approve" | "remove" | null;
@@ -142,14 +143,10 @@ const IncidentActions = ({ incident }: { incident: FireIncidentDetail }) => {
         dialogTitle='Delete Incident'
         dialogDescription='The incident and all its records will be hidden. It can be restored from the Deleted tab.'
       >
-        <ReasonForm
-          label='Reason'
-          placeholder='Memo reference and Chief, BFP approval'
-          submitLabel='Delete'
-          destructive
+        <DeleteIncidentForm
           isPending={isRemoving}
-          onSubmit={(reason) =>
-            removeFireIncident({ id: incident.id, reason })
+          onSubmit={({ reason, memoReference }) =>
+            removeFireIncident({ id: incident.id, reason, memoReference })
               .then(() => navigate("/fireincidents"))
               .catch(ignoreError)
           }

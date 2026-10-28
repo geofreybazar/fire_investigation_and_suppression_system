@@ -134,8 +134,24 @@ export class FireIncidentService {
             approvalStatus: query.approvalStatus,
           }),
           ...(query.categoryId && { categoryId: query.categoryId }),
+          // Matches the incident number or the typed parts of the location.
           ...(query.search && {
-            incidentNo: { contains: query.search, mode: 'insensitive' },
+            OR: [
+              { incidentNo: { contains: query.search, mode: 'insensitive' } },
+              {
+                location: {
+                  placeOfOccurence: {
+                    contains: query.search,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+              {
+                location: {
+                  barangay: { contains: query.search, mode: 'insensitive' },
+                },
+              },
+            ],
           }),
           ...((query.from || query.to) && {
             createdAt: {
@@ -258,7 +274,7 @@ export class FireIncidentService {
       id,
       user.sub,
       FireIncidentEventType.REMOVED,
-      input.reason ?? null,
+      { reason: input.reason ?? null },
       IncidentApprovalStatus.REJECTED,
     );
 
@@ -451,9 +467,9 @@ export class FireIncidentService {
     input: DeleteFireIncidentInput,
     user: CurrentUserJwtPayload,
   ) {
-    if (!input.reason) {
+    if (!input.reason || !input.memoReference) {
       throw new BadRequestException(
-        'A reason (the memo reference and its approval) is required.',
+        'A reason and the reference of the memo approved by the Chief, BFP are required.',
       );
     }
 
@@ -463,7 +479,7 @@ export class FireIncidentService {
       id,
       user.sub,
       FireIncidentEventType.DELETED,
-      input.reason,
+      { reason: input.reason, memoReference: input.memoReference },
     );
 
     if (!deleted) {

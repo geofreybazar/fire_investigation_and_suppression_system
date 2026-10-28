@@ -15,7 +15,10 @@ describe('OfficeRepository', () => {
       findFirst: ReturnType<typeof vi.fn>;
       create: ReturnType<typeof vi.fn>;
       update: ReturnType<typeof vi.fn>;
+      findMany: ReturnType<typeof vi.fn>;
+      updateMany: ReturnType<typeof vi.fn>;
     };
+    $transaction: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(async () => {
@@ -24,9 +27,18 @@ describe('OfficeRepository', () => {
         findUnique: vi.fn(),
         findFirst: vi.fn(),
         create: vi.fn(),
-        update: vi.fn(),
+        update: vi
+          .fn()
+          .mockImplementation(({ data, where }) =>
+            Promise.resolve({ id: where.id, ...data }),
+          ),
+        // No child offices unless a test says otherwise.
+        findMany: vi.fn().mockResolvedValue([]),
+        updateMany: vi.fn(),
       },
+      $transaction: vi.fn(),
     };
+    prisma.$transaction.mockImplementation((callback) => callback(prisma));
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -124,6 +136,67 @@ describe('OfficeRepository', () => {
       expect(prisma.office.update).toHaveBeenCalledWith({
         data: expect.objectContaining({ regionCode: null }),
         where: { id: officeId },
+      });
+    });
+
+    it('re-regions every office below a re-parented office', async () => {
+      const newRegionId = '44444444-4444-4444-8444-444444444444';
+      const stationId = '55555555-5555-4555-8555-555555555555';
+
+      prisma.office.findUnique.mockResolvedValue({
+        id: newRegionId,
+        type: 'REGIONAL_OFFICE',
+        regionId: null,
+      });
+      prisma.office.findMany
+        .mockResolvedValueOnce([
+          { id: stationId, type: 'CITY_FIRE_STATION', parentId: officeId },
+        ])
+        .mockResolvedValueOnce([]);
+
+      await repository.updateOffice(officeId, {
+        name: 'Manila District Fire Station',
+        type: 'DISTRICT_FIRE_STATION',
+        parentId: newRegionId,
+      });
+
+      expect(prisma.office.update).toHaveBeenCalledWith({
+        data: expect.objectContaining({ regionId: newRegionId }),
+        where: { id: officeId },
+      });
+      expect(prisma.office.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({ where: { parentId: { in: [officeId] } } }),
+      );
+      expect(prisma.office.updateMany).toHaveBeenCalledWith({
+        where: { id: { in: [stationId] } },
+        data: { regionId: newRegionId },
+      });
+    });
+
+    it('gives children of a regional office that region', async () => {
+      const districtId = '55555555-5555-4555-8555-555555555555';
+
+      prisma.office.findUnique.mockResolvedValue({
+        id: nhqId,
+        type: 'NATIONAL_HEADQUARTERS',
+        regionId: null,
+      });
+      prisma.office.findMany
+        .mockResolvedValueOnce([
+          { id: districtId, type: 'DISTRICT_FIRE_STATION', parentId: officeId },
+        ])
+        .mockResolvedValueOnce([]);
+
+      await repository.updateOffice(officeId, {
+        name: 'Regional Office NCR',
+        type: 'REGIONAL_OFFICE',
+        parentId: nhqId,
+        regionCode: 'NCR',
+      });
+
+      expect(prisma.office.updateMany).toHaveBeenCalledWith({
+        where: { id: { in: [districtId] } },
+        data: { regionId: officeId },
       });
     });
   });

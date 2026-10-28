@@ -8,9 +8,7 @@ import { RANKS, ROLE } from "@/constants/personnel";
 
 export const changePasswordSchema = z.object({
   userId: z.string(),
-  currentPassword: z
-    .string()
-    .min(12, "Password must be at least 12 characters long"),
+  currentPassword: z.string().min(1, "Current password is required"),
   newPassword: z
     .string()
     .min(12, "Password must be at least 12 characters long.")

@@ -31,8 +31,19 @@ import TableSkeleton from "@/components/common/TableSkeleton";
 import IncidentTable from "@/components/features/fireIncidents/list/IncidentTable";
 import DeletedIncidentTable from "@/components/features/fireIncidents/list/DeletedIncidentTable";
 import SubmitIncidentForm from "@/components/features/fireIncidents/form/SubmitIncidentForm";
+import CategoryFilter, {
+  type CategoryOption,
+} from "@/components/features/fireIncidents/list/CategoryFilter";
 
 const ALL = "ALL";
+const NO_CATEGORY: CategoryOption = { id: "", label: "" };
+
+// Date inputs give a calendar day; the bounds cover that whole day in
+// Philippine time.
+const startOfDay = (date: string) =>
+  date ? `${date}T00:00:00.000+08:00` : undefined;
+const endOfDay = (date: string) =>
+  date ? `${date}T23:59:59.999+08:00` : undefined;
 
 const FireIncidents = () => {
   const user = useUserStore((state) => state.user);
@@ -40,6 +51,9 @@ const FireIncidents = () => {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<string>(ALL);
   const [approvalStatus, setApprovalStatus] = useState<string>(ALL);
+  const [category, setCategory] = useState<CategoryOption>(NO_CATEGORY);
+  const [submittedFrom, setSubmittedFrom] = useState("");
+  const [submittedTo, setSubmittedTo] = useState("");
   const [openSubmit, setOpenSubmit] = useState(false);
   const debouncedSearch = useDebounce(search, 500);
 
@@ -65,12 +79,18 @@ const FireIncidents = () => {
       approvalStatus === ALL
         ? undefined
         : (approvalStatus as IncidentApprovalStatus),
+    categoryId: category.id || undefined,
+    from: startOfDay(submittedFrom),
+    to: endOfDay(submittedTo),
   };
 
   const clearFilters = () => {
     setSearch("");
     setStatus(ALL);
     setApprovalStatus(ALL);
+    setCategory(NO_CATEGORY);
+    setSubmittedFrom("");
+    setSubmittedTo("");
     setCurrentPage(1);
   };
 
@@ -85,7 +105,7 @@ const FireIncidents = () => {
               setSearch(event.target.value);
               setCurrentPage(1);
             }}
-            placeholder='Search incident number'
+            placeholder='Search incident number, place or barangay'
             className='pl-9'
           />
         </div>
@@ -135,6 +155,42 @@ const FireIncidents = () => {
             </SelectContent>
           </Select>
         )}
+      </div>
+
+      <div className='flex flex-col gap-3 sm:flex-row sm:items-center'>
+        <CategoryFilter
+          category={category}
+          setCategory={(selected) => {
+            setCategory(selected);
+            setCurrentPage(1);
+          }}
+        />
+        <label className='flex items-center gap-2 text-sm text-muted-foreground'>
+          Submitted from
+          <Input
+            type='date'
+            value={submittedFrom}
+            max={submittedTo || undefined}
+            onChange={(event) => {
+              setSubmittedFrom(event.target.value);
+              setCurrentPage(1);
+            }}
+            className='w-auto'
+          />
+        </label>
+        <label className='flex items-center gap-2 text-sm text-muted-foreground'>
+          to
+          <Input
+            type='date'
+            value={submittedTo}
+            min={submittedFrom || undefined}
+            onChange={(event) => {
+              setSubmittedTo(event.target.value);
+              setCurrentPage(1);
+            }}
+            className='w-auto'
+          />
+        </label>
       </div>
 
       <ErrorBoundary FallbackComponent={ErrorFallbackComponent}>

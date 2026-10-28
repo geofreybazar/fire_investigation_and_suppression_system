@@ -8,7 +8,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { ADMINISTRATION_LINKS } from "@/constants/links";
+import type { NavLinkItem } from "@/constants/links";
 
 const iconMap: Record<string, React.ReactNode> = {
   Users: <Users />,
@@ -17,13 +17,13 @@ const iconMap: Record<string, React.ReactNode> = {
   Shapes: <Shapes />,
 };
 
-const Administration = () => {
+const Administration = ({ links }: { links: NavLinkItem[] }) => {
   const { toggleSidebar, isMobile } = useSidebar();
 
   return (
     <SidebarGroupContent>
       <SidebarMenu>
-        {ADMINISTRATION_LINKS.map((link) => (
+        {links.map((link) => (
           <NavLink to={link.link} key={link.link}>
             {({ isActive }) => (
               <SidebarMenuItem>

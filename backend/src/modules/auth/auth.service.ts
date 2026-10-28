@@ -7,6 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import bcrypt from 'bcrypt';
+import { randomUUID } from 'crypto';
 
 import { LoginInput } from '../users/schema/user.schema.js';
 import { AuthRepository } from './auth.repository.js';
@@ -22,8 +23,6 @@ export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
   async login(loginData: LoginInput) {
-    this.logger.log(`Logging in user: ${loginData.account_number}`);
-
     const user = await this.authRepository.findUserByAccountNumber(
       loginData.account_number,
     );
@@ -35,9 +34,7 @@ export class AuthService {
 
     // Deactivated accounts get the same generic error so account status isn't revealed.
     if (!user || !passwordCorrect || !user.isActive) {
-      this.logger.error(
-        `User not found or invalid credentials: ${loginData.account_number}`,
-      );
+      this.logger.warn('Failed login attempt');
       throw new UnauthorizedException('Invalid account number or password');
     }
 
@@ -69,6 +66,10 @@ export class AuthService {
       {
         secret: refreshSecret,
         expiresIn: '7d',
+        // iat has one-second precision, so without a unique jti two tokens
+        // issued in the same second are identical and collide on the
+        // unique stored hash.
+        jwtid: randomUUID(),
       },
     );
 
@@ -96,7 +97,7 @@ export class AuthService {
       // delete the previous token
       await this.authRepository.deleteRefreshToken(storedToken.id);
 
-      this.logger.log(`${storedToken.user.account_number} user logged out`);
+      this.logger.log('User logged out');
 
       return {
         message: 'Logged out successfully',
@@ -153,6 +154,7 @@ export class AuthService {
         {
           secret: refreshSecret,
           expiresIn: '7d',
+          jwtid: randomUUID(),
         },
       );
 

@@ -8,5 +8,5 @@ export default () => ({
   defaultPassword: process.env.DEFAULT_PASSWORD,
   databaseUrl: process.env.DATABASE_URL,
   jwtSecret: process.env.JWT_SECRET,
-  refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
+  refreshSecret: process.env.REFRESH_SECRET,
 });

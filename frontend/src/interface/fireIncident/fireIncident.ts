@@ -53,6 +53,7 @@ export interface PaginatedFireIncidents {
 export interface DeletedFireIncident extends FireIncidentListItem {
   deletedAt: string;
   deletionReason: string | null;
+  deletionMemoReference: string | null;
   deletedBy: UserSummary | null;
 }
 
@@ -227,4 +228,8 @@ export interface FireIncidentListFilters {
   status?: FireIncidentStatus;
   approvalStatus?: IncidentApprovalStatus;
   search?: string;
+  categoryId?: string;
+  // ISO timestamps bounding the submission time.
+  from?: string;
+  to?: string;
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service.js';
 import { UserInput } from './schema/user.schema.js';
-import { Prisma, RANK } from '../../generated/prisma/client.js';
+import { Prisma, RANK, ROLE } from '../../generated/prisma/client.js';
 import { UUID } from 'crypto';
 import { CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 
@@ -35,6 +35,12 @@ export class UsersRepository {
         office: true,
         position: true,
       },
+    });
+  }
+
+  async countActiveUsersWithRole(officeId: string, role: ROLE) {
+    return this.prismaService.user.count({
+      where: { officeId, role, isActive: true },
     });
   }
 

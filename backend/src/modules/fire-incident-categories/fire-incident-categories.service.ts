@@ -83,6 +83,13 @@ export class FireIncidentCategoriesService {
       );
     }
 
+    // The count includes soft-deleted incidents, which still reference it.
+    if (category._count.incidents > 0) {
+      throw new ConflictException(
+        'This category cannot be deleted because fire incidents use it.',
+      );
+    }
+
     await this.fireIncidentCategoriesRepository.deleteById(id);
 
     return {

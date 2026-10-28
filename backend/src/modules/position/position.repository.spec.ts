@@ -5,14 +5,18 @@ import { PrismaService } from '../../prisma.service.js';
 describe('PositionRepository', () => {
   let repository: PositionRepository;
   let prisma: {
-    position: { findMany: ReturnType<typeof vi.fn> };
-    office: { count: ReturnType<typeof vi.fn> };
+    position: {
+      findMany: ReturnType<typeof vi.fn>;
+      count: ReturnType<typeof vi.fn>;
+    };
   };
 
   beforeEach(async () => {
     prisma = {
-      position: { findMany: vi.fn().mockResolvedValue([]) },
-      office: { count: vi.fn().mockResolvedValue(0) },
+      position: {
+        findMany: vi.fn().mockResolvedValue([]),
+        count: vi.fn().mockResolvedValue(0),
+      },
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -34,6 +38,15 @@ describe('PositionRepository', () => {
           include: { users: { omit: { password: true } } },
         }),
       );
+    });
+
+    it('counts positions, not offices, for the total', async () => {
+      prisma.position.count.mockResolvedValue(7);
+
+      const result = await repository.findPaginatedPositions(0, 10);
+
+      expect(prisma.position.count).toHaveBeenCalled();
+      expect(result.total).toBe(7);
     });
   });
 });

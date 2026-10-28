@@ -8,11 +8,24 @@ import { OfficeInput } from './schema/office.schema.js';
 import { OfficeType, Prisma } from '../../generated/prisma/client.js';
 import { UUID } from 'crypto';
 import { CurrentUserJwtPayload } from '../../types/jwt.payload.js';
+import { normalizeRegionCode } from './utils/validateRegionCode.js';
 
-// Stored trimmed and upper-cased to match generateIncidentNumber; blank
-// (non-regional offices) is stored as null so the unique index allows many.
-function normalizeRegionCode(regionCode?: string | null): string | null {
-  return regionCode?.trim().toUpperCase() || null;
+interface RegionParent {
+  id: string;
+  type: OfficeType;
+  regionId: string | null;
+}
+
+// The regional office an office belongs to, given its parent. Regional
+// offices themselves belong to no region.
+function regionIdUnder(type: OfficeType, parent: RegionParent): string | null {
+  if (type === OfficeType.REGIONAL_OFFICE) {
+    return null;
+  }
+
+  return parent.type === OfficeType.REGIONAL_OFFICE
+    ? parent.id
+    : parent.regionId;
 }
 
 @Injectable()
@@ -49,6 +62,11 @@ export class OfficeRepository {
           select: {
             users: true,
             children: true,
+            fireIncidents: true,
+            handledIncidentInvestigations: true,
+            conductedInvestigations: true,
+            referralsFrom: true,
+            referralsTo: true,
           },
         },
       },
@@ -122,6 +140,15 @@ export class OfficeRepository {
     return { offices, total };
   }
 
+  // A counter row exists once any incident number has used the code.
+  async isRegionCodeUsed(regionCode: string) {
+    const count = await this.prismaService.incidentNumberCounter.count({
+      where: { regionCode },
+    });
+
+    return count > 0;
+  }
+
   async deleteById(id: string) {
     return this.prismaService.office.delete({
       where: { id },
@@ -148,16 +175,7 @@ export class OfficeRepository {
         throw new NotFoundException('Parent office not found');
       }
 
-      if (data.type === OfficeType.REGIONAL_OFFICE) {
-        // Regional Office belongs to no region
-        regionId = null;
-      } else if (parentOffice.type === OfficeType.REGIONAL_OFFICE) {
-        // Child of Regional Office
-        regionId = parentOffice.id;
-      } else {
-        // Child of District/Provincial/etc.
-        regionId = parentOffice.regionId;
-      }
+      regionId = regionIdUnder(data.type, parentOffice);
     }
 
     // 3. Create the office
@@ -192,34 +210,74 @@ export class OfficeRepository {
         throw new NotFoundException('Parent office not found');
       }
 
-      if (data.type === OfficeType.REGIONAL_OFFICE) {
-        // Regional Office belongs to no region
-        regionId = null;
-      } else if (parentOffice.type === OfficeType.REGIONAL_OFFICE) {
-        // Child of Regional Office
-        regionId = parentOffice.id;
-      } else {
-        // Child of District/Provincial/etc.
-        regionId = parentOffice.regionId;
-      }
+      regionId = regionIdUnder(data.type, parentOffice);
     }
 
     if (data.parentId === officeId) {
       throw new BadRequestException('An office cannot be its own parent');
     }
 
-    // update the office
-    return this.prismaService.office.update({
-      data: {
-        name: data.name,
-        type: data.type,
-        parentId: data.parentId,
-        regionId,
-        regionCode: normalizeRegionCode(data.regionCode),
-      },
-      where: {
-        id: officeId,
-      },
+    // The office and every office below it are re-regioned together.
+    return this.prismaService.$transaction(async (tx) => {
+      const updated = await tx.office.update({
+        data: {
+          name: data.name,
+          type: data.type,
+          parentId: data.parentId,
+          regionId,
+          regionCode: normalizeRegionCode(data.regionCode),
+        },
+        where: {
+          id: officeId,
+        },
+      });
+
+      await this.recomputeDescendantRegions(tx, updated);
+
+      return updated;
     });
+  }
+
+  // Walks the hierarchy one level at a time, so each child's region is derived
+  // from its already-updated parent.
+  private async recomputeDescendantRegions(
+    tx: Prisma.TransactionClient,
+    root: RegionParent,
+  ) {
+    let level: RegionParent[] = [root];
+
+    while (level.length > 0) {
+      const parents = new Map(level.map((office) => [office.id, office]));
+
+      const children = await tx.office.findMany({
+        where: { parentId: { in: [...parents.keys()] } },
+        select: { id: true, type: true, parentId: true },
+      });
+
+      const idsByRegion = new Map<string | null, string[]>();
+      const next: RegionParent[] = [];
+
+      for (const child of children) {
+        const regionId = regionIdUnder(
+          child.type,
+          parents.get(child.parentId!)!,
+        );
+
+        idsByRegion.set(regionId, [
+          ...(idsByRegion.get(regionId) ?? []),
+          child.id,
+        ]);
+        next.push({ id: child.id, type: child.type, regionId });
+      }
+
+      for (const [regionId, ids] of idsByRegion) {
+        await tx.office.updateMany({
+          where: { id: { in: ids } },
+          data: { regionId },
+        });
+      }
+
+      level = next;
+    }
   }
 }

@@ -14,6 +14,15 @@ import Settings from "@/pages/Settings";
 import MyProfile from "@/pages/MyProfile";
 import Positions from "@/pages/Positions";
 import IncidentClassification from "@/pages/IncidentClassification";
+import { useUserStore } from "@/store/userStore";
+import {
+  ADMINISTRATION_LINKS,
+  FIRE_OPERATIONS_LINKS,
+  INVESTIGATION_LINKS,
+  OVERVIEW_LINKS,
+  REPORTS_LINKS,
+} from "@/constants/links";
+import { canViewIncidents } from "@/utils/incidentPermissions";
 
 // The incident and investigation pages are split out of the main bundle.
 const FireIncidents = loadable(() => import("@/pages/FireIncidents"));
@@ -42,11 +51,50 @@ const routes = [
   { path: "/incidentclassifications", element: <IncidentClassification /> },
 ];
 
+// Each page uses its sidebar link's rule; detail pages follow their list.
+const linkAccess = new Map(
+  [
+    ...OVERVIEW_LINKS,
+    ...FIRE_OPERATIONS_LINKS,
+    ...INVESTIGATION_LINKS,
+    ...REPORTS_LINKS,
+    ...ADMINISTRATION_LINKS,
+  ].map((link) => [link.link, link.canAccess]),
+);
+linkAccess.set("/fireincidents/:id", canViewIncidents);
+linkAccess.set("/investigations/:id", canViewIncidents);
+
+// Display only: the backend rejects every request the role can't make.
+const RequireAccess = ({
+  path,
+  children,
+}: {
+  path: string;
+  children: React.ReactNode;
+}) => {
+  const user = useUserStore((state) => state.user);
+  const canAccess = linkAccess.get(path);
+
+  if (canAccess && !canAccess(user)) {
+    return (
+      <div className='rounded-lg border p-10 text-center text-sm text-muted-foreground'>
+        This page is not available for your role.
+      </div>
+    );
+  }
+
+  return children;
+};
+
 const Router = () => {
   return (
     <Routes>
       {routes.map(({ path, element }) => (
-        <Route key={path} path={path} element={element} />
+        <Route
+          key={path}
+          path={path}
+          element={<RequireAccess path={path}>{element}</RequireAccess>}
+        />
       ))}
     </Routes>
   );
