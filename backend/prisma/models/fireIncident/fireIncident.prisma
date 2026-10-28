@@ -39,10 +39,10 @@ model FireIncident {
   createdBy   User   @relation("IncidentCreatedBy", fields: [createdById], references: [id])
 
   // Soft delete: hides the incident and everything connected to it
-  deletedAt      DateTime?
-  deletedById    String?
-  deletedBy      User?     @relation("IncidentDeletedBy", fields: [deletedById], references: [id])
-  deletionReason String?
+  deletedAt             DateTime?
+  deletedById           String?
+  deletedBy             User?     @relation("IncidentDeletedBy", fields: [deletedById], references: [id])
+  deletionReason        String?
   // Reference of the Chief, BFP-approved memo authorizing a SUPER_ADMIN deletion.
   deletionMemoReference String?
 

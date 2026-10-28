@@ -14,9 +14,12 @@ export class PositionService {
 
   private readonly logger = new Logger(PositionService.name);
 
-  async create(positionData: PositionInput) {
+  async create(positionData: PositionInput, actorId: string) {
     this.logger.log('Creating new position');
-    const position = await this.positionRepository.createPosition(positionData);
+    const position = await this.positionRepository.createPosition(
+      positionData,
+      actorId,
+    );
     return position;
   }
 
@@ -38,10 +41,11 @@ export class PositionService {
     };
   }
 
-  async updatePositon(id: UUID, positionData: PositionInput) {
+  async updatePositon(id: UUID, positionData: PositionInput, actorId: string) {
     const updatedPosition = await this.positionRepository.updatePosition(
       id,
       positionData,
+      actorId,
     );
     if (!updatedPosition) {
       throw new NotFoundException('Position not found');
@@ -50,7 +54,7 @@ export class PositionService {
     return updatedPosition;
   }
 
-  async deletePosiiton(positionid: UUID) {
+  async deletePosiiton(positionid: UUID, actorId: string) {
     const position =
       await this.positionRepository.findPositionForDeletion(positionid);
     if (!position) {
@@ -63,7 +67,7 @@ export class PositionService {
       );
     }
 
-    await this.positionRepository.deletePosition(positionid);
+    await this.positionRepository.deletePosition(positionid, actorId);
 
     return {
       message: 'Position deleted successfully.',

@@ -7,6 +7,8 @@ import { type FireIncidentCategoriesInput } from './schema/fire-incident-categor
 const categoryId = '11111111-1111-4111-8111-111111111111';
 const input = { name: 'Structural' } as FireIncidentCategoriesInput;
 
+const actorId = 'actor-1';
+
 describe('FireIncidentCategoriesService', () => {
   let service: FireIncidentCategoriesService;
   let repository: {
@@ -47,10 +49,13 @@ describe('FireIncidentCategoriesService', () => {
       const created = { id: categoryId, ...input };
       repository.addFireIncidentCategory.mockResolvedValue(created);
 
-      await expect(service.addFireIncidentCategory(input)).resolves.toBe(
-        created,
+      await expect(
+        service.addFireIncidentCategory(input, actorId),
+      ).resolves.toBe(created);
+      expect(repository.addFireIncidentCategory).toHaveBeenCalledWith(
+        input,
+        actorId,
       );
-      expect(repository.addFireIncidentCategory).toHaveBeenCalledWith(input);
     });
   });
 
@@ -82,11 +87,12 @@ describe('FireIncidentCategoriesService', () => {
       repository.editFireIncidentCategory.mockResolvedValue(edited);
 
       await expect(
-        service.editFireIncidentCategory(categoryId, input),
+        service.editFireIncidentCategory(categoryId, input, actorId),
       ).resolves.toBe(edited);
       expect(repository.editFireIncidentCategory).toHaveBeenCalledWith(
         categoryId,
         input,
+        actorId,
       );
     });
   });
@@ -109,16 +115,18 @@ describe('FireIncidentCategoriesService', () => {
         _count: { incidents: 0 },
       });
 
-      await expect(service.deleteCategory(categoryId)).resolves.toEqual({
+      await expect(
+        service.deleteCategory(categoryId, actorId),
+      ).resolves.toEqual({
         message: 'Category deleted successfully.',
       });
-      expect(repository.deleteById).toHaveBeenCalledWith(categoryId);
+      expect(repository.deleteById).toHaveBeenCalledWith(categoryId, actorId);
     });
 
     it('throws NotFoundException when the category does not exist', async () => {
       repository.getCategoryById.mockResolvedValue(null);
 
-      await expect(service.deleteCategory(categoryId)).rejects.toThrow(
+      await expect(service.deleteCategory(categoryId, actorId)).rejects.toThrow(
         NotFoundException,
       );
       expect(repository.deleteById).not.toHaveBeenCalled();
@@ -131,7 +139,7 @@ describe('FireIncidentCategoriesService', () => {
         _count: { incidents: 0 },
       });
 
-      await expect(service.deleteCategory(categoryId)).rejects.toThrow(
+      await expect(service.deleteCategory(categoryId, actorId)).rejects.toThrow(
         ConflictException,
       );
       expect(repository.deleteById).not.toHaveBeenCalled();
@@ -144,7 +152,7 @@ describe('FireIncidentCategoriesService', () => {
         _count: { incidents: 2 },
       });
 
-      await expect(service.deleteCategory(categoryId)).rejects.toThrow(
+      await expect(service.deleteCategory(categoryId, actorId)).rejects.toThrow(
         'This category cannot be deleted because fire incidents use it.',
       );
       expect(repository.deleteById).not.toHaveBeenCalled();

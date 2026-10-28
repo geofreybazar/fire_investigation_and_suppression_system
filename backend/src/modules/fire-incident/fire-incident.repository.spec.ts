@@ -11,6 +11,7 @@ describe('FireIncidentRepository', () => {
     $queryRaw: ReturnType<typeof vi.fn>;
     fireIncident: Record<string, ReturnType<typeof vi.fn>>;
     fireIncidentEvent: { create: ReturnType<typeof vi.fn> };
+    auditLog: { create: ReturnType<typeof vi.fn> };
     incidentTimeline: Record<string, ReturnType<typeof vi.fn>>;
     incidentNumberCounter: { upsert: ReturnType<typeof vi.fn> };
   };
@@ -28,6 +29,7 @@ describe('FireIncidentRepository', () => {
         updateMany: vi.fn().mockResolvedValue({ count: 1 }),
       },
       fireIncidentEvent: { create: vi.fn() },
+      auditLog: { create: vi.fn() },
       incidentTimeline: {
         update: vi.fn(),
         create: vi.fn().mockResolvedValue({ id: 'new-entry' }),
@@ -181,6 +183,58 @@ describe('FireIncidentRepository', () => {
           actorId,
           remarks: 'Memo 2026-114: Duplicate entry',
         },
+      });
+    });
+
+    it('writes an audit entry for a SUPER_ADMIN deletion', async () => {
+      tx.fireIncident.findUnique.mockResolvedValue({
+        officeId: 'station-1',
+        office: { regionId: 'region-1' },
+      });
+
+      await repository.softDelete(incidentId, actorId, 'DELETED', {
+        reason: 'Duplicate entry',
+        memoReference: '2026-114',
+      });
+
+      expect(tx.auditLog.create).toHaveBeenCalledWith({
+        data: {
+          actorId,
+          action: 'INCIDENT_DELETED',
+          entityType: 'FIRE_INCIDENT',
+          entityId: incidentId,
+          officeId: 'station-1',
+          regionId: 'region-1',
+          changes: { reason: 'Duplicate entry', memoReference: '2026-114' },
+        },
+      });
+    });
+
+    it('writes no audit entry for a staff removal', async () => {
+      await repository.softDelete(
+        incidentId,
+        actorId,
+        'REMOVED',
+        { reason: null },
+        'REJECTED',
+      );
+
+      expect(tx.auditLog.create).not.toHaveBeenCalled();
+    });
+
+    it('writes an audit entry when an incident is restored', async () => {
+      tx.fireIncident.findUnique.mockResolvedValue({
+        officeId: 'station-1',
+        office: { regionId: 'region-1' },
+      });
+
+      await expect(repository.restore(incidentId, actorId)).resolves.toBe(true);
+
+      expect(tx.auditLog.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          action: 'INCIDENT_RESTORED',
+          entityId: incidentId,
+        }),
       });
     });
 

@@ -62,6 +62,11 @@ export type Investigation = Prisma.InvestigationModel
  */
 export type InvestigationReferral = Prisma.InvestigationReferralModel
 /**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel
+/**
  * Model FireOpertaionResources
  * 
  */

@@ -39,7 +39,7 @@ erDiagram
     InvestigationReport ||--o{ InvestigationReportReview : has
 ```
 
-`IncidentNumberCounter` (table `incident_number_counters`) stands alone.
+`IncidentNumberCounter` (table `incident_number_counters`) stands alone. `AuditLog` references only its actor (`User`); its `officeId`, `regionId` and `entityId` are plain snapshot ids (§5).
 
 ## 2. Organization and users
 
@@ -83,7 +83,13 @@ erDiagram
 
 Investigation fields (cause, classification, origin) are kept separate from the incident's lifecycle fields.
 
-## 5. Enums
+## 5. Audit log
+
+| Model | Key fields | Notes |
+|---|---|---|
+| `AuditLog` | `actorId → User`, `action: AuditAction`, `entityType: AuditEntityType`, `entityId`, `officeId?`, `regionId?`, `changes Json?`, `createdAt` | Written in the same transaction as the change. `officeId`/`regionId` are snapshots for `REGIONAL_ADMIN` scoping, so entries outlive deleted offices. `changes` holds `{ field: { from, to } }` for updates or a field snapshot for creates and deletes, never passwords or tokens. Indexes on `(entityType, entityId)`, `actorId`, `createdAt`, `officeId`, `regionId`. |
+
+## 6. Enums
 
 | Enum | Values |
 |---|---|
@@ -99,11 +105,13 @@ Investigation fields (cause, classification, origin) are kept separate from the 
 | `ReportStatus` | `DRAFT`, `SUBMITTED`, `UNDER_REVIEW`, `APPROVED`, `REJECTED` |
 | `ReportDecision` | `UNDER_REVIEW`, `APPROVED`, `REJECTED` |
 | `FireCaseClassification` | `UNDER_INVESTIGATION`, `ACCIDENTAL`, `INCENDIARY_INTENTIONAL`, `NATURAL`, `FIRE_CASE_WITH_NEGLIGENT_ACTS` |
+| `AuditAction` | `USER_CREATED`, `USER_UPDATED`, `USER_ACTIVATED`, `USER_DEACTIVATED`, `USER_PASSWORD_CHANGED`, `OFFICE_CREATED/UPDATED/DELETED`, `POSITION_CREATED/UPDATED/DELETED`, `CATEGORY_CREATED/UPDATED/DELETED`, `SUBCATEGORY_CREATED/UPDATED/DELETED`, `INCIDENT_DELETED`, `INCIDENT_RESTORED` |
+| `AuditEntityType` | `USER`, `OFFICE`, `POSITION`, `FIRE_INCIDENT_CATEGORY`, `FIRE_INCIDENT_SUBCATEGORY`, `FIRE_INCIDENT` |
 | `CauseOfFire` | about 40 values, including `UNDER_INVESTIGATION`; see `models/fireIncident/enums.prisma` |
 
 Known misspellings that are deferred, since renames need approval (REQUIREMENTS.md D-24): `placeOfOccurence`, `FireOpertaionResources`, `LPG_EXPLOSION_CAUSED_BY_DEFECTIVE_HOSELlNE`.
 
-## 6. Migrations
+## 7. Migrations
 
 | Migration | Change |
 |---|---|
@@ -115,5 +123,6 @@ Known misspellings that are deferred, since renames need approval (REQUIREMENTS.
 | `20261010120000_add_incident_workflow_schema` | approval, soft delete, owning and handling office, timeline voids and corrections, events, referrals, multiple investigations, reports and reviews, `REKINDLE`, `CITY_MUNICIPALITY_CHIEF_INVESTIGATOR`, location fields |
 | `20261010180000_unique_office_name_per_parent` | `@@unique([parentId, name])` on `Office` |
 | `20261028120000_add_deletion_memo_reference` | `FireIncident.deletionMemoReference` |
+| `20261028140000_add_audit_log` | `AuditLog` table, `AuditAction` and `AuditEntityType` enums |
 
 Create migrations with `npx prisma migrate dev --name <name> --config prisma7.config.ts` and regenerate with `npx prisma generate --config prisma7.config.ts`.

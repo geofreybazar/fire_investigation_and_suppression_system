@@ -49,6 +49,7 @@ All paths are under `/api`.
 | fire-incident-categories | `fire_incident_categories_api` | `POST /`, `GET /`, `GET :id`, `PATCH :id`, `DELETE :id` | NHQ writes; incident roles read |
 | fire-incident-subcategories | `fire_incident_subcategories_api` | `POST /`, `GET :id`, `PATCH :id` (name), `DELETE :id` | NHQ writes; incident roles read |
 | fire-incident | `fire-incident` | `POST /`, `GET /`, `GET deleted`, `GET :id`, `PATCH :id`, `POST :id/resubmit`, `POST :id/approve`, `POST :id/reject`, `POST :id/timeline`, `POST :id/timeline/:entryId/void`, `POST :id/timeline/:entryId/correct`, `DELETE :id`, `POST :id/restore` | see §2.4 |
+| audit | `audit` | `GET /` (paginated; filter by action, entity, actor, date) | `SUPER_ADMIN` all; `NHQ_ADMIN` admin changes; `REGIONAL_ADMIN` its region plus its own actions |
 | investigation | `investigation` | `GET queue`, `GET assigned`, `GET incident/:incidentId`, `GET incident/:incidentId/candidates`, `POST incident/:incidentId/refer`, `POST incident/:incidentId/start`, `GET :id`, `PATCH :id`, `POST :id/submit`, `POST :id/review` | chiefs, investigators, incident viewers |
 
 ### 2.3 Request lifecycle
@@ -110,6 +111,7 @@ Only `FIRE_OUT` and `FIRE_OUT_UPON_ARRIVAL` incidents are investigable (`INVESTI
 
 | Concern | Where |
 |---|---|
+| Audit trail | `modules/audit/audit.writer.ts`: `recordAudit(tx, entry)`, called by the users, office, position, category, subcategory and fire-incident repositories inside the transaction that makes the change; `auditChanges`/`auditSnapshot` record only listed, non-sensitive fields |
 | Prisma error mapping | `common/filters/prisma-exception.filter.ts` |
 | Role decorator / guard | `common/decorators/roles.decorator.ts`, `common/guards/role.guard.ts` |
 | Current user | `common/decorators/current-user.decorator.ts` |
@@ -158,6 +160,7 @@ service/*.service.ts            axios calls through axiosJWT("/api/<prefix>")
 | Status | Pages |
 |---|---|
 | Implemented | `FireIncidents`, `FireIncidentDetail`, `Investigations`, `InvestigationDetail`, `Personnel`, `Offices`, `Positions`, `IncidentClassification`, `Settings`, `MyProfile`, `LoginPage` |
+| Implemented (admin) | `AuditLog` (`/auditlog`, lazy-loaded) |
 | Placeholder | `Dashboard`, `IncidentMap`, `FireStations`, `Monitoring`, `ResponseUnits`, `Evidence`, `IncidentReports`, `Statistics` |
 
 The frontend hides controls by role for usability only. The backend enforces every rule.

@@ -9,6 +9,19 @@ import { OfficeType, Prisma } from '../../generated/prisma/client.js';
 import { UUID } from 'crypto';
 import { CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 import { normalizeRegionCode } from './utils/validateRegionCode.js';
+import {
+  auditChanges,
+  auditSnapshot,
+  recordAudit,
+} from '../audit/audit.writer.js';
+
+const OFFICE_AUDIT_FIELDS = [
+  'name',
+  'type',
+  'parentId',
+  'regionId',
+  'regionCode',
+] as const;
 
 interface RegionParent {
   id: string;
@@ -149,13 +162,27 @@ export class OfficeRepository {
     return count > 0;
   }
 
-  async deleteById(id: string) {
-    return this.prismaService.office.delete({
-      where: { id },
+  async deleteById(id: string, actorId: string) {
+    return this.prismaService.$transaction(async (tx) => {
+      const office = await tx.office.delete({
+        where: { id },
+      });
+
+      await recordAudit(tx, {
+        actorId,
+        action: 'OFFICE_DELETED',
+        entityType: 'OFFICE',
+        entityId: id,
+        officeId: id,
+        regionId: office.regionId,
+        changes: auditSnapshot(office, [...OFFICE_AUDIT_FIELDS]),
+      });
+
+      return office;
     });
   }
 
-  async createOffice(data: OfficeInput) {
+  async createOffice(data: OfficeInput, actorId: string) {
     let regionId: string | null = null;
 
     // 1. If this office has a parent, get the parent
@@ -179,18 +206,32 @@ export class OfficeRepository {
     }
 
     // 3. Create the office
-    return this.prismaService.office.create({
-      data: {
-        name: data.name,
-        type: data.type,
-        parentId: data.parentId,
-        regionId,
-        regionCode: normalizeRegionCode(data.regionCode),
-      },
+    return this.prismaService.$transaction(async (tx) => {
+      const office = await tx.office.create({
+        data: {
+          name: data.name,
+          type: data.type,
+          parentId: data.parentId,
+          regionId,
+          regionCode: normalizeRegionCode(data.regionCode),
+        },
+      });
+
+      await recordAudit(tx, {
+        actorId,
+        action: 'OFFICE_CREATED',
+        entityType: 'OFFICE',
+        entityId: office.id,
+        officeId: office.id,
+        regionId: office.regionId,
+        changes: auditSnapshot(office, [...OFFICE_AUDIT_FIELDS]),
+      });
+
+      return office;
     });
   }
 
-  async updateOffice(officeId: UUID, data: OfficeInput) {
+  async updateOffice(officeId: UUID, data: OfficeInput, actorId: string) {
     let regionId: string | null = null;
 
     // 1. If this office has a parent, get the parent
@@ -219,6 +260,8 @@ export class OfficeRepository {
 
     // The office and every office below it are re-regioned together.
     return this.prismaService.$transaction(async (tx) => {
+      const before = await tx.office.findUnique({ where: { id: officeId } });
+
       const updated = await tx.office.update({
         data: {
           name: data.name,
@@ -233,6 +276,22 @@ export class OfficeRepository {
       });
 
       await this.recomputeDescendantRegions(tx, updated);
+
+      const changes = before
+        ? auditChanges(before, updated, [...OFFICE_AUDIT_FIELDS])
+        : {};
+
+      if (Object.keys(changes).length > 0) {
+        await recordAudit(tx, {
+          actorId,
+          action: 'OFFICE_UPDATED',
+          entityType: 'OFFICE',
+          entityId: officeId,
+          officeId,
+          regionId: updated.regionId,
+          changes,
+        });
+      }
 
       return updated;
     });

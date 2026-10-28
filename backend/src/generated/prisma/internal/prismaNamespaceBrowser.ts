@@ -55,6 +55,7 @@ export const ModelName = {
   InvestigationReportReview: 'InvestigationReportReview',
   Investigation: 'Investigation',
   InvestigationReferral: 'InvestigationReferral',
+  AuditLog: 'AuditLog',
   FireOpertaionResources: 'FireOpertaionResources',
   IncidentImpact: 'IncidentImpact',
   IncidentLocation: 'IncidentLocation',
@@ -150,6 +151,21 @@ export const InvestigationReferralScalarFieldEnum = {
 } as const
 
 export type InvestigationReferralScalarFieldEnum = (typeof InvestigationReferralScalarFieldEnum)[keyof typeof InvestigationReferralScalarFieldEnum]
+
+
+export const AuditLogScalarFieldEnum = {
+  id: 'id',
+  actorId: 'actorId',
+  action: 'action',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  officeId: 'officeId',
+  regionId: 'regionId',
+  changes: 'changes',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
 export const FireOpertaionResourcesScalarFieldEnum = {
@@ -393,6 +409,14 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -407,4 +431,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

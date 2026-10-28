@@ -126,6 +126,7 @@ describe('OfficeService', () => {
           type: cityStation.type,
           parentId: cityStation.parentId,
         }),
+        superAdmin.sub,
       );
     });
 
@@ -148,6 +149,7 @@ describe('OfficeService', () => {
 
       expect(repository.createOffice).toHaveBeenCalledWith(
         expect.objectContaining({ type: 'REGIONAL_OFFICE', regionCode: 'NCR' }),
+        superAdmin.sub,
       );
     });
 
@@ -319,7 +321,11 @@ describe('OfficeService', () => {
       await expect(
         service.updateOffice(officeId, station, regionalAdmin),
       ).resolves.toBe(updated);
-      expect(repository.updateOffice).toHaveBeenCalledWith(officeId, station);
+      expect(repository.updateOffice).toHaveBeenCalledWith(
+        officeId,
+        station,
+        regionalAdmin.sub,
+      );
     });
 
     it('throws NotFoundException when the office does not exist', async () => {
@@ -456,7 +462,10 @@ describe('OfficeService', () => {
           message: 'Office deleted successfully.',
         },
       );
-      expect(repository.deleteById).toHaveBeenCalledWith(officeId);
+      expect(repository.deleteById).toHaveBeenCalledWith(
+        officeId,
+        superAdmin.sub,
+      );
     });
 
     it('allows REGIONAL_ADMIN to delete an office in their region', async () => {
@@ -464,7 +473,10 @@ describe('OfficeService', () => {
 
       await service.deleteOffice(officeId, regionalAdmin);
 
-      expect(repository.deleteById).toHaveBeenCalledWith(officeId);
+      expect(repository.deleteById).toHaveBeenCalledWith(
+        officeId,
+        regionalAdmin.sub,
+      );
     });
 
     it('throws NotFoundException when the office does not exist', async () => {

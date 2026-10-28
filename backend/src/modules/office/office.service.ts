@@ -49,12 +49,15 @@ export class OfficeService {
 
     await this.assertNameAvailable(officeData);
 
-    const office = await this.officeRepository.createOffice({
-      name: officeData.name,
-      type: officeData.type,
-      parentId: officeData.parentId,
-      regionCode: officeData.regionCode,
-    });
+    const office = await this.officeRepository.createOffice(
+      {
+        name: officeData.name,
+        type: officeData.type,
+        parentId: officeData.parentId,
+        regionCode: officeData.regionCode,
+      },
+      user.sub,
+    );
 
     this.logger.log(`Office is created: ${office.name}`);
 
@@ -143,6 +146,7 @@ export class OfficeService {
     const updatedOffice = await this.officeRepository.updateOffice(
       id,
       officeData,
+      user.sub,
     );
 
     this.logger.log('Updating office successful');
@@ -188,7 +192,7 @@ export class OfficeService {
       );
     }
 
-    await this.officeRepository.deleteById(officeId);
+    await this.officeRepository.deleteById(officeId, user.sub);
 
     return {
       message: 'Office deleted successfully.',

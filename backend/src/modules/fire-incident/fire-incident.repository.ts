@@ -8,6 +8,20 @@ import {
   IncidentApprovalStatus,
 } from '../../generated/prisma/enums.js';
 import { generateIncidentNumber } from './utils/generate-incident-number.js';
+import { recordAudit } from '../audit/audit.writer.js';
+
+// The owning station and its region, for the audit entry's scope.
+async function incidentScope(tx: Prisma.TransactionClient, id: string) {
+  const incident = await tx.fireIncident.findUnique({
+    where: { id },
+    select: { officeId: true, office: { select: { regionId: true } } },
+  });
+
+  return {
+    officeId: incident?.officeId ?? null,
+    regionId: incident?.office.regionId ?? null,
+  };
+}
 
 // Users are only ever exposed by name.
 const userSummary = {
@@ -333,6 +347,18 @@ export class FireIncidentRepository {
         },
       });
 
+      // A SUPER_ADMIN write (Q-23); staff removals stay in the event log only.
+      if (eventType === FireIncidentEventType.DELETED) {
+        await recordAudit(tx, {
+          actorId,
+          action: 'INCIDENT_DELETED',
+          entityType: 'FIRE_INCIDENT',
+          entityId: id,
+          ...(await incidentScope(tx, id)),
+          changes: { reason: deletion.reason, memoReference },
+        });
+      }
+
       return true;
     });
   }
@@ -359,6 +385,14 @@ export class FireIncidentRepository {
           type: FireIncidentEventType.RESTORED,
           actorId,
         },
+      });
+
+      await recordAudit(tx, {
+        actorId,
+        action: 'INCIDENT_RESTORED',
+        entityType: 'FIRE_INCIDENT',
+        entityId: id,
+        ...(await incidentScope(tx, id)),
       });
 
       return true;

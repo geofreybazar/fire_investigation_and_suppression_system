@@ -19,6 +19,8 @@ import {
 import { Roles } from '../../common/decorators/roles.decorator.js';
 import { AuthGuard } from '../auth/auth.guard.js';
 import { RoleGuard } from '../../common/guards/role.guard.js';
+import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
+import { type CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 import { ROLE } from '../../generated/prisma/enums.js';
 import { INCIDENT_VIEWER_ROLES } from '../fire-incident/utils/incident-scope.js';
 
@@ -45,9 +47,11 @@ export class FireIncidentCategoriesController {
   async addFireIncidentCategory(
     @Body({ schema: fireIncidentCategoriesSchema })
     fireIncidentCategoryInput: FireIncidentCategoriesInput,
+    @CurrentUser() user: CurrentUserJwtPayload,
   ) {
     return this.fireIncidentCategoriesService.addFireIncidentCategory(
       fireIncidentCategoryInput,
+      user.sub,
     );
   }
 
@@ -70,10 +74,12 @@ export class FireIncidentCategoriesController {
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body({ schema: fireIncidentCategoriesSchema })
     fireIncidentCategoryInput: FireIncidentCategoriesInput,
+    @CurrentUser() user: CurrentUserJwtPayload,
   ) {
     return this.fireIncidentCategoriesService.editFireIncidentCategory(
       id,
       fireIncidentCategoryInput,
+      user.sub,
     );
   }
 
@@ -84,7 +90,10 @@ export class FireIncidentCategoriesController {
   }
 
   @Delete(':id')
-  async deleteCategory(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.fireIncidentCategoriesService.deleteCategory(id);
+  async deleteCategory(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @CurrentUser() user: CurrentUserJwtPayload,
+  ) {
+    return this.fireIncidentCategoriesService.deleteCategory(id, user.sub);
   }
 }

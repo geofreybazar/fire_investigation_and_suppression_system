@@ -101,6 +101,7 @@ export class UsersService {
     const newUser = await this.usersRepository.createUser(
       passwordHash,
       userData,
+      user.sub,
     );
 
     this.logger.log(`User created: ${newUser.id}`);
@@ -229,6 +230,7 @@ export class UsersService {
     const user = await this.usersRepository.deactivateUser(
       userId,
       isActive.isActive,
+      currentUser.sub,
     );
 
     if (!user) {
@@ -302,7 +304,11 @@ export class UsersService {
     await this.assertNoOpenInvestigation(userId);
 
     // edit user info
-    const editedUser = await this.usersRepository.editUser(userId, userData);
+    const editedUser = await this.usersRepository.editUser(
+      userId,
+      userData,
+      user.sub,
+    );
 
     if (!editedUser) {
       throw new NotFoundException('for editing user cannot found');

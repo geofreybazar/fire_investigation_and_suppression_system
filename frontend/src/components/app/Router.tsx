@@ -29,6 +29,7 @@ const FireIncidents = loadable(() => import("@/pages/FireIncidents"));
 const FireIncidentDetail = loadable(() => import("@/pages/FireIncidentDetail"));
 const Investigations = loadable(() => import("@/pages/Investigations"));
 const InvestigationDetail = loadable(() => import("@/pages/InvestigationDetail"));
+const AuditLog = loadable(() => import("@/pages/AuditLog"));
 
 const routes = [
   { path: "/", element: <Dashboard /> },
@@ -49,6 +50,7 @@ const routes = [
   { path: "/profile", element: <MyProfile /> },
   { path: "/positions", element: <Positions /> },
   { path: "/incidentclassifications", element: <IncidentClassification /> },
+  { path: "/auditlog", element: <AuditLog /> },
 ];
 
 // Each page uses its sidebar link's rule; detail pages follow their list.

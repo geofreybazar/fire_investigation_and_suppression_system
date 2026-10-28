@@ -122,4 +122,10 @@ export const ADMINISTRATION_LINKS: NavLinkItem[] = [
     icon: "Shapes",
     canAccess: canManageClassifications,
   },
+  {
+    link: "/auditlog",
+    label: "Audit Log",
+    icon: "History",
+    canAccess: isAdmin,
+  },
 ];

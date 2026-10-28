@@ -37,7 +37,11 @@ describe('UsersRepository', () => {
       findUnique: ReturnType<typeof vi.fn>;
       findMany: ReturnType<typeof vi.fn>;
       count: ReturnType<typeof vi.fn>;
+      update: ReturnType<typeof vi.fn>;
     };
+    office: { findUnique: ReturnType<typeof vi.fn> };
+    auditLog: { create: ReturnType<typeof vi.fn> };
+    $transaction: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(async () => {
@@ -47,8 +51,15 @@ describe('UsersRepository', () => {
         findUnique: vi.fn(),
         findMany: vi.fn().mockResolvedValue([]),
         count: vi.fn().mockResolvedValue(0),
+        update: vi.fn(),
       },
+      office: {
+        findUnique: vi.fn().mockResolvedValue({ regionId: 'region-1' }),
+      },
+      auditLog: { create: vi.fn() },
+      $transaction: vi.fn(),
     };
+    prisma.$transaction.mockImplementation((callback) => callback(prisma));
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -62,7 +73,9 @@ describe('UsersRepository', () => {
 
   describe('createUser', () => {
     it('stores the password hash but omits it from the returned user', async () => {
-      await repository.createUser('hashed-default', newInvestigator);
+      prisma.user.create.mockResolvedValue({ id: userId, ...newInvestigator });
+
+      await repository.createUser('hashed-default', newInvestigator, 'actor-1');
 
       expect(prisma.user.create).toHaveBeenCalledWith({
         data: expect.objectContaining({
@@ -71,6 +84,100 @@ describe('UsersRepository', () => {
         }),
         omit: { password: true },
       });
+    });
+
+    it('records the new user without the password', async () => {
+      prisma.user.create.mockResolvedValue({ id: userId, ...newInvestigator });
+
+      await repository.createUser('hashed-default', newInvestigator, 'actor-1');
+
+      const { data } = prisma.auditLog.create.mock.calls[0][0];
+      expect(data).toMatchObject({
+        actorId: 'actor-1',
+        action: 'USER_CREATED',
+        entityType: 'USER',
+        entityId: userId,
+        officeId,
+        regionId: 'region-1',
+      });
+      expect(data.changes).toMatchObject({ role: 'REGIONAL_INVESTIGATOR' });
+      expect(JSON.stringify(data.changes)).not.toContain('hashed-default');
+    });
+  });
+
+  describe('audit entries', () => {
+    const stored = { id: userId, ...newInvestigator, isActive: true };
+
+    it('records only the changed fields on edit', async () => {
+      prisma.user.findUnique.mockResolvedValue(stored);
+      prisma.user.update.mockResolvedValue({
+        ...stored,
+        role: 'REGIONAL_CHIEF_INVESTIGATOR',
+      });
+
+      await repository.editUser(
+        userId,
+        { ...newInvestigator, role: 'REGIONAL_CHIEF_INVESTIGATOR' },
+        'actor-1',
+      );
+
+      expect(prisma.auditLog.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          action: 'USER_UPDATED',
+          changes: {
+            role: {
+              from: 'REGIONAL_INVESTIGATOR',
+              to: 'REGIONAL_CHIEF_INVESTIGATOR',
+            },
+          },
+        }),
+      });
+    });
+
+    it('writes nothing for an edit that changes nothing', async () => {
+      prisma.user.findUnique.mockResolvedValue(stored);
+      prisma.user.update.mockResolvedValue(stored);
+
+      await repository.editUser(userId, newInvestigator, 'actor-1');
+
+      expect(prisma.auditLog.create).not.toHaveBeenCalled();
+    });
+
+    it('returns null and writes nothing for a missing user', async () => {
+      prisma.user.findUnique.mockResolvedValue(null);
+
+      await expect(
+        repository.editUser(userId, newInvestigator, 'actor-1'),
+      ).resolves.toBeNull();
+      expect(prisma.user.update).not.toHaveBeenCalled();
+      expect(prisma.auditLog.create).not.toHaveBeenCalled();
+    });
+
+    it('records a deactivation', async () => {
+      prisma.user.findUnique.mockResolvedValue({ isActive: true });
+      prisma.user.update.mockResolvedValue({ ...stored, isActive: false });
+
+      await repository.deactivateUser(userId, false, 'actor-1');
+
+      expect(prisma.auditLog.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          action: 'USER_DEACTIVATED',
+          changes: { isActive: { from: true, to: false } },
+        }),
+      });
+    });
+
+    it('records a password change with the user as actor and no values', async () => {
+      prisma.user.update.mockResolvedValue(stored);
+
+      await repository.changePassowrd('new-hash', userId);
+
+      const { data } = prisma.auditLog.create.mock.calls[0][0];
+      expect(data).toMatchObject({
+        actorId: userId,
+        action: 'USER_PASSWORD_CHANGED',
+      });
+      expect(data.changes).toBeUndefined();
     });
   });
 

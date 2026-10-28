@@ -252,6 +252,7 @@ export type UserWhereInput = {
   investigationReferrals?: Prisma.InvestigationReferralListRelationFilter
   reviewedReports?: Prisma.InvestigationReportListRelationFilter
   reportReviews?: Prisma.InvestigationReportReviewListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -281,6 +282,7 @@ export type UserOrderByWithRelationInput = {
   investigationReferrals?: Prisma.InvestigationReferralOrderByRelationAggregateInput
   reviewedReports?: Prisma.InvestigationReportOrderByRelationAggregateInput
   reportReviews?: Prisma.InvestigationReportReviewOrderByRelationAggregateInput
+  auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -313,6 +315,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   investigationReferrals?: Prisma.InvestigationReferralListRelationFilter
   reviewedReports?: Prisma.InvestigationReportListRelationFilter
   reportReviews?: Prisma.InvestigationReportReviewListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
 }, "id" | "email" | "account_number">
 
 export type UserOrderByWithAggregationInput = {
@@ -376,6 +379,7 @@ export type UserCreateInput = {
   investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -403,6 +407,7 @@ export type UserUncheckedCreateInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserUpdateInput = {
@@ -430,6 +435,7 @@ export type UserUpdateInput = {
   investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -457,6 +463,7 @@ export type UserUncheckedUpdateInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -637,6 +644,20 @@ export type UserUpdateOneRequiredWithoutInvestigationReferralsNestedInput = {
   upsert?: Prisma.UserUpsertWithoutInvestigationReferralsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvestigationReferralsInput, Prisma.UserUpdateWithoutInvestigationReferralsInput>, Prisma.UserUncheckedUpdateWithoutInvestigationReferralsInput>
+}
+
+export type UserCreateNestedOneWithoutAuditLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAuditLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
+  upsert?: Prisma.UserUpsertWithoutAuditLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
 }
 
 export type UserCreateNestedOneWithoutCreatedTimelineEntriesInput = {
@@ -857,6 +878,7 @@ export type UserCreateWithoutReviewedReportsInput = {
   investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
   investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
   reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutReviewedReportsInput = {
@@ -883,6 +905,7 @@ export type UserUncheckedCreateWithoutReviewedReportsInput = {
   investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
   investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutReviewedReportsInput = {
@@ -925,6 +948,7 @@ export type UserUpdateWithoutReviewedReportsInput = {
   investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
   investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewedReportsInput = {
@@ -951,6 +975,7 @@ export type UserUncheckedUpdateWithoutReviewedReportsInput = {
   investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
   investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutReportReviewsInput = {
@@ -977,6 +1002,7 @@ export type UserCreateWithoutReportReviewsInput = {
   investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
   investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutReportReviewsInput = {
@@ -1003,6 +1029,7 @@ export type UserUncheckedCreateWithoutReportReviewsInput = {
   investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
   investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutReportReviewsInput = {
@@ -1045,6 +1072,7 @@ export type UserUpdateWithoutReportReviewsInput = {
   investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
   investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReportReviewsInput = {
@@ -1071,6 +1099,7 @@ export type UserUncheckedUpdateWithoutReportReviewsInput = {
   investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
   investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutAssignedInvestigationsInput = {
@@ -1097,6 +1126,7 @@ export type UserCreateWithoutAssignedInvestigationsInput = {
   investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutAssignedInvestigationsInput = {
@@ -1123,6 +1153,7 @@ export type UserUncheckedCreateWithoutAssignedInvestigationsInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutAssignedInvestigationsInput = {
@@ -1154,6 +1185,7 @@ export type UserCreateWithoutInvestigationsAssignedInput = {
   investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutInvestigationsAssignedInput = {
@@ -1180,6 +1212,7 @@ export type UserUncheckedCreateWithoutInvestigationsAssignedInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutInvestigationsAssignedInput = {
@@ -1222,6 +1255,7 @@ export type UserUpdateWithoutAssignedInvestigationsInput = {
   investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssignedInvestigationsInput = {
@@ -1248,6 +1282,7 @@ export type UserUncheckedUpdateWithoutAssignedInvestigationsInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserUpsertWithoutInvestigationsAssignedInput = {
@@ -1285,6 +1320,7 @@ export type UserUpdateWithoutInvestigationsAssignedInput = {
   investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInvestigationsAssignedInput = {
@@ -1311,6 +1347,7 @@ export type UserUncheckedUpdateWithoutInvestigationsAssignedInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutInvestigationReferralsInput = {
@@ -1337,6 +1374,7 @@ export type UserCreateWithoutInvestigationReferralsInput = {
   investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
   reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutInvestigationReferralsInput = {
@@ -1363,6 +1401,7 @@ export type UserUncheckedCreateWithoutInvestigationReferralsInput = {
   investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
   reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutInvestigationReferralsInput = {
@@ -1405,6 +1444,7 @@ export type UserUpdateWithoutInvestigationReferralsInput = {
   investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
   reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInvestigationReferralsInput = {
@@ -1429,6 +1469,131 @@ export type UserUncheckedUpdateWithoutInvestigationReferralsInput = {
   voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
   assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
   investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
+  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
+  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserCreateWithoutAuditLogsInput = {
+  id?: string
+  email: string
+  account_number: string
+  rank: $Enums.RANK
+  first_name: string
+  last_name: string
+  middle_name?: string | null
+  password: string
+  isActive?: boolean
+  role: $Enums.ROLE
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  office: Prisma.OfficeCreateNestedOneWithoutUsersInput
+  position: Prisma.PositionCreateNestedOneWithoutUsersInput
+  notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
+  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
+  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
+  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
+  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
+  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
+  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
+  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
+  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
+  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+}
+
+export type UserUncheckedCreateWithoutAuditLogsInput = {
+  id?: string
+  email: string
+  account_number: string
+  rank: $Enums.RANK
+  first_name: string
+  last_name: string
+  middle_name?: string | null
+  password: string
+  isActive?: boolean
+  officeId: string
+  positionId: string
+  role: $Enums.ROLE
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
+  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
+  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
+  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
+  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
+  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
+  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
+  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+}
+
+export type UserCreateOrConnectWithoutAuditLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+}
+
+export type UserUpsertWithoutAuditLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAuditLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
+}
+
+export type UserUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
+  position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
+  notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
+  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
+  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
+  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
+  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
+  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
+  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
+  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
+  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
+  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  positionId?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
+  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
+  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
+  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
+  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
+  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
 }
@@ -1457,6 +1622,7 @@ export type UserCreateWithoutCreatedTimelineEntriesInput = {
   investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedTimelineEntriesInput = {
@@ -1483,6 +1649,7 @@ export type UserUncheckedCreateWithoutCreatedTimelineEntriesInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedTimelineEntriesInput = {
@@ -1514,6 +1681,7 @@ export type UserCreateWithoutVoidedTimelineEntriesInput = {
   investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutVoidedTimelineEntriesInput = {
@@ -1540,6 +1708,7 @@ export type UserUncheckedCreateWithoutVoidedTimelineEntriesInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutVoidedTimelineEntriesInput = {
@@ -1582,6 +1751,7 @@ export type UserUpdateWithoutCreatedTimelineEntriesInput = {
   investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedTimelineEntriesInput = {
@@ -1608,6 +1778,7 @@ export type UserUncheckedUpdateWithoutCreatedTimelineEntriesInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserUpsertWithoutVoidedTimelineEntriesInput = {
@@ -1645,6 +1816,7 @@ export type UserUpdateWithoutVoidedTimelineEntriesInput = {
   investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutVoidedTimelineEntriesInput = {
@@ -1671,6 +1843,7 @@ export type UserUncheckedUpdateWithoutVoidedTimelineEntriesInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutFireIncidentsInput = {
@@ -1697,6 +1870,7 @@ export type UserCreateWithoutFireIncidentsInput = {
   investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutFireIncidentsInput = {
@@ -1723,6 +1897,7 @@ export type UserUncheckedCreateWithoutFireIncidentsInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutFireIncidentsInput = {
@@ -1754,6 +1929,7 @@ export type UserCreateWithoutDeletedFireIncidentsInput = {
   investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutDeletedFireIncidentsInput = {
@@ -1780,6 +1956,7 @@ export type UserUncheckedCreateWithoutDeletedFireIncidentsInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutDeletedFireIncidentsInput = {
@@ -1822,6 +1999,7 @@ export type UserUpdateWithoutFireIncidentsInput = {
   investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFireIncidentsInput = {
@@ -1848,6 +2026,7 @@ export type UserUncheckedUpdateWithoutFireIncidentsInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserUpsertWithoutDeletedFireIncidentsInput = {
@@ -1885,6 +2064,7 @@ export type UserUpdateWithoutDeletedFireIncidentsInput = {
   investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDeletedFireIncidentsInput = {
@@ -1911,6 +2091,7 @@ export type UserUncheckedUpdateWithoutDeletedFireIncidentsInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutFireIncidentEventsInput = {
@@ -1937,6 +2118,7 @@ export type UserCreateWithoutFireIncidentEventsInput = {
   investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutFireIncidentEventsInput = {
@@ -1963,6 +2145,7 @@ export type UserUncheckedCreateWithoutFireIncidentEventsInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutFireIncidentEventsInput = {
@@ -2005,6 +2188,7 @@ export type UserUpdateWithoutFireIncidentEventsInput = {
   investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFireIncidentEventsInput = {
@@ -2031,6 +2215,7 @@ export type UserUncheckedUpdateWithoutFireIncidentEventsInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutNotificationInput = {
@@ -2057,6 +2242,7 @@ export type UserCreateWithoutNotificationInput = {
   investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutNotificationInput = {
@@ -2083,6 +2269,7 @@ export type UserUncheckedCreateWithoutNotificationInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutNotificationInput = {
@@ -2125,6 +2312,7 @@ export type UserUpdateWithoutNotificationInput = {
   investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationInput = {
@@ -2151,6 +2339,7 @@ export type UserUncheckedUpdateWithoutNotificationInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutOfficeInput = {
@@ -2177,6 +2366,7 @@ export type UserCreateWithoutOfficeInput = {
   investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutOfficeInput = {
@@ -2203,6 +2393,7 @@ export type UserUncheckedCreateWithoutOfficeInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutOfficeInput = {
@@ -2273,6 +2464,7 @@ export type UserCreateWithoutPositionInput = {
   investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutPositionInput = {
@@ -2299,6 +2491,7 @@ export type UserUncheckedCreateWithoutPositionInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutPositionInput = {
@@ -2351,6 +2544,7 @@ export type UserCreateWithoutRefreshTokensInput = {
   investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutRefreshTokensInput = {
@@ -2377,6 +2571,7 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
   reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -2419,6 +2614,7 @@ export type UserUpdateWithoutRefreshTokensInput = {
   investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRefreshTokensInput = {
@@ -2445,6 +2641,7 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateManyOfficeInput = {
@@ -2485,6 +2682,7 @@ export type UserUpdateWithoutOfficeInput = {
   investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOfficeInput = {
@@ -2511,6 +2709,7 @@ export type UserUncheckedUpdateWithoutOfficeInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutOfficeInput = {
@@ -2565,6 +2764,7 @@ export type UserUpdateWithoutPositionInput = {
   investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPositionInput = {
@@ -2591,6 +2791,7 @@ export type UserUncheckedUpdateWithoutPositionInput = {
   investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
   reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
   reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutPositionInput = {
@@ -2624,6 +2825,7 @@ export type UserCountOutputType = {
   investigationReferrals: number
   reviewedReports: number
   reportReviews: number
+  auditLogs: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2638,6 +2840,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   investigationReferrals?: boolean | UserCountOutputTypeCountInvestigationReferralsArgs
   reviewedReports?: boolean | UserCountOutputTypeCountReviewedReportsArgs
   reportReviews?: boolean | UserCountOutputTypeCountReportReviewsArgs
+  auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
 }
 
 /**
@@ -2727,6 +2930,13 @@ export type UserCountOutputTypeCountReportReviewsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.InvestigationReportReviewWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuditLogWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2755,6 +2965,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   investigationReferrals?: boolean | Prisma.User$investigationReferralsArgs<ExtArgs>
   reviewedReports?: boolean | Prisma.User$reviewedReportsArgs<ExtArgs>
   reportReviews?: boolean | Prisma.User$reportReviewsArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2823,6 +3034,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   investigationReferrals?: boolean | Prisma.User$investigationReferralsArgs<ExtArgs>
   reviewedReports?: boolean | Prisma.User$reviewedReportsArgs<ExtArgs>
   reportReviews?: boolean | Prisma.User$reportReviewsArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2851,6 +3063,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     investigationReferrals: Prisma.$InvestigationReferralPayload<ExtArgs>[]
     reviewedReports: Prisma.$InvestigationReportPayload<ExtArgs>[]
     reportReviews: Prisma.$InvestigationReportReviewPayload<ExtArgs>[]
+    auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3273,6 +3486,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   investigationReferrals<T extends Prisma.User$investigationReferralsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$investigationReferralsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestigationReferralPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviewedReports<T extends Prisma.User$reviewedReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewedReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestigationReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reportReviews<T extends Prisma.User$reportReviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reportReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestigationReportReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3995,6 +4209,30 @@ export type User$reportReviewsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.InvestigationReportReviewScalarFieldEnum | Prisma.InvestigationReportReviewScalarFieldEnum[]
+}
+
+/**
+ * User.auditLogs
+ */
+export type User$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuditLog
+   */
+  select?: Prisma.AuditLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuditLog
+   */
+  omit?: Prisma.AuditLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuditLogInclude<ExtArgs> | null
+  where?: Prisma.AuditLogWhereInput
+  orderBy?: Prisma.AuditLogOrderByWithRelationInput | Prisma.AuditLogOrderByWithRelationInput[]
+  cursor?: Prisma.AuditLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
 }
 
 /**

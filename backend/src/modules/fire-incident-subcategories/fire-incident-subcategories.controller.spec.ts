@@ -3,6 +3,7 @@ import { FireIncidentSubcategoriesController } from './fire-incident-subcategori
 import { FireIncidentSubcategoriesService } from './fire-incident-subcategories.service.js';
 import { AuthGuard } from '../auth/auth.guard.js';
 import { RoleGuard } from '../../common/guards/role.guard.js';
+import { type CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 
 describe('FireIncidentSubcategoriesController', () => {
   let controller: FireIncidentSubcategoriesController;
@@ -32,14 +33,20 @@ describe('FireIncidentSubcategoriesController', () => {
   });
 
   it('delegates edit and delete to the service', async () => {
-    await controller.editFireIncidentSubcategory('sub-1', {
-      name: 'Commercial',
-    });
-    await controller.deleteSubcategory('sub-1');
+    const user = { sub: 'actor-1' } as CurrentUserJwtPayload;
 
-    expect(service.editFireIncidentSubcategory).toHaveBeenCalledWith('sub-1', {
-      name: 'Commercial',
-    });
-    expect(service.deleteSubcategory).toHaveBeenCalledWith('sub-1');
+    await controller.editFireIncidentSubcategory(
+      'sub-1',
+      { name: 'Commercial' },
+      user,
+    );
+    await controller.deleteSubcategory('sub-1', user);
+
+    expect(service.editFireIncidentSubcategory).toHaveBeenCalledWith(
+      'sub-1',
+      { name: 'Commercial' },
+      'actor-1',
+    );
+    expect(service.deleteSubcategory).toHaveBeenCalledWith('sub-1', 'actor-1');
   });
 });

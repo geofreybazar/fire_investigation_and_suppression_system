@@ -4,6 +4,8 @@ import { FireIncidentSubcategoriesService } from './fire-incident-subcategories.
 import { FireIncidentSubCategoriesRepository } from './fire-incident-subcategories.repository.js';
 import { type FireIncidentSubCategoriesInput } from './schema/fire-incident-subcategories.schema.js';
 
+const actorId = 'actor-1';
+
 describe('FireIncidentSubcategoriesService', () => {
   let service: FireIncidentSubcategoriesService;
   let repository: {
@@ -45,10 +47,13 @@ describe('FireIncidentSubcategoriesService', () => {
       const created = { id: 'sub-1', ...input };
       repository.addFireIncidentSubcategory.mockResolvedValue(created);
 
-      await expect(service.addFireIncidentSubcategory(input)).resolves.toBe(
-        created,
+      await expect(
+        service.addFireIncidentSubcategory(input, actorId),
+      ).resolves.toBe(created);
+      expect(repository.addFireIncidentSubcategory).toHaveBeenCalledWith(
+        input,
+        actorId,
       );
-      expect(repository.addFireIncidentSubcategory).toHaveBeenCalledWith(input);
     });
   });
 
@@ -74,13 +79,16 @@ describe('FireIncidentSubcategoriesService', () => {
       });
 
       await expect(
-        service.editFireIncidentSubcategory(subcategoryId, {
-          name: 'Commercial',
-        }),
+        service.editFireIncidentSubcategory(
+          subcategoryId,
+          { name: 'Commercial' },
+          actorId,
+        ),
       ).resolves.toEqual({ id: subcategoryId, name: 'Commercial' });
       expect(repository.editFireIncidentSubcategory).toHaveBeenCalledWith(
         subcategoryId,
         { name: 'Commercial' },
+        actorId,
       );
     });
 
@@ -88,7 +96,11 @@ describe('FireIncidentSubcategoriesService', () => {
       repository.getSubcategoryById.mockResolvedValue(null);
 
       await expect(
-        service.editFireIncidentSubcategory(subcategoryId, { name: 'X' }),
+        service.editFireIncidentSubcategory(
+          subcategoryId,
+          { name: 'X' },
+          actorId,
+        ),
       ).rejects.toThrow(NotFoundException);
       expect(repository.editFireIncidentSubcategory).not.toHaveBeenCalled();
     });
@@ -101,10 +113,15 @@ describe('FireIncidentSubcategoriesService', () => {
         _count: { incidents: 0 },
       });
 
-      await expect(service.deleteSubcategory(subcategoryId)).resolves.toEqual({
+      await expect(
+        service.deleteSubcategory(subcategoryId, actorId),
+      ).resolves.toEqual({
         message: 'Sub category deleted successfully.',
       });
-      expect(repository.deleteById).toHaveBeenCalledWith(subcategoryId);
+      expect(repository.deleteById).toHaveBeenCalledWith(
+        subcategoryId,
+        actorId,
+      );
     });
 
     it('throws ConflictException when incidents use the sub category', async () => {
@@ -113,18 +130,18 @@ describe('FireIncidentSubcategoriesService', () => {
         _count: { incidents: 1 },
       });
 
-      await expect(service.deleteSubcategory(subcategoryId)).rejects.toThrow(
-        ConflictException,
-      );
+      await expect(
+        service.deleteSubcategory(subcategoryId, actorId),
+      ).rejects.toThrow(ConflictException);
       expect(repository.deleteById).not.toHaveBeenCalled();
     });
 
     it('throws NotFoundException for a missing sub category', async () => {
       repository.getSubcategoryById.mockResolvedValue(null);
 
-      await expect(service.deleteSubcategory(subcategoryId)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        service.deleteSubcategory(subcategoryId, actorId),
+      ).rejects.toThrow(NotFoundException);
       expect(repository.deleteById).not.toHaveBeenCalled();
     });
   });
