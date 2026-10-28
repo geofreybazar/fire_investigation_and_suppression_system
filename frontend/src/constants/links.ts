@@ -36,7 +36,6 @@ export const OVERVIEW_LINKS: NavLinkItem[] = [
     label: "Incident Map",
     icon: "Map",
     canAccess: canViewIncidents,
-    comingSoon: true,
   },
   {
     link: "/fireincidents",
@@ -91,7 +90,6 @@ export const REPORTS_LINKS: NavLinkItem[] = [
     label: "Incident Reports",
     icon: "FileText",
     canAccess: canViewIncidents,
-    comingSoon: true,
   },
 
   {
@@ -99,7 +97,6 @@ export const REPORTS_LINKS: NavLinkItem[] = [
     label: "Statistics & Analytics",
     icon: "BarChart3",
     canAccess: canViewIncidents,
-    comingSoon: true,
   },
 ];
 
