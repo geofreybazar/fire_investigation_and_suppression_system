@@ -2,8 +2,8 @@
 
 > **Status: APPROVED (revision 10), approved by the project owner on 2026-10-10.**
 > All items tagged PROPOSED or INTERPRETED in this revision were accepted with the approval and are binding requirements. Items tagged OPEN remain undecided and must be resolved before the feature they affect is built.
-> **Revision 11 (draft, 2026-10-28):** refreshes §1.2 and §10.1 to match the code after Phases 1–5. It also adds §11.5, proposed answers to Q-01, Q-20, Q-21, Q-22 and Q-23 for the audit log, notifications, statistics, incident map and attachments. Those answers are **PROPOSED, pending owner approval**; the features they cover must not be built until they are approved.
-> Last updated: 2026-10-10. Derived from `CLAUDE.md`, owner answers given on 2026-10-10 (rounds 1–9), the Prisma schema (`backend/prisma/`), backend modules (`backend/src/modules/`), frontend pages, hooks and services (`frontend/src/`), and backend unit tests.
+> **Revision 11 (2026-10-28):** refreshes §1.2 and §10.1 to match the code, and adds §11.5, answers to Q-01, Q-20, Q-21, Q-22 and Q-23 (audit log, notifications, statistics, incident map, attachments). All five were **approved by the project owner on 2026-10-28** and are implemented (roadmap phases 1–5, PRs #1–#6). Parts those answers left open stay OPEN: official BFP report forms (Q-20), email/SMS notifications (Q-21), attachment retention (Q-22), and the Fire Stations, Monitoring and Response Units pages (Q-01).
+> Last updated: 2026-10-28. Derived from `CLAUDE.md`, owner answers given on 2026-10-10 (rounds 1–9), the Prisma schema (`backend/prisma/`), backend modules (`backend/src/modules/`), frontend pages, hooks and services (`frontend/src/`), and backend unit tests.
 
 ## 0. How to read this document
 

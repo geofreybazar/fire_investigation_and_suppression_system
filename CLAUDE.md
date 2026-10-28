@@ -34,6 +34,9 @@ npm test                          # vitest run (all *.spec.ts)
 npx vitest run src/modules/office/office.service.spec.ts   # single test file
 npx vitest run -t "should be defined"                      # filter by test name
 npm run test:e2e                  # vitest with vitest.config.e2e.ts (test/*.e2e-spec.ts)
+# E2E tests run against the database in backend/.env. Each creates its own
+# records with a unique suffix and deletes them in afterAll (delete
+# IncidentLocation before FireIncident: that FK is RESTRICT, see D-05).
 ```
 
 Prisma (config is `prisma7.config.ts`, which reads `DATABASE_URL` from `.env`):
@@ -62,6 +65,10 @@ There is no frontend test setup.
 - **ESM imports**: relative imports must use the `.js` extension (e.g. `'./office.service.js'`).
 - **Prisma schema is split** across `prisma/schema.prisma` (generator + datasource) and `prisma/models/**/*.prisma`; the config points `schema` at the `prisma/` folder. The client is generated into `src/generated/prisma/` — import types/enums from `generated/prisma/client.js` or `generated/prisma/enums.js`, never `@prisma/client`. Don't hand-edit generated files.
 - **Prisma errors** (`P2002` unique violations, etc.) are converted to HTTP exceptions globally by `common/filters/prisma-exception.filter.ts`, so repositories generally don't need to catch them.
+- **Audit log:** changes to users, offices, positions and categories, `SUPER_ADMIN` incident deletion/restore, and attachment downloads are recorded with `recordAudit(tx, entry)` from `modules/audit/audit.writer.ts`, called by the repository **inside the transaction that makes the change**. Record only listed, non-sensitive fields (`auditSnapshot` / `auditChanges`); never passwords or tokens. Incident and investigation workflow history stays in `IncidentTimeline`, `FireIncidentEvent`, `InvestigationReferral` and `InvestigationReportReview`.
+- **Notifications:** workflow notifications go through `NotificationDispatcher.notify()` (`modules/notification/notification.dispatcher.ts`) **after** the change commits; it applies user preferences, skips the actor and never throws. Wording lives in `notification.messages.ts`.
+- **Incident visibility** for any new read path reuses `incidentScopeWhere()` / `isIncidentVisible()` from `fire-incident/utils/incident-scope.ts` (statistics, attachments and investigations already do). Out-of-scope records return 404, not 403.
+- **Attachments** are stored by `AttachmentStorage` under `UPLOAD_DIR` (random keys, outside the web root) and only served through the download endpoint.
 - **Auth**: login sets `access_token` (15m) and `refresh_token` (7d) as httpOnly cookies; refresh tokens are persisted in the `RefreshToken` table and rotated on `/auth/refresh_token`. `AuthGuard` reads the cookie, and on any failure throws `TokenExpiredException` with `error: "TOKEN_EXPIRED"` — the frontend depends on that exact string to trigger a refresh.
 - **Authorization** has two layers:
   1. `@Roles(...)` + `@UseGuards(AuthGuard, RoleGuard)` on controllers for coarse role checks; `@CurrentUser()` yields the `CurrentUserJwtPayload`.
