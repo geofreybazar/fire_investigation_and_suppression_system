@@ -13,6 +13,8 @@ import {
 } from '../../generated/prisma/enums.js';
 import { CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 import { InvestigationRepository } from './investigation.repository.js';
+import { NotificationDispatcher } from '../notification/notification.dispatcher.js';
+import { notificationMessages } from '../notification/notification.messages.js';
 import {
   type ReferCaseInput,
   type ReviewReportInput,
@@ -50,6 +52,7 @@ export class InvestigationService {
 
   constructor(
     private readonly investigationRepository: InvestigationRepository,
+    private readonly notificationDispatcher: NotificationDispatcher,
   ) {}
 
   // ----- Case handling on an incident -----
@@ -124,6 +127,18 @@ export class InvestigationService {
 
     this.logger.log(`Investigation case referred ${direction}: ${incidentId}`);
 
+    await this.notificationDispatcher.notify({
+      ...notificationMessages.caseReferred(
+        incidentId,
+        incident.incidentNo ?? '',
+      ),
+      actorId: user.sub,
+      recipients: {
+        officeId: input.toOfficeId,
+        roles: CHIEF_INVESTIGATOR_ROLES,
+      },
+    });
+
     return { message: 'Case referred.', direction };
   }
 
@@ -174,6 +189,15 @@ export class InvestigationService {
 
     this.logger.log(`Investigation started: ${investigation.investigationNo}`);
 
+    await this.notificationDispatcher.notify({
+      ...notificationMessages.investigatorAssigned(
+        investigation.id,
+        investigation.investigationNo,
+      ),
+      actorId: user.sub,
+      recipients: { userIds: [investigator.id] },
+    });
+
     return investigation;
   }
 
@@ -223,6 +247,18 @@ export class InvestigationService {
       throw new ConflictException('The report can no longer be submitted.');
     }
 
+    await this.notificationDispatcher.notify({
+      ...notificationMessages.reportSubmitted(
+        id,
+        investigation.investigationNo,
+      ),
+      actorId: user.sub,
+      recipients: {
+        officeId: investigation.conductingOfficeId,
+        roles: CHIEF_INVESTIGATOR_ROLES,
+      },
+    });
+
     return { message: 'Report submitted.' };
   }
 
@@ -252,6 +288,26 @@ export class InvestigationService {
     }
 
     this.logger.log(`Investigation report ${input.decision}: ${id}`);
+
+    // Moving the report to UNDER_REVIEW tells the investigator nothing new.
+    const decided =
+      input.decision === ReportDecision.APPROVED
+        ? notificationMessages.reportApproved(id, investigation.investigationNo)
+        : input.decision === ReportDecision.REJECTED
+          ? notificationMessages.reportRejected(
+              id,
+              investigation.investigationNo,
+              input.remarks,
+            )
+          : null;
+
+    if (decided) {
+      await this.notificationDispatcher.notify({
+        ...decided,
+        actorId: user.sub,
+        recipients: { userIds: [investigation.assignedInvestigatorId] },
+      });
+    }
 
     return {
       message: `Report ${input.decision.toLowerCase().replace('_', ' ')}.`,

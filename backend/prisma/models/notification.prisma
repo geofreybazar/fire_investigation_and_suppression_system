@@ -4,7 +4,48 @@ model NotificationPreference {
   investigationUpdates Boolean @default(true)
   reportReview         Boolean @default(true)
   systemAnnouncements  Boolean @default(true)
+  // Incident submission, approval and rejection (REQUIREMENTS.md Q-21).
+  incidentUpdates      Boolean @default(true)
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum NotificationType {
+  INCIDENT_SUBMITTED
+  INCIDENT_RESUBMITTED
+  INCIDENT_APPROVED
+  INCIDENT_REJECTED
+  INCIDENT_INVESTIGABLE
+  CASE_REFERRED
+  INVESTIGATOR_ASSIGNED
+  REPORT_SUBMITTED
+  REPORT_APPROVED
+  REPORT_REJECTED
+}
+
+enum NotificationEntityType {
+  FIRE_INCIDENT
+  INVESTIGATION
+}
+
+// In-app notification inbox (REQUIREMENTS.md Q-21). No email or SMS yet.
+model Notification {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type  NotificationType
+  title String
+  body  String
+
+  // What the notification links to.
+  entityType NotificationEntityType
+  entityId   String
+
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, readAt, createdAt])
 }

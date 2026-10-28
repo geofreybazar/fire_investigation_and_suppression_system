@@ -191,6 +191,30 @@ export const CauseOfFire = {
 export type CauseOfFire = (typeof CauseOfFire)[keyof typeof CauseOfFire]
 
 
+export const NotificationType = {
+  INCIDENT_SUBMITTED: 'INCIDENT_SUBMITTED',
+  INCIDENT_RESUBMITTED: 'INCIDENT_RESUBMITTED',
+  INCIDENT_APPROVED: 'INCIDENT_APPROVED',
+  INCIDENT_REJECTED: 'INCIDENT_REJECTED',
+  INCIDENT_INVESTIGABLE: 'INCIDENT_INVESTIGABLE',
+  CASE_REFERRED: 'CASE_REFERRED',
+  INVESTIGATOR_ASSIGNED: 'INVESTIGATOR_ASSIGNED',
+  REPORT_SUBMITTED: 'REPORT_SUBMITTED',
+  REPORT_APPROVED: 'REPORT_APPROVED',
+  REPORT_REJECTED: 'REPORT_REJECTED'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const NotificationEntityType = {
+  FIRE_INCIDENT: 'FIRE_INCIDENT',
+  INVESTIGATION: 'INVESTIGATION'
+} as const
+
+export type NotificationEntityType = (typeof NotificationEntityType)[keyof typeof NotificationEntityType]
+
+
 export const OfficeType = {
   NATIONAL_HEADQUARTERS: 'NATIONAL_HEADQUARTERS',
   REGIONAL_OFFICE: 'REGIONAL_OFFICE',

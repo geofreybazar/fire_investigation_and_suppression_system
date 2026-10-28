@@ -103,6 +103,11 @@ export type IncidentNumberCounter = Prisma.IncidentNumberCounterModel
  */
 export type NotificationPreference = Prisma.NotificationPreferenceModel
 /**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
  * Model Office
  * 
  */

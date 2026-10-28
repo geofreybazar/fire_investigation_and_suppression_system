@@ -10,6 +10,7 @@ import { InvestigationService } from './investigation.service.js';
 import { InvestigationRepository } from './investigation.repository.js';
 import { type CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 import { type ROLE } from '../../generated/prisma/enums.js';
+import { NotificationDispatcher } from '../notification/notification.dispatcher.js';
 
 const STATION = 'station-1';
 const DISTRICT = 'district-1';
@@ -83,6 +84,7 @@ const incident = (overrides: Record<string, unknown> = {}) => ({
 
 const investigation = (overrides: Record<string, unknown> = {}) => ({
   id: investigationId,
+  investigationNo: 'INV-2026-10-NCR-000123-01',
   fireIncidentId: incidentId,
   conductingOfficeId: STATION,
   assignedInvestigatorId: investigatorId,
@@ -103,7 +105,10 @@ describe('InvestigationService', () => {
   let service: InvestigationService;
   let repository: Record<string, ReturnType<typeof vi.fn>>;
 
+  let dispatcher: { notify: ReturnType<typeof vi.fn> };
+
   beforeEach(async () => {
+    dispatcher = { notify: vi.fn().mockResolvedValue(undefined) };
     repository = {
       findOfficeType: vi.fn((officeId: string) =>
         Promise.resolve({ id: officeId, type: officeTypes[officeId] }),
@@ -144,6 +149,7 @@ describe('InvestigationService', () => {
       providers: [
         InvestigationService,
         { provide: InvestigationRepository, useValue: repository },
+        { provide: NotificationDispatcher, useValue: dispatcher },
       ],
     }).compile();
 
@@ -483,6 +489,102 @@ describe('InvestigationService', () => {
         0,
         10,
       );
+    });
+  });
+
+  describe('notifications (Q-21)', () => {
+    it("notifies the target office's chief investigators of a referral", async () => {
+      await service.refer(incidentId, { toOfficeId: DISTRICT }, stationChief);
+
+      expect(dispatcher.notify).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'CASE_REFERRED',
+          entityType: 'FIRE_INCIDENT',
+          entityId: incidentId,
+          actorId: stationChief.sub,
+          recipients: {
+            officeId: DISTRICT,
+            roles: expect.arrayContaining([
+              'DISTRICT_PROVINCE_CHIEF_INVESTIGATOR',
+            ]),
+          },
+        }),
+      );
+    });
+
+    it('notifies the assigned investigator when an investigation starts', async () => {
+      await service.start(
+        incidentId,
+        { investigatorId: investigatorId },
+        stationChief,
+      );
+
+      expect(dispatcher.notify).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'INVESTIGATOR_ASSIGNED',
+          entityType: 'INVESTIGATION',
+          entityId: investigationId,
+          recipients: { userIds: [investigatorId] },
+        }),
+      );
+    });
+
+    it('notifies the handling chiefs when the report is submitted', async () => {
+      await service.submit(investigationId, investigator);
+
+      expect(dispatcher.notify).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'REPORT_SUBMITTED',
+          body: 'The report for investigation INV-2026-10-NCR-000123-01 is ready for your review.',
+          recipients: expect.objectContaining({ officeId: STATION }),
+        }),
+      );
+    });
+
+    it('notifies the investigator of a rejection with the remarks', async () => {
+      repository.findForAccess.mockResolvedValue(
+        investigation({ report: { status: 'UNDER_REVIEW' } }),
+      );
+
+      await service.review(
+        investigationId,
+        { decision: 'REJECTED', remarks: 'Add witness statements' },
+        stationChief,
+      );
+
+      expect(dispatcher.notify).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'REPORT_REJECTED',
+          body: 'Your report for investigation INV-2026-10-NCR-000123-01 was rejected: Add witness statements',
+          recipients: { userIds: [investigatorId] },
+        }),
+      );
+    });
+
+    it('notifies the investigator of an approval', async () => {
+      repository.findForAccess.mockResolvedValue(
+        investigation({ report: { status: 'UNDER_REVIEW' } }),
+      );
+
+      await service.review(
+        investigationId,
+        { decision: 'APPROVED' },
+        stationChief,
+      );
+
+      expect(dispatcher.notify).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'REPORT_APPROVED' }),
+      );
+    });
+
+    it('sends nothing when the report only moves under review', async () => {
+      await service.review(
+        investigationId,
+        { decision: 'UNDER_REVIEW' },
+        stationChief,
+      );
+
+      expect(dispatcher.notify).not.toHaveBeenCalled();
     });
   });
 });

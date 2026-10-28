@@ -20,12 +20,9 @@ import {
   type NotificationInput,
 } from "@/interface/notifications/notifications";
 
-const Notifications = () => {
-  const user = useUserStore((u) => u.user);
-  if (!user) {
-    return <Navigate to='/login' replace />;
-  }
-  const { notificationSettings } = useGetUserNotificationSettings(user.id);
+// Hooks can't run after an early return, so the form is its own component.
+const NotificationSettingsForm = ({ userId }: { userId: string }) => {
+  const { notificationSettings } = useGetUserNotificationSettings(userId);
 
   const methods = useForm<NotificationInput>({
     resolver: zodResolver(notificationSchema),
@@ -33,6 +30,7 @@ const Notifications = () => {
       investigationUpdates: notificationSettings.investigationUpdates,
       reportReview: notificationSettings.reportReview,
       systemAnnouncements: notificationSettings.systemAnnouncements,
+      incidentUpdates: notificationSettings.incidentUpdates,
     },
   });
 
@@ -40,10 +38,11 @@ const Notifications = () => {
 
   const onSubmit = async (data: NotificationInput) => {
     await updateSettings({
-      userId: user.id,
+      userId,
       investigationUpdates: data.investigationUpdates,
       reportReview: data.reportReview,
       systemAnnouncements: data.systemAnnouncements,
+      incidentUpdates: data.incidentUpdates,
     });
   };
 
@@ -67,13 +66,33 @@ const Notifications = () => {
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <CardContent className='space-y-5'>
           <Controller
+            name='incidentUpdates'
+            control={methods.control}
+            render={({ field }) => (
+              <SettingSwitch
+                id='incident-updates'
+                label='Incident Updates'
+                description='Receive notifications when an incident needs your approval, or yours is approved or rejected.'
+                checked={field.value}
+                onCheckedChange={(checked) => {
+                  field.onChange(checked);
+                  methods.handleSubmit(onSubmit)();
+                }}
+                disabled={isPending}
+              />
+            )}
+          />
+
+          <Separator />
+
+          <Controller
             name='investigationUpdates'
             control={methods.control}
             render={({ field }) => (
               <SettingSwitch
                 id='investigation-updates'
                 label='Investigation Updates'
-                description='Receive notifications when an investigation is assigned or updated.'
+                description='Receive notifications when a finished fire awaits an investigation decision, a case is referred to you, or an investigation is assigned to you.'
                 checked={field.value}
                 onCheckedChange={(checked) => {
                   field.onChange(checked);
@@ -93,7 +112,7 @@ const Notifications = () => {
               <SettingSwitch
                 id='report-review'
                 label='Report Review'
-                description='Receive notifications when a report requires your review.'
+                description='Receive notifications when a report needs your review, or your report is approved or rejected.'
                 checked={field.value}
                 onCheckedChange={(checked) => {
                   field.onChange(checked);
@@ -127,6 +146,16 @@ const Notifications = () => {
       </form>
     </Card>
   );
+};
+
+const Notifications = () => {
+  const user = useUserStore((u) => u.user);
+
+  if (!user) {
+    return <Navigate to='/login' replace />;
+  }
+
+  return <NotificationSettingsForm userId={user.id} />;
 };
 
 export default Notifications;

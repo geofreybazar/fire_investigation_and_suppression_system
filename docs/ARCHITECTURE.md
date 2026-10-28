@@ -45,7 +45,7 @@ All paths are under `/api`.
 | users | `users` | `POST /`, `GET /`, `GET :id`, `PATCH /` (own password), `PATCH :id` (status), `PATCH edituser/:id` | admins; `GET :id` and `PATCH /` for the current user |
 | office | `office_api` | `POST /`, `GET /`, `GET alloffices`, `PATCH :id`, `DELETE :id` | `SUPER_ADMIN`, `NHQ_ADMIN`, `REGIONAL_ADMIN` |
 | position | `position_api` | `POST /`, `GET /`, `GET allpositions`, `PATCH :id`, `DELETE :id` | admins |
-| notification | `notification` | `GET :id`, `PATCH :id` | current user's preferences |
+| notification | `notification` | `GET inbox`, `GET unread-count`, `POST read-all`, `POST :id/read`, `GET :id` and `PATCH :id` (preferences) | current user only |
 | fire-incident-categories | `fire_incident_categories_api` | `POST /`, `GET /`, `GET :id`, `PATCH :id`, `DELETE :id` | NHQ writes; incident roles read |
 | fire-incident-subcategories | `fire_incident_subcategories_api` | `POST /`, `GET :id`, `PATCH :id` (name), `DELETE :id` | NHQ writes; incident roles read |
 | fire-incident | `fire-incident` | `POST /`, `GET /`, `GET deleted`, `GET :id`, `PATCH :id`, `POST :id/resubmit`, `POST :id/approve`, `POST :id/reject`, `POST :id/timeline`, `POST :id/timeline/:entryId/void`, `POST :id/timeline/:entryId/correct`, `DELETE :id`, `POST :id/restore` | see §2.4 |
@@ -111,6 +111,7 @@ Only `FIRE_OUT` and `FIRE_OUT_UPON_ARRIVAL` incidents are investigable (`INVESTI
 
 | Concern | Where |
 |---|---|
+| Notifications | `modules/notification/notification.dispatcher.ts`: `NotificationDispatcher.notify(event)`, called by the fire-incident and investigation services after a change commits. Resolves recipients (specific users, or active holders of roles in an office), applies preferences, skips the actor, and never throws. Wording in `notification.messages.ts` |
 | Audit trail | `modules/audit/audit.writer.ts`: `recordAudit(tx, entry)`, called by the users, office, position, category, subcategory and fire-incident repositories inside the transaction that makes the change; `auditChanges`/`auditSnapshot` record only listed, non-sensitive fields |
 | Prisma error mapping | `common/filters/prisma-exception.filter.ts` |
 | Role decorator / guard | `common/decorators/roles.decorator.ts`, `common/guards/role.guard.ts` |
@@ -154,6 +155,8 @@ service/*.service.ts            axios calls through axiosJWT("/api/<prefix>")
 `service/AxiosCreate.ts` creates an axios instance with `withCredentials: true`. On a `TOKEN_EXPIRED` response it runs a single shared `POST /api/auth/refresh_token`, so concurrent requests wait on one promise, and then retries the original request once. On `Unauthorized` or a failed refresh it clears the stored user and redirects to `/login`.
 
 ### 3.3 Routes
+
+The navbar bell (`components/layout/Navbar/NotificationBell.tsx`) polls the unread count every 60 s and loads the latest notifications when opened.
 
 `components/app/Router.tsx` holds a flat route list. Each route uses the `canAccess` rule of its sidebar link in `constants/links.ts`, and the sidebar hides links and empty groups the role can't use (display only). `FireIncidents`, `FireIncidentDetail`, `Investigations` and `InvestigationDetail` are code-split with `@loadable/component`.
 
