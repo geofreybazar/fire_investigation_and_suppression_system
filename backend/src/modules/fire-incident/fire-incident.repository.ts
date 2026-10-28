@@ -190,7 +190,11 @@ export class FireIncidentRepository {
       where: { id },
       select: {
         id: true,
+        incidentNo: true,
         officeId: true,
+        createdById: true,
+        fireIncidentStatus: true,
+        investigationHandlingOfficeId: true,
         approvalStatus: true,
         deletedAt: true,
         categoryId: true,
@@ -440,6 +444,7 @@ export class FireIncidentRepository {
         where: { id },
         select: {
           deletedAt: true,
+          fireIncidentStatus: true,
           timeline: { select: timelineEntryState },
           _count: { select: { investigations: true } },
         },
@@ -485,7 +490,11 @@ export class FireIncidentRepository {
         },
       });
 
-      return { entryId: created?.id ?? null, current: change.current };
+      return {
+        entryId: created?.id ?? null,
+        current: change.current,
+        previousStatus: incident.fireIncidentStatus,
+      };
     });
   }
 

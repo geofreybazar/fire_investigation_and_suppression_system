@@ -38,7 +38,7 @@ FIIS (shown in the UI as "Fire Investigation and Suppression System") is a web a
 | Office management | Implemented | Implemented |
 | Position management | Implemented | Implemented |
 | Incident classification (categories / subcategories) | Categories: full CRUD. Subcategories: create only (FR-CAT-007 in progress) | Implemented (subcategory create only) |
-| Notification preferences | Implemented (settings only, no delivery) | Implemented |
+| Notification preferences and in-app notifications | Implemented (Q-21 approved; in-app only, no email or SMS) | Implemented (settings and navbar bell) |
 | Fire incidents | Implemented (rev 11) | Implemented |
 | Incident creation approval, soft deletion and restore | Implemented (rev 11) | Implemented |
 | Investigations, referral between offices, assignment, reports | Implemented (rev 11) | Implemented |
@@ -578,8 +578,8 @@ PROPOSED:
 | Capability | Status | Notes |
 |---|---|---|
 | Incident reports / statistics | **OPEN** | Placeholder pages only. Required report formats (e.g. official BFP forms), aggregation levels and export formats are undefined (Q-20). CONFIRMED: `REKINDLE` counts as its own category; the latest completed investigation replaces earlier ones. PROPOSED: pending, rejected and deleted incidents are excluded. |
-| Notification preferences | IMPLEMENTED | Per user: `investigationUpdates`, `reportReview`, `systemAnnouncements` (default on). Created with the user. |
-| Notification delivery | **OPEN** | No delivery channel or trigger events exist. Natural triggers: incident pending approval, approval/rejection, incident completed (to the station chief investigator), case referred, investigator assigned, report submitted, approved or rejected (Q-21). |
+| Notification preferences | IMPLEMENTED | Per user: `incidentUpdates`, `investigationUpdates`, `reportReview`, `systemAnnouncements` (default on). Created with the user. |
+| Notification delivery | **IMPLEMENTED** in-app (Q-21 approved 2026-10-28) | `Notification` inbox per user, sent after the change commits (best effort; a failure never undoes the change). Triggers and recipients as in §11.5 Q-21, filtered by preference; the actor is never notified. Email and SMS remain OPEN. |
 | Attachments / evidence | **OPEN** | "Evidence" page exists; no model, storage or endpoint. CLAUDE.md requires preventing unauthorized access to sensitive attachments (CONFIRMED as a security rule). Attachments are hidden and restored with their incident (CONFIRMED). File types, size limits, storage location, retention and chain-of-custody needs are undefined (Q-22). |
 | Incident status/alarm history | Schema only | `IncidentTimeline` records status, alarm level, user-entered `occurredAt`, remarks, creator and server `createdAt`. One entry per status or alarm change; ordered by `occurredAt` (CONFIRMED). `createdById` has no FK to `User` (D-15). |
 | General audit log | **IMPLEMENTED** (Q-23 approved 2026-10-28) | `AuditLog` records every change to users, roles, offices, positions and categories, and SUPER_ADMIN incident deletion and restore, in the same transaction as the change (field changes only, never passwords or tokens). Incident and investigation workflow history stays in the timeline, event, referral and review tables. Read through `GET /api/audit`, scoped as in §11.5 Q-23. Attachment downloads join it with Phase 5. |
@@ -830,7 +830,7 @@ PROPOSED:
 |---|---|---|
 | FR-NOT-001 | Each user can view and update their own notification preferences. | IMPLEMENTED |
 | FR-NOT-002 | A user can only read or change their **own** preferences. | PROPOSED (D-03) |
-| FR-NOT-003 | Notifications for the triggers in §8, according to preferences. | OPEN (Q-21) |
+| FR-NOT-003 | Notifications for the triggers in §8, according to preferences. | CONFIRMED (Q-21, 2026-10-28) / IMPLEMENTED (in-app) |
 
 ### 9.12 Attachments (FR-ATT)
 
@@ -916,6 +916,7 @@ Severity: **H** = security or data-integrity risk, **M** = rule not enforced, **
 | 2026-10-28 | Roadmap phase 1 (branch `roadmap-phase-1-binding-gaps`) | D-13 (logout clears cookies), D-14 (refresh tokens hashed), D-16, D-17 (409 for categories and subcategories in use), D-21, D-22, D-23 (role-aware sidebar and routes; Fire Operations pages hidden, Q-01); FR-CAT-007 (subcategory edit/delete), FR-OFF-007 (descendants re-regioned), FR-OFF-008 (offices with incident or investigation records can't be deleted), FR-OFF-010 (region code frozen once used), FR-USR-015 (warning), FR-AUD-003 (memo reference), FR-INC-027 (category, date, place and barangay filters) |
 
 | 2026-10-28 | Roadmap phase 2 (branch `roadmap-phase-2-audit-log`, migration `20261028140000_add_audit_log`) | FR-AUD-006 and Q-23: general audit log for users, offices, positions, categories and SUPER_ADMIN incident deletion/restore; `GET /api/audit` with per-role scope; Audit Log page |
+| 2026-10-28 | Roadmap phase 3 (branch `roadmap-phase-3-notifications`, migration `20261028160000_add_notifications`) | FR-NOT-003 and Q-21: in-app notifications for incident submission, resubmission, approval, rejection, finished fires, referrals, assignments and report decisions; `incidentUpdates` preference; navbar bell |
 
 Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23 resolved by roadmap phase 1 and earlier phases).
 
@@ -1027,7 +1028,7 @@ Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23
 | ID | Proposed answer |
 |---|---|
 | Q-23 | **APPROVED 2026-10-28.** A general `AuditLog` (actor, action, entity, office, non-sensitive changed fields, time) records every change to users, roles, offices, positions and categories, every `SUPER_ADMIN` write and every attachment download. Incident and investigation history stays in the existing timeline, event, referral and review tables. `SUPER_ADMIN` reads everything, `NHQ_ADMIN` reads admin changes, and `REGIONAL_ADMIN` reads changes in its region. |
-| Q-21 | In-app notifications only for now (no email or SMS). Triggers: incident submitted/resubmitted (to the station's chief of operations), approved/rejected (to the submitter), reached `FIRE_OUT`/`FIRE_OUT_UPON_ARRIVAL` (to the handling chief investigators), case referred (to the target office's chief investigators), investigator assigned (to the assignee), report submitted (to the handling chief), report approved/rejected (to the assignee). A new `incidentUpdates` preference joins the existing three. |
+| Q-21 | **APPROVED 2026-10-28.** In-app notifications only for now (no email or SMS). Triggers: incident submitted/resubmitted (to the station's chief of operations), approved/rejected (to the submitter), reached `FIRE_OUT`/`FIRE_OUT_UPON_ARRIVAL` (to the handling chief investigators), case referred (to the target office's chief investigators), investigator assigned (to the assignee), report submitted (to the handling chief), report approved/rejected (to the assignee). A new `incidentUpdates` preference joins the existing three. |
 | Q-20 | Dashboard (KPIs and "my tasks"), a statistics page (by status with `REKINDLE` as its own bucket, category, alarm, month, child office, impact totals, cause and classification from the latest completed investigation) and an incident report table with CSV export. Only approved, non-deleted incidents within the viewer's scope count. Official BFP forms stay OPEN. |
 | Q-01 | In scope: Dashboard, Statistics, Incident Reports, Incident Map (approved incidents with coordinates, OpenStreetMap tiles) and Evidence (Q-22). Monitoring, Fire Stations and Response Units are hidden until they are scoped. |
 | Q-22 | Attachments on incidents (by the owning station's staff/COMMEL) and on investigations (by the assigned investigator while open; locked after approval). JPEG, PNG, WebP and PDF, up to 20 MB, checked by file signature; a SHA-256 hash is stored for integrity. Files are kept on server disk outside the web root and downloaded only through an authorized endpoint; downloads are audited. Removal is soft. Attachments are hidden and restored with their incident. Retention period stays OPEN. |
@@ -1042,4 +1043,4 @@ Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23
 | §11.2 confirmations | Project owner | Complete |
 | PROPOSED designs accepted: §3.5 timeline validation and corrections, §3.7 approval state, §3.8 soft delete, §5.3 data model, required `barangay` | Project owner | Accepted 2026-10-10 |
 | §10 discrepancies triaged (fix / accept / defer) | Project owner | Approved 2026-10-10 (§10.1) |
-| §11.5 proposed answers (revision 11) | Project owner | Q-23 approved 2026-10-28; Q-01, Q-20, Q-21, Q-22 **pending** |
+| §11.5 proposed answers (revision 11) | Project owner | Q-23 and Q-21 approved 2026-10-28; Q-01, Q-20, Q-22 **pending** |

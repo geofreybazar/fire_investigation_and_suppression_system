@@ -209,6 +209,7 @@ export class InvestigationRepository {
       where: { id },
       select: {
         id: true,
+        investigationNo: true,
         fireIncidentId: true,
         conductingOfficeId: true,
         assignedInvestigatorId: true,

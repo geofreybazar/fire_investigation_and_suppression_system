@@ -15,6 +15,7 @@ import {
 import { type CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 import { type CreateFireIncidentInput } from './schema/fire-incident.schema.js';
 import { type ROLE } from '../../generated/prisma/enums.js';
+import { NotificationDispatcher } from '../notification/notification.dispatcher.js';
 
 const STATION = 'station-1';
 const OTHER_STATION = 'station-2';
@@ -67,7 +68,11 @@ const row = (
 
 const accessIncident = (overrides: Record<string, unknown> = {}) => ({
   id: incidentId,
+  incidentNo: '2026-10-NCR-000001',
   officeId: STATION,
+  createdById: 'submitter-1',
+  fireIncidentStatus: 'ON_GOING',
+  investigationHandlingOfficeId: null,
   approvalStatus: 'APPROVED',
   deletedAt: null,
   categoryId,
@@ -93,10 +98,16 @@ describe('FireIncidentService', () => {
   let repository: Record<string, ReturnType<typeof vi.fn>>;
   let timeline: TimelineEntryRow[];
   let investigationCount: number;
+  // The incident's stored status before a timeline change.
+  let previousStatus: string;
+
+  let dispatcher: { notify: ReturnType<typeof vi.fn> };
 
   beforeEach(async () => {
+    dispatcher = { notify: vi.fn().mockResolvedValue(undefined) };
     timeline = [];
     investigationCount = 0;
+    previousStatus = 'ON_GOING';
 
     repository = {
       findOfficeType: vi.fn((officeId: string) =>
@@ -140,7 +151,11 @@ describe('FireIncidentService', () => {
           }) => TimelineChange,
         ) => {
           const change = plan({ entries: timeline, investigationCount });
-          return Promise.resolve({ entryId: 'new-entry', ...change });
+          return Promise.resolve({
+            entryId: 'new-entry',
+            ...change,
+            previousStatus,
+          });
         },
       ),
     };
@@ -149,6 +164,7 @@ describe('FireIncidentService', () => {
       providers: [
         FireIncidentService,
         { provide: FireIncidentRepository, useValue: repository },
+        { provide: NotificationDispatcher, useValue: dispatcher },
       ],
     }).compile();
 
@@ -710,6 +726,147 @@ describe('FireIncidentService', () => {
       await expect(service.restore(incidentId, superAdmin)).rejects.toThrow(
         NotFoundException,
       );
+    });
+  });
+
+  describe('notifications (Q-21)', () => {
+    it("notifies the station's chief of operations of a submission", async () => {
+      await service.submit(submission, staff);
+
+      expect(dispatcher.notify).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'INCIDENT_SUBMITTED',
+          entityType: 'FIRE_INCIDENT',
+          entityId: incidentId,
+          actorId: staff.sub,
+          recipients: {
+            officeId: STATION,
+            roles: ['CITY_MUNICIPALITY_OPERATION'],
+          },
+        }),
+      );
+    });
+
+    it('notifies the submitter of approval with the incident number', async () => {
+      repository.findForAccess.mockResolvedValue(
+        accessIncident({ approvalStatus: 'PENDING', incidentNo: null }),
+      );
+
+      await service.approve(incidentId, chief);
+
+      expect(dispatcher.notify).toHaveBeenCalledTimes(1);
+      expect(dispatcher.notify).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'INCIDENT_APPROVED',
+          body: 'Your fire incident was approved as 2026-10-NCR-000001.',
+          recipients: { userIds: ['submitter-1'] },
+        }),
+      );
+    });
+
+    it('also tells the chief investigators when an approved incident is already out', async () => {
+      repository.findForAccess.mockResolvedValue(
+        accessIncident({
+          approvalStatus: 'PENDING',
+          incidentNo: null,
+          fireIncidentStatus: 'FIRE_OUT_UPON_ARRIVAL',
+        }),
+      );
+
+      await service.approve(incidentId, chief);
+
+      expect(dispatcher.notify).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'INCIDENT_INVESTIGABLE',
+          recipients: {
+            officeId: STATION,
+            roles: expect.arrayContaining([
+              'CITY_MUNICIPALITY_CHIEF_INVESTIGATOR',
+            ]),
+          },
+        }),
+      );
+    });
+
+    it('notifies the submitter of a rejection with the remarks', async () => {
+      repository.findForAccess.mockResolvedValue(
+        accessIncident({ approvalStatus: 'PENDING' }),
+      );
+
+      await service.reject(incidentId, { remarks: 'Wrong barangay' }, chief);
+
+      expect(dispatcher.notify).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'INCIDENT_REJECTED',
+          body: 'Your fire incident was rejected: Wrong barangay',
+          recipients: { userIds: ['submitter-1'] },
+        }),
+      );
+    });
+
+    it('notifies the chief of operations of a resubmission', async () => {
+      repository.findForAccess.mockResolvedValue(
+        accessIncident({ approvalStatus: 'REJECTED' }),
+      );
+
+      await service.resubmit(incidentId, staff);
+
+      expect(dispatcher.notify).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'INCIDENT_RESUBMITTED' }),
+      );
+    });
+
+    describe('when the fire is finished', () => {
+      beforeEach(() => {
+        timeline = [
+          row('e1', 'VERIFICATION', '10:00'),
+          row('e2', 'ON_GOING', '10:10', 'SECOND_ALARM'),
+          row('e3', 'FIRE_UNDER_CONTROL', '10:30', 'SECOND_ALARM'),
+        ];
+        previousStatus = 'FIRE_UNDER_CONTROL';
+      });
+
+      const fireOut = () =>
+        service.addTimelineEntry(
+          incidentId,
+          { status: 'FIRE_OUT', occurredAt: at('11:00') },
+          staff,
+        );
+
+      it("notifies the handling office's chief investigators", async () => {
+        repository.findForAccess.mockResolvedValue(
+          accessIncident({ investigationHandlingOfficeId: DISTRICT }),
+        );
+
+        const result = await fireOut();
+
+        expect(result).not.toHaveProperty('previousStatus');
+        expect(dispatcher.notify).toHaveBeenCalledWith(
+          expect.objectContaining({
+            type: 'INCIDENT_INVESTIGABLE',
+            body: 'Fire incident 2026-10-NCR-000001 is now fire out. Decide whether to start an investigation or refer the case.',
+            recipients: expect.objectContaining({ officeId: DISTRICT }),
+          }),
+        );
+      });
+
+      it('does not notify again when the incident was already out', async () => {
+        previousStatus = 'FIRE_OUT';
+
+        await fireOut();
+
+        expect(dispatcher.notify).not.toHaveBeenCalled();
+      });
+
+      it('does not notify for an incident that is not approved', async () => {
+        repository.findForAccess.mockResolvedValue(
+          accessIncident({ approvalStatus: 'PENDING' }),
+        );
+
+        await fireOut();
+
+        expect(dispatcher.notify).not.toHaveBeenCalled();
+      });
     });
   });
 });

@@ -39,6 +39,9 @@ import {
   sortTimeline,
   type TimelineEntryState,
 } from './utils/incident-rules.js';
+import { CHIEF_INVESTIGATOR_ROLES } from '../investigation/utils/investigation-rules.js';
+import { NotificationDispatcher } from '../notification/notification.dispatcher.js';
+import { notificationMessages } from '../notification/notification.messages.js';
 import {
   INCIDENT_EDITOR_ROLES,
   incidentScopeWhere,
@@ -63,6 +66,7 @@ export class FireIncidentService {
 
   constructor(
     private readonly fireIncidentRepository: FireIncidentRepository,
+    private readonly notificationDispatcher: NotificationDispatcher,
   ) {}
 
   // ----- Submit, list and view (3.2) -----
@@ -115,6 +119,15 @@ export class FireIncidentService {
     });
 
     this.logger.log(`Fire incident submitted: ${incident.id}`);
+
+    await this.notificationDispatcher.notify({
+      ...notificationMessages.incidentSubmitted(incident.id),
+      actorId: user.sub,
+      recipients: {
+        officeId: station.id,
+        roles: [ROLE.CITY_MUNICIPALITY_OPERATION],
+      },
+    });
 
     return incident;
   }
@@ -202,6 +215,21 @@ export class FireIncidentService {
 
     this.logger.log(`Fire incident approved: ${id}`);
 
+    await this.notificationDispatcher.notify({
+      ...notificationMessages.incidentApproved(id, result.incidentNo),
+      actorId: user.sub,
+      recipients: { userIds: [incident.createdById] },
+    });
+
+    // Submitted as already finished (e.g. fire out upon arrival).
+    if (INVESTIGABLE_STATUSES.includes(incident.fireIncidentStatus)) {
+      await this.notifyInvestigable(
+        { ...incident, incidentNo: result.incidentNo },
+        incident.fireIncidentStatus,
+        user,
+      );
+    }
+
     return result;
   }
 
@@ -228,6 +256,12 @@ export class FireIncidentService {
       throw new ConflictException('Only a pending incident can be rejected.');
     }
 
+    await this.notificationDispatcher.notify({
+      ...notificationMessages.incidentRejected(id, input.remarks),
+      actorId: user.sub,
+      recipients: { userIds: [incident.createdById] },
+    });
+
     return { message: 'Fire incident rejected.' };
   }
 
@@ -247,6 +281,15 @@ export class FireIncidentService {
         'Only a rejected incident can be resubmitted.',
       );
     }
+
+    await this.notificationDispatcher.notify({
+      ...notificationMessages.incidentResubmitted(id),
+      actorId: user.sub,
+      recipients: {
+        officeId: incident.officeId,
+        roles: [ROLE.CITY_MUNICIPALITY_OPERATION],
+      },
+    });
 
     return { message: 'Fire incident resubmitted.' };
   }
@@ -295,7 +338,7 @@ export class FireIncidentService {
     const incident = await this.findVisible(id, user);
     this.assertStationEditor(incident, user);
 
-    return this.applyTimelineChange(id, user, ({ entries }) => {
+    return this.applyTimelineChange(incident, user, ({ entries }) => {
       const newEntry = this.toNewEntry(input, entries);
       const next = [...this.toStates(entries), this.toState(newEntry)];
 
@@ -315,7 +358,7 @@ export class FireIncidentService {
     this.assertStationEditor(incident, user);
 
     return this.applyTimelineChange(
-      id,
+      incident,
       user,
       ({ entries, investigationCount }) => {
         this.findActiveEntry(entries, entryId);
@@ -347,7 +390,7 @@ export class FireIncidentService {
     this.assertStationEditor(incident, user);
 
     return this.applyTimelineChange(
-      id,
+      incident,
       user,
       ({ entries, investigationCount }) => {
         this.findActiveEntry(entries, entryId);
@@ -583,7 +626,7 @@ export class FireIncidentService {
   }
 
   private async applyTimelineChange(
-    id: string,
+    incident: AccessIncident,
     user: CurrentUserJwtPayload,
     plan: (context: {
       entries: TimelineEntryRow[];
@@ -591,7 +634,7 @@ export class FireIncidentService {
     }) => TimelineChange,
   ) {
     const result = await this.fireIncidentRepository.changeTimeline(
-      id,
+      incident.id,
       user.sub,
       plan,
     );
@@ -600,7 +643,42 @@ export class FireIncidentService {
       throw new NotFoundException('Fire incident not found.');
     }
 
-    return result;
+    const { previousStatus, ...change } = result;
+
+    // Only approved incidents can be investigated, so only they notify.
+    if (
+      incident.approvalStatus === IncidentApprovalStatus.APPROVED &&
+      INVESTIGABLE_STATUSES.includes(change.current.status) &&
+      !INVESTIGABLE_STATUSES.includes(previousStatus)
+    ) {
+      await this.notifyInvestigable(incident, change.current.status, user);
+    }
+
+    return change;
+  }
+
+  // The fire is finished: the handling office's chief investigators decide
+  // whether to investigate (Q-21).
+  private async notifyInvestigable(
+    incident: Pick<
+      AccessIncident,
+      'id' | 'incidentNo' | 'officeId' | 'investigationHandlingOfficeId'
+    >,
+    status: FireIncidentStatus,
+    user: CurrentUserJwtPayload,
+  ) {
+    await this.notificationDispatcher.notify({
+      ...notificationMessages.incidentInvestigable(
+        incident.id,
+        incident.incidentNo ?? '',
+        status,
+      ),
+      actorId: user.sub,
+      recipients: {
+        officeId: incident.investigationHandlingOfficeId ?? incident.officeId,
+        roles: CHIEF_INVESTIGATOR_ROLES,
+      },
+    });
   }
 
   private findActiveEntry(entries: TimelineEntryRow[], entryId: string) {

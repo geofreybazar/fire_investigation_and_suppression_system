@@ -12,6 +12,7 @@ erDiagram
     Position ||--o{ User : has
     User ||--o{ RefreshToken : has
     User ||--o| NotificationPreference : has
+    User ||--o{ Notification : receives
 
     Office ||--o{ FireIncident : "owns (officeId)"
     Office |o--o{ FireIncident : "handles investigation"
@@ -49,7 +50,8 @@ erDiagram
 | `User` | `email`, `account_number`, `rank: RANK`, names, `password` (bcrypt hash), `isActive`, `officeId`, `positionId`, `role: ROLE` | `email` and `account_number` unique; indexes on `officeId`, `positionId`, `role` |
 | `Position` | `name`, `isActive` | `name` unique |
 | `RefreshToken` | `refreshToken` (SHA-256 hash of the token), `expiresAt`, `userId` | unique; cascade on user delete |
-| `NotificationPreference` | `investigationUpdates`, `reportReview`, `systemAnnouncements` | one per user; cascade |
+| `NotificationPreference` | `incidentUpdates`, `investigationUpdates`, `reportReview`, `systemAnnouncements` (all default on) | one per user; cascade |
+| `Notification` | `userId`, `type: NotificationType`, `title`, `body`, `entityType: NotificationEntityType`, `entityId`, `readAt?`, `createdAt` | in-app inbox (Q-21); cascade with the user; index `(userId, readAt, createdAt)` |
 
 - `Office` has two self-relations. `parent`/`children` is the hierarchy, and `region`/`regionalOffices` points every office at its regional office. Only regional offices carry a `regionCode`, which incident numbers use.
 - `password` must never leave the API.
@@ -106,6 +108,8 @@ Investigation fields (cause, classification, origin) are kept separate from the 
 | `ReportDecision` | `UNDER_REVIEW`, `APPROVED`, `REJECTED` |
 | `FireCaseClassification` | `UNDER_INVESTIGATION`, `ACCIDENTAL`, `INCENDIARY_INTENTIONAL`, `NATURAL`, `FIRE_CASE_WITH_NEGLIGENT_ACTS` |
 | `AuditAction` | `USER_CREATED`, `USER_UPDATED`, `USER_ACTIVATED`, `USER_DEACTIVATED`, `USER_PASSWORD_CHANGED`, `OFFICE_CREATED/UPDATED/DELETED`, `POSITION_CREATED/UPDATED/DELETED`, `CATEGORY_CREATED/UPDATED/DELETED`, `SUBCATEGORY_CREATED/UPDATED/DELETED`, `INCIDENT_DELETED`, `INCIDENT_RESTORED` |
+| `NotificationType` | `INCIDENT_SUBMITTED`, `INCIDENT_RESUBMITTED`, `INCIDENT_APPROVED`, `INCIDENT_REJECTED`, `INCIDENT_INVESTIGABLE`, `CASE_REFERRED`, `INVESTIGATOR_ASSIGNED`, `REPORT_SUBMITTED`, `REPORT_APPROVED`, `REPORT_REJECTED` |
+| `NotificationEntityType` | `FIRE_INCIDENT`, `INVESTIGATION` |
 | `AuditEntityType` | `USER`, `OFFICE`, `POSITION`, `FIRE_INCIDENT_CATEGORY`, `FIRE_INCIDENT_SUBCATEGORY`, `FIRE_INCIDENT` |
 | `CauseOfFire` | about 40 values, including `UNDER_INVESTIGATION`; see `models/fireIncident/enums.prisma` |
 
@@ -124,5 +128,6 @@ Known misspellings that are deferred, since renames need approval (REQUIREMENTS.
 | `20261010180000_unique_office_name_per_parent` | `@@unique([parentId, name])` on `Office` |
 | `20261028120000_add_deletion_memo_reference` | `FireIncident.deletionMemoReference` |
 | `20261028140000_add_audit_log` | `AuditLog` table, `AuditAction` and `AuditEntityType` enums |
+| `20261028160000_add_notifications` | `Notification` table, its enums, `NotificationPreference.incidentUpdates` |
 
 Create migrations with `npx prisma migrate dev --name <name> --config prisma7.config.ts` and regenerate with `npx prisma generate --config prisma7.config.ts`.

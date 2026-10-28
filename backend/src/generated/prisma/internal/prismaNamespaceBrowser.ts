@@ -68,6 +68,7 @@ export const ModelName = {
   FireIncidentSubcategory: 'FireIncidentSubcategory',
   IncidentNumberCounter: 'IncidentNumberCounter',
   NotificationPreference: 'NotificationPreference',
+  Notification: 'Notification',
   Office: 'Office',
   Position: 'Position',
   RefreshToken: 'RefreshToken',
@@ -340,10 +341,26 @@ export const NotificationPreferenceScalarFieldEnum = {
   investigationUpdates: 'investigationUpdates',
   reportReview: 'reportReview',
   systemAnnouncements: 'systemAnnouncements',
+  incidentUpdates: 'incidentUpdates',
   userId: 'userId'
 } as const
 
 export type NotificationPreferenceScalarFieldEnum = (typeof NotificationPreferenceScalarFieldEnum)[keyof typeof NotificationPreferenceScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  body: 'body',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  readAt: 'readAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const OfficeScalarFieldEnum = {

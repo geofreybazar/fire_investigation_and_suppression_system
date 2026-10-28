@@ -22,12 +22,22 @@ describe('NotificationService', () => {
   let repository: {
     getUserNotificationSettings: ReturnType<typeof vi.fn>;
     updateNotificationSettings: ReturnType<typeof vi.fn>;
+    findInbox: ReturnType<typeof vi.fn>;
+    countUnread: ReturnType<typeof vi.fn>;
+    markRead: ReturnType<typeof vi.fn>;
+    markAllRead: ReturnType<typeof vi.fn>;
+    exists: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(async () => {
     repository = {
       getUserNotificationSettings: vi.fn(),
       updateNotificationSettings: vi.fn(),
+      findInbox: vi.fn().mockResolvedValue({ notifications: [], total: 0 }),
+      countUnread: vi.fn().mockResolvedValue(0),
+      markRead: vi.fn().mockResolvedValue(1),
+      markAllRead: vi.fn().mockResolvedValue(3),
+      exists: vi.fn().mockResolvedValue(false),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -95,6 +105,62 @@ describe('NotificationService', () => {
         ),
       ).rejects.toThrow(ForbiddenException);
       expect(repository.updateNotificationSettings).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('inbox', () => {
+    it("lists only the current user's notifications, 10 per page", async () => {
+      repository.findInbox.mockResolvedValue({ notifications: [], total: 25 });
+
+      const result = await service.findInbox(3, currentUser);
+
+      expect(repository.findInbox).toHaveBeenCalledWith(userId, 20, 10);
+      expect(result.pagination).toEqual({
+        page: 3,
+        limit: 10,
+        total: 25,
+        totalPages: 3,
+      });
+    });
+
+    it('counts unread notifications for the current user', async () => {
+      repository.countUnread.mockResolvedValue(4);
+
+      await expect(service.countUnread(currentUser)).resolves.toEqual({
+        unread: 4,
+      });
+      expect(repository.countUnread).toHaveBeenCalledWith(userId);
+    });
+
+    it('marks a notification read', async () => {
+      await service.markRead('n-1', currentUser);
+
+      expect(repository.markRead).toHaveBeenCalledWith('n-1', userId);
+    });
+
+    it('treats an already-read notification as fine', async () => {
+      repository.markRead.mockResolvedValue(0);
+      repository.exists.mockResolvedValue(true);
+
+      await expect(service.markRead('n-1', currentUser)).resolves.toEqual({
+        message: 'Notification marked as read.',
+      });
+    });
+
+    it("returns 404 for a missing or someone else's notification", async () => {
+      repository.markRead.mockResolvedValue(0);
+
+      await expect(service.markRead('n-1', currentUser)).rejects.toThrow(
+        NotFoundException,
+      );
+      expect(repository.exists).toHaveBeenCalledWith('n-1', userId);
+    });
+
+    it("marks all of the current user's notifications read", async () => {
+      await expect(service.markAllRead(currentUser)).resolves.toEqual({
+        updated: 3,
+      });
+      expect(repository.markAllRead).toHaveBeenCalledWith(userId);
     });
   });
 });
