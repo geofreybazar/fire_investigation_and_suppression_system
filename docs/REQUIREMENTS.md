@@ -2,6 +2,7 @@
 
 > **Status: APPROVED (revision 10), approved by the project owner on 2026-10-10.**
 > All items tagged PROPOSED or INTERPRETED in this revision were accepted with the approval and are binding requirements. Items tagged OPEN remain undecided and must be resolved before the feature they affect is built.
+> **Revision 11 (draft, 2026-10-28):** refreshes §1.2 and §10.1 to match the code after Phases 1–5. It also adds §11.5, proposed answers to Q-01, Q-20, Q-21, Q-22 and Q-23 for the audit log, notifications, statistics, incident map and attachments. Those answers are **PROPOSED, pending owner approval**; the features they cover must not be built until they are approved.
 > Last updated: 2026-10-10. Derived from `CLAUDE.md`, owner answers given on 2026-10-10 (rounds 1–9), the Prisma schema (`backend/prisma/`), backend modules (`backend/src/modules/`), frontend pages, hooks and services (`frontend/src/`), and backend unit tests.
 
 ## 0. How to read this document
@@ -36,14 +37,15 @@ FIIS (shown in the UI as "Fire Investigation and Suppression System") is a web a
 | Personnel (user) management | Implemented | Implemented |
 | Office management | Implemented | Implemented |
 | Position management | Implemented | Implemented |
-| Incident classification (categories / subcategories) | Categories: full CRUD. Subcategories: create only | Implemented |
+| Incident classification (categories / subcategories) | Categories: full CRUD. Subcategories: create only (FR-CAT-007 in progress) | Implemented (subcategory create only) |
 | Notification preferences | Implemented (settings only, no delivery) | Implemented |
-| Fire incidents | Schema and incident-number utility only. Endpoint is an unguarded stub | Page shell with empty table |
-| Incident creation approval, soft deletion and restore | None (no schema) | None |
-| Investigations, referral between offices, assignment, reports | Schema only, one investigation per incident, no referral, assignment or number generator | Placeholder page |
-| Evidence / attachments | None | Placeholder page |
-| Dashboard, incident map, monitoring, fire stations, response units, statistics, incident reports | None | Placeholder pages |
-| Audit history | Only `IncidentTimeline` in schema | None |
+| Fire incidents | Implemented (rev 11) | Implemented |
+| Incident creation approval, soft deletion and restore | Implemented (rev 11) | Implemented |
+| Investigations, referral between offices, assignment, reports | Implemented (rev 11) | Implemented |
+| Evidence / attachments | None (design PROPOSED in §11.5) | Placeholder page |
+| Dashboard, incident map, statistics, incident reports | None (design PROPOSED in §11.5) | Placeholder pages |
+| Monitoring, fire stations, response units | None (OPEN, Q-01) | Placeholder pages |
+| Audit history | `IncidentTimeline`, `FireIncidentEvent`, referral and report-review history; no general audit log (PROPOSED in §11.5) | Incident event history only |
 
 ### 1.3 In scope
 
@@ -911,7 +913,9 @@ Severity: **H** = security or data-integrity risk, **M** = rule not enforced, **
 | 2026-10-10 | Phase 4 (investigation backend) | Service logic for D-29 (several investigations per incident, one open at a time), referrals, assignment, reports and reviews; FR-USR-013/014 (investigators with an open investigation are locked). |
 | 2026-10-10 | Phase 5 (frontend) | Fire-incident list, submission, detail (approval, timeline with corrections, details, impact/resources/personnel, deletion and restore) and investigation pages (case queue, assignments, referral, start, drafting, submission and review). Controls are shown by role; the backend enforces every rule. |
 
-Still open from priority 2: none.
+| 2026-10-28 | Roadmap phase 1 (branch `roadmap-phase-1-binding-gaps`) | D-13 (logout clears cookies), D-14 (refresh tokens hashed), D-16, D-17 (409 for categories and subcategories in use), D-21, D-22, D-23 (role-aware sidebar and routes; Fire Operations pages hidden, Q-01); FR-CAT-007 (subcategory edit/delete), FR-OFF-007 (descendants re-regioned), FR-OFF-008 (offices with incident or investigation records can't be deleted), FR-OFF-010 (region code frozen once used), FR-USR-015 (warning), FR-AUD-003 (memo reference), FR-INC-027 (category, date, place and barangay filters) |
+
+Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23 resolved by roadmap phase 1 and earlier phases).
 
 ---
 
@@ -1016,6 +1020,16 @@ Still open from priority 2: none.
 | Q-26 | Are positions a national list managed by NHQ only, or can regional admins add them? |
 | Q-27 | Which roles may maintain incident categories and subcategories? |
 
+### 11.5 Proposed answers (revision 11, PROPOSED, pending owner approval)
+
+| ID | Proposed answer |
+|---|---|
+| Q-23 | A general `AuditLog` (actor, action, entity, office, non-sensitive changed fields, time) records every change to users, roles, offices, positions and categories, every `SUPER_ADMIN` write and every attachment download. Incident and investigation history stays in the existing timeline, event, referral and review tables. `SUPER_ADMIN` reads everything, `NHQ_ADMIN` reads admin changes, and `REGIONAL_ADMIN` reads changes in its region. |
+| Q-21 | In-app notifications only for now (no email or SMS). Triggers: incident submitted/resubmitted (to the station's chief of operations), approved/rejected (to the submitter), reached `FIRE_OUT`/`FIRE_OUT_UPON_ARRIVAL` (to the handling chief investigators), case referred (to the target office's chief investigators), investigator assigned (to the assignee), report submitted (to the handling chief), report approved/rejected (to the assignee). A new `incidentUpdates` preference joins the existing three. |
+| Q-20 | Dashboard (KPIs and "my tasks"), a statistics page (by status with `REKINDLE` as its own bucket, category, alarm, month, child office, impact totals, cause and classification from the latest completed investigation) and an incident report table with CSV export. Only approved, non-deleted incidents within the viewer's scope count. Official BFP forms stay OPEN. |
+| Q-01 | In scope: Dashboard, Statistics, Incident Reports, Incident Map (approved incidents with coordinates, OpenStreetMap tiles) and Evidence (Q-22). Monitoring, Fire Stations and Response Units are hidden until they are scoped. |
+| Q-22 | Attachments on incidents (by the owning station's staff/COMMEL) and on investigations (by the assigned investigator while open; locked after approval). JPEG, PNG, WebP and PDF, up to 20 MB, checked by file signature; a SHA-256 hash is stored for integrity. Files are kept on server disk outside the web root and downloaded only through an authorized endpoint; downloads are audited. Removal is soft. Attachments are hidden and restored with their incident. Retention period stays OPEN. |
+
 ---
 
 ## 12. Approval
@@ -1026,3 +1040,4 @@ Still open from priority 2: none.
 | §11.2 confirmations | Project owner | Complete |
 | PROPOSED designs accepted: §3.5 timeline validation and corrections, §3.7 approval state, §3.8 soft delete, §5.3 data model, required `barangay` | Project owner | Accepted 2026-10-10 |
 | §10 discrepancies triaged (fix / accept / defer) | Project owner | Approved 2026-10-10 (§10.1) |
+| §11.5 proposed answers (revision 11) | Project owner | **Pending** |
