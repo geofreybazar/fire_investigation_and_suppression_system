@@ -1,0 +1,36 @@
+import {
+  BarChart3,
+  Building,
+  Building2,
+  BriefcaseBusiness,
+  FileText,
+  Flame,
+  History,
+  LayoutDashboard,
+  Map,
+  Radio,
+  Search,
+  Shapes,
+  Shield,
+  Truck,
+  Users,
+} from "lucide-react";
+
+// Icons for the `icon` names in constants/links.ts.
+export const NAV_ICONS: Record<string, React.ReactNode> = {
+  Dashboard: <LayoutDashboard />,
+  Map: <Map />,
+  Flame: <Flame />,
+  Building2: <Building2 />,
+  Radio: <Radio />,
+  Truck: <Truck />,
+  Search: <Search />,
+  Shield: <Shield />,
+  FileText: <FileText />,
+  BarChart3: <BarChart3 />,
+  Users: <Users />,
+  BriefcaseBusiness: <BriefcaseBusiness />,
+  Building: <Building />,
+  Shapes: <Shapes />,
+  History: <History />,
+};

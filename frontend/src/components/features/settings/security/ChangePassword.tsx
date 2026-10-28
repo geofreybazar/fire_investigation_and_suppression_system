@@ -21,13 +21,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useChangePassword from "@/hooks/users/useChangePassword";
 
-const ChangePassword = () => {
-  const user = useUserStore((u) => u.user);
+// Hooks can't run after an early return, so the dialog is its own component.
+const ChangePasswordDialog = ({ userId }: { userId: string }) => {
   const { changePassword, isPending } = useChangePassword();
-
-  if (!user) {
-    return <Navigate to='/login' replace />;
-  }
 
   const [open, setOpen] = useState(false);
   const modalOnChange = (isOpen: boolean) => {
@@ -37,7 +33,7 @@ const ChangePassword = () => {
   const methods = useForm<ChangePasswordInput>({
     resolver: zodResolver(changePasswordSchema),
     defaultValues: {
-      userId: user.id,
+      userId,
       currentPassword: "",
       newPassword: "",
     },
@@ -74,13 +70,14 @@ const ChangePassword = () => {
             control={methods.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Current Password</FieldLabel>
+                <FieldLabel htmlFor='current-password'>
+                  Current Password
+                </FieldLabel>
                 <Input
                   {...field}
-                  id='form-rhf-demo-titlse'
+                  id='current-password'
                   aria-invalid={fieldState.invalid}
-                  placeholder='••••••••••••'
-                  autoComplete='off'
+                  autoComplete='current-password'
                   type='password'
                 />
                 {fieldState.invalid && (
@@ -97,13 +94,12 @@ const ChangePassword = () => {
             control={methods.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>New Password</FieldLabel>
+                <FieldLabel htmlFor='new-password'>New Password</FieldLabel>
                 <Input
                   {...field}
-                  id='form-rhf-demo-title'
+                  id='new-password'
                   aria-invalid={fieldState.invalid}
-                  placeholder='••••••••••••'
-                  autoComplete='off'
+                  autoComplete='new-password'
                   type='password'
                 />
                 {fieldState.invalid && (
@@ -114,20 +110,28 @@ const ChangePassword = () => {
           />
         </FieldGroup>
         <Button type='submit' disabled={isPending}>
-          <Button type='submit' disabled={isPending}>
-            {isPending ? (
-              <>
-                <Spinner />
-                Submitting...
-              </>
-            ) : (
-              "Submit"
-            )}
-          </Button>
+          {isPending ? (
+            <>
+              <Spinner />
+              Submitting...
+            </>
+          ) : (
+            "Submit"
+          )}
         </Button>
       </form>
     </DialogComponent>
   );
+};
+
+const ChangePassword = () => {
+  const user = useUserStore((u) => u.user);
+
+  if (!user) {
+    return <Navigate to='/login' replace />;
+  }
+
+  return <ChangePasswordDialog userId={user.id} />;
 };
 
 export default ChangePassword;

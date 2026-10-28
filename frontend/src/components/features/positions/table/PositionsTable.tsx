@@ -2,7 +2,8 @@ import useGetPositions from "@/hooks/position/useGetPositions";
 import PaginationComponent from "@/components/common/PaginationComponent";
 import DesktopView from "./DesktopView";
 import MobileView from "./MobileView";
-import NoOfficeFound from "../../offices/table/NoOfficeFound";
+import { BriefcaseBusiness } from "lucide-react";
+import EmptyState from "@/components/common/EmptyState";
 
 interface PositionsTableProps {
   debouncedSearch: string;
@@ -26,9 +27,15 @@ const PositionsTable = ({
 
   if (!positions || positions.data.length === 0) {
     return (
-      <NoOfficeFound
-        hasFilters={Boolean(debouncedSearch)}
-        onClearFilters={clearFilters}
+      <EmptyState
+        icon={<BriefcaseBusiness />}
+        title='No Positions Found'
+        description={
+          debouncedSearch
+            ? "No positions match your search. Try a different name."
+            : "There are no positions yet. Add one to start assigning personnel."
+        }
+        onClearFilters={debouncedSearch ? clearFilters : undefined}
       />
     );
   }

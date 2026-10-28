@@ -2,6 +2,7 @@ import { useState } from "react";
 import DialogComponent from "@/components/common/DialogComponent";
 import { Shapes, Plus } from "lucide-react";
 import AddClassification from "./addClassification/AddClassification";
+import PageHeader from "@/components/common/PageHeader";
 
 const Header = () => {
   const [openAddClassification, setOpenAddClassification] = useState(false);
@@ -10,22 +11,11 @@ const Header = () => {
   };
 
   return (
-    <div className='flex items-center justify-between'>
-      <div className='flex items-center gap-3'>
-        <div className='flex h-10 w-10 items-center justify-center rounded-lg border bg-muted/50'>
-          <Shapes className='h-5 w-5' />
-        </div>
-
-        <div>
-          <h1 className='text-2xl font-semibold tracking-tight'>
-            Incident Classifications
-          </h1>
-          <p className='text-sm text-muted-foreground'>
-            Manage classifications used to categorize fire incidents.
-          </p>
-        </div>
-      </div>
-
+    <PageHeader
+      icon={<Shapes />}
+      title='Incident Classifications'
+      description='Manage classifications used to categorize fire incidents.'
+    >
       <DialogComponent
         open={openAddClassification}
         modalOnChange={modalOnchange}
@@ -38,7 +28,7 @@ const Header = () => {
           setOpenAddClassification={setOpenAddClassification}
         />
       </DialogComponent>
-    </div>
+    </PageHeader>
   );
 };
 

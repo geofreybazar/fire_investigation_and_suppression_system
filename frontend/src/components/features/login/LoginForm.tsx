@@ -8,10 +8,27 @@ import { type LoginType, loginSchema } from "@/interface/login";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-import { Field, FieldError, FieldGroup } from "@/components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { useUserStore } from "@/store/userStore";
 
 import { isAxiosError } from "axios";
+
+// The server's message (e.g. wrong credentials), or a readable fallback when
+// there is none, such as when the server can't be reached.
+const loginErrorMessage = (error: unknown) => {
+  if (isAxiosError(error)) {
+    if (!error.response) {
+      return "Can't reach the server. Check your connection and try again.";
+    }
+    return error.response.data?.message ?? "Login failed. Please try again.";
+  }
+  return "Login failed. Please try again.";
+};
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -50,12 +67,17 @@ const LoginForm = () => {
           control={control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor='login-account-number'>
+                Account number
+              </FieldLabel>
               <Input
                 {...field}
-                id='form-rhf-demo-title'
+                id='login-account-number'
                 aria-invalid={fieldState.invalid}
-                placeholder='A123456'
-                autoComplete='off'
+                placeholder='e.g. B13084'
+                autoComplete='username'
+                autoCapitalize='characters'
+                autoFocus
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
@@ -67,13 +89,13 @@ const LoginForm = () => {
           control={control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor='login-password'>Password</FieldLabel>
               <Input
                 {...field}
                 type='password'
-                id='form-rhf-demo-title'
+                id='login-password'
                 aria-invalid={fieldState.invalid}
-                placeholder='••••••••••••'
-                autoComplete='off'
+                autoComplete='current-password'
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
@@ -90,10 +112,11 @@ const LoginForm = () => {
       </Button>
 
       {isError && (
-        <p className='text-center text-red-600 text-sm font-medium'>
-          {isAxiosError(error)
-            ? error.response?.data?.message
-            : "Login failed. Please try again."}
+        <p
+          role='alert'
+          className='text-center text-sm font-medium text-destructive'
+        >
+          {loginErrorMessage(error)}
         </p>
       )}
     </form>

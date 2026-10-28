@@ -18,6 +18,8 @@ export interface NavLinkItem {
   label: string;
   icon: string;
   canAccess: (user?: LinkUser | null) => boolean;
+  // Planned but not built yet: shown with a "Soon" tag.
+  comingSoon?: boolean;
 }
 
 const everyone = (user?: LinkUser | null) => !!user;
@@ -34,6 +36,7 @@ export const OVERVIEW_LINKS: NavLinkItem[] = [
     label: "Incident Map",
     icon: "Map",
     canAccess: canViewIncidents,
+    comingSoon: true,
   },
   {
     link: "/fireincidents",
@@ -78,6 +81,7 @@ export const INVESTIGATION_LINKS: NavLinkItem[] = [
     label: "Evidence",
     icon: "Shield",
     canAccess: canViewIncidents,
+    comingSoon: true,
   },
 ];
 
@@ -87,6 +91,7 @@ export const REPORTS_LINKS: NavLinkItem[] = [
     label: "Incident Reports",
     icon: "FileText",
     canAccess: canViewIncidents,
+    comingSoon: true,
   },
 
   {
@@ -94,6 +99,7 @@ export const REPORTS_LINKS: NavLinkItem[] = [
     label: "Statistics & Analytics",
     icon: "BarChart3",
     canAccess: canViewIncidents,
+    comingSoon: true,
   },
 ];
 

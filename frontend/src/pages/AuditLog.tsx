@@ -19,6 +19,7 @@ import {
 import ErrorFallbackComponent from "@/components/common/ErrorFallbackComponent";
 import TableSkeleton from "@/components/common/TableSkeleton";
 import AuditLogTable from "@/components/features/audit/AuditLogTable";
+import PageHeader from "@/components/common/PageHeader";
 
 const ALL = "ALL";
 
@@ -56,18 +57,11 @@ const AuditLog = () => {
 
   return (
     <div className='space-y-6'>
-      <div className='flex items-center gap-3'>
-        <div className='flex size-10 items-center justify-center rounded-lg border bg-muted/50'>
-          <History className='size-5' />
-        </div>
-        <div>
-          <h1 className='text-2xl font-semibold tracking-tight'>Audit Log</h1>
-          <p className='text-sm text-muted-foreground'>
-            Who changed users, offices, positions, classifications and deleted
-            incidents, and when.
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        icon={<History />}
+        title='Audit Log'
+        description='Who changed users, offices, positions, classifications and deleted incidents, and when.'
+      />
 
       <div className='flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center'>
         <Select

@@ -3,6 +3,7 @@ import AlertInformation from "../components/features/myProfile/AlertInformation"
 import PageHeader from "@/components/common/PageHeader";
 import UserDetailsLoading from "@/components/features/myProfile/UserDetailsLoading";
 import loadable from "@loadable/component";
+import { UserRound } from "lucide-react";
 import { ErrorBoundary } from "react-error-boundary";
 
 const UserDetails = loadable(
@@ -17,8 +18,9 @@ const MyProfile = () => {
     <div className='space-y-6'>
       {/* Page Header */}
       <PageHeader
-        title={"My Profile"}
-        description={" View your account and organizational information."}
+        icon={<UserRound />}
+        title='My Profile'
+        description='View your account and organizational information.'
       />
 
       {/* Information alert */}

@@ -2,25 +2,17 @@ import { useState } from "react";
 import DialogComponent from "@/components/common/DialogComponent";
 import { Users, Plus } from "lucide-react";
 import AddPersonnel from "./addPersonnel/AddPersonnel";
+import PageHeader from "@/components/common/PageHeader";
 
 const Header = () => {
   const [openAddPersonnel, setOpenAddPersonnel] = useState(false);
 
   return (
-    <div className='flex items-center justify-between'>
-      <div className='flex items-center gap-3'>
-        <div className='flex h-10 w-10 items-center justify-center rounded-lg border bg-muted/50'>
-          <Users className='h-5 w-5' />
-        </div>
-
-        <div>
-          <h1 className='text-2xl font-semibold tracking-tight'>Personnel</h1>
-          <p className='text-sm text-muted-foreground'>
-            Manage personnel accounts and organizational assignments.
-          </p>
-        </div>
-      </div>
-
+    <PageHeader
+      icon={<Users />}
+      title='Personnel'
+      description='Manage personnel accounts and organizational assignments.'
+    >
       <DialogComponent
         open={openAddPersonnel}
         modalOnChange={setOpenAddPersonnel}
@@ -32,7 +24,7 @@ const Header = () => {
       >
         <AddPersonnel setOpenAddPersonnel={setOpenAddPersonnel} />
       </DialogComponent>
-    </div>
+    </PageHeader>
   );
 };
 

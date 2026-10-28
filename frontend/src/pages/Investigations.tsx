@@ -27,6 +27,8 @@ import {
   IncidentStatusBadge,
   ReportStatusBadge,
 } from "@/components/features/fireIncidents/StatusBadges";
+import PageHeader from "@/components/common/PageHeader";
+import { rowLinkProps } from "@/utils/rowLink";
 
 const Empty = ({ text }: { text: string }) => (
   <div className='flex min-h-[200px] items-center justify-center rounded-lg border text-sm text-muted-foreground'>
@@ -62,10 +64,14 @@ const QueueTable = () => {
             return (
               <TableRow
                 key={incident.id}
-                className='cursor-pointer'
-                onClick={() => navigate(`/fireincidents/${incident.id}`)}
+                className='cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring'
+                {...rowLinkProps(() =>
+                  navigate(`/fireincidents/${incident.id}`),
+                )}
               >
-                <TableCell className='font-medium'>{incident.incidentNo}</TableCell>
+                <TableCell className='font-medium'>
+                  {incident.incidentNo}
+                </TableCell>
                 <TableCell>
                   <IncidentStatusBadge status={incident.fireIncidentStatus} />
                 </TableCell>
@@ -124,8 +130,10 @@ const AssignedTable = () => {
           {assigned.data.map((investigation) => (
             <TableRow
               key={investigation.id}
-              className='cursor-pointer'
-              onClick={() => navigate(`/investigations/${investigation.id}`)}
+              className='cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring'
+              {...rowLinkProps(() =>
+                navigate(`/investigations/${investigation.id}`),
+              )}
             >
               <TableCell className='font-medium'>
                 {investigation.investigationNo}
@@ -154,7 +162,9 @@ const AssignedTable = () => {
 
 const Section = ({ children }: { children: React.ReactNode }) => (
   <ErrorBoundary FallbackComponent={ErrorFallbackComponent}>
-    <Suspense fallback={<Skeleton className='h-48 w-full' />}>{children}</Suspense>
+    <Suspense fallback={<Skeleton className='h-48 w-full' />}>
+      {children}
+    </Suspense>
   </ErrorBoundary>
 );
 
@@ -165,17 +175,11 @@ const Investigations = () => {
 
   return (
     <div className='space-y-6'>
-      <div className='flex items-center gap-3'>
-        <div className='flex size-10 items-center justify-center rounded-lg border bg-muted/50'>
-          <Search className='size-5' />
-        </div>
-        <div>
-          <h1 className='text-2xl font-semibold tracking-tight'>Investigations</h1>
-          <p className='text-sm text-muted-foreground'>
-            Cases waiting on your office and investigations assigned to you.
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        icon={<Search />}
+        title='Investigations'
+        description='Cases waiting on your office and investigations assigned to you.'
+      />
 
       {!showQueue && !showAssigned && (
         <Empty text='Investigations are listed on each fire incident you can view.' />

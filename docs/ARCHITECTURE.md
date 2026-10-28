@@ -142,13 +142,15 @@ service/*.service.ts            axios calls through axiosJWT("/api/<prefix>")
 | `hooks/` | per-feature query and mutation hooks (`fireIncidents/`, `investigations/`, `users/`, `offices/`, `position/`, `notifications/`, …) |
 | `interface/` | request and response types and Zod form schemas |
 | `components/ui/` | shadcn components (`base-vega` style on `@base-ui/react`) |
-| `components/common/` | shared dialogs, pagination, page header, skeletons, `form/FormFields.tsx` |
-| `components/layout/` | `Layout`, `AppSidebar`, `Navbar` |
+| `components/common/` | shared dialogs, pagination, skeletons, `form/FormFields.tsx`; `PageHeader` (the one page heading: icon, title, description, actions), `EmptyState`, `ComingSoon` (placeholder sections) |
+| `components/layout/` | `Layout`, `AppSidebar` (one `NavGroup` per link group, icons in `navIcons.tsx`), `Navbar` (clock, notification bell, theme toggle) |
 | `store/userStore.ts` | Zustand global user state |
 | `utils/incidentPermissions.ts` | decides which incident controls to show (display only) |
 | `constants/` | enum labels and options, sidebar links |
 
 `@/` aliases `src/`. React Compiler is enabled through Babel.
+
+Theme tokens live in `src/index.css`: BFP red as `--primary` (light and dark), plus `--success`, `--warning` and `--info` for status badges (`StatusBadges.tsx` maps each incident, approval and report status to one of them). The theme follows the device setting until the user picks one; `ThemeProvider` wraps the whole app, including the login page.
 
 ### 3.2 API client and token refresh
 
