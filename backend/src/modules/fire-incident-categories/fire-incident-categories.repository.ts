@@ -2,6 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service.js';
 import { FireIncidentCategoriesInput } from './schema/fire-incident-categories.schema.js';
 import { Prisma } from '../../generated/prisma/client.js';
+import {
+  auditChanges,
+  auditSnapshot,
+  recordAudit,
+} from '../audit/audit.writer.js';
 
 @Injectable()
 export class FireIncidentCategoriesRepository {
@@ -9,9 +14,22 @@ export class FireIncidentCategoriesRepository {
 
   async addFireIncidentCategory(
     fireIncidentCategoryInput: FireIncidentCategoriesInput,
+    actorId: string,
   ) {
-    return this.prismaService.fireIncidentCategory.create({
-      data: fireIncidentCategoryInput,
+    return this.prismaService.$transaction(async (tx) => {
+      const category = await tx.fireIncidentCategory.create({
+        data: fireIncidentCategoryInput,
+      });
+
+      await recordAudit(tx, {
+        actorId,
+        action: 'CATEGORY_CREATED',
+        entityType: 'FIRE_INCIDENT_CATEGORY',
+        entityId: category.id,
+        changes: auditSnapshot(category, ['name', 'type']),
+      });
+
+      return category;
     });
   }
 
@@ -49,10 +67,33 @@ export class FireIncidentCategoriesRepository {
   async editFireIncidentCategory(
     id: string,
     fireIncidentCategoryInput: FireIncidentCategoriesInput,
+    actorId: string,
   ) {
-    return this.prismaService.fireIncidentCategory.update({
-      where: { id },
-      data: { ...fireIncidentCategoryInput },
+    return this.prismaService.$transaction(async (tx) => {
+      const before = await tx.fireIncidentCategory.findUnique({
+        where: { id },
+      });
+
+      const category = await tx.fireIncidentCategory.update({
+        where: { id },
+        data: { ...fireIncidentCategoryInput },
+      });
+
+      const changes = before
+        ? auditChanges(before, category, ['name', 'type'])
+        : {};
+
+      if (Object.keys(changes).length > 0) {
+        await recordAudit(tx, {
+          actorId,
+          action: 'CATEGORY_UPDATED',
+          entityType: 'FIRE_INCIDENT_CATEGORY',
+          entityId: id,
+          changes,
+        });
+      }
+
+      return category;
     });
   }
 
@@ -66,9 +107,21 @@ export class FireIncidentCategoriesRepository {
     });
   }
 
-  async deleteById(id: string) {
-    return this.prismaService.fireIncidentCategory.delete({
-      where: { id },
+  async deleteById(id: string, actorId: string) {
+    return this.prismaService.$transaction(async (tx) => {
+      const category = await tx.fireIncidentCategory.delete({
+        where: { id },
+      });
+
+      await recordAudit(tx, {
+        actorId,
+        action: 'CATEGORY_DELETED',
+        entityType: 'FIRE_INCIDENT_CATEGORY',
+        entityId: id,
+        changes: auditSnapshot(category, ['name', 'type']),
+      });
+
+      return category;
     });
   }
 }

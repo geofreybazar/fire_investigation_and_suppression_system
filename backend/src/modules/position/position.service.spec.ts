@@ -6,6 +6,8 @@ import { PositionRepository } from './position.repository.js';
 
 const positionId = '11111111-1111-4111-8111-111111111111' as UUID;
 
+const actorId = 'actor-1';
+
 describe('PositionService', () => {
   let service: PositionService;
   let repository: {
@@ -46,12 +48,13 @@ describe('PositionService', () => {
       const created = { id: positionId, name: 'Fire Marshal' };
       repository.createPosition.mockResolvedValue(created);
 
-      await expect(service.create({ name: 'Fire Marshal' })).resolves.toBe(
-        created,
+      await expect(
+        service.create({ name: 'Fire Marshal' }, actorId),
+      ).resolves.toBe(created);
+      expect(repository.createPosition).toHaveBeenCalledWith(
+        { name: 'Fire Marshal' },
+        actorId,
       );
-      expect(repository.createPosition).toHaveBeenCalledWith({
-        name: 'Fire Marshal',
-      });
     });
   });
 
@@ -99,18 +102,28 @@ describe('PositionService', () => {
       repository.updatePosition.mockResolvedValue(updated);
 
       await expect(
-        service.updatePositon(positionId, { name: 'Senior Inspector' }),
+        service.updatePositon(
+          positionId,
+          { name: 'Senior Inspector' },
+          actorId,
+        ),
       ).resolves.toBe(updated);
-      expect(repository.updatePosition).toHaveBeenCalledWith(positionId, {
-        name: 'Senior Inspector',
-      });
+      expect(repository.updatePosition).toHaveBeenCalledWith(
+        positionId,
+        { name: 'Senior Inspector' },
+        actorId,
+      );
     });
 
     it('throws NotFoundException when the position does not exist', async () => {
       repository.updatePosition.mockResolvedValue(null);
 
       await expect(
-        service.updatePositon(positionId, { name: 'Senior Inspector' }),
+        service.updatePositon(
+          positionId,
+          { name: 'Senior Inspector' },
+          actorId,
+        ),
       ).rejects.toThrow(NotFoundException);
     });
   });
@@ -122,16 +135,21 @@ describe('PositionService', () => {
         _count: { users: 0 },
       });
 
-      await expect(service.deletePosiiton(positionId)).resolves.toEqual({
+      await expect(
+        service.deletePosiiton(positionId, actorId),
+      ).resolves.toEqual({
         message: 'Position deleted successfully.',
       });
-      expect(repository.deletePosition).toHaveBeenCalledWith(positionId);
+      expect(repository.deletePosition).toHaveBeenCalledWith(
+        positionId,
+        actorId,
+      );
     });
 
     it('throws NotFoundException when the position does not exist', async () => {
       repository.findPositionForDeletion.mockResolvedValue(null);
 
-      await expect(service.deletePosiiton(positionId)).rejects.toThrow(
+      await expect(service.deletePosiiton(positionId, actorId)).rejects.toThrow(
         NotFoundException,
       );
       expect(repository.deletePosition).not.toHaveBeenCalled();
@@ -143,7 +161,7 @@ describe('PositionService', () => {
         _count: { users: 2 },
       });
 
-      await expect(service.deletePosiiton(positionId)).rejects.toThrow(
+      await expect(service.deletePosiiton(positionId, actorId)).rejects.toThrow(
         ConflictException,
       );
       expect(repository.deletePosition).not.toHaveBeenCalled();

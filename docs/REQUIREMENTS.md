@@ -45,7 +45,7 @@ FIIS (shown in the UI as "Fire Investigation and Suppression System") is a web a
 | Evidence / attachments | None (design PROPOSED in §11.5) | Placeholder page |
 | Dashboard, incident map, statistics, incident reports | None (design PROPOSED in §11.5) | Placeholder pages |
 | Monitoring, fire stations, response units | None (OPEN, Q-01) | Placeholder pages |
-| Audit history | `IncidentTimeline`, `FireIncidentEvent`, referral and report-review history; no general audit log (PROPOSED in §11.5) | Incident event history only |
+| Audit history | `IncidentTimeline`, `FireIncidentEvent`, referral and report-review history, plus the general `AuditLog` (Q-23 approved) | Incident event history; Audit Log page for admins |
 
 ### 1.3 In scope
 
@@ -582,7 +582,7 @@ PROPOSED:
 | Notification delivery | **OPEN** | No delivery channel or trigger events exist. Natural triggers: incident pending approval, approval/rejection, incident completed (to the station chief investigator), case referred, investigator assigned, report submitted, approved or rejected (Q-21). |
 | Attachments / evidence | **OPEN** | "Evidence" page exists; no model, storage or endpoint. CLAUDE.md requires preventing unauthorized access to sensitive attachments (CONFIRMED as a security rule). Attachments are hidden and restored with their incident (CONFIRMED). File types, size limits, storage location, retention and chain-of-custody needs are undefined (Q-22). |
 | Incident status/alarm history | Schema only | `IncidentTimeline` records status, alarm level, user-entered `occurredAt`, remarks, creator and server `createdAt`. One entry per status or alarm change; ordered by `occurredAt` (CONFIRMED). `createdById` has no FK to `User` (D-15). |
-| General audit log | **OPEN** | No audit of user, office, role or investigation changes. Confirmed workflows call for recording: submission, approval, rejection, resubmission and removal; deletion (with memo reference) and restore; referrals; investigation start and assignment; report submission and decisions; every `SUPER_ADMIN` write. Broader scope is open (Q-23). |
+| General audit log | **IMPLEMENTED** (Q-23 approved 2026-10-28) | `AuditLog` records every change to users, roles, offices, positions and categories, and SUPER_ADMIN incident deletion and restore, in the same transaction as the change (field changes only, never passwords or tokens). Incident and investigation workflow history stays in the timeline, event, referral and review tables. Read through `GET /api/audit`, scoped as in §11.5 Q-23. Attachment downloads join it with Phase 5. |
 
 ---
 
@@ -848,7 +848,7 @@ PROPOSED:
 | FR-AUD-003 | Every `SUPER_ADMIN` write is recorded; deletions also record the memo reference and Chief BFP approval details; restores record who and when. | PROPOSED (follows from §3.8, §7.4) |
 | FR-AUD-004 | Referrals, investigation starts/assignments, report submissions and decisions record actor and time. | PROPOSED |
 | FR-AUD-005 | Timeline `createdById` references a real user. | PROPOSED (D-15) |
-| FR-AUD-006 | Changes to users, roles and offices are audited. | OPEN (Q-23) |
+| FR-AUD-006 | Changes to users, roles and offices are audited. | CONFIRMED (Q-23, 2026-10-28) / IMPLEMENTED |
 | FR-AUD-007 | Logs do not contain sensitive incident, investigation or personal information. | CONFIRMED |
 
 ---
@@ -914,6 +914,8 @@ Severity: **H** = security or data-integrity risk, **M** = rule not enforced, **
 | 2026-10-10 | Phase 5 (frontend) | Fire-incident list, submission, detail (approval, timeline with corrections, details, impact/resources/personnel, deletion and restore) and investigation pages (case queue, assignments, referral, start, drafting, submission and review). Controls are shown by role; the backend enforces every rule. |
 
 | 2026-10-28 | Roadmap phase 1 (branch `roadmap-phase-1-binding-gaps`) | D-13 (logout clears cookies), D-14 (refresh tokens hashed), D-16, D-17 (409 for categories and subcategories in use), D-21, D-22, D-23 (role-aware sidebar and routes; Fire Operations pages hidden, Q-01); FR-CAT-007 (subcategory edit/delete), FR-OFF-007 (descendants re-regioned), FR-OFF-008 (offices with incident or investigation records can't be deleted), FR-OFF-010 (region code frozen once used), FR-USR-015 (warning), FR-AUD-003 (memo reference), FR-INC-027 (category, date, place and barangay filters) |
+
+| 2026-10-28 | Roadmap phase 2 (branch `roadmap-phase-2-audit-log`, migration `20261028140000_add_audit_log`) | FR-AUD-006 and Q-23: general audit log for users, offices, positions, categories and SUPER_ADMIN incident deletion/restore; `GET /api/audit` with per-role scope; Audit Log page |
 
 Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23 resolved by roadmap phase 1 and earlier phases).
 
@@ -1024,7 +1026,7 @@ Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23
 
 | ID | Proposed answer |
 |---|---|
-| Q-23 | A general `AuditLog` (actor, action, entity, office, non-sensitive changed fields, time) records every change to users, roles, offices, positions and categories, every `SUPER_ADMIN` write and every attachment download. Incident and investigation history stays in the existing timeline, event, referral and review tables. `SUPER_ADMIN` reads everything, `NHQ_ADMIN` reads admin changes, and `REGIONAL_ADMIN` reads changes in its region. |
+| Q-23 | **APPROVED 2026-10-28.** A general `AuditLog` (actor, action, entity, office, non-sensitive changed fields, time) records every change to users, roles, offices, positions and categories, every `SUPER_ADMIN` write and every attachment download. Incident and investigation history stays in the existing timeline, event, referral and review tables. `SUPER_ADMIN` reads everything, `NHQ_ADMIN` reads admin changes, and `REGIONAL_ADMIN` reads changes in its region. |
 | Q-21 | In-app notifications only for now (no email or SMS). Triggers: incident submitted/resubmitted (to the station's chief of operations), approved/rejected (to the submitter), reached `FIRE_OUT`/`FIRE_OUT_UPON_ARRIVAL` (to the handling chief investigators), case referred (to the target office's chief investigators), investigator assigned (to the assignee), report submitted (to the handling chief), report approved/rejected (to the assignee). A new `incidentUpdates` preference joins the existing three. |
 | Q-20 | Dashboard (KPIs and "my tasks"), a statistics page (by status with `REKINDLE` as its own bucket, category, alarm, month, child office, impact totals, cause and classification from the latest completed investigation) and an incident report table with CSV export. Only approved, non-deleted incidents within the viewer's scope count. Official BFP forms stay OPEN. |
 | Q-01 | In scope: Dashboard, Statistics, Incident Reports, Incident Map (approved incidents with coordinates, OpenStreetMap tiles) and Evidence (Q-22). Monitoring, Fire Stations and Response Units are hidden until they are scoped. |
@@ -1040,4 +1042,4 @@ Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23
 | §11.2 confirmations | Project owner | Complete |
 | PROPOSED designs accepted: §3.5 timeline validation and corrections, §3.7 approval state, §3.8 soft delete, §5.3 data model, required `barangay` | Project owner | Accepted 2026-10-10 |
 | §10 discrepancies triaged (fix / accept / defer) | Project owner | Approved 2026-10-10 (§10.1) |
-| §11.5 proposed answers (revision 11) | Project owner | **Pending** |
+| §11.5 proposed answers (revision 11) | Project owner | Q-23 approved 2026-10-28; Q-01, Q-20, Q-21, Q-22 **pending** |

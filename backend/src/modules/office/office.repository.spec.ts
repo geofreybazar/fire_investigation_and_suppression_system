@@ -7,6 +7,8 @@ const officeId = '11111111-1111-4111-8111-111111111111' as UUID;
 const nhqId = '22222222-2222-4222-8222-222222222222';
 const regionalId = '33333333-3333-4333-8333-333333333333';
 
+const actorId = 'actor-1';
+
 describe('OfficeRepository', () => {
   let repository: OfficeRepository;
   let prisma: {
@@ -18,6 +20,7 @@ describe('OfficeRepository', () => {
       findMany: ReturnType<typeof vi.fn>;
       updateMany: ReturnType<typeof vi.fn>;
     };
+    auditLog: { create: ReturnType<typeof vi.fn> };
     $transaction: ReturnType<typeof vi.fn>;
   };
 
@@ -26,7 +29,11 @@ describe('OfficeRepository', () => {
       office: {
         findUnique: vi.fn(),
         findFirst: vi.fn(),
-        create: vi.fn(),
+        create: vi
+          .fn()
+          .mockImplementation(({ data }) =>
+            Promise.resolve({ id: 'new-office', ...data }),
+          ),
         update: vi
           .fn()
           .mockImplementation(({ data, where }) =>
@@ -36,6 +43,7 @@ describe('OfficeRepository', () => {
         findMany: vi.fn().mockResolvedValue([]),
         updateMany: vi.fn(),
       },
+      auditLog: { create: vi.fn() },
       $transaction: vi.fn(),
     };
     prisma.$transaction.mockImplementation((callback) => callback(prisma));
@@ -58,12 +66,15 @@ describe('OfficeRepository', () => {
         regionId: null,
       });
 
-      await repository.createOffice({
-        name: 'Regional Office NCR',
-        type: 'REGIONAL_OFFICE',
-        parentId: nhqId,
-        regionCode: ' ncr ',
-      });
+      await repository.createOffice(
+        {
+          name: 'Regional Office NCR',
+          type: 'REGIONAL_OFFICE',
+          parentId: nhqId,
+          regionCode: ' ncr ',
+        },
+        actorId,
+      );
 
       expect(prisma.office.create).toHaveBeenCalledWith({
         data: {
@@ -83,12 +94,15 @@ describe('OfficeRepository', () => {
         regionId: null,
       });
 
-      await repository.createOffice({
-        name: 'Manila District Fire Station',
-        type: 'DISTRICT_FIRE_STATION',
-        parentId: regionalId,
-        regionCode: '',
-      });
+      await repository.createOffice(
+        {
+          name: 'Manila District Fire Station',
+          type: 'DISTRICT_FIRE_STATION',
+          parentId: regionalId,
+          regionCode: '',
+        },
+        actorId,
+      );
 
       expect(prisma.office.create).toHaveBeenCalledWith({
         data: expect.objectContaining({
@@ -107,12 +121,16 @@ describe('OfficeRepository', () => {
         regionId: null,
       });
 
-      await repository.updateOffice(officeId, {
-        name: 'Regional Office NCR',
-        type: 'REGIONAL_OFFICE',
-        parentId: nhqId,
-        regionCode: 'NCR',
-      });
+      await repository.updateOffice(
+        officeId,
+        {
+          name: 'Regional Office NCR',
+          type: 'REGIONAL_OFFICE',
+          parentId: nhqId,
+          regionCode: 'NCR',
+        },
+        actorId,
+      );
 
       expect(prisma.office.update).toHaveBeenCalledWith({
         data: expect.objectContaining({ regionCode: 'NCR' }),
@@ -127,11 +145,15 @@ describe('OfficeRepository', () => {
         regionId: null,
       });
 
-      await repository.updateOffice(officeId, {
-        name: 'Manila District Fire Station',
-        type: 'DISTRICT_FIRE_STATION',
-        parentId: regionalId,
-      });
+      await repository.updateOffice(
+        officeId,
+        {
+          name: 'Manila District Fire Station',
+          type: 'DISTRICT_FIRE_STATION',
+          parentId: regionalId,
+        },
+        actorId,
+      );
 
       expect(prisma.office.update).toHaveBeenCalledWith({
         data: expect.objectContaining({ regionCode: null }),
@@ -154,11 +176,15 @@ describe('OfficeRepository', () => {
         ])
         .mockResolvedValueOnce([]);
 
-      await repository.updateOffice(officeId, {
-        name: 'Manila District Fire Station',
-        type: 'DISTRICT_FIRE_STATION',
-        parentId: newRegionId,
-      });
+      await repository.updateOffice(
+        officeId,
+        {
+          name: 'Manila District Fire Station',
+          type: 'DISTRICT_FIRE_STATION',
+          parentId: newRegionId,
+        },
+        actorId,
+      );
 
       expect(prisma.office.update).toHaveBeenCalledWith({
         data: expect.objectContaining({ regionId: newRegionId }),
@@ -187,12 +213,16 @@ describe('OfficeRepository', () => {
         ])
         .mockResolvedValueOnce([]);
 
-      await repository.updateOffice(officeId, {
-        name: 'Regional Office NCR',
-        type: 'REGIONAL_OFFICE',
-        parentId: nhqId,
-        regionCode: 'NCR',
-      });
+      await repository.updateOffice(
+        officeId,
+        {
+          name: 'Regional Office NCR',
+          type: 'REGIONAL_OFFICE',
+          parentId: nhqId,
+          regionCode: 'NCR',
+        },
+        actorId,
+      );
 
       expect(prisma.office.updateMany).toHaveBeenCalledWith({
         where: { id: { in: [districtId] } },
@@ -216,6 +246,70 @@ describe('OfficeRepository', () => {
           id: { not: officeId },
         },
         select: { id: true },
+      });
+    });
+  });
+
+  describe('audit entries', () => {
+    it('records a created office with its region', async () => {
+      prisma.office.findUnique.mockResolvedValue({
+        id: regionalId,
+        type: 'REGIONAL_OFFICE',
+        regionId: null,
+      });
+
+      await repository.createOffice(
+        {
+          name: 'Manila District Fire Station',
+          type: 'DISTRICT_FIRE_STATION',
+          parentId: regionalId,
+        },
+        actorId,
+      );
+
+      expect(prisma.auditLog.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          actorId,
+          action: 'OFFICE_CREATED',
+          entityType: 'OFFICE',
+          entityId: 'new-office',
+          officeId: 'new-office',
+          regionId: regionalId,
+        }),
+      });
+    });
+
+    it('records only the fields that changed on update', async () => {
+      prisma.office.findUnique.mockImplementation(({ where }) =>
+        Promise.resolve(
+          where.id === officeId
+            ? {
+                id: officeId,
+                name: 'Old Name',
+                type: 'DISTRICT_FIRE_STATION',
+                parentId: regionalId,
+                regionId: regionalId,
+                regionCode: null,
+              }
+            : { id: regionalId, type: 'REGIONAL_OFFICE', regionId: null },
+        ),
+      );
+
+      await repository.updateOffice(
+        officeId,
+        {
+          name: 'New Name',
+          type: 'DISTRICT_FIRE_STATION',
+          parentId: regionalId,
+        },
+        actorId,
+      );
+
+      expect(prisma.auditLog.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          action: 'OFFICE_UPDATED',
+          changes: { name: { from: 'Old Name', to: 'New Name' } },
+        }),
       });
     });
   });

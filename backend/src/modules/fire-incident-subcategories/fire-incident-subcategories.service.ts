@@ -20,10 +20,12 @@ export class FireIncidentSubcategoriesService {
 
   async addFireIncidentSubcategory(
     fireIncidentSubCategoryInput: FireIncidentSubCategoriesInput,
+    actorId: string,
   ) {
     this.logger.log('Adding new fire incident sub-category');
     return await this.fireIncidentSubCategoriesRepository.addFireIncidentSubcategory(
       fireIncidentSubCategoryInput,
+      actorId,
     );
   }
 
@@ -41,6 +43,7 @@ export class FireIncidentSubcategoriesService {
   async editFireIncidentSubcategory(
     id: string,
     input: EditFireIncidentSubCategoryInput,
+    actorId: string,
   ) {
     await this.getSubcategoryById(id);
 
@@ -48,10 +51,11 @@ export class FireIncidentSubcategoriesService {
     return this.fireIncidentSubCategoriesRepository.editFireIncidentSubcategory(
       id,
       input,
+      actorId,
     );
   }
 
-  async deleteSubcategory(id: string) {
+  async deleteSubcategory(id: string, actorId: string) {
     const subcategory = await this.getSubcategoryById(id);
 
     // The foreign key would silently null the incidents' subcategory, so the
@@ -62,7 +66,7 @@ export class FireIncidentSubcategoriesService {
       );
     }
 
-    await this.fireIncidentSubCategoriesRepository.deleteById(id);
+    await this.fireIncidentSubCategoriesRepository.deleteById(id, actorId);
 
     return {
       message: 'Sub category deleted successfully.',

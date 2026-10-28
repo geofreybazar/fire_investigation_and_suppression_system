@@ -140,6 +140,7 @@ describe('UsersService', () => {
       expect(usersRepository.createUser).toHaveBeenCalledWith(
         'hashed-default',
         newInvestigator,
+        superAdmin.sub,
       );
     });
 
@@ -444,7 +445,11 @@ describe('UsersService', () => {
       await expect(
         service.changeUserStatus(userId, { isActive: true }, superAdmin),
       ).resolves.toEqual({ message: 'User activated successfully.' });
-      expect(usersRepository.deactivateUser).toHaveBeenCalledWith(userId, true);
+      expect(usersRepository.deactivateUser).toHaveBeenCalledWith(
+        userId,
+        true,
+        superAdmin.sub,
+      );
     });
 
     it('reports deactivation when isActive is false', async () => {
@@ -456,6 +461,7 @@ describe('UsersService', () => {
       expect(usersRepository.deactivateUser).toHaveBeenCalledWith(
         userId,
         false,
+        superAdmin.sub,
       );
     });
 
@@ -622,6 +628,7 @@ describe('UsersService', () => {
       expect(usersRepository.editUser).toHaveBeenCalledWith(
         userId,
         newInvestigator,
+        regionalAdmin.sub,
       );
     });
 
@@ -780,6 +787,7 @@ describe('UsersService', () => {
       expect(usersRepository.editUser).toHaveBeenCalledWith(
         userId,
         superAdminDetails,
+        superAdmin.sub,
       );
     });
 

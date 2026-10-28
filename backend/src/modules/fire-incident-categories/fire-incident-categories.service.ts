@@ -16,10 +16,12 @@ export class FireIncidentCategoriesService {
 
   async addFireIncidentCategory(
     fireIncidentCategoryInput: FireIncidentCategoriesInput,
+    actorId: string,
   ) {
     this.logger.log('Adding new fire incident category');
     return this.fireIncidentCategoriesRepository.addFireIncidentCategory(
       fireIncidentCategoryInput,
+      actorId,
     );
   }
 
@@ -48,6 +50,7 @@ export class FireIncidentCategoriesService {
   async editFireIncidentCategory(
     id: string,
     fireIncidentCategoryInput: FireIncidentCategoriesInput,
+    actorId: string,
   ) {
     this.logger.log(`Editing fire incident category with ID: ${id}`);
 
@@ -55,6 +58,7 @@ export class FireIncidentCategoriesService {
       await this.fireIncidentCategoriesRepository.editFireIncidentCategory(
         id,
         fireIncidentCategoryInput,
+        actorId,
       );
 
     return fireIncidentCategory;
@@ -69,7 +73,7 @@ export class FireIncidentCategoriesService {
     return fireIncidentCategory;
   }
 
-  async deleteCategory(id: string) {
+  async deleteCategory(id: string, actorId: string) {
     const category =
       await this.fireIncidentCategoriesRepository.getCategoryById(id);
 
@@ -90,7 +94,7 @@ export class FireIncidentCategoriesService {
       );
     }
 
-    await this.fireIncidentCategoriesRepository.deleteById(id);
+    await this.fireIncidentCategoriesRepository.deleteById(id, actorId);
 
     return {
       message: 'Category deleted successfully.',

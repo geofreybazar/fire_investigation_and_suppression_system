@@ -1,5 +1,11 @@
 import { NavLink } from "react-router";
-import { Users, Building, BriefcaseBusiness, Shapes } from "lucide-react";
+import {
+  Users,
+  Building,
+  BriefcaseBusiness,
+  Shapes,
+  History,
+} from "lucide-react";
 
 import {
   SidebarGroupContent,
@@ -15,6 +21,7 @@ const iconMap: Record<string, React.ReactNode> = {
   Building: <Building />,
   BriefcaseBusiness: <BriefcaseBusiness />,
   Shapes: <Shapes />,
+  History: <History />,
 };
 
 const Administration = ({ links }: { links: NavLinkItem[] }) => {
