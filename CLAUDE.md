@@ -68,7 +68,7 @@ There is no frontend test setup.
   2. Role × office-type permission maps (`users/utils/*.permissions.ts`, `office/utils/office.permissions.ts`, `OfficeAuthorizationService`) restrict which office types a role may manage/assign. Roles (`ROLE` enum in `prisma/models/user.prisma`) are tiered NHQ / REGIONAL / DISTRICT_PROVINCE / station; `REGIONAL_ADMIN` queries are scoped to their own office and offices whose `regionId` is theirs.
 - **Office hierarchy** is enforced in `office/utils/office-heirarchy.validator.ts`: NHQ → Regional → District/Provincial → City/Municipal stations.
 - **Incident numbers** are generated inside a transaction via `fire-incident/utils/generate-incident-number.ts`, using the `IncidentNumberCounter` table keyed by (year, month, regionCode) in Asia/Manila time; regional offices carry a unique `regionCode`.
-- **Known gaps:** `docs/REQUIREMENTS.md` §10 lists past discrepancies between code and requirements; §10.1 records which were resolved in Phases 1–5 (D-24 renames are deferred, D-05 accepted). Not built yet: the Dashboard, IncidentMap, FireStations, Monitoring, ResponseUnits, Evidence, IncidentReports and Statistics pages are placeholders.
+- **Known gaps:** `docs/REQUIREMENTS.md` §10 lists past discrepancies between code and requirements; §10.1 records which were resolved in Phases 1–5 (D-24 renames are deferred, D-05 accepted). Not built yet: Evidence (roadmap phase 5, needs Q-22) and the unscoped FireStations, Monitoring and ResponseUnits pages, which show "Coming soon".
 - **Further docs:** `docs/ARCHITECTURE.md` (modules, request lifecycle, auth, workflows) and `docs/DATA_MODEL.md` (ER diagram, models, enums, migrations).
 
 ## Frontend architecture

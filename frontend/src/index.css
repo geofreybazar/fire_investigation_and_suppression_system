@@ -146,3 +146,41 @@
     cursor: pointer;
   }
 }
+
+/* Incident map markers and legend, coloured by status tone. */
+.incident-marker {
+  stroke: var(--background);
+  stroke-width: 2;
+  fill-opacity: 0.9;
+}
+.legend-dot {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+}
+.incident-marker--danger {
+  fill: var(--destructive);
+  background: var(--destructive);
+}
+.incident-marker--warning {
+  fill: var(--warning);
+  background: var(--warning);
+}
+.incident-marker--success {
+  fill: var(--success);
+  background: var(--success);
+}
+.incident-marker--info {
+  fill: var(--info);
+  background: var(--info);
+}
+.incident-marker--neutral {
+  fill: var(--muted-foreground);
+  background: var(--muted-foreground);
+}
+/* Keep the map below the sticky navbar (z-50). */
+.leaflet-container {
+  z-index: 0;
+  font-family: inherit;
+}

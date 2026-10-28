@@ -49,6 +49,7 @@ All paths are under `/api`.
 | fire-incident-categories | `fire_incident_categories_api` | `POST /`, `GET /`, `GET :id`, `PATCH :id`, `DELETE :id` | NHQ writes; incident roles read |
 | fire-incident-subcategories | `fire_incident_subcategories_api` | `POST /`, `GET :id`, `PATCH :id` (name), `DELETE :id` | NHQ writes; incident roles read |
 | fire-incident | `fire-incident` | `POST /`, `GET /`, `GET deleted`, `GET :id`, `PATCH :id`, `POST :id/resubmit`, `POST :id/approve`, `POST :id/reject`, `POST :id/timeline`, `POST :id/timeline/:entryId/void`, `POST :id/timeline/:entryId/correct`, `DELETE :id`, `POST :id/restore` | see §2.4 |
+| statistics | `statistics` | `GET summary`, `GET incidents` (paginated report), `GET incidents.csv`, `GET map` (filters: from, to, status, categoryType) | incident viewers; approved incidents in scope only; admins without incident access get 403 |
 | audit | `audit` | `GET /` (paginated; filter by action, entity, actor, date) | `SUPER_ADMIN` all; `NHQ_ADMIN` admin changes; `REGIONAL_ADMIN` its region plus its own actions |
 | investigation | `investigation` | `GET queue`, `GET assigned`, `GET incident/:incidentId`, `GET incident/:incidentId/candidates`, `POST incident/:incidentId/refer`, `POST incident/:incidentId/start`, `GET :id`, `PATCH :id`, `POST :id/submit`, `POST :id/review` | chiefs, investigators, incident viewers |
 
@@ -113,6 +114,7 @@ Only `FIRE_OUT` and `FIRE_OUT_UPON_ARRIVAL` incidents are investigable (`INVESTI
 |---|---|
 | Notifications | `modules/notification/notification.dispatcher.ts`: `NotificationDispatcher.notify(event)`, called by the fire-incident and investigation services after a change commits. Resolves recipients (specific users, or active holders of roles in an office), applies preferences, skips the actor, and never throws. Wording in `notification.messages.ts` |
 | Audit trail | `modules/audit/audit.writer.ts`: `recordAudit(tx, entry)`, called by the users, office, position, category, subcategory and fire-incident repositories inside the transaction that makes the change; `auditChanges`/`auditSnapshot` record only listed, non-sensitive fields |
+| Statistics | `modules/statistics/utils/statistics-aggregate.ts` (pure aggregation over approved, in-scope incidents loaded with `incidentScopeWhere()`), `utils/csv.ts` (CSV with formula-injection guard) |
 | Prisma error mapping | `common/filters/prisma-exception.filter.ts` |
 | Role decorator / guard | `common/decorators/roles.decorator.ts`, `common/guards/role.guard.ts` |
 | Current user | `common/decorators/current-user.decorator.ts` |
@@ -166,6 +168,7 @@ The navbar bell (`components/layout/Navbar/NotificationBell.tsx`) polls the unre
 |---|---|
 | Implemented | `FireIncidents`, `FireIncidentDetail`, `Investigations`, `InvestigationDetail`, `Personnel`, `Offices`, `Positions`, `IncidentClassification`, `Settings`, `MyProfile`, `LoginPage` |
 | Implemented (admin) | `AuditLog` (`/auditlog`, lazy-loaded) |
-| Placeholder | `Dashboard`, `IncidentMap`, `FireStations`, `Monitoring`, `ResponseUnits`, `Evidence`, `IncidentReports`, `Statistics` |
+| Implemented (phase 4) | `Dashboard` (year KPIs, my tasks, shortcuts), `Statistics` (recharts), `IncidentReports` (table and CSV), `IncidentMap` (react-leaflet, OpenStreetMap tiles); the last three are lazy-loaded so the chart and map libraries stay out of the main bundle |
+| Coming soon | `Evidence` (phase 5); `FireStations`, `Monitoring`, `ResponseUnits` (unscoped, hidden from the sidebar) |
 
 The frontend hides controls by role for usability only. The backend enforces every rule.

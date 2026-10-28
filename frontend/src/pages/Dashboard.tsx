@@ -10,6 +10,17 @@ import {
 import { formatRole } from "@/utils/formatRole";
 import PageHeader from "@/components/common/PageHeader";
 import { NAV_ICONS } from "@/components/layout/AppSidebar/navIcons";
+import {
+  MyTasks,
+  YearSummary,
+} from "@/components/features/dashboard/DashboardSections";
+import { STATION_CHIEF_ROLE } from "@/constants/fireIncident";
+import {
+  canViewIncidents,
+  isChiefInvestigator,
+  isInvestigator,
+  isSuperAdmin,
+} from "@/utils/incidentPermissions";
 
 // What each page is for, shown on its shortcut card.
 const DESCRIPTIONS: Record<string, string> = {
@@ -20,10 +31,13 @@ const DESCRIPTIONS: Record<string, string> = {
   "/offices": "Manage offices and their hierarchy.",
   "/incidentclassifications": "Manage incident categories and subcategories.",
   "/auditlog": "See who changed what, and when.",
+  "/incidentmap": "Approved incidents with coordinates on a map.",
+  "/incidentreports": "Filter approved incidents and download them as CSV.",
+  "/statistics": "Charts of incidents, casualties, damages and causes.",
 };
 
-// A welcome page with shortcuts until the statistics dashboard is built
-// (roadmap phase 4).
+// This year's numbers and the user's open work, for roles that see
+// incidents; shortcuts to every page the role can use.
 const Dashboard = () => {
   const user = useUserStore((state) => state.user);
 
@@ -44,6 +58,15 @@ const Dashboard = () => {
         description={user ? formatRole(user.role) : undefined}
       />
 
+      {canViewIncidents(user) && <YearSummary />}
+
+      <MyTasks
+        approvals={user?.role === STATION_CHIEF_ROLE}
+        queue={isChiefInvestigator(user) || isSuperAdmin(user)}
+        assigned={isInvestigator(user)}
+      />
+
+      <h2 className='text-sm font-medium text-muted-foreground'>Go to</h2>
       <div className='grid gap-4 sm:grid-cols-2 xl:grid-cols-3'>
         {shortcuts.map((link) => (
           <Link
@@ -64,10 +87,6 @@ const Dashboard = () => {
           </Link>
         ))}
       </div>
-
-      <p className='text-sm text-muted-foreground'>
-        Incident statistics, the incident map and reports are coming soon.
-      </p>
     </div>
   );
 };

@@ -1,13 +1,10 @@
 import { Routes, Route } from "react-router";
 import loadable from "@loadable/component";
 import Dashboard from "@/pages/Dashboard";
-import IncidentMap from "@/pages/IncidentMap";
 import FireStations from "@/pages/FireStations";
 import Monitoring from "@/pages/Monitoring";
 import ResponseUnits from "@/pages/ResponseUnits";
-import IncidentReports from "@/pages/IncidentReports";
 import Evidence from "@/pages/Evidence";
-import Statistics from "@/pages/Statistics";
 import Personnel from "@/pages/Personnel";
 import Offices from "@/pages/Offices";
 import Settings from "@/pages/Settings";
@@ -28,8 +25,14 @@ import { canViewIncidents } from "@/utils/incidentPermissions";
 const FireIncidents = loadable(() => import("@/pages/FireIncidents"));
 const FireIncidentDetail = loadable(() => import("@/pages/FireIncidentDetail"));
 const Investigations = loadable(() => import("@/pages/Investigations"));
-const InvestigationDetail = loadable(() => import("@/pages/InvestigationDetail"));
+const InvestigationDetail = loadable(
+  () => import("@/pages/InvestigationDetail"),
+);
 const AuditLog = loadable(() => import("@/pages/AuditLog"));
+// Charts and the map bring large libraries, so they load only when opened.
+const Statistics = loadable(() => import("@/pages/Statistics"));
+const IncidentReports = loadable(() => import("@/pages/IncidentReports"));
+const IncidentMap = loadable(() => import("@/pages/IncidentMap"));
 
 const routes = [
   { path: "/", element: <Dashboard /> },

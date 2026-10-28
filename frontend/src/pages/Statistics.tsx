@@ -1,17 +1,59 @@
+import { Suspense, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { BarChart3 } from "lucide-react";
-import ComingSoon from "@/components/common/ComingSoon";
+import PageHeader from "@/components/common/PageHeader";
+import ErrorFallbackComponent from "@/components/common/ErrorFallbackComponent";
+import { Skeleton } from "@/components/ui/skeleton";
+import StatisticsFilterBar from "@/components/features/statistics/StatisticsFilterBar";
+import { toStatisticsFilters, yearToDate } from "@/utils/statisticsFilters";
+import StatisticsContent from "@/components/features/statistics/StatisticsContent";
 
-const Statistics = () => (
-  <ComingSoon
-    icon={<BarChart3 />}
-    title='Statistics & Analytics'
-    description='Fire incident statistics for your office and the offices below it.'
-    planned={[
-      "Incidents by status, category, alarm level, month and office",
-      "Casualties, families affected and estimated damages",
-      "Causes and classifications from completed investigations",
-    ]}
-  />
+const Loading = () => (
+  <div className='space-y-6'>
+    <div className='grid gap-4 sm:grid-cols-2 xl:grid-cols-4'>
+      {Array.from({ length: 8 }, (_, i) => (
+        <Skeleton key={i} className='h-24' />
+      ))}
+    </div>
+    <div className='grid gap-4 lg:grid-cols-2'>
+      {Array.from({ length: 4 }, (_, i) => (
+        <Skeleton key={i} className='h-80' />
+      ))}
+    </div>
+  </div>
 );
+
+const Statistics = () => {
+  const [filters, setFilters] = useState(yearToDate);
+
+  return (
+    <div className='space-y-6'>
+      <PageHeader
+        icon={<BarChart3 />}
+        title='Statistics & Analytics'
+        description='Approved fire incidents in your office and the offices below it.'
+      />
+
+      <StatisticsFilterBar
+        value={filters}
+        onChange={setFilters}
+        showStatus={false}
+      />
+
+      <ErrorBoundary FallbackComponent={ErrorFallbackComponent}>
+        <Suspense fallback={<Loading />}>
+          <StatisticsContent filters={toStatisticsFilters(filters)} />
+        </Suspense>
+      </ErrorBoundary>
+
+      <p className='text-xs text-muted-foreground'>
+        Pending, rejected and deleted incidents are not counted. The incident
+        date is the date of the fire, or the date it was recorded when that is
+        blank. Causes and classifications come from each incident&apos;s latest
+        completed investigation.
+      </p>
+    </div>
+  );
+};
 
 export default Statistics;
