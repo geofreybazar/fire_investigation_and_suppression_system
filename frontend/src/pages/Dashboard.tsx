@@ -34,6 +34,7 @@ const DESCRIPTIONS: Record<string, string> = {
   "/incidentmap": "Approved incidents with coordinates on a map.",
   "/incidentreports": "Filter approved incidents and download them as CSV.",
   "/statistics": "Charts of incidents, casualties, damages and causes.",
+  "/evidence": "Photos and documents on incidents and investigations.",
 };
 
 // This year's numbers and the user's open work, for roles that see

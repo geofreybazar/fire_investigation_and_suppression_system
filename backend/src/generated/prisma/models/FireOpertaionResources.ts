@@ -530,14 +530,6 @@ export type FireOpertaionResourcesNullableScalarRelationFilter = {
   isNot?: Prisma.FireOpertaionResourcesWhereInput | null
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type FireOpertaionResourcesCreateNestedOneWithoutFireIncidentInput = {
   create?: Prisma.XOR<Prisma.FireOpertaionResourcesCreateWithoutFireIncidentInput, Prisma.FireOpertaionResourcesUncheckedCreateWithoutFireIncidentInput>
   connectOrCreate?: Prisma.FireOpertaionResourcesCreateOrConnectWithoutFireIncidentInput

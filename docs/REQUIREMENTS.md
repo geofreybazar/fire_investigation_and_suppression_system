@@ -42,7 +42,7 @@ FIIS (shown in the UI as "Fire Investigation and Suppression System") is a web a
 | Fire incidents | Implemented (rev 11) | Implemented |
 | Incident creation approval, soft deletion and restore | Implemented (rev 11) | Implemented |
 | Investigations, referral between offices, assignment, reports | Implemented (rev 11) | Implemented |
-| Evidence / attachments | None (design PROPOSED in §11.5) | Placeholder page |
+| Evidence / attachments | Implemented (Q-22 approved): `/api/attachments` upload, list, download, soft removal | Implemented (attachments on incident and investigation pages, Evidence page) |
 | Dashboard, incident map, statistics, incident reports | Implemented (Q-20, Q-01 approved): `GET /api/statistics/summary`, `incidents`, `incidents.csv`, `map` | Implemented |
 | Monitoring, fire stations, response units | None (OPEN, Q-01) | Placeholder pages |
 | Audit history | `IncidentTimeline`, `FireIncidentEvent`, referral and report-review history, plus the general `AuditLog` (Q-23 approved) | Incident event history; Audit Log page for admins |
@@ -580,7 +580,7 @@ PROPOSED:
 | Incident reports / statistics | **IMPLEMENTED** (Q-20, Q-01 approved 2026-10-28) | Statistics page (totals, active, rekindled, investigated; casualties and damages; by month, status, category type, category, alarm, child office, cause and classification), incident report table with CSV export (up to 10,000 rows per file), incident map, and dashboard KPIs and "my tasks". Only approved, non-deleted incidents within the viewer's scope count. The incident date is the fire's date, or the recording date when blank (Asia/Manila months). `REKINDLE` counts as its own category (incidents that rekindled at least once). Causes and classifications use the latest completed investigation. Official BFP report forms stay OPEN. |
 | Notification preferences | IMPLEMENTED | Per user: `incidentUpdates`, `investigationUpdates`, `reportReview`, `systemAnnouncements` (default on). Created with the user. |
 | Notification delivery | **IMPLEMENTED** in-app (Q-21 approved 2026-10-28) | `Notification` inbox per user, sent after the change commits (best effort; a failure never undoes the change). Triggers and recipients as in §11.5 Q-21, filtered by preference; the actor is never notified. Email and SMS remain OPEN. |
-| Attachments / evidence | **OPEN** | "Evidence" page exists; no model, storage or endpoint. CLAUDE.md requires preventing unauthorized access to sensitive attachments (CONFIRMED as a security rule). Attachments are hidden and restored with their incident (CONFIRMED). File types, size limits, storage location, retention and chain-of-custody needs are undefined (Q-22). |
+| Attachments / evidence | **IMPLEMENTED** (Q-22 approved 2026-10-28) | Incident attachments by the owning station's staff/COMMEL; investigation evidence by the assigned investigator while the investigation is open (locked after approval). JPEG, PNG, WebP and PDF up to 20 MB, recognised by file signature (the declared type is ignored); a SHA-256 hash is stored. Files live on server disk outside the web root (`UPLOAD_DIR`) under random keys and are only served as downloads through an endpoint that applies the incident's visibility; every download is audited. Removal is soft, by the uploader. Attachments are hidden and restored with their incident. Retention period stays OPEN. |
 | Incident status/alarm history | Schema only | `IncidentTimeline` records status, alarm level, user-entered `occurredAt`, remarks, creator and server `createdAt`. One entry per status or alarm change; ordered by `occurredAt` (CONFIRMED). `createdById` has no FK to `User` (D-15). |
 | General audit log | **IMPLEMENTED** (Q-23 approved 2026-10-28) | `AuditLog` records every change to users, roles, offices, positions and categories, and SUPER_ADMIN incident deletion and restore, in the same transaction as the change (field changes only, never passwords or tokens). Incident and investigation workflow history stays in the timeline, event, referral and review tables. Read through `GET /api/audit`, scoped as in §11.5 Q-23. Attachment downloads join it with Phase 5. |
 
@@ -836,8 +836,8 @@ PROPOSED:
 
 | ID | Requirement | Status |
 |---|---|---|
-| FR-ATT-001 | Access to attachments is restricted by the owning incident/investigation's office scope; they are hidden and restored with the incident. | CONFIRMED |
-| FR-ATT-002 | Attachment types, limits, storage, retention, chain of custody. | OPEN (Q-22) |
+| FR-ATT-001 | Access to attachments is restricted by the owning incident/investigation's office scope; they are hidden and restored with the incident. | CONFIRMED / IMPLEMENTED |
+| FR-ATT-002 | Attachment types, limits, storage, retention, chain of custody. | CONFIRMED (Q-22, 2026-10-28) / IMPLEMENTED; retention period OPEN |
 
 ### 9.13 Audit (FR-AUD)
 
@@ -919,6 +919,7 @@ Severity: **H** = security or data-integrity risk, **M** = rule not enforced, **
 | 2026-10-28 | Roadmap phase 3 (branch `roadmap-phase-3-notifications`, migration `20261028160000_add_notifications`) | FR-NOT-003 and Q-21: in-app notifications for incident submission, resubmission, approval, rejection, finished fires, referrals, assignments and report decisions; `incidentUpdates` preference; navbar bell |
 | 2026-10-28 | UI polish (branch `ui-polish`) | Branding, status colours, login accessibility, one sidebar component, coming-soon pages, shared page header and empty state |
 | 2026-10-28 | Roadmap phase 4 (branch `roadmap-phase-4-statistics`) | FR-RPT-010, Q-20 and Q-01: statistics, incident reports with CSV export, incident map, dashboard KPIs and tasks |
+| 2026-10-28 | Roadmap phase 5 (branch `roadmap-phase-5-attachments`, migration `20261028180000_add_attachments`) | FR-ATT-001/002 and Q-22: incident attachments, investigation evidence, Evidence page, audited downloads |
 
 Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23 resolved by roadmap phase 1 and earlier phases).
 
@@ -1033,7 +1034,7 @@ Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23
 | Q-21 | **APPROVED 2026-10-28.** In-app notifications only for now (no email or SMS). Triggers: incident submitted/resubmitted (to the station's chief of operations), approved/rejected (to the submitter), reached `FIRE_OUT`/`FIRE_OUT_UPON_ARRIVAL` (to the handling chief investigators), case referred (to the target office's chief investigators), investigator assigned (to the assignee), report submitted (to the handling chief), report approved/rejected (to the assignee). A new `incidentUpdates` preference joins the existing three. |
 | Q-20 | **APPROVED 2026-10-28.** Dashboard (KPIs and "my tasks"), a statistics page (by status with `REKINDLE` as its own bucket, category, alarm, month, child office, impact totals, cause and classification from the latest completed investigation) and an incident report table with CSV export. Only approved, non-deleted incidents within the viewer's scope count. Official BFP forms stay OPEN. |
 | Q-01 | **APPROVED 2026-10-28.** In scope: Dashboard, Statistics, Incident Reports, Incident Map (approved incidents with coordinates, OpenStreetMap tiles) and Evidence (Q-22). Monitoring, Fire Stations and Response Units are hidden until they are scoped. |
-| Q-22 | Attachments on incidents (by the owning station's staff/COMMEL) and on investigations (by the assigned investigator while open; locked after approval). JPEG, PNG, WebP and PDF, up to 20 MB, checked by file signature; a SHA-256 hash is stored for integrity. Files are kept on server disk outside the web root and downloaded only through an authorized endpoint; downloads are audited. Removal is soft. Attachments are hidden and restored with their incident. Retention period stays OPEN. |
+| Q-22 | **APPROVED 2026-10-28.** Attachments on incidents (by the owning station's staff/COMMEL) and on investigations (by the assigned investigator while open; locked after approval). JPEG, PNG, WebP and PDF, up to 20 MB, checked by file signature; a SHA-256 hash is stored for integrity. Files are kept on server disk outside the web root and downloaded only through an authorized endpoint; downloads are audited. Removal is soft. Attachments are hidden and restored with their incident. Retention period stays OPEN. |
 
 ---
 
@@ -1045,4 +1046,4 @@ Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23
 | §11.2 confirmations | Project owner | Complete |
 | PROPOSED designs accepted: §3.5 timeline validation and corrections, §3.7 approval state, §3.8 soft delete, §5.3 data model, required `barangay` | Project owner | Accepted 2026-10-10 |
 | §10 discrepancies triaged (fix / accept / defer) | Project owner | Approved 2026-10-10 (§10.1) |
-| §11.5 proposed answers (revision 11) | Project owner | Q-23, Q-21, Q-20 and Q-01 approved 2026-10-28; Q-22 **pending** |
+| §11.5 proposed answers (revision 11) | Project owner | All approved 2026-10-28 (Q-23, Q-21, Q-20, Q-01, Q-22) |

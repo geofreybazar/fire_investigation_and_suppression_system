@@ -39,6 +39,7 @@ import {
 } from "@/components/common/form/FormFields";
 import ReasonForm from "@/components/features/fireIncidents/form/ReasonForm";
 import { ReportStatusBadge } from "@/components/features/fireIncidents/StatusBadges";
+import AttachmentsCard from "@/components/features/attachments/AttachmentsCard";
 
 const EDITABLE = ["DRAFT", "REJECTED"];
 const REVIEWABLE = ["SUBMITTED", "UNDER_REVIEW"];
@@ -254,6 +255,21 @@ const InvestigationView = ({ id }: { id: string }) => {
           )}
         </CardContent>
       </Card>
+
+      <AttachmentsCard
+        title='Evidence'
+        description={
+          investigation.completedAt
+            ? "The investigation is approved; its evidence is locked."
+            : "Photos and documents gathered by the assigned investigator."
+        }
+        target={{ kind: "investigation", id: investigation.id }}
+        canUpload={
+          user?.id === investigation.assignedInvestigatorId &&
+          !investigation.completedAt
+        }
+        allowRemoval={!investigation.completedAt}
+      />
 
       {investigation.report && investigation.report.reviews.length > 0 && (
         <Card>

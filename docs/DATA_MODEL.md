@@ -30,6 +30,8 @@ erDiagram
     FireIncident ||--o{ IncidentTimeline : has
     IncidentTimeline |o--o| IncidentTimeline : "correctsEntry"
     FireIncident ||--o{ FireIncidentEvent : "audit log"
+    FireIncident ||--o{ Attachment : has
+    Investigation |o--o{ Attachment : evidence
 
     FireIncident ||--o{ Investigation : has
     FireIncident ||--o{ InvestigationReferral : has
@@ -85,7 +87,13 @@ erDiagram
 
 Investigation fields (cause, classification, origin) are kept separate from the incident's lifecycle fields.
 
-## 5. Audit log
+## 5. Attachments
+
+| Model | Key fields | Notes |
+|---|---|---|
+| `Attachment` | `fireIncidentId`, `investigationId?`, `uploadedById`, `originalName`, `mimeType` (detected from content), `sizeBytes`, `storageKey` (unique, never returned to clients), `sha256`, `description?`, `createdAt`, `removedAt?`, `removedById?` | Q-22. Cascades with its incident or investigation; soft removal by the uploader. Index `(fireIncidentId, createdAt)`, `investigationId`. |
+
+## 5a. Audit log
 
 | Model | Key fields | Notes |
 |---|---|---|
@@ -107,10 +115,10 @@ Investigation fields (cause, classification, origin) are kept separate from the 
 | `ReportStatus` | `DRAFT`, `SUBMITTED`, `UNDER_REVIEW`, `APPROVED`, `REJECTED` |
 | `ReportDecision` | `UNDER_REVIEW`, `APPROVED`, `REJECTED` |
 | `FireCaseClassification` | `UNDER_INVESTIGATION`, `ACCIDENTAL`, `INCENDIARY_INTENTIONAL`, `NATURAL`, `FIRE_CASE_WITH_NEGLIGENT_ACTS` |
-| `AuditAction` | `USER_CREATED`, `USER_UPDATED`, `USER_ACTIVATED`, `USER_DEACTIVATED`, `USER_PASSWORD_CHANGED`, `OFFICE_CREATED/UPDATED/DELETED`, `POSITION_CREATED/UPDATED/DELETED`, `CATEGORY_CREATED/UPDATED/DELETED`, `SUBCATEGORY_CREATED/UPDATED/DELETED`, `INCIDENT_DELETED`, `INCIDENT_RESTORED` |
+| `AuditAction` | `USER_CREATED`, `USER_UPDATED`, `USER_ACTIVATED`, `USER_DEACTIVATED`, `USER_PASSWORD_CHANGED`, `OFFICE_CREATED/UPDATED/DELETED`, `POSITION_CREATED/UPDATED/DELETED`, `CATEGORY_CREATED/UPDATED/DELETED`, `SUBCATEGORY_CREATED/UPDATED/DELETED`, `INCIDENT_DELETED`, `INCIDENT_RESTORED`, `ATTACHMENT_DOWNLOADED` |
 | `NotificationType` | `INCIDENT_SUBMITTED`, `INCIDENT_RESUBMITTED`, `INCIDENT_APPROVED`, `INCIDENT_REJECTED`, `INCIDENT_INVESTIGABLE`, `CASE_REFERRED`, `INVESTIGATOR_ASSIGNED`, `REPORT_SUBMITTED`, `REPORT_APPROVED`, `REPORT_REJECTED` |
 | `NotificationEntityType` | `FIRE_INCIDENT`, `INVESTIGATION` |
-| `AuditEntityType` | `USER`, `OFFICE`, `POSITION`, `FIRE_INCIDENT_CATEGORY`, `FIRE_INCIDENT_SUBCATEGORY`, `FIRE_INCIDENT` |
+| `AuditEntityType` | `USER`, `OFFICE`, `POSITION`, `FIRE_INCIDENT_CATEGORY`, `FIRE_INCIDENT_SUBCATEGORY`, `FIRE_INCIDENT`, `ATTACHMENT` |
 | `CauseOfFire` | about 40 values, including `UNDER_INVESTIGATION`; see `models/fireIncident/enums.prisma` |
 
 Known misspellings that are deferred, since renames need approval (REQUIREMENTS.md D-24): `placeOfOccurence`, `FireOpertaionResources`, `LPG_EXPLOSION_CAUSED_BY_DEFECTIVE_HOSELlNE`.
@@ -128,6 +136,7 @@ Known misspellings that are deferred, since renames need approval (REQUIREMENTS.
 | `20261010180000_unique_office_name_per_parent` | `@@unique([parentId, name])` on `Office` |
 | `20261028120000_add_deletion_memo_reference` | `FireIncident.deletionMemoReference` |
 | `20261028140000_add_audit_log` | `AuditLog` table, `AuditAction` and `AuditEntityType` enums |
+| `20261028180000_add_attachments` | `Attachment` table; `ATTACHMENT_DOWNLOADED` and `ATTACHMENT` audit enum values |
 | `20261028160000_add_notifications` | `Notification` table, its enums, `NotificationPreference.incidentUpdates` |
 
 Create migrations with `npx prisma migrate dev --name <name> --config prisma7.config.ts` and regenerate with `npx prisma generate --config prisma7.config.ts`.

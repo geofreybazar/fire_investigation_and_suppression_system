@@ -80,7 +80,6 @@ export const INVESTIGATION_LINKS: NavLinkItem[] = [
     label: "Evidence",
     icon: "Shield",
     canAccess: canViewIncidents,
-    comingSoon: true,
   },
 ];
 

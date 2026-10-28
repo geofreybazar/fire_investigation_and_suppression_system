@@ -55,6 +55,7 @@ export const ModelName = {
   InvestigationReportReview: 'InvestigationReportReview',
   Investigation: 'Investigation',
   InvestigationReferral: 'InvestigationReferral',
+  Attachment: 'Attachment',
   AuditLog: 'AuditLog',
   FireOpertaionResources: 'FireOpertaionResources',
   IncidentImpact: 'IncidentImpact',
@@ -152,6 +153,25 @@ export const InvestigationReferralScalarFieldEnum = {
 } as const
 
 export type InvestigationReferralScalarFieldEnum = (typeof InvestigationReferralScalarFieldEnum)[keyof typeof InvestigationReferralScalarFieldEnum]
+
+
+export const AttachmentScalarFieldEnum = {
+  id: 'id',
+  fireIncidentId: 'fireIncidentId',
+  investigationId: 'investigationId',
+  uploadedById: 'uploadedById',
+  originalName: 'originalName',
+  mimeType: 'mimeType',
+  sizeBytes: 'sizeBytes',
+  storageKey: 'storageKey',
+  sha256: 'sha256',
+  description: 'description',
+  createdAt: 'createdAt',
+  removedAt: 'removedAt',
+  removedById: 'removedById'
+} as const
+
+export type AttachmentScalarFieldEnum = (typeof AttachmentScalarFieldEnum)[keyof typeof AttachmentScalarFieldEnum]
 
 
 export const AuditLogScalarFieldEnum = {

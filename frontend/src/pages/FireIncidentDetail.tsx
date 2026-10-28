@@ -11,9 +11,14 @@ import TimelineSection from "@/components/features/fireIncidents/detail/Timeline
 import EventHistory from "@/components/features/fireIncidents/detail/EventHistory";
 import IncidentExtrasCard from "@/components/features/fireIncidents/detail/IncidentExtrasCard";
 import InvestigationCaseSection from "@/components/features/fireIncidents/detail/InvestigationCaseSection";
+import AttachmentsCard from "@/components/features/attachments/AttachmentsCard";
+import { useUserStore } from "@/store/userStore";
+import { canEditIncident } from "@/utils/incidentPermissions";
 
 const IncidentDetail = ({ id }: { id: string }) => {
+  const user = useUserStore((state) => state.user);
   const { fireIncident } = useGetFireIncident(id);
+  const isEditor = canEditIncident(user, fireIncident);
 
   return (
     <div className='space-y-6'>
@@ -34,6 +39,13 @@ const IncidentDetail = ({ id }: { id: string }) => {
       <IncidentSummary incident={fireIncident} />
       <TimelineSection incident={fireIncident} />
       <IncidentExtrasCard incident={fireIncident} />
+      <AttachmentsCard
+        title='Attachments'
+        description='Photos and documents about the incident, added by the station.'
+        target={{ kind: "incident", id: fireIncident.id }}
+        canUpload={isEditor}
+        allowRemoval={isEditor}
+      />
 
       <ErrorBoundary FallbackComponent={ErrorFallbackComponent}>
         <Suspense fallback={<Skeleton className='h-32 w-full' />}>

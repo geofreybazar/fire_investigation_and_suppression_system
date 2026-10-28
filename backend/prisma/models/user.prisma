@@ -80,8 +80,10 @@ model User {
   reviewedReports        InvestigationReport[]       @relation("ReportReviewedBy")
   reportReviews          InvestigationReportReview[] @relation("ReportReviewReviewer")
 
-  auditLogs     AuditLog[]     @relation("AuditActor")
-  notifications Notification[]
+  auditLogs           AuditLog[]     @relation("AuditActor")
+  notifications       Notification[]
+  uploadedAttachments Attachment[]   @relation("AttachmentUploadedBy")
+  removedAttachments  Attachment[]   @relation("AttachmentRemovedBy")
 
   @@index([officeId])
   @@index([positionId])

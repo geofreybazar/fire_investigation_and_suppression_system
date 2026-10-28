@@ -55,6 +55,7 @@ model FireIncident {
   investigations Investigation[]
   referrals      InvestigationReferral[]
   events         FireIncidentEvent[]
+  attachments    Attachment[]
 
   remarks String?
 
