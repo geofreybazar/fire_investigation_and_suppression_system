@@ -9,10 +9,12 @@ import {
   ReportStatus,
 } from '../../generated/prisma/enums.js';
 import {
+  awaitsDecision,
   INVESTIGATOR_ROLES,
   REPORT_EDITABLE_STATUSES,
   REVIEW_FROM,
 } from './utils/investigation-rules.js';
+import { INVESTIGABLE_STATUSES } from '../fire-incident/utils/incident-rules.js';
 
 // Users are only ever exposed by name.
 const userSummary = {
@@ -25,6 +27,9 @@ const officeSummary = {
 
 // An investigation is open while it is assigned and its report not approved.
 const open = { completedAt: null } as const;
+
+// Why a case is in the chief investigator's queue.
+export type QueueReason = 'DECISION' | 'REVIEW';
 
 export interface InvestigationDraft {
   investigation: {
@@ -356,52 +361,108 @@ export class InvestigationRepository {
     });
   }
 
-  // Incidents waiting on an office's investigation decisions.
+  // Incidents waiting on the office's chief investigator: a case to decide
+  // (start, refer or leave) or a submitted report to review.
   async findQueue(officeId: string, skip: number, take: number) {
-    const where: Prisma.FireIncidentWhereInput = {
-      deletedAt: null,
-      approvalStatus: 'APPROVED',
-      OR: [
-        { investigationHandlingOfficeId: officeId },
-        { investigationHandlingOfficeId: null, officeId },
-      ],
+    const awaitingReview: Prisma.InvestigationWhereInput = {
+      ...open,
+      conductingOfficeId: officeId,
+      report: { status: { in: REVIEW_FROM[ReportDecision.APPROVED] } },
     };
 
-    const [incidents, total] = await Promise.all([
-      this.prismaService.fireIncident.findMany({
-        where,
-        select: {
-          id: true,
-          incidentNo: true,
-          fireIncidentStatus: true,
-          createdAt: true,
-          office: officeSummary,
-          location: {
-            select: {
-              placeOfOccurence: true,
-              barangay: true,
-              city_municipality: true,
-            },
+    // Which cases still wait depends on referral and start dates, so the
+    // candidates are filtered here and only the page is loaded in full.
+    const candidates = await this.prismaService.fireIncident.findMany({
+      where: {
+        deletedAt: null,
+        approvalStatus: 'APPROVED',
+        AND: [
+          {
+            OR: [
+              { investigationHandlingOfficeId: officeId },
+              { investigationHandlingOfficeId: null, officeId },
+            ],
           },
-          investigations: {
-            orderBy: { startedAt: 'desc' },
-            take: 1,
-            select: {
-              id: true,
-              investigationNo: true,
-              completedAt: true,
-              report: { select: { status: true } },
-            },
+          {
+            OR: [
+              {
+                fireIncidentStatus: { in: INVESTIGABLE_STATUSES },
+                investigations: { none: open },
+              },
+              { investigations: { some: awaitingReview } },
+            ],
+          },
+        ],
+      },
+      select: {
+        id: true,
+        investigations: {
+          where: { conductingOfficeId: officeId },
+          orderBy: { startedAt: 'desc' },
+          take: 1,
+          select: { startedAt: true, completedAt: true },
+        },
+        referrals: {
+          where: { toOfficeId: officeId },
+          orderBy: { createdAt: 'desc' },
+          take: 1,
+          select: { createdAt: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const waiting = new Map<string, QueueReason>();
+    for (const candidate of candidates) {
+      const [lastHere] = candidate.investigations;
+      if (lastHere && lastHere.completedAt === null) {
+        waiting.set(candidate.id, 'REVIEW');
+      } else if (
+        awaitsDecision(
+          lastHere?.startedAt ?? null,
+          candidate.referrals[0]?.createdAt ?? null,
+        )
+      ) {
+        waiting.set(candidate.id, 'DECISION');
+      }
+    }
+
+    const pageIds = [...waiting.keys()].slice(skip, skip + take);
+    const rows = await this.prismaService.fireIncident.findMany({
+      where: { id: { in: pageIds } },
+      select: {
+        id: true,
+        incidentNo: true,
+        fireIncidentStatus: true,
+        createdAt: true,
+        office: officeSummary,
+        location: {
+          select: {
+            placeOfOccurence: true,
+            barangay: true,
+            city_municipality: true,
           },
         },
-        orderBy: { createdAt: 'desc' },
-        skip,
-        take,
-      }),
-      this.prismaService.fireIncident.count({ where }),
-    ]);
+        investigations: {
+          orderBy: { startedAt: 'desc' },
+          take: 1,
+          select: {
+            id: true,
+            investigationNo: true,
+            completedAt: true,
+            report: { select: { status: true } },
+          },
+        },
+      },
+    });
 
-    return { incidents, total };
+    const byId = new Map(rows.map((row) => [row.id, row]));
+    const incidents = pageIds.flatMap((id) => {
+      const row = byId.get(id);
+      return row ? [{ ...row, awaiting: waiting.get(id)! }] : [];
+    });
+
+    return { incidents, total: waiting.size };
   }
 
   async findAssigned(userId: string, skip: number, take: number) {

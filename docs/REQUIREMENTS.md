@@ -926,6 +926,7 @@ Severity: **H** = security or data-integrity risk, **M** = rule not enforced, **
 
 | 2026-11-03 | Owner answers (branch `q-answers-incident-rules`) | Q-50: only the original submitter changes a rejected incident. Q-51 / FR-OFF-009: office moves check referred cases. Q-34g, Q-41 and Q-52c needed no code change. |
 | 2026-11-03 | Q-19 (branch `q-19-login-security`, migration `add_login_security`) | FR-AUTH-009, FR-AUTH-010, FR-AUTH-011: forced password change and temporary lockout |
+| 2026-11-03 | Case queue (branch `investigation-case-queue`) | The chief investigator's case queue lists only cases waiting on the office: Fire Out or Fire Out Upon Arrival with no investigation by the office since the case reached it (a later referral back counts as reaching it again), or a submitted report to review. Queue rows say what is needed and link to the latest investigation |
 
 Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23 resolved by roadmap phase 1 and earlier phases).
 

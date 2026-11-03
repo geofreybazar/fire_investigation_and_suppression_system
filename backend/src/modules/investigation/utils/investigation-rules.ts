@@ -149,6 +149,17 @@ export function assertInvestigationConcluded(investigation: {
   }
 }
 
+// A case with no open investigation waits on its handling office's decision
+// until that office starts an investigation. A referral to the office after
+// its last investigation hands the case back for a new decision.
+export function awaitsDecision(
+  lastStartedHere: Date | null,
+  lastReferredHere: Date | null,
+): boolean {
+  if (!lastStartedHere) return true;
+  return lastReferredHere !== null && lastReferredHere > lastStartedHere;
+}
+
 // INV-<incidentNo>-<NN>: NN counts the incident's investigations from 01.
 export function investigationNumber(
   incidentNo: string,

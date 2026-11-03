@@ -97,8 +97,12 @@ export interface InvestigationDetail {
   report: InvestigationReport | null;
 }
 
+// DECISION: start, refer or leave the case. REVIEW: a submitted report.
+export type QueueReason = "DECISION" | "REVIEW";
+
 export interface QueueItem {
   id: string;
+  awaiting: QueueReason;
   incidentNo: string | null;
   fireIncidentStatus: FireIncidentStatus;
   createdAt: string;
