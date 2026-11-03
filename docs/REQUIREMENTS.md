@@ -3,7 +3,8 @@
 > **Status: APPROVED (revision 10), approved by the project owner on 2026-10-10.**
 > All items tagged PROPOSED or INTERPRETED in this revision were accepted with the approval and are binding requirements. Items tagged OPEN remain undecided and must be resolved before the feature they affect is built.
 > **Revision 11 (2026-10-28):** refreshes §1.2 and §10.1 to match the code, and adds §11.5, answers to Q-01, Q-20, Q-21, Q-22 and Q-23 (audit log, notifications, statistics, incident map, attachments). All five were **approved by the project owner on 2026-10-28** and are implemented (roadmap phases 1–5, PRs #1–#6). Parts those answers left open stay OPEN: official BFP report forms (Q-20), email/SMS notifications (Q-21), attachment retention (Q-22), and the Fire Stations, Monitoring and Response Units pages (Q-01).
-> Last updated: 2026-10-28. Derived from `CLAUDE.md`, owner answers given on 2026-10-10 (rounds 1–9), the Prisma schema (`backend/prisma/`), backend modules (`backend/src/modules/`), frontend pages, hooks and services (`frontend/src/`), and backend unit tests.
+> **Revision 12 (2026-11-03):** adds §11.6, the owner's answers to Q-19, Q-34g, Q-41, Q-50, Q-51 and Q-52c. Q-19 is decided but not built yet.
+> Last updated: 2026-11-03. Derived from `CLAUDE.md`, owner answers given on 2026-10-10 (rounds 1–9), the Prisma schema (`backend/prisma/`), backend modules (`backend/src/modules/`), frontend pages, hooks and services (`frontend/src/`), and backend unit tests.
 
 ## 0. How to read this document
 
@@ -166,8 +167,8 @@ Definitions:
 | Add timeline entries (status and/or alarm change), including while pending approval | Same, of the owning station | CONFIRMED |
 | See a pending or rejected incident | Station operations group, `SUPER_ADMIN` | CONFIRMED |
 | Approve or reject creation | `CITY_MUNICIPALITY_OPERATION` of the owning station | CONFIRMED |
-| Edit and resubmit a rejected incident | Station staff/COMMEL | CONFIRMED (who exactly: Q-50) |
-| Remove a **rejected**, never-approved incident | Station staff/COMMEL | CONFIRMED (pending ones cannot be removed) |
+| Edit and resubmit a rejected incident | The staff/COMMEL member who submitted it | CONFIRMED (Q-50) |
+| Remove a **rejected**, never-approved incident | The staff/COMMEL member who submitted it | CONFIRMED (Q-50; pending ones cannot be removed) |
 | Update an approved incident (status, alarm level, details, date fields) without approval | `CITY_MUNICIPALITY_OPERATION_STAFF`, `CITY_MUNICIPALITY_COMMEL` of the owning station | CONFIRMED |
 | Make any change to an incident | **Not** `CITY_MUNICIPALITY_OPERATION`, **not** `SUPER_ADMIN` | CONFIRMED |
 | View approved incidents | All non-admin roles within scope; `SUPER_ADMIN` everywhere | CONFIRMED |
@@ -180,7 +181,7 @@ Definitions:
 | Action | Who | Status |
 |---|---|---|
 | Start an investigation (create it and assign an investigator in one step) | Chief investigator of the handling office | CONFIRMED |
-| Refer the case up to any office above in the chain, or down to an office below, while no investigation is open | Chief investigator of the handling office | CONFIRMED (down-target limits INTERPRETED, Q-52c) |
+| Refer the case up to any office above in the chain, or down to an office below, while no investigation is open | Chief investigator of the handling office | CONFIRMED (Q-52c) |
 | Do nothing (no investigation) | Chief investigator of the handling office | CONFIRMED |
 | After an approved investigation, refer the case up **or down** so another office can start a new investigation | Chief investigator of the handling office | CONFIRMED |
 | Be assigned | An active `*_INVESTIGATOR` of the handling office | CONFIRMED (office) / PROPOSED (active) |
@@ -328,9 +329,9 @@ PROPOSED design:
 - Pending, rejected and removed incidents are excluded from incident lists for everyone outside the station operations group, and from statistics.
 - Removing a rejected incident is a soft delete, like `SUPER_ADMIN` deletion (§3.8) (INTERPRETED).
 
-OPEN:
-- **Q-50:** Can any staff/COMMEL of the station resubmit or remove a rejected incident, or only the original submitter?
-- **Q-34g:** If a station has several `CITY_MUNICIPALITY_OPERATION` users, is one approval enough? Who approves if none is active?
+Answered 2026-11-03 (§11.6):
+- **Q-50:** Only the original submitter can edit, resubmit or remove a rejected incident. If the submitter has left, `SUPER_ADMIN` can clear it and the station submits a new one.
+- **Q-34g:** One approval is enough. With no active `CITY_MUNICIPALITY_OPERATION`, the incident stays pending until an admin provides one.
 
 ### 3.8 Deletion and restore
 
@@ -451,7 +452,7 @@ Using the chain *owning station → district/provincial → regional → NHQ*:
 | Referral and starting an investigation require the incident status to be `FIRE_OUT` or `FIRE_OUT_UPON_ARRIVAL`. | CONFIRMED (start) / PROPOSED (referral) |
 | The handling office's chief investigator may refer the case to **any** ancestor of the handling office, skipping levels. | CONFIRMED |
 | Referral to an office outside the chain (another region, a sibling district) is rejected. | CONFIRMED |
-| The handling office's chief investigator may refer the case down to an office below it, within the owning station's chain. | CONFIRMED (down) / INTERPRETED (limited to the owning station's chain, Q-52c) |
+| The handling office's chief investigator may refer the case down to an office below it, within the owning station's chain. | CONFIRMED (limited to the owning station's chain, Q-52c) |
 | No referral while an investigation is open (assigned and not yet approved) (400). | CONFIRMED |
 | After an approved investigation, the handling chief may refer the case up **or down**; the new handling office may then start a new investigation. | CONFIRMED |
 | After referral, only the new handling office's chief investigator can start, refer, or decide on reports. | CONFIRMED |
@@ -559,7 +560,7 @@ Region scoping is only applied to office **listings**. It is not applied to offi
 
 Inactive users can log in and refresh (D-12). The login and create-user responses include the password hash, which the frontend stores in `localStorage` (D-06). Logout does not clear cookies (D-13). Refresh tokens are stored in plaintext (D-14). There is no forced password change after the default password (Q-19).
 
-Role and office come from the JWT. A role or office change takes effect only on the next token refresh (up to 15 minutes). This matters for approval, assignment, referral and report-approval rights (Q-41).
+Role and office come from the JWT. A role or office change takes effect only on the next token refresh (up to 15 minutes). This matters for approval, assignment, referral and report-approval rights; the owner accepted the delay (Q-41).
 
 ### 7.4 `SUPER_ADMIN` account
 
@@ -600,7 +601,7 @@ PROPOSED:
 | FR-AUTH-006 | Deactivated users cannot log in or refresh tokens. | PROPOSED (D-12) |
 | FR-AUTH-007 | Logout clears both auth cookies. | PROPOSED (D-13) |
 | FR-AUTH-008 | No API response includes the password hash or refresh token. | CONFIRMED / **violated** (D-06) |
-| FR-AUTH-009 | Users change their own password by supplying the current password; the new password meets the complexity policy (≥12 chars, upper, lower, digit, special). | IMPLEMENTED (policy itself needs confirmation, Q-19) |
+| FR-AUTH-009 | Users change their own password by supplying the current password; the new password meets the complexity policy (≥12 chars, upper, lower, digit, special). | IMPLEMENTED (policy confirmed, Q-19) |
 
 **Acceptance criteria / edge cases**
 - Unknown account and wrong password return the same 401 message.
@@ -642,7 +643,7 @@ PROPOSED:
 | FR-OFF-006 | Delete is authorized by the same office-type rules as create/update. | PROPOSED (D-08) |
 | FR-OFF-007 | Changing an office's parent recomputes `regionId` for it and all descendants. | PROPOSED (D-11) |
 | FR-OFF-008 | An office that owns incidents (including hidden ones), handles a case, or conducted an investigation cannot be deleted. | PROPOSED |
-| FR-OFF-009 | Re-parenting a station that owns incidents changes who can see them and where their cases can be referred. Whether that is allowed. | OPEN (Q-51) |
+| FR-OFF-009 | Moving an office is allowed, and its stations' incidents follow them. The move is refused (409, naming the incidents) if a referred case would fall outside the station's new chain while unfinished: it has an open investigation, or the handling office has not completed one. Finished cases in that position return to the owning station, recorded in the referral history with the admin as actor, and its chief investigators are notified. | CONFIRMED (Q-51) |
 | FR-OFF-010 | A region code cannot be changed once incidents have been numbered with it. | PROPOSED (Q-25) |
 
 ### 9.4 Positions (FR-POS)
@@ -677,8 +678,8 @@ PROPOSED:
 | FR-INC-004 | A submitted incident is pending until a `CITY_MUNICIPALITY_OPERATION` of the same station approves it. | CONFIRMED |
 | FR-INC-005 | While pending, staff/COMMEL of the station can add timeline entries. | CONFIRMED |
 | FR-INC-006 | A `CITY_MUNICIPALITY_OPERATION` can approve or reject only incidents of their own station. | CONFIRMED |
-| FR-INC-007 | A rejected incident can be edited and resubmitted. | CONFIRMED (who: Q-50) |
-| FR-INC-008 | A rejected, never-approved incident can be removed (hidden) by station staff/COMMEL. Pending and approved incidents cannot be removed by them (403). | CONFIRMED |
+| FR-INC-007 | A rejected incident can be edited and resubmitted. | CONFIRMED (only the original submitter, Q-50) |
+| FR-INC-008 | A rejected, never-approved incident can be removed (hidden) by the staff/COMMEL member who submitted it (Q-50). Pending and approved incidents cannot be removed by them (403). | CONFIRMED |
 | FR-INC-009 | Pending and rejected incidents are visible only to the station operations group and `SUPER_ADMIN`. | CONFIRMED |
 | FR-INC-010 | `CITY_MUNICIPALITY_OPERATION` and `SUPER_ADMIN` cannot create or update incident data (403). `CITY_MUNICIPALITY_OPERATION` only approves or rejects; `SUPER_ADMIN` only views, deletes and restores. | CONFIRMED |
 | FR-INC-011 | `CITY_MUNICIPALITY_OPERATION_STAFF` and `CITY_MUNICIPALITY_COMMEL` of the owning station update approved incidents (status, alarm level, details) directly, without approval. | CONFIRMED |
@@ -777,7 +778,7 @@ PROPOSED:
 | FR-INV-006 | Starting an investigation creates it, generates its number and assigns an investigator in one step; `startedAt` is the assignment time. | CONFIRMED (start = assign) / PROPOSED (number at start) |
 | FR-INV-007 | The assignee must be an active `*_INVESTIGATOR` of the handling office. | CONFIRMED (office) / PROPOSED (active) |
 | FR-INV-008 | An open investigation cannot be reassigned (400). | CONFIRMED |
-| FR-INV-009 | The handling chief may refer the case to any ancestor office (skipping levels), or down within the owning station's chain. Other targets return 400/403. | CONFIRMED / INTERPRETED (down target, Q-52c) |
+| FR-INV-009 | The handling chief may refer the case to any ancestor office (skipping levels), or down within the owning station's chain. Other targets return 400/403. | CONFIRMED (Q-52c) |
 | FR-INV-010 | Referral is rejected (400) while an investigation is open. | CONFIRMED |
 | FR-INV-011 | After referral, only the new handling office's chief investigator can act on the case; the previous office's chief gets 403. | CONFIRMED |
 | FR-INV-012 | After an investigation is approved, the handling chief may refer the case up or down, and the new handling office may start a new investigation. | CONFIRMED |
@@ -921,6 +922,8 @@ Severity: **H** = security or data-integrity risk, **M** = rule not enforced, **
 | 2026-10-28 | Roadmap phase 4 (branch `roadmap-phase-4-statistics`) | FR-RPT-010, Q-20 and Q-01: statistics, incident reports with CSV export, incident map, dashboard KPIs and tasks |
 | 2026-10-28 | Roadmap phase 5 (branch `roadmap-phase-5-attachments`, migration `20261028180000_add_attachments`) | FR-ATT-001/002 and Q-22: incident attachments, investigation evidence, Evidence page, audited downloads |
 
+| 2026-11-03 | Owner answers (branch `q-answers-incident-rules`) | Q-50: only the original submitter changes a rejected incident. Q-51 / FR-OFF-009: office moves check referred cases. Q-34g, Q-41 and Q-52c needed no code change. |
+
 Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23 resolved by roadmap phase 1 and earlier phases).
 
 ---
@@ -999,6 +1002,8 @@ Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23
 
 ### 11.3 Important
 
+Answered questions stay listed here for their IDs; check §11.5 and §11.6 for their answers.
+
 | ID | Question |
 |---|---|
 | Q-52c | When a chief refers a case down, can it go to any office below them, or only to offices in the owning station's chain (its own district/province or the station)? |
@@ -1026,7 +1031,7 @@ Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23
 | Q-26 | Are positions a national list managed by NHQ only, or can regional admins add them? |
 | Q-27 | Which roles may maintain incident categories and subcategories? |
 
-### 11.5 Proposed answers (revision 11, PROPOSED, pending owner approval)
+### 11.5 Answers approved in revision 11
 
 | ID | Proposed answer |
 |---|---|
@@ -1035,6 +1040,21 @@ Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23
 | Q-20 | **APPROVED 2026-10-28.** Dashboard (KPIs and "my tasks"), a statistics page (by status with `REKINDLE` as its own bucket, category, alarm, month, child office, impact totals, cause and classification from the latest completed investigation) and an incident report table with CSV export. Only approved, non-deleted incidents within the viewer's scope count. Official BFP forms stay OPEN. |
 | Q-01 | **APPROVED 2026-10-28.** In scope: Dashboard, Statistics, Incident Reports, Incident Map (approved incidents with coordinates, OpenStreetMap tiles) and Evidence (Q-22). Monitoring, Fire Stations and Response Units are hidden until they are scoped. |
 | Q-22 | **APPROVED 2026-10-28.** Attachments on incidents (by the owning station's staff/COMMEL) and on investigations (by the assigned investigator while open; locked after approval). JPEG, PNG, WebP and PDF, up to 20 MB, checked by file signature; a SHA-256 hash is stored for integrity. Files are kept on server disk outside the web root and downloaded only through an authorized endpoint; downloads are audited. Removal is soft. Attachments are hidden and restored with their incident. Retention period stays OPEN. |
+
+### 11.6 Answers approved in revision 12 (2026-11-03)
+
+| ID | Answer | Built |
+|---|---|---|
+| Q-19 | Users created through the API must change the default password at first login. The current password policy is approved. After 5 failed logins an account is locked for 15 minutes. | Not yet |
+| Q-34g | One approval is enough. With no active chief of operations the incident stays pending until an admin provides one; `SUPER_ADMIN` does not approve. | Yes |
+| Q-41 | The delay of up to 15 minutes before role or office changes take effect is acceptable. | Yes |
+| Q-50 | Only the original submitter can edit, resubmit, remove or attach files to a rejected incident. If the submitter has left, `SUPER_ADMIN` can clear the incident and the station submits a new one. | Yes |
+| Q-51 | Incidents follow a moved station. See FR-OFF-009 for moves with referred cases. | Yes |
+| Q-52c | A case referred down stays within the owning station's chain. | Yes |
+
+| ID | New question |
+|---|---|
+| Q-67 | There is no way for an admin to reset a forgotten password. Should there be one, and who may use it? |
 
 ---
 
@@ -1047,3 +1067,4 @@ Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23
 | PROPOSED designs accepted: §3.5 timeline validation and corrections, §3.7 approval state, §3.8 soft delete, §5.3 data model, required `barangay` | Project owner | Accepted 2026-10-10 |
 | §10 discrepancies triaged (fix / accept / defer) | Project owner | Approved 2026-10-10 (§10.1) |
 | §11.5 proposed answers (revision 11) | Project owner | All approved 2026-10-28 (Q-23, Q-21, Q-20, Q-01, Q-22) |
+| §11.6 answers (revision 12) | Project owner | Given 2026-11-03 (Q-19, Q-34g, Q-41, Q-50, Q-51, Q-52c) |

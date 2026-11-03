@@ -19,6 +19,11 @@ interface OwnedIncident {
   officeId: string;
 }
 
+interface EditableIncident extends OwnedIncident {
+  approvalStatus: string;
+  createdBy: { id: string };
+}
+
 export const isSuperAdmin = (user?: CurrentUser | null) =>
   user?.role === "SUPER_ADMIN";
 
@@ -30,8 +35,12 @@ export const isIncidentEditor = (user?: CurrentUser | null) =>
 
 export const canEditIncident = (
   user: CurrentUser | null | undefined,
-  incident: OwnedIncident,
-) => isIncidentEditor(user) && user?.officeId === incident.officeId;
+  incident: EditableIncident,
+) =>
+  isIncidentEditor(user) &&
+  user?.officeId === incident.officeId &&
+  (incident.approvalStatus !== "REJECTED" ||
+    incident.createdBy.id === user.id);
 
 export const isStationChiefOf = (
   user: CurrentUser | null | undefined,

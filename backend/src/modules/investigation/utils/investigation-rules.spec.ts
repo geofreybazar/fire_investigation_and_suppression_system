@@ -1,6 +1,8 @@
 import { BadRequestException } from '@nestjs/common';
+import { OfficeType } from '../../../generated/prisma/enums.js';
 import {
   assertInvestigationConcluded,
+  caseAfterStationMove,
   investigationNumber,
   referralDirection,
   referralTargets,
@@ -106,5 +108,48 @@ describe('investigation rules', () => {
     expect(investigationNumber('2026-10-NCR-000123', 1)).toBe(
       'INV-2026-10-NCR-000123-02',
     );
+  });
+});
+
+describe('caseAfterStationMove (Q-51)', () => {
+  const chain = [
+    { id: 'station', name: 'Station', type: OfficeType.CITY_FIRE_STATION },
+    { id: 'new-district', name: 'New', type: OfficeType.DISTRICT_FIRE_STATION },
+  ];
+  const completed = (conductingOfficeId: string) => ({
+    conductingOfficeId,
+    completedAt: new Date(),
+  });
+  const open = (conductingOfficeId: string) => ({
+    conductingOfficeId,
+    completedAt: null,
+  });
+
+  it('leaves a case handled inside the new chain alone', () => {
+    expect(
+      caseAfterStationMove(chain, 'new-district', [open('new-district')]),
+    ).toBe('STAYS');
+  });
+
+  it('blocks the move for an open investigation outside the chain', () => {
+    expect(
+      caseAfterStationMove(chain, 'old-district', [open('old-district')]),
+    ).toBe('BLOCKS_MOVE');
+  });
+
+  it('blocks the move for a referred case with no investigation yet', () => {
+    expect(caseAfterStationMove(chain, 'old-district', [])).toBe('BLOCKS_MOVE');
+  });
+
+  it('blocks when only a different office has completed an investigation', () => {
+    expect(
+      caseAfterStationMove(chain, 'old-district', [completed('station')]),
+    ).toBe('BLOCKS_MOVE');
+  });
+
+  it('returns a completed case to the station', () => {
+    expect(
+      caseAfterStationMove(chain, 'old-district', [completed('old-district')]),
+    ).toBe('RETURNS_TO_STATION');
   });
 });

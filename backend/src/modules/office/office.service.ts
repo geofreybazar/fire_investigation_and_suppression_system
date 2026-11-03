@@ -16,6 +16,9 @@ import {
   normalizeRegionCode,
   validateRegionCode,
 } from './utils/validateRegionCode.js';
+import { CHIEF_INVESTIGATOR_ROLES } from '../investigation/utils/investigation-rules.js';
+import { NotificationDispatcher } from '../notification/notification.dispatcher.js';
+import { notificationMessages } from '../notification/notification.messages.js';
 
 @Injectable()
 export class OfficeService {
@@ -24,6 +27,7 @@ export class OfficeService {
   constructor(
     private readonly officeRepository: OfficeRepository,
     private readonly officeAuthorizationService: OfficeAuthorizationService,
+    private readonly notificationDispatcher: NotificationDispatcher,
   ) {}
 
   async createOffice(officeData: OfficeInput, user: CurrentUserJwtPayload) {
@@ -143,13 +147,24 @@ export class OfficeService {
       );
     }
 
-    const updatedOffice = await this.officeRepository.updateOffice(
-      id,
-      officeData,
-      user.sub,
-    );
+    const { office: updatedOffice, returnedCases } =
+      await this.officeRepository.updateOffice(id, officeData, user.sub);
 
     this.logger.log('Updating office successful');
+
+    for (const returned of returnedCases) {
+      await this.notificationDispatcher.notify({
+        ...notificationMessages.caseReferred(
+          returned.incidentId,
+          returned.incidentNo,
+        ),
+        actorId: user.sub,
+        recipients: {
+          officeId: returned.stationId,
+          roles: CHIEF_INVESTIGATOR_ROLES,
+        },
+      });
+    }
 
     return updatedOffice;
   }

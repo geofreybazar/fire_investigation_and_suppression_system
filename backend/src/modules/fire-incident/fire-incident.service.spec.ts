@@ -70,7 +70,7 @@ const accessIncident = (overrides: Record<string, unknown> = {}) => ({
   id: incidentId,
   incidentNo: '2026-10-NCR-000001',
   officeId: STATION,
-  createdById: 'submitter-1',
+  createdById: staff.sub,
   fireIncidentStatus: 'ON_GOING',
   investigationHandlingOfficeId: null,
   approvalStatus: 'APPROVED',
@@ -463,6 +463,53 @@ describe('FireIncidentService', () => {
       );
     });
 
+    it('forbids another staff member from resubmitting (Q-50)', async () => {
+      repository.findForAccess.mockResolvedValue(
+        accessIncident({
+          approvalStatus: 'REJECTED',
+          createdById: 'another-submitter',
+        }),
+      );
+
+      await expect(service.resubmit(incidentId, staff)).rejects.toThrow(
+        'Only the original submitter can change a rejected incident.',
+      );
+      expect(repository.changeApprovalStatus).not.toHaveBeenCalled();
+    });
+
+    it('forbids another staff member from removing or editing it (Q-50)', async () => {
+      repository.findForAccess.mockResolvedValue(
+        accessIncident({
+          approvalStatus: 'REJECTED',
+          createdById: 'another-submitter',
+        }),
+      );
+
+      await expect(service.remove(incidentId, {}, commel)).rejects.toThrow(
+        ForbiddenException,
+      );
+      await expect(
+        service.updateDetails(incidentId, {}, commel),
+      ).rejects.toThrow(ForbiddenException);
+      await expect(
+        service.addTimelineEntry(
+          incidentId,
+          { status: 'ON_GOING', occurredAt: at('11:00') },
+          commel,
+        ),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('lets any station staff member edit an approved incident', async () => {
+      repository.findForAccess.mockResolvedValue(
+        accessIncident({ createdById: 'another-submitter' }),
+      );
+
+      await expect(
+        service.updateDetails(incidentId, {}, staff),
+      ).resolves.not.toThrow();
+    });
+
     it('forbids the chief from resubmitting', async () => {
       await expect(service.resubmit(incidentId, chief)).rejects.toThrow(
         ForbiddenException,
@@ -759,7 +806,7 @@ describe('FireIncidentService', () => {
         expect.objectContaining({
           type: 'INCIDENT_APPROVED',
           body: 'Your fire incident was approved as 2026-10-NCR-000001.',
-          recipients: { userIds: ['submitter-1'] },
+          recipients: { userIds: [staff.sub] },
         }),
       );
     });
@@ -799,7 +846,7 @@ describe('FireIncidentService', () => {
         expect.objectContaining({
           type: 'INCIDENT_REJECTED',
           body: 'Your fire incident was rejected: Wrong barangay',
-          recipients: { userIds: ['submitter-1'] },
+          recipients: { userIds: [staff.sub] },
         }),
       );
     });

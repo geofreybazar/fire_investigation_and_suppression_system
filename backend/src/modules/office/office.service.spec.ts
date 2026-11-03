@@ -8,6 +8,7 @@ import {
 import { type UUID } from 'crypto';
 import { OfficeService } from './office.service.js';
 import { OfficeRepository } from './office.repository.js';
+import { NotificationDispatcher } from '../notification/notification.dispatcher.js';
 import { OfficeAuthorizationService } from './services/office.authorization.service.js';
 import { type OfficeInput } from './schema/office.schema.js';
 import { type CurrentUserJwtPayload } from '../../types/jwt.payload.js';
@@ -63,6 +64,7 @@ const cityStation: OfficeInput = {
 
 describe('OfficeService', () => {
   let service: OfficeService;
+  let dispatcher: { notify: ReturnType<typeof vi.fn> };
   let repository: {
     findById: ReturnType<typeof vi.fn>;
     findByNameUnderParent: ReturnType<typeof vi.fn>;
@@ -76,6 +78,7 @@ describe('OfficeService', () => {
   };
 
   beforeEach(async () => {
+    dispatcher = { notify: vi.fn() };
     repository = {
       findById: vi.fn(),
       // By default no other office has the name.
@@ -84,7 +87,9 @@ describe('OfficeService', () => {
       findAllOffices: vi.fn(),
       findPaginatedOffices: vi.fn(),
       createOffice: vi.fn(),
-      updateOffice: vi.fn(),
+      updateOffice: vi
+        .fn()
+        .mockResolvedValue({ office: {}, returnedCases: [] }),
       deleteById: vi.fn(),
       isRegionCodeUsed: vi.fn().mockResolvedValue(false),
     };
@@ -96,6 +101,7 @@ describe('OfficeService', () => {
         OfficeService,
         OfficeAuthorizationService,
         { provide: OfficeRepository, useValue: repository },
+        { provide: NotificationDispatcher, useValue: dispatcher },
       ],
     }).compile();
 
@@ -314,9 +320,30 @@ describe('OfficeService', () => {
 
     const station = { ...cityStation, parentId: districtId };
 
+    it("tells the station's chief investigators about returned cases (Q-51)", async () => {
+      repository.updateOffice.mockResolvedValue({
+        office: { id: officeId, ...station },
+        returnedCases: [
+          { incidentId: 'i-1', incidentNo: 'NO-1', stationId: officeId },
+        ],
+      });
+
+      await service.updateOffice(officeId, station, regionalAdmin);
+
+      expect(dispatcher.notify).toHaveBeenCalledWith(
+        expect.objectContaining({
+          actorId: regionalAdmin.sub,
+          recipients: expect.objectContaining({ officeId }),
+        }),
+      );
+    });
+
     it('updates an office that passes all checks', async () => {
       const updated = { id: officeId, ...station };
-      repository.updateOffice.mockResolvedValue(updated);
+      repository.updateOffice.mockResolvedValue({
+        office: updated,
+        returnedCases: [],
+      });
 
       await expect(
         service.updateOffice(officeId, station, regionalAdmin),
@@ -398,7 +425,10 @@ describe('OfficeService', () => {
     });
 
     it('ignores the office itself when checking the name', async () => {
-      repository.updateOffice.mockResolvedValue({ id: officeId });
+      repository.updateOffice.mockResolvedValue({
+        office: { id: officeId },
+        returnedCases: [],
+      });
 
       await service.updateOffice(officeId, station, regionalAdmin);
 

@@ -43,6 +43,7 @@ import { CHIEF_INVESTIGATOR_ROLES } from '../investigation/utils/investigation-r
 import { NotificationDispatcher } from '../notification/notification.dispatcher.js';
 import { notificationMessages } from '../notification/notification.messages.js';
 import {
+  assertMayChangeIfRejected,
   INCIDENT_EDITOR_ROLES,
   incidentScopeWhere,
   isIncidentVisible,
@@ -294,7 +295,7 @@ export class FireIncidentService {
     return { message: 'Fire incident resubmitted.' };
   }
 
-  // Staff remove their own rejected incidents; SUPER_ADMIN deletes the rest (3.6).
+  // Submitters remove their own rejected incidents; SUPER_ADMIN deletes the rest (3.6).
   async remove(
     id: string,
     input: DeleteFireIncidentInput,
@@ -576,6 +577,8 @@ export class FireIncidentService {
         "Only the station's operation staff and COMMEL can change this incident.",
       );
     }
+
+    assertMayChangeIfRejected(incident, user);
   }
 
   private assertStationChief(

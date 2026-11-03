@@ -117,7 +117,7 @@ There is no frontend test setup.
 
 ## FIIS Domain Rules
 
-The approved business requirements are in `docs/REQUIREMENTS.md` (revision 10, approved 2026-10-10). It is the source of truth for the rules below. Read the relevant section and its FR IDs before implementing a feature. Anything still tagged OPEN there must be asked about, not guessed.
+The approved business requirements are in `docs/REQUIREMENTS.md` (revision 12, last updated 2026-11-03). It is the source of truth for the rules below. Read the relevant section and its FR IDs before implementing a feature. Anything still tagged OPEN there must be asked about, not guessed.
 
 ### Roles
 
@@ -130,7 +130,7 @@ The approved business requirements are in `docs/REQUIREMENTS.md` (revision 10, a
 ### Fire Incidents
 
 - Treat FireIncident as the authoritative incident record. It is owned by the submitter's office, which is always a city/municipal station.
-- Only `CITY_MUNICIPALITY_OPERATION_STAFF` and `CITY_MUNICIPALITY_COMMEL` create and update incidents and timeline entries. Creation is pending until the station's `CITY_MUNICIPALITY_OPERATION` approves it. Updates need no approval. Pending and rejected incidents are visible only to the station operations group and `SUPER_ADMIN`. Staff may remove only rejected, never-approved incidents.
+- Only `CITY_MUNICIPALITY_OPERATION_STAFF` and `CITY_MUNICIPALITY_COMMEL` create and update incidents and timeline entries. Creation is pending until the station's `CITY_MUNICIPALITY_OPERATION` approves it. Updates need no approval. Pending and rejected incidents are visible only to the station operations group and `SUPER_ADMIN`. Only the original submitter may edit, resubmit or remove a rejected incident (never-approved only).
 - Only `SUPER_ADMIN` deletes approved incidents. Deletion is soft: it hides the incident and all connected data. `SUPER_ADMIN` can restore.
 - Incident location is required and persisted with the incident. Region, province/district and city/municipality are derived from the submitter's office, never taken from the client. `placeOfOccurence` and `barangay` are typed by the user; latitude/longitude are optional. Incident date fields are optional.
 - Status uses the exact Prisma enum identifiers `VERIFICATION`, `ON_GOING`, `FIRE_UNDER_CONTROL`, `FIRE_OUT`, `FIRE_OUT_UPON_ARRIVAL`, `FALSE_ALARM`, plus the approved `REKINDLE`. Follow the transition table in `docs/REQUIREMENTS.md` §3.3:

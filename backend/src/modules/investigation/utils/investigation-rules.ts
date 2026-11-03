@@ -109,6 +109,27 @@ export function referralTargets(
     }));
 }
 
+// What a moved station means for a case it owns (Q-51). A case handled outside
+// the station's new chain blocks the move until its work is finished; once it
+// is, the case goes back to the station so it can still be referred.
+export function caseAfterStationMove(
+  chain: ChainOffice[],
+  handlingOfficeId: string,
+  investigations: { conductingOfficeId: string; completedAt: Date | null }[],
+): 'STAYS' | 'BLOCKS_MOVE' | 'RETURNS_TO_STATION' {
+  if (chain.some((office) => office.id === handlingOfficeId)) {
+    return 'STAYS';
+  }
+
+  const finished =
+    investigations.every(({ completedAt }) => completedAt !== null) &&
+    investigations.some(
+      ({ conductingOfficeId }) => conductingOfficeId === handlingOfficeId,
+    );
+
+  return finished ? 'RETURNS_TO_STATION' : 'BLOCKS_MOVE';
+}
+
 // A report can only be submitted or approved once the investigation has
 // a classification and cause other than UNDER_INVESTIGATION.
 export function assertInvestigationConcluded(investigation: {

@@ -41,6 +41,7 @@ const incident = (overrides: Record<string, unknown> = {}) => ({
   incidentNo: '2026-03-NCR-000001',
   officeId: STATION,
   approvalStatus: 'APPROVED',
+  createdById: 'submitter-1',
   deletedAt: null,
   office: { id: STATION, parentId: 'district-1', regionId: 'region-1' },
   ...overrides,
@@ -97,6 +98,25 @@ describe('AttachmentService', () => {
   });
 
   describe('uploading to an incident', () => {
+    it('lets only the submitter attach to a rejected incident (Q-50)', async () => {
+      repository.findIncident.mockResolvedValue(
+        incident({ approvalStatus: 'REJECTED' }),
+      );
+
+      await expect(
+        service.uploadToIncident(incidentId, pdf, {}, staff),
+      ).rejects.toThrow(ForbiddenException);
+      expect(storage.save).not.toHaveBeenCalled();
+
+      repository.findIncident.mockResolvedValue(
+        incident({ approvalStatus: 'REJECTED', createdById: staff.sub }),
+      );
+
+      await expect(
+        service.uploadToIncident(incidentId, pdf, {}, staff),
+      ).resolves.toBeDefined();
+    });
+
     it('stores the file with the detected type, size and hash', async () => {
       await service.uploadToIncident(incidentId, pdf, {}, staff);
 

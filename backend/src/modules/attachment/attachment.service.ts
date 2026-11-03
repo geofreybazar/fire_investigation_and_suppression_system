@@ -11,6 +11,7 @@ import {
 import { Prisma } from '../../generated/prisma/client.js';
 import { CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 import {
+  assertMayChangeIfRejected,
   INCIDENT_EDITOR_ROLES,
   incidentScopeWhere,
   isIncidentVisible,
@@ -63,6 +64,8 @@ export class AttachmentService {
         "Only the owning station's operation staff and COMMEL can attach files to an incident.",
       );
     }
+
+    assertMayChangeIfRejected(incident!, user);
 
     return this.store(file, input, user, { fireIncidentId: incidentId });
   }
