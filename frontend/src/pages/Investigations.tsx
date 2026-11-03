@@ -1,5 +1,5 @@
 import { Suspense, useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { ErrorBoundary } from "react-error-boundary";
 import { Search } from "lucide-react";
 import { useUserStore } from "@/store/userStore";
@@ -11,6 +11,7 @@ import {
   isSuperAdmin,
 } from "@/utils/incidentPermissions";
 import { formatDateTime } from "@/utils/dateTime";
+import type { QueueReason } from "@/interface/investigation/investigation";
 import {
   Table,
   TableBody,
@@ -36,14 +37,19 @@ const Empty = ({ text }: { text: string }) => (
   </div>
 );
 
-// Incidents whose investigation decisions sit with the chief's office.
+const AWAITING_LABEL: Record<QueueReason, string> = {
+  DECISION: "Decide: start or refer",
+  REVIEW: "Review report",
+};
+
+// Cases waiting on the chief's office: a decision or a report to review.
 const QueueTable = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const { queue } = useGetInvestigationQueue(page);
 
   if (queue.data.length === 0) {
-    return <Empty text='No cases are handled by your office right now.' />;
+    return <Empty text='No cases are waiting on your office right now.' />;
   }
 
   return (
@@ -52,6 +58,7 @@ const QueueTable = () => {
         <TableHeader>
           <TableRow>
             <TableHead>Incident No.</TableHead>
+            <TableHead>Needs</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Location</TableHead>
             <TableHead>Latest investigation</TableHead>
@@ -72,6 +79,9 @@ const QueueTable = () => {
                 <TableCell className='font-medium'>
                   {incident.incidentNo}
                 </TableCell>
+                <TableCell className='text-sm'>
+                  {AWAITING_LABEL[incident.awaiting]}
+                </TableCell>
                 <TableCell>
                   <IncidentStatusBadge status={incident.fireIncidentStatus} />
                 </TableCell>
@@ -83,7 +93,14 @@ const QueueTable = () => {
                 <TableCell>
                   {latest ? (
                     <div className='flex items-center gap-2'>
-                      <span className='text-sm'>{latest.investigationNo}</span>
+                      <Link
+                        to={`/investigations/${latest.id}`}
+                        className='text-sm underline-offset-4 hover:underline'
+                        onClick={(event) => event.stopPropagation()}
+                        onKeyDown={(event) => event.stopPropagation()}
+                      >
+                        {latest.investigationNo}
+                      </Link>
                       <ReportStatusBadge status={latest.report?.status} />
                     </div>
                   ) : (

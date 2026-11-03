@@ -2,6 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { OfficeType } from '../../../generated/prisma/enums.js';
 import {
   assertInvestigationConcluded,
+  awaitsDecision,
   caseAfterStationMove,
   investigationNumber,
   referralDirection,
@@ -151,5 +152,24 @@ describe('caseAfterStationMove (Q-51)', () => {
     expect(
       caseAfterStationMove(chain, 'old-district', [completed('old-district')]),
     ).toBe('RETURNS_TO_STATION');
+  });
+});
+
+describe('awaitsDecision', () => {
+  const jan = new Date('2026-01-01T00:00:00Z');
+  const feb = new Date('2026-02-01T00:00:00Z');
+
+  it('waits when the office never started an investigation', () => {
+    expect(awaitsDecision(null, null)).toBe(true);
+    expect(awaitsDecision(null, jan)).toBe(true);
+  });
+
+  it('stops waiting once the office has investigated', () => {
+    expect(awaitsDecision(jan, null)).toBe(false);
+    expect(awaitsDecision(feb, jan)).toBe(false);
+  });
+
+  it('waits again when the case is referred back after that', () => {
+    expect(awaitsDecision(jan, feb)).toBe(true);
   });
 });
