@@ -20,6 +20,12 @@ describe('OfficeRepository', () => {
       findMany: ReturnType<typeof vi.fn>;
       updateMany: ReturnType<typeof vi.fn>;
     };
+    fireIncident: {
+      findMany: ReturnType<typeof vi.fn>;
+      update: ReturnType<typeof vi.fn>;
+    };
+    investigationReferral: { create: ReturnType<typeof vi.fn> };
+    $queryRaw: ReturnType<typeof vi.fn>;
     auditLog: { create: ReturnType<typeof vi.fn> };
     $transaction: ReturnType<typeof vi.fn>;
   };
@@ -43,6 +49,13 @@ describe('OfficeRepository', () => {
         findMany: vi.fn().mockResolvedValue([]),
         updateMany: vi.fn(),
       },
+      // No referred cases unless a test says otherwise.
+      fireIncident: {
+        findMany: vi.fn().mockResolvedValue([]),
+        update: vi.fn(),
+      },
+      investigationReferral: { create: vi.fn() },
+      $queryRaw: vi.fn(),
       auditLog: { create: vi.fn() },
       $transaction: vi.fn(),
     };
@@ -114,6 +127,116 @@ describe('OfficeRepository', () => {
   });
 
   describe('updateOffice', () => {
+    describe('moving an office with referred cases (Q-51)', () => {
+      const oldDistrict = 'old-district';
+      const station = {
+        id: officeId,
+        name: 'Station',
+        type: 'CITY_FIRE_STATION',
+        parent: {
+          id: 'new-district',
+          name: 'New',
+          type: 'DISTRICT_FIRE_STATION',
+        },
+        region: {
+          id: regionalId,
+          name: 'Region',
+          type: 'REGIONAL_OFFICE',
+          parent: { id: nhqId, name: 'NHQ', type: 'NATIONAL_HEADQUARTERS' },
+        },
+      };
+      const referred = (overrides: Record<string, unknown>) => ({
+        id: 'incident-1',
+        incidentNo: '2026-10-NCR-000001',
+        deletedAt: null,
+        investigationHandlingOfficeId: oldDistrict,
+        investigations: [],
+        office: station,
+        ...overrides,
+      });
+      const move = () =>
+        repository.updateOffice(
+          officeId,
+          {
+            name: 'Station',
+            type: 'CITY_FIRE_STATION',
+            parentId: 'new-district',
+          },
+          actorId,
+        );
+
+      beforeEach(() => {
+        prisma.office.findUnique
+          .mockResolvedValueOnce({
+            id: 'new-district',
+            type: 'DISTRICT_FIRE_STATION',
+            regionId: regionalId,
+          })
+          .mockResolvedValueOnce({
+            id: officeId,
+            type: 'CITY_FIRE_STATION',
+            parentId: oldDistrict,
+            regionId: regionalId,
+          });
+      });
+
+      it('blocks the move and names the unfinished case', async () => {
+        prisma.fireIncident.findMany.mockResolvedValue([referred({})]);
+
+        await expect(move()).rejects.toThrow('2026-10-NCR-000001');
+        expect(prisma.investigationReferral.create).not.toHaveBeenCalled();
+        expect(prisma.auditLog.create).not.toHaveBeenCalled();
+      });
+
+      it('returns a completed case to the station and records it', async () => {
+        prisma.fireIncident.findMany.mockResolvedValue([
+          referred({
+            investigations: [
+              { conductingOfficeId: oldDistrict, completedAt: new Date() },
+            ],
+          }),
+        ]);
+
+        const result = await move();
+
+        expect(prisma.fireIncident.update).toHaveBeenCalledWith({
+          where: { id: 'incident-1' },
+          data: { investigationHandlingOfficeId: officeId },
+        });
+        expect(prisma.investigationReferral.create).toHaveBeenCalledWith({
+          data: expect.objectContaining({
+            fromOfficeId: oldDistrict,
+            toOfficeId: officeId,
+            direction: 'DOWN',
+            referredById: actorId,
+          }),
+        });
+        expect(result.returnedCases).toEqual([
+          {
+            incidentId: 'incident-1',
+            incidentNo: '2026-10-NCR-000001',
+            stationId: officeId,
+          },
+        ]);
+      });
+
+      it('returns a hidden completed case without notifying about it', async () => {
+        prisma.fireIncident.findMany.mockResolvedValue([
+          referred({
+            deletedAt: new Date(),
+            investigations: [
+              { conductingOfficeId: oldDistrict, completedAt: new Date() },
+            ],
+          }),
+        ]);
+
+        const result = await move();
+
+        expect(prisma.fireIncident.update).toHaveBeenCalled();
+        expect(result.returnedCases).toEqual([]);
+      });
+    });
+
     it('saves the region code on update', async () => {
       prisma.office.findUnique.mockResolvedValue({
         id: nhqId,

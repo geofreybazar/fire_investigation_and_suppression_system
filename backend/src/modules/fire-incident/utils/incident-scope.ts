@@ -41,6 +41,21 @@ export interface IncidentVisibilityFields {
   office: { id: string; parentId: string | null; regionId: string | null };
 }
 
+// A rejected incident can be changed only by the person who submitted it (Q-50).
+export function assertMayChangeIfRejected(
+  incident: { approvalStatus: IncidentApprovalStatus; createdById: string },
+  user: CurrentUserJwtPayload,
+): void {
+  if (
+    incident.approvalStatus === IncidentApprovalStatus.REJECTED &&
+    incident.createdById !== user.sub
+  ) {
+    throw new ForbiddenException(
+      'Only the original submitter can change a rejected incident.',
+    );
+  }
+}
+
 function assertMayViewIncidents(user: CurrentUserJwtPayload): void {
   if (NO_INCIDENT_ACCESS.includes(user.role)) {
     throw new ForbiddenException('You are not allowed to view fire incidents.');

@@ -3,12 +3,13 @@ import { PrismaService } from '../../prisma.service.js';
 import { Prisma } from '../../generated/prisma/client.js';
 import { recordAudit } from '../audit/audit.writer.js';
 
-// The incident fields that decide who may see it (incident-scope.ts).
+// The incident fields that decide who may see and change it (incident-scope.ts).
 const incidentAccess = {
   select: {
     id: true,
     incidentNo: true,
     officeId: true,
+    createdById: true,
     approvalStatus: true,
     deletedAt: true,
     office: { select: { id: true, parentId: true, regionId: true } },
