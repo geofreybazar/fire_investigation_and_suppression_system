@@ -4,6 +4,7 @@ import { useUserStore } from "@/store/userStore";
 
 import LoginPage from "@/pages/LoginPage";
 import HomePage from "@/pages/HomePage";
+import ForcePasswordChange from "@/pages/ForcePasswordChange";
 
 function App() {
   const user = useUserStore((state) => state.user);
@@ -34,7 +35,15 @@ function App() {
       />
       <Route
         path='/*'
-        element={user ? <HomePage /> : <Navigate to='/login' replace />}
+        element={
+          !user ? (
+            <Navigate to='/login' replace />
+          ) : user.mustChangePassword ? (
+            <ForcePasswordChange user={user} />
+          ) : (
+            <HomePage />
+          )
+        }
       />
     </Routes>
   );

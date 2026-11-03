@@ -35,6 +35,11 @@ export const axiosJWT = async (baseUrl: string) => {
         window.localStorage.removeItem("user");
       }
 
+      // Shows the change-password screen (the session started on another device).
+      if (user && error.response.data.error === "PASSWORD_CHANGE_REQUIRED") {
+        useUserStore.getState().setUser({ ...user, mustChangePassword: true });
+      }
+
       if (
         !originalRequest._retry &&
         user &&

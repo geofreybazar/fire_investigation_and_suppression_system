@@ -3,7 +3,7 @@
 > **Status: APPROVED (revision 10), approved by the project owner on 2026-10-10.**
 > All items tagged PROPOSED or INTERPRETED in this revision were accepted with the approval and are binding requirements. Items tagged OPEN remain undecided and must be resolved before the feature they affect is built.
 > **Revision 11 (2026-10-28):** refreshes §1.2 and §10.1 to match the code, and adds §11.5, answers to Q-01, Q-20, Q-21, Q-22 and Q-23 (audit log, notifications, statistics, incident map, attachments). All five were **approved by the project owner on 2026-10-28** and are implemented (roadmap phases 1–5, PRs #1–#6). Parts those answers left open stay OPEN: official BFP report forms (Q-20), email/SMS notifications (Q-21), attachment retention (Q-22), and the Fire Stations, Monitoring and Response Units pages (Q-01).
-> **Revision 12 (2026-11-03):** adds §11.6, the owner's answers to Q-19, Q-34g, Q-41, Q-50, Q-51 and Q-52c. Q-19 is decided but not built yet.
+> **Revision 12 (2026-11-03):** adds §11.6, the owner's answers to Q-19, Q-34g, Q-41, Q-50, Q-51 and Q-52c. Q-19 is built; its migration adds three `User` columns.
 > Last updated: 2026-11-03. Derived from `CLAUDE.md`, owner answers given on 2026-10-10 (rounds 1–9), the Prisma schema (`backend/prisma/`), backend modules (`backend/src/modules/`), frontend pages, hooks and services (`frontend/src/`), and backend unit tests.
 
 ## 0. How to read this document
@@ -558,7 +558,7 @@ Region scoping is only applied to office **listings**. It is not applied to offi
 
 ### 7.3 Gaps (see §10)
 
-Inactive users can log in and refresh (D-12). The login and create-user responses include the password hash, which the frontend stores in `localStorage` (D-06). Logout does not clear cookies (D-13). Refresh tokens are stored in plaintext (D-14). There is no forced password change after the default password (Q-19).
+Inactive users can log in and refresh (D-12). The login and create-user responses include the password hash, which the frontend stores in `localStorage` (D-06). Logout does not clear cookies (D-13). Refresh tokens are stored in plaintext (D-14). There was no forced password change after the default password (resolved 2026-11-03, FR-AUTH-010).
 
 Role and office come from the JWT. A role or office change takes effect only on the next token refresh (up to 15 minutes). This matters for approval, assignment, referral and report-approval rights; the owner accepted the delay (Q-41).
 
@@ -601,7 +601,9 @@ PROPOSED:
 | FR-AUTH-006 | Deactivated users cannot log in or refresh tokens. | PROPOSED (D-12) |
 | FR-AUTH-007 | Logout clears both auth cookies. | PROPOSED (D-13) |
 | FR-AUTH-008 | No API response includes the password hash or refresh token. | CONFIRMED / **violated** (D-06) |
-| FR-AUTH-009 | Users change their own password by supplying the current password; the new password meets the complexity policy (≥12 chars, upper, lower, digit, special). | IMPLEMENTED (policy confirmed, Q-19) |
+| FR-AUTH-009 | Users change their own password by supplying the current password; the new password meets the complexity policy (≥12 chars, upper, lower, digit, special) and differs from the current one. | CONFIRMED (Q-19) |
+| FR-AUTH-010 | A user created through the API must change the default password before doing anything else; until then the API refuses every other authenticated request with 403 `PASSWORD_CHANGE_REQUIRED`. | CONFIRMED (Q-19) |
+| FR-AUTH-011 | After 5 failed logins an account is locked for 15 minutes, and the login error is the same for every failure, so it doesn't reveal which accounts exist. | CONFIRMED (Q-19) |
 
 **Acceptance criteria / edge cases**
 - Unknown account and wrong password return the same 401 message.
@@ -923,6 +925,7 @@ Severity: **H** = security or data-integrity risk, **M** = rule not enforced, **
 | 2026-10-28 | Roadmap phase 5 (branch `roadmap-phase-5-attachments`, migration `20261028180000_add_attachments`) | FR-ATT-001/002 and Q-22: incident attachments, investigation evidence, Evidence page, audited downloads |
 
 | 2026-11-03 | Owner answers (branch `q-answers-incident-rules`) | Q-50: only the original submitter changes a rejected incident. Q-51 / FR-OFF-009: office moves check referred cases. Q-34g, Q-41 and Q-52c needed no code change. |
+| 2026-11-03 | Q-19 (branch `q-19-login-security`, migration `add_login_security`) | FR-AUTH-009, FR-AUTH-010, FR-AUTH-011: forced password change and temporary lockout |
 
 Still open from priority 2: none. Still open from priority 3: none (D-13 to D-23 resolved by roadmap phase 1 and earlier phases).
 
@@ -1045,7 +1048,7 @@ Answered questions stay listed here for their IDs; check §11.5 and §11.6 for t
 
 | ID | Answer | Built |
 |---|---|---|
-| Q-19 | Users created through the API must change the default password at first login. The current password policy is approved. After 5 failed logins an account is locked for 15 minutes. | Not yet |
+| Q-19 | Users created through the API must change the default password at first login. The current password policy is approved. After 5 failed logins an account is locked for 15 minutes; even the correct password is refused during the lock. | Yes |
 | Q-34g | One approval is enough. With no active chief of operations the incident stays pending until an admin provides one; `SUPER_ADMIN` does not approve. | Yes |
 | Q-41 | The delay of up to 15 minutes before role or office changes take effect is acceptable. | Yes |
 | Q-50 | Only the original submitter can edit, resubmit, remove or attach files to a rejected incident. If the submitter has left, `SUPER_ADMIN` can clear the incident and the station submits a new one. | Yes |

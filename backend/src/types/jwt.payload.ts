@@ -7,4 +7,5 @@ export interface CurrentUserJwtPayload {
   role: ROLE;
   positionId: string;
   officeId: string;
+  mustChangePassword?: boolean;
 }

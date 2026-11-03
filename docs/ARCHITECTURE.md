@@ -71,7 +71,8 @@ cookie access_token
 
 ### 2.4 Authentication
 
-- `POST /api/auth/login` checks the password with bcrypt and rejects inactive users. It sets two httpOnly cookies: `access_token` (15 min) and `refresh_token` (7 days). The password hash is never returned.
+- `POST /api/auth/login` checks the password with bcrypt and rejects inactive users. It sets two httpOnly cookies: `access_token` (15 min) and `refresh_token` (7 days). The password hash is never returned. After 5 failed logins the account is locked for 15 minutes (Q-19).
+- Users created through the API have `mustChangePassword` set, and the flag is carried in the JWT. `AuthGuard` answers 403 `PASSWORD_CHANGE_REQUIRED` except on routes marked `@AllowPendingPasswordChange()`. The frontend shows `ForcePasswordChange`, then refreshes the tokens once the password changes.
 - Refresh tokens are stored in the `RefreshToken` table as SHA-256 hashes (`auth.repository.ts`). `POST /api/auth/refresh_token` validates the stored token and the user's `isActive` flag, then rotates both cookies. `POST /api/auth/logout` deletes the stored token and clears both cookies.
 - The frontend depends on the exact error string `TOKEN_EXPIRED` to trigger a refresh (§3.2).
 

@@ -27,6 +27,38 @@ export class AuthRepository {
     });
   }
 
+  // The increment holds the row lock, so concurrent failures all count.
+  async recordFailedLogin(
+    userId: string,
+    maxFailures: number,
+    lockMinutes: number,
+  ) {
+    return this.prismaService.$transaction(async (tx) => {
+      const { failedLoginCount } = await tx.user.update({
+        where: { id: userId },
+        data: { failedLoginCount: { increment: 1 } },
+        select: { failedLoginCount: true },
+      });
+
+      if (failedLoginCount >= maxFailures) {
+        await tx.user.update({
+          where: { id: userId },
+          data: {
+            failedLoginCount: 0,
+            lockedUntil: new Date(Date.now() + lockMinutes * 60 * 1000),
+          },
+        });
+      }
+    });
+  }
+
+  async clearFailedLogins(userId: string) {
+    return this.prismaService.user.update({
+      where: { id: userId },
+      data: { failedLoginCount: 0, lockedUntil: null },
+    });
+  }
+
   async createRefreshToken(userId: string, refreshToken: string) {
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);

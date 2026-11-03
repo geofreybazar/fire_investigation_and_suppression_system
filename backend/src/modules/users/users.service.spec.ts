@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   NotFoundException,
@@ -351,7 +352,9 @@ describe('UsersService', () => {
         id: userId,
         password: 'old-hash',
       });
-      vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
+      vi.mocked(bcrypt.compare)
+        .mockResolvedValueOnce(true as never)
+        .mockResolvedValueOnce(false as never);
       vi.mocked(bcrypt.hash).mockResolvedValue('new-hash' as never);
 
       await expect(
@@ -368,7 +371,20 @@ describe('UsersService', () => {
       );
     });
 
-    it('throws UnauthorizedException when the current password is wrong', async () => {
+    it('refuses a new password equal to the current one', async () => {
+      usersRepository.findUserForChangePassword.mockResolvedValue({
+        id: userId,
+        password: 'old-hash',
+      });
+      vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
+
+      await expect(
+        service.changePassword(passwordData, userId),
+      ).rejects.toThrow('different from the current one');
+      expect(usersRepository.changePassowrd).not.toHaveBeenCalled();
+    });
+
+    it('throws BadRequestException when the current password is wrong', async () => {
       usersRepository.findUserForChangePassword.mockResolvedValue({
         id: userId,
         password: 'old-hash',
@@ -377,7 +393,7 @@ describe('UsersService', () => {
 
       await expect(
         service.changePassword(passwordData, userId),
-      ).rejects.toThrow(UnauthorizedException);
+      ).rejects.toThrow(BadRequestException);
       expect(usersRepository.changePassowrd).not.toHaveBeenCalled();
     });
 

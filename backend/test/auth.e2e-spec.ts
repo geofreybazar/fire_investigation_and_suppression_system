@@ -114,7 +114,9 @@ describe('Auth flow (e2e)', () => {
       .send({ account_number: accountNumber, password: 'wrong-password' })
       .expect(401);
 
-    expect(response.body.message).toBe('Invalid account number or password');
+    expect(response.body.message).toContain(
+      'Invalid account number or password',
+    );
     expect(cookiesOf(response).access_token).toBeUndefined();
   });
 

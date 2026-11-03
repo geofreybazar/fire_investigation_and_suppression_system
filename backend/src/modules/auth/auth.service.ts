@@ -12,6 +12,32 @@ import { randomUUID } from 'crypto';
 import { LoginInput } from '../users/schema/user.schema.js';
 import { AuthRepository } from './auth.repository.js';
 
+// Q-19: 5 failed logins lock the account for 15 minutes.
+const MAX_FAILED_LOGINS = 5;
+const LOCK_MINUTES = 15;
+
+// One message for wrong passwords, locks and deactivated accounts, so nothing
+// reveals which account numbers exist.
+const LOGIN_FAILED_MESSAGE = `Invalid account number or password. After ${MAX_FAILED_LOGINS} failed tries, an account is locked for ${LOCK_MINUTES} minutes.`;
+
+function tokenClaims(user: {
+  id: string;
+  account_number: string;
+  role: string;
+  positionId: string;
+  officeId: string;
+  mustChangePassword: boolean;
+}) {
+  return {
+    sub: user.id,
+    account_number: user.account_number,
+    role: user.role,
+    positionId: user.positionId,
+    officeId: user.officeId,
+    mustChangePassword: user.mustChangePassword,
+  };
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -32,51 +58,53 @@ export class AuthService {
         ? false
         : await bcrypt.compare(loginData.password, user.password);
 
-    // Deactivated accounts get the same generic error so account status isn't revealed.
-    if (!user || !passwordCorrect || !user.isActive) {
+    // Even the correct password is refused during a lock. Tries during a lock
+    // don't extend it.
+    const locked = !!user?.lockedUntil && user.lockedUntil > new Date();
+
+    if (user && !passwordCorrect && !locked) {
+      await this.authRepository.recordFailedLogin(
+        user.id,
+        MAX_FAILED_LOGINS,
+        LOCK_MINUTES,
+      );
+    }
+
+    if (!user || !passwordCorrect || !user.isActive || locked) {
       this.logger.warn('Failed login attempt');
-      throw new UnauthorizedException('Invalid account number or password');
+      throw new UnauthorizedException(LOGIN_FAILED_MESSAGE);
+    }
+
+    if (user.failedLoginCount > 0 || user.lockedUntil) {
+      await this.authRepository.clearFailedLogins(user.id);
     }
 
     const jwtSecret = this.configService.get<string>('JWT_SECRET');
     const refreshSecret = this.configService.get<string>('REFRESH_SECRET');
 
-    const accessToken = await this.jwtService.signAsync(
-      {
-        sub: user.id,
-        account_number: user.account_number,
-        role: user.role,
-        positionId: user.positionId,
-        officeId: user.officeId,
-      },
-      {
-        secret: jwtSecret,
-        expiresIn: '15m',
-      },
-    );
+    const accessToken = await this.jwtService.signAsync(tokenClaims(user), {
+      secret: jwtSecret,
+      expiresIn: '15m',
+    });
 
-    const refreshToken = await this.jwtService.signAsync(
-      {
-        sub: user.id,
-        account_number: user.account_number,
-        role: user.role,
-        positionId: user.positionId,
-        officeId: user.officeId,
-      },
-      {
-        secret: refreshSecret,
-        expiresIn: '7d',
-        // iat has one-second precision, so without a unique jti two tokens
-        // issued in the same second are identical and collide on the
-        // unique stored hash.
-        jwtid: randomUUID(),
-      },
-    );
+    const refreshToken = await this.jwtService.signAsync(tokenClaims(user), {
+      secret: refreshSecret,
+      expiresIn: '7d',
+      // iat has one-second precision, so without a unique jti two tokens
+      // issued in the same second are identical and collide on the
+      // unique stored hash.
+      jwtid: randomUUID(),
+    });
 
     await this.authRepository.createRefreshToken(user.id, refreshToken);
 
     // The hash is needed above for bcrypt.compare but must never leave the API.
-    const { password: _password, ...safeUser } = user;
+    const {
+      password: _password,
+      failedLoginCount: _failedLoginCount,
+      lockedUntil: _lockedUntil,
+      ...safeUser
+    } = user;
 
     return { user: safeUser, accessToken, refreshToken };
   }
@@ -130,13 +158,7 @@ export class AuthService {
 
       // create new access tokens
       const newAccessToken = await this.jwtService.signAsync(
-        {
-          sub: user.id,
-          account_number: user.account_number,
-          role: user.role,
-          positionId: user.positionId,
-          officeId: user.officeId,
-        },
+        tokenClaims(user),
         {
           secret: jwtSecret,
           expiresIn: '15m',
@@ -144,13 +166,7 @@ export class AuthService {
       );
 
       const newRefreshToken = await this.jwtService.signAsync(
-        {
-          sub: user.id,
-          account_number: user.account_number,
-          role: user.role,
-          positionId: user.positionId,
-          officeId: user.officeId,
-        },
+        tokenClaims(user),
         {
           secret: refreshSecret,
           expiresIn: '7d',
