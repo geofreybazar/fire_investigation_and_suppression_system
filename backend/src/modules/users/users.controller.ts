@@ -28,6 +28,7 @@ import { RANK } from '../../generated/prisma/enums.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { type UUID } from 'crypto';
 import { type CurrentUserJwtPayload } from '../../types/jwt.payload.js';
+import { AllowPendingPasswordChange } from '../../common/decorators/allow-pending-password-change.decorator.js';
 
 @Controller('users')
 export class UsersController {
@@ -52,6 +53,7 @@ export class UsersController {
     return this.usersService.getUser(id, user);
   }
 
+  @AllowPendingPasswordChange()
   @UseGuards(AuthGuard, RoleGuard)
   @Patch()
   async changePassword(

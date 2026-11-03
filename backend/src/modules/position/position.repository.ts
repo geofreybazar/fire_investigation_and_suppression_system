@@ -8,6 +8,8 @@ import {
   recordAudit,
 } from '../audit/audit.writer.js';
 
+import { LOGIN_INTERNAL_FIELDS } from '../users/users.repository.js';
+
 @Injectable()
 export class PositionRepository {
   constructor(private readonly prismaService: PrismaService) {}
@@ -49,9 +51,7 @@ export class PositionRepository {
         where,
         include: {
           users: {
-            omit: {
-              password: true,
-            },
+            omit: LOGIN_INTERNAL_FIELDS,
           },
         },
         skip,

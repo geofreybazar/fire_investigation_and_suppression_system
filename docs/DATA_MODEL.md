@@ -49,7 +49,7 @@ erDiagram
 | Model | Key fields | Constraints |
 |---|---|---|
 | `Office` | `name`, `type: OfficeType`, `isActive`, `parentId?`, `regionId?`, `regionCode?` | `@@unique([parentId, name])`; `regionCode` unique; indexes on `parentId`, `regionId`, `type` |
-| `User` | `email`, `account_number`, `rank: RANK`, names, `password` (bcrypt hash), `isActive`, `officeId`, `positionId`, `role: ROLE` | `email` and `account_number` unique; indexes on `officeId`, `positionId`, `role` |
+| `User` | `email`, `account_number`, `rank: RANK`, names, `password` (bcrypt hash), `isActive`, `mustChangePassword`, `failedLoginCount`, `lockedUntil`, `officeId`, `positionId`, `role: ROLE` | `email` and `account_number` unique; indexes on `officeId`, `positionId`, `role` |
 | `Position` | `name`, `isActive` | `name` unique |
 | `RefreshToken` | `refreshToken` (SHA-256 hash of the token), `expiresAt`, `userId` | unique; cascade on user delete |
 | `NotificationPreference` | `incidentUpdates`, `investigationUpdates`, `reportReview`, `systemAnnouncements` (all default on) | one per user; cascade |

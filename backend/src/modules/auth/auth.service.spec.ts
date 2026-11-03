@@ -23,6 +23,9 @@ const user = {
   role: 'REGIONAL_INVESTIGATOR',
   positionId: 'position-1',
   officeId: 'office-1',
+  mustChangePassword: false,
+  failedLoginCount: 0,
+  lockedUntil: null as Date | null,
 };
 
 const tokenPayload = {
@@ -31,6 +34,7 @@ const tokenPayload = {
   role: user.role,
   positionId: user.positionId,
   officeId: user.officeId,
+  mustChangePassword: false,
 };
 
 describe('AuthService', () => {
@@ -41,6 +45,8 @@ describe('AuthService', () => {
     createRefreshToken: ReturnType<typeof vi.fn>;
     findRefreshToken: ReturnType<typeof vi.fn>;
     deleteRefreshToken: ReturnType<typeof vi.fn>;
+    recordFailedLogin: ReturnType<typeof vi.fn>;
+    clearFailedLogins: ReturnType<typeof vi.fn>;
   };
   let jwtService: {
     signAsync: ReturnType<typeof vi.fn>;
@@ -56,6 +62,8 @@ describe('AuthService', () => {
       createRefreshToken: vi.fn(),
       findRefreshToken: vi.fn(),
       deleteRefreshToken: vi.fn(),
+      recordFailedLogin: vi.fn(),
+      clearFailedLogins: vi.fn(),
     };
     jwtService = {
       // Return the secret so tests can tell access and refresh tokens apart.
@@ -84,6 +92,63 @@ describe('AuthService', () => {
     expect(service).toBeDefined();
   });
 
+  describe('login protection (Q-19)', () => {
+    const credentials = { account_number: 'ACC001', password: 'secret' };
+
+    it('counts a wrong password', async () => {
+      repository.findUserByAccountNumber.mockResolvedValue(user);
+      vi.mocked(bcrypt.compare).mockResolvedValue(false as never);
+
+      await expect(service.login(credentials)).rejects.toThrow(
+        UnauthorizedException,
+      );
+      expect(repository.recordFailedLogin).toHaveBeenCalledWith(user.id, 5, 15);
+    });
+
+    it('refuses the correct password during a lock, without counting', async () => {
+      repository.findUserByAccountNumber.mockResolvedValue({
+        ...user,
+        lockedUntil: new Date(Date.now() + 60_000),
+      });
+      vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
+
+      await expect(service.login(credentials)).rejects.toThrow(
+        'an account is locked for 15 minutes',
+      );
+      expect(jwtService.signAsync).not.toHaveBeenCalled();
+      expect(repository.recordFailedLogin).not.toHaveBeenCalled();
+    });
+
+    it('allows login once the lock has expired and clears it', async () => {
+      repository.findUserByAccountNumber.mockResolvedValue({
+        ...user,
+        lockedUntil: new Date(Date.now() - 60_000),
+      });
+      vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
+
+      await expect(service.login(credentials)).resolves.toBeDefined();
+      expect(repository.clearFailedLogins).toHaveBeenCalledWith(user.id);
+    });
+
+    it('never returns the login counters and carries the change flag', async () => {
+      repository.findUserByAccountNumber.mockResolvedValue({
+        ...user,
+        mustChangePassword: true,
+      });
+      vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
+
+      const result = await service.login(credentials);
+
+      expect(result.user).not.toHaveProperty('failedLoginCount');
+      expect(result.user).not.toHaveProperty('lockedUntil');
+      expect(result.user).not.toHaveProperty('password');
+      expect(jwtService.signAsync).toHaveBeenCalledWith(
+        expect.objectContaining({ mustChangePassword: true }),
+        expect.anything(),
+      );
+    });
+  });
+
   describe('login', () => {
     const credentials = { account_number: 'ACC001', password: 'Password123!' };
 
@@ -110,7 +175,12 @@ describe('AuthService', () => {
         user.id,
         'token-signed-with-refresh-secret',
       );
-      const { password: _password, ...safeUser } = user;
+      const {
+        password: _password,
+        failedLoginCount: _failedLoginCount,
+        lockedUntil: _lockedUntil,
+        ...safeUser
+      } = user;
       expect(result).toEqual({
         user: safeUser,
         accessToken: 'token-signed-with-access-secret',

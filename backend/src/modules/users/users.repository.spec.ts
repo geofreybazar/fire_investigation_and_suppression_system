@@ -81,8 +81,9 @@ describe('UsersRepository', () => {
         data: expect.objectContaining({
           ...newInvestigator,
           password: 'hashed-default',
+          mustChangePassword: true,
         }),
-        omit: { password: true },
+        omit: { password: true, failedLoginCount: true, lockedUntil: true },
       });
     });
 
@@ -208,7 +209,9 @@ describe('UsersRepository', () => {
       );
 
       expect(prisma.user.findMany).toHaveBeenCalledWith(
-        expect.objectContaining({ omit: { password: true } }),
+        expect.objectContaining({
+          omit: { password: true, failedLoginCount: true, lockedUntil: true },
+        }),
       );
     });
 

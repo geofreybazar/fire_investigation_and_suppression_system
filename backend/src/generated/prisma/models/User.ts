@@ -20,8 +20,18 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
+}
+
+export type UserAvgAggregateOutputType = {
+  failedLoginCount: number | null
+}
+
+export type UserSumAggregateOutputType = {
+  failedLoginCount: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -34,6 +44,9 @@ export type UserMinAggregateOutputType = {
   middle_name: string | null
   password: string | null
   isActive: boolean | null
+  mustChangePassword: boolean | null
+  failedLoginCount: number | null
+  lockedUntil: Date | null
   officeId: string | null
   positionId: string | null
   role: $Enums.ROLE | null
@@ -49,6 +62,9 @@ export type UserMaxAggregateOutputType = {
   middle_name: string | null
   password: string | null
   isActive: boolean | null
+  mustChangePassword: boolean | null
+  failedLoginCount: number | null
+  lockedUntil: Date | null
   officeId: string | null
   positionId: string | null
   role: $Enums.ROLE | null
@@ -64,12 +80,23 @@ export type UserCountAggregateOutputType = {
   middle_name: number
   password: number
   isActive: number
+  mustChangePassword: number
+  failedLoginCount: number
+  lockedUntil: number
   officeId: number
   positionId: number
   role: number
   _all: number
 }
 
+
+export type UserAvgAggregateInputType = {
+  failedLoginCount?: true
+}
+
+export type UserSumAggregateInputType = {
+  failedLoginCount?: true
+}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -81,6 +108,9 @@ export type UserMinAggregateInputType = {
   middle_name?: true
   password?: true
   isActive?: true
+  mustChangePassword?: true
+  failedLoginCount?: true
+  lockedUntil?: true
   officeId?: true
   positionId?: true
   role?: true
@@ -96,6 +126,9 @@ export type UserMaxAggregateInputType = {
   middle_name?: true
   password?: true
   isActive?: true
+  mustChangePassword?: true
+  failedLoginCount?: true
+  lockedUntil?: true
   officeId?: true
   positionId?: true
   role?: true
@@ -111,6 +144,9 @@ export type UserCountAggregateInputType = {
   middle_name?: true
   password?: true
   isActive?: true
+  mustChangePassword?: true
+  failedLoginCount?: true
+  lockedUntil?: true
   officeId?: true
   positionId?: true
   role?: true
@@ -155,6 +191,18 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -185,6 +233,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
+  _avg?: UserAvgAggregateInputType
+  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -199,10 +249,15 @@ export type UserGroupByOutputType = {
   middle_name: string | null
   password: string
   isActive: boolean
+  mustChangePassword: boolean
+  failedLoginCount: number
+  lockedUntil: Date | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -235,6 +290,9 @@ export type UserWhereInput = {
   middle_name?: Prisma.StringNullableFilter<"User"> | string | null
   password?: Prisma.StringFilter<"User"> | string
   isActive?: Prisma.BoolFilter<"User"> | boolean
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
+  failedLoginCount?: Prisma.IntFilter<"User"> | number
+  lockedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   officeId?: Prisma.StringFilter<"User"> | string
   positionId?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumROLEFilter<"User"> | $Enums.ROLE
@@ -268,6 +326,9 @@ export type UserOrderByWithRelationInput = {
   middle_name?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
+  failedLoginCount?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   officeId?: Prisma.SortOrder
   positionId?: Prisma.SortOrder
   role?: Prisma.SortOrder
@@ -304,6 +365,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   middle_name?: Prisma.StringNullableFilter<"User"> | string | null
   password?: Prisma.StringFilter<"User"> | string
   isActive?: Prisma.BoolFilter<"User"> | boolean
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
+  failedLoginCount?: Prisma.IntFilter<"User"> | number
+  lockedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   officeId?: Prisma.StringFilter<"User"> | string
   positionId?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumROLEFilter<"User"> | $Enums.ROLE
@@ -337,12 +401,17 @@ export type UserOrderByWithAggregationInput = {
   middle_name?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
+  failedLoginCount?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   officeId?: Prisma.SortOrder
   positionId?: Prisma.SortOrder
   role?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
+  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
+  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -358,6 +427,9 @@ export type UserScalarWhereWithAggregatesInput = {
   middle_name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  mustChangePassword?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  failedLoginCount?: Prisma.IntWithAggregatesFilter<"User"> | number
+  lockedUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   officeId?: Prisma.StringWithAggregatesFilter<"User"> | string
   positionId?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.EnumROLEWithAggregatesFilter<"User"> | $Enums.ROLE
@@ -373,6 +445,9 @@ export type UserCreateInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -404,6 +479,9 @@ export type UserUncheckedCreateInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -435,6 +513,9 @@ export type UserUpdateInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -466,6 +547,9 @@ export type UserUncheckedUpdateInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -497,6 +581,9 @@ export type UserCreateManyInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -512,6 +599,9 @@ export type UserUpdateManyMutationInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
 }
 
@@ -525,6 +615,9 @@ export type UserUncheckedUpdateManyInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -560,9 +653,16 @@ export type UserCountOrderByAggregateInput = {
   middle_name?: Prisma.SortOrder
   password?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
+  failedLoginCount?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrder
   officeId?: Prisma.SortOrder
   positionId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+}
+
+export type UserAvgOrderByAggregateInput = {
+  failedLoginCount?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -575,6 +675,9 @@ export type UserMaxOrderByAggregateInput = {
   middle_name?: Prisma.SortOrder
   password?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
+  failedLoginCount?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrder
   officeId?: Prisma.SortOrder
   positionId?: Prisma.SortOrder
   role?: Prisma.SortOrder
@@ -590,9 +693,16 @@ export type UserMinOrderByAggregateInput = {
   middle_name?: Prisma.SortOrder
   password?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
+  failedLoginCount?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrder
   officeId?: Prisma.SortOrder
   positionId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+}
+
+export type UserSumOrderByAggregateInput = {
+  failedLoginCount?: Prisma.SortOrder
 }
 
 export type UserCreateNestedOneWithoutReviewedReportsInput = {
@@ -929,6 +1039,9 @@ export type UserCreateWithoutReviewedReportsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -959,6 +1072,9 @@ export type UserUncheckedCreateWithoutReviewedReportsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -1005,6 +1121,9 @@ export type UserUpdateWithoutReviewedReportsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -1035,6 +1154,9 @@ export type UserUncheckedUpdateWithoutReviewedReportsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -1065,6 +1187,9 @@ export type UserCreateWithoutReportReviewsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -1095,6 +1220,9 @@ export type UserUncheckedCreateWithoutReportReviewsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -1141,6 +1269,9 @@ export type UserUpdateWithoutReportReviewsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -1171,6 +1302,9 @@ export type UserUncheckedUpdateWithoutReportReviewsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -1201,6 +1335,9 @@ export type UserCreateWithoutAssignedInvestigationsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -1231,6 +1368,9 @@ export type UserUncheckedCreateWithoutAssignedInvestigationsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -1266,6 +1406,9 @@ export type UserCreateWithoutInvestigationsAssignedInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -1296,6 +1439,9 @@ export type UserUncheckedCreateWithoutInvestigationsAssignedInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -1342,6 +1488,9 @@ export type UserUpdateWithoutAssignedInvestigationsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -1372,6 +1521,9 @@ export type UserUncheckedUpdateWithoutAssignedInvestigationsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -1413,6 +1565,9 @@ export type UserUpdateWithoutInvestigationsAssignedInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -1443,6 +1598,9 @@ export type UserUncheckedUpdateWithoutInvestigationsAssignedInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -1473,6 +1631,9 @@ export type UserCreateWithoutInvestigationReferralsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -1503,6 +1664,9 @@ export type UserUncheckedCreateWithoutInvestigationReferralsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -1549,6 +1713,9 @@ export type UserUpdateWithoutInvestigationReferralsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -1579,6 +1746,9 @@ export type UserUncheckedUpdateWithoutInvestigationReferralsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -1609,6 +1779,9 @@ export type UserCreateWithoutUploadedAttachmentsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -1639,6 +1812,9 @@ export type UserUncheckedCreateWithoutUploadedAttachmentsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -1674,6 +1850,9 @@ export type UserCreateWithoutRemovedAttachmentsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -1704,6 +1883,9 @@ export type UserUncheckedCreateWithoutRemovedAttachmentsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -1750,6 +1932,9 @@ export type UserUpdateWithoutUploadedAttachmentsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -1780,6 +1965,9 @@ export type UserUncheckedUpdateWithoutUploadedAttachmentsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -1821,6 +2009,9 @@ export type UserUpdateWithoutRemovedAttachmentsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -1851,6 +2042,9 @@ export type UserUncheckedUpdateWithoutRemovedAttachmentsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -1881,6 +2075,9 @@ export type UserCreateWithoutAuditLogsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -1911,6 +2108,9 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -1957,6 +2157,9 @@ export type UserUpdateWithoutAuditLogsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -1987,6 +2190,9 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -2017,6 +2223,9 @@ export type UserCreateWithoutCreatedTimelineEntriesInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -2047,6 +2256,9 @@ export type UserUncheckedCreateWithoutCreatedTimelineEntriesInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -2082,6 +2294,9 @@ export type UserCreateWithoutVoidedTimelineEntriesInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -2112,6 +2327,9 @@ export type UserUncheckedCreateWithoutVoidedTimelineEntriesInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -2158,6 +2376,9 @@ export type UserUpdateWithoutCreatedTimelineEntriesInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -2188,6 +2409,9 @@ export type UserUncheckedUpdateWithoutCreatedTimelineEntriesInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -2229,6 +2453,9 @@ export type UserUpdateWithoutVoidedTimelineEntriesInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -2259,6 +2486,9 @@ export type UserUncheckedUpdateWithoutVoidedTimelineEntriesInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -2289,6 +2519,9 @@ export type UserCreateWithoutFireIncidentsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -2319,6 +2552,9 @@ export type UserUncheckedCreateWithoutFireIncidentsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -2354,6 +2590,9 @@ export type UserCreateWithoutDeletedFireIncidentsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -2384,6 +2623,9 @@ export type UserUncheckedCreateWithoutDeletedFireIncidentsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -2430,6 +2672,9 @@ export type UserUpdateWithoutFireIncidentsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -2460,6 +2705,9 @@ export type UserUncheckedUpdateWithoutFireIncidentsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -2501,6 +2749,9 @@ export type UserUpdateWithoutDeletedFireIncidentsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -2531,6 +2782,9 @@ export type UserUncheckedUpdateWithoutDeletedFireIncidentsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -2561,6 +2815,9 @@ export type UserCreateWithoutFireIncidentEventsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -2591,6 +2848,9 @@ export type UserUncheckedCreateWithoutFireIncidentEventsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -2637,6 +2897,9 @@ export type UserUpdateWithoutFireIncidentEventsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -2667,6 +2930,9 @@ export type UserUncheckedUpdateWithoutFireIncidentEventsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -2697,6 +2963,9 @@ export type UserCreateWithoutNotificationInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -2727,6 +2996,9 @@ export type UserUncheckedCreateWithoutNotificationInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -2773,6 +3045,9 @@ export type UserUpdateWithoutNotificationInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -2803,6 +3078,9 @@ export type UserUncheckedUpdateWithoutNotificationInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -2833,6 +3111,9 @@ export type UserCreateWithoutNotificationsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -2863,6 +3144,9 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -2909,6 +3193,9 @@ export type UserUpdateWithoutNotificationsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -2939,6 +3226,9 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -2969,6 +3259,9 @@ export type UserCreateWithoutOfficeInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   position: Prisma.PositionCreateNestedOneWithoutUsersInput
@@ -2999,6 +3292,9 @@ export type UserUncheckedCreateWithoutOfficeInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   positionId: string
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
@@ -3058,6 +3354,9 @@ export type UserScalarWhereInput = {
   middle_name?: Prisma.StringNullableFilter<"User"> | string | null
   password?: Prisma.StringFilter<"User"> | string
   isActive?: Prisma.BoolFilter<"User"> | boolean
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
+  failedLoginCount?: Prisma.IntFilter<"User"> | number
+  lockedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   officeId?: Prisma.StringFilter<"User"> | string
   positionId?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumROLEFilter<"User"> | $Enums.ROLE
@@ -3073,6 +3372,9 @@ export type UserCreateWithoutPositionInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
@@ -3103,6 +3405,9 @@ export type UserUncheckedCreateWithoutPositionInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   role: $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
@@ -3159,6 +3464,9 @@ export type UserCreateWithoutRefreshTokensInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   role: $Enums.ROLE
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
   position: Prisma.PositionCreateNestedOneWithoutUsersInput
@@ -3189,6 +3497,9 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   positionId: string
   role: $Enums.ROLE
@@ -3235,6 +3546,9 @@ export type UserUpdateWithoutRefreshTokensInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
   position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
@@ -3265,6 +3579,9 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
@@ -3295,6 +3612,9 @@ export type UserCreateManyOfficeInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   positionId: string
   role: $Enums.ROLE
 }
@@ -3309,6 +3629,9 @@ export type UserUpdateWithoutOfficeInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
@@ -3339,6 +3662,9 @@ export type UserUncheckedUpdateWithoutOfficeInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -3369,6 +3695,9 @@ export type UserUncheckedUpdateManyWithoutOfficeInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
 }
@@ -3383,6 +3712,9 @@ export type UserCreateManyPositionInput = {
   middle_name?: string | null
   password: string
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
   officeId: string
   role: $Enums.ROLE
 }
@@ -3397,6 +3729,9 @@ export type UserUpdateWithoutPositionInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
@@ -3427,6 +3762,9 @@ export type UserUncheckedUpdateWithoutPositionInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -3457,6 +3795,9 @@ export type UserUncheckedUpdateManyWithoutPositionInput = {
   middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
 }
@@ -3628,6 +3969,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   middle_name?: boolean
   password?: boolean
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: boolean
+  lockedUntil?: boolean
   officeId?: boolean
   positionId?: boolean
   role?: boolean
@@ -3662,6 +4006,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   middle_name?: boolean
   password?: boolean
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: boolean
+  lockedUntil?: boolean
   officeId?: boolean
   positionId?: boolean
   role?: boolean
@@ -3679,6 +4026,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   middle_name?: boolean
   password?: boolean
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: boolean
+  lockedUntil?: boolean
   officeId?: boolean
   positionId?: boolean
   role?: boolean
@@ -3696,12 +4046,15 @@ export type UserSelectScalar = {
   middle_name?: boolean
   password?: boolean
   isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: boolean
+  lockedUntil?: boolean
   officeId?: boolean
   positionId?: boolean
   role?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "account_number" | "rank" | "first_name" | "last_name" | "middle_name" | "password" | "isActive" | "officeId" | "positionId" | "role", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "account_number" | "rank" | "first_name" | "last_name" | "middle_name" | "password" | "isActive" | "mustChangePassword" | "failedLoginCount" | "lockedUntil" | "officeId" | "positionId" | "role", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   office?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
@@ -3764,6 +4117,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     middle_name: string | null
     password: string
     isActive: boolean
+    mustChangePassword: boolean
+    failedLoginCount: number
+    lockedUntil: Date | null
     officeId: string
     positionId: string
     role: $Enums.ROLE
@@ -4217,6 +4573,9 @@ export interface UserFieldRefs {
   readonly middle_name: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
+  readonly mustChangePassword: Prisma.FieldRef<"User", 'Boolean'>
+  readonly failedLoginCount: Prisma.FieldRef<"User", 'Int'>
+  readonly lockedUntil: Prisma.FieldRef<"User", 'DateTime'>
   readonly officeId: Prisma.FieldRef<"User", 'String'>
   readonly positionId: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'ROLE'>

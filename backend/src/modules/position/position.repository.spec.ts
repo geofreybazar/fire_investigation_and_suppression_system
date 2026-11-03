@@ -35,7 +35,15 @@ describe('PositionRepository', () => {
 
       expect(prisma.position.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
-          include: { users: { omit: { password: true } } },
+          include: {
+            users: {
+              omit: {
+                password: true,
+                failedLoginCount: true,
+                lockedUntil: true,
+              },
+            },
+          },
         }),
       );
     });

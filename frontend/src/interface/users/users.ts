@@ -47,6 +47,7 @@ export interface User extends AddNewUserInput {
   office: Office;
   position: Position;
   isActive: boolean;
+  mustChangePassword?: boolean;
 }
 
 export interface GetAllPersonnel {

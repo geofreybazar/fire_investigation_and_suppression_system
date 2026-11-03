@@ -1,3 +1,4 @@
+import axios from "axios";
 import type { LoginType } from "@/interface/login";
 import { axiosJWT } from "./AxiosCreate";
 
@@ -13,4 +14,9 @@ const logout = async () => {
   return response.data;
 };
 
-export default { login, logout };
+// Issues tokens that reflect the user's current state.
+const refreshSession = async () => {
+  await axios.post("/api/auth/refresh_token", {}, { withCredentials: true });
+};
+
+export default { login, logout, refreshSession };

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
@@ -139,7 +140,7 @@ export class UsersService {
       throw new ForbiddenException('You are not allowed to view this user.');
     }
 
-    const { password, ...safeUser } = user;
+    const { password, failedLoginCount, lockedUntil, ...safeUser } = user;
     return safeUser;
   }
 
@@ -157,7 +158,21 @@ export class UsersService {
 
     if (!user || !passwordCorrect) {
       this.logger.warn(`Password change failed for account: ${userId}`);
+    }
+
+    if (!user) {
       throw new UnauthorizedException('Current password is incorrect');
+    }
+
+    // Not 401: the frontend treats Unauthorized as a dead session and logs out.
+    if (!passwordCorrect) {
+      throw new BadRequestException('Current password is incorrect');
+    }
+
+    if (await bcrypt.compare(newPassword, user.password)) {
+      throw new BadRequestException(
+        'The new password must be different from the current one.',
+      );
     }
 
     const saltRound = 10;

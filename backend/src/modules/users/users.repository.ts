@@ -10,6 +10,13 @@ import {
   recordAudit,
 } from '../audit/audit.writer.js';
 
+// Never returned to clients.
+export const LOGIN_INTERNAL_FIELDS = {
+  password: true,
+  failedLoginCount: true,
+  lockedUntil: true,
+} as const;
+
 // User fields recorded in the audit log; the password hash never is.
 const USER_AUDIT_FIELDS = [
   'account_number',
@@ -43,14 +50,13 @@ export class UsersRepository {
         data: {
           ...userData,
           password: passwordHash,
+          mustChangePassword: true,
 
           notification: {
             create: {},
           },
         },
-        omit: {
-          password: true,
-        },
+        omit: LOGIN_INTERNAL_FIELDS,
       });
 
       await recordAudit(tx, {
@@ -125,6 +131,7 @@ export class UsersRepository {
       const user = await tx.user.update({
         data: {
           password: passwordHash,
+          mustChangePassword: false,
         },
         where: {
           id,
@@ -195,9 +202,7 @@ export class UsersRepository {
           office: true,
           position: true,
         },
-        omit: {
-          password: true,
-        },
+        omit: LOGIN_INTERNAL_FIELDS,
         skip,
         take: limit,
         orderBy: {
