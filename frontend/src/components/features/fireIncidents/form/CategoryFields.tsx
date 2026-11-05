@@ -1,9 +1,6 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import useDebounce from "@/hooks/useDebounce";
-import useGetClassifications from "@/hooks/incidentClassification/useGetClassifications";
-import { Input } from "@/components/ui/input";
-import { Field, FieldLabel } from "@/components/ui/field";
+import useGetAllClassifications from "@/hooks/incidentClassification/useGetAllClassifications";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SelectField, type Option } from "@/components/common/form/FormFields";
 
@@ -13,16 +10,16 @@ interface CategoryFormValues {
 }
 
 interface CategoryFieldsProps {
-  // The incident's current category, which may not be on the first page of results.
+  // The incident's current category, kept as an option in case it is no
+  // longer returned by the categories list.
   current?: { category?: Option; subcategory?: Option };
 }
 
-const CategoryOptions = ({ search, current }: CategoryFieldsProps & { search: string }) => {
+const CategoryOptions = ({ current }: CategoryFieldsProps) => {
   const { getValues, setValue } = useFormContext<CategoryFormValues>();
   const categoryId = useWatch<CategoryFormValues>({ name: "categoryId" }) as string;
-  const { fireIncidentClassifications } = useGetClassifications(1, search);
+  const { categories } = useGetAllClassifications();
 
-  const categories = fireIncidentClassifications.data;
   const categoryOptions: Option[] = categories.map((category) => ({
     value: category.id,
     label: category.name,
@@ -41,8 +38,7 @@ const CategoryOptions = ({ search, current }: CategoryFieldsProps & { search: st
       ? [current.subcategory]
       : [];
 
-  // Clear a subcategory that doesn't belong to the newly chosen category. Only
-  // when that category is in the current results, so searching never clears it.
+  // Clear a subcategory that doesn't belong to the newly chosen category.
   const knownSubcategoryIds = selected
     ? selected.subCategories.map((sub) => sub.id).join(",")
     : null;
@@ -78,33 +74,19 @@ const CategoryOptions = ({ search, current }: CategoryFieldsProps & { search: st
   );
 };
 
-const CategoryFields = ({ current }: CategoryFieldsProps) => {
-  const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 400);
-
-  return (
-    <div className='grid gap-3 sm:grid-cols-2'>
-      <Field className='sm:col-span-2'>
-        <FieldLabel htmlFor='category-search'>Find a category</FieldLabel>
-        <Input
-          id='category-search'
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder='Type to search categories'
-        />
-      </Field>
-      <Suspense
-        fallback={
-          <>
-            <Skeleton className='h-9 w-full' />
-            <Skeleton className='h-9 w-full' />
-          </>
-        }
-      >
-        <CategoryOptions search={debouncedSearch} current={current} />
-      </Suspense>
-    </div>
-  );
-};
+const CategoryFields = ({ current }: CategoryFieldsProps) => (
+  <div className='grid gap-3 sm:grid-cols-2'>
+    <Suspense
+      fallback={
+        <>
+          <Skeleton className='h-9 w-full' />
+          <Skeleton className='h-9 w-full' />
+        </>
+      }
+    >
+      <CategoryOptions current={current} />
+    </Suspense>
+  </div>
+);
 
 export default CategoryFields;

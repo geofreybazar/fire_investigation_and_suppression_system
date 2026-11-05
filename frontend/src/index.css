@@ -184,3 +184,11 @@
   z-index: 0;
   font-family: inherit;
 }
+
+/* Hides the scrollbar; the element still scrolls. */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
