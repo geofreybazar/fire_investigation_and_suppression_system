@@ -76,7 +76,7 @@ const SubmitIncidentForm = ({ onDone }: { onDone: () => void }) => {
     <FormProvider {...methods}>
       <form
         onSubmit={methods.handleSubmit(onSubmit)}
-        className='flex max-h-[70vh] flex-col gap-4 overflow-y-auto pr-1'
+        className='flex max-h-[70vh] flex-col gap-4 overflow-y-auto pr-1 scrollbar-none'
       >
         <CategoryFields />
 
