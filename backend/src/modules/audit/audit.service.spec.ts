@@ -7,31 +7,31 @@ import { type CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 
 const regionalOfficeId = 'region-1';
 
-const userWithRole = (
+const user = (
   role: CurrentUserJwtPayload['role'],
+  officeType: CurrentUserJwtPayload['officeType'] = 'REGIONAL_OFFICE',
+  officeId = regionalOfficeId,
 ): CurrentUserJwtPayload => ({
   sub: '11111111-1111-4111-8111-111111111111' as UUID,
   account_number: 'ADMIN001',
   role,
+  section: null,
   positionId: 'position-1',
-  officeId: regionalOfficeId,
+  officeId,
+  officeType,
 });
-
-const ADMIN_TYPES = [
-  'USER',
-  'OFFICE',
-  'POSITION',
-  'FIRE_INCIDENT_CATEGORY',
-  'FIRE_INCIDENT_SUBCATEGORY',
-];
 
 describe('AuditService', () => {
   let service: AuditService;
-  let repository: { findPaginated: ReturnType<typeof vi.fn> };
+  let repository: {
+    findPaginated: ReturnType<typeof vi.fn>;
+    findChildOfficeIds: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(async () => {
     repository = {
       findPaginated: vi.fn().mockResolvedValue({ auditLogs: [], total: 0 }),
+      findChildOfficeIds: vi.fn().mockResolvedValue(['station-1', 'station-2']),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -44,39 +44,64 @@ describe('AuditService', () => {
     service = module.get<AuditService>(AuditService);
   });
 
-  const scopeFor = async (role: CurrentUserJwtPayload['role']) => {
-    await service.findPaginated({ page: 1 }, userWithRole(role));
+  const scopeFor = async (actor: CurrentUserJwtPayload) => {
+    await service.findPaginated({ page: 1 }, actor);
     return repository.findPaginated.mock.calls[0][0].AND[0];
   };
 
   it('lets SUPER_ADMIN read every entry', async () => {
-    await expect(scopeFor('SUPER_ADMIN')).resolves.toEqual({});
+    await expect(
+      scopeFor(user('SUPER_ADMIN', 'NATIONAL_HEADQUARTERS', 'nhq')),
+    ).resolves.toEqual({});
   });
 
-  it('limits NHQ_ADMIN to admin changes', async () => {
-    await expect(scopeFor('NHQ_ADMIN')).resolves.toEqual({
-      entityType: { in: ADMIN_TYPES },
-    });
+  it('lets an NHQ admin read every entry (national)', async () => {
+    await expect(
+      scopeFor(user('ADMIN', 'NATIONAL_HEADQUARTERS', 'nhq')),
+    ).resolves.toEqual({});
   });
 
-  it('limits REGIONAL_ADMIN to its region plus its own actions', async () => {
-    const user = userWithRole('REGIONAL_ADMIN');
+  it('limits a regional admin to its region plus its own actions', async () => {
+    const actor = user('ADMIN');
 
-    await expect(scopeFor('REGIONAL_ADMIN')).resolves.toEqual({
+    await expect(scopeFor(actor)).resolves.toEqual({
       OR: [
-        {
-          entityType: { in: ['USER', 'OFFICE'] },
-          OR: [{ officeId: regionalOfficeId }, { regionId: regionalOfficeId }],
-        },
-        { actorId: user.sub, entityType: { in: ADMIN_TYPES } },
+        { officeId: regionalOfficeId },
+        { regionId: regionalOfficeId },
+        { actorId: actor.sub },
       ],
     });
   });
 
-  it('forbids every other role', async () => {
-    await expect(
-      service.findPaginated({ page: 1 }, userWithRole('NHQ_VIEWER')),
-    ).rejects.toThrow(ForbiddenException);
+  it('limits a provincial admin to its office and stations plus its own actions', async () => {
+    const actor = user('ADMIN', 'PROVINCIAL_FIRE_STATION', 'province-1');
+
+    await expect(scopeFor(actor)).resolves.toEqual({
+      OR: [
+        { officeId: { in: ['province-1', 'station-1', 'station-2'] } },
+        { actorId: actor.sub },
+      ],
+    });
+    expect(repository.findChildOfficeIds).toHaveBeenCalledWith('province-1');
+  });
+
+  it('limits a station admin to its own office plus its own actions', async () => {
+    const actor = user('ADMIN', 'CITY_FIRE_STATION', 'station-1');
+
+    await expect(scopeFor(actor)).resolves.toEqual({
+      OR: [{ officeId: 'station-1' }, { actorId: actor.sub }],
+    });
+  });
+
+  it('forbids encoders and viewers', async () => {
+    for (const actor of [
+      user('VIEWER', 'NATIONAL_HEADQUARTERS', 'nhq'),
+      user('ENCODER', 'CITY_FIRE_STATION', 'station-1'),
+    ]) {
+      await expect(service.findPaginated({ page: 1 }, actor)).rejects.toThrow(
+        ForbiddenException,
+      );
+    }
     expect(repository.findPaginated).not.toHaveBeenCalled();
   });
 
@@ -86,7 +111,7 @@ describe('AuditService', () => {
 
     const result = await service.findPaginated(
       { page: 3, action: 'USER_UPDATED', entityType: 'USER', from },
-      userWithRole('SUPER_ADMIN'),
+      user('SUPER_ADMIN', 'NATIONAL_HEADQUARTERS', 'nhq'),
     );
 
     expect(repository.findPaginated).toHaveBeenCalledWith(

@@ -4,20 +4,26 @@ enum AuditAction {
   USER_ACTIVATED
   USER_DEACTIVATED
   USER_PASSWORD_CHANGED
+  USER_PASSWORD_RESET
   OFFICE_CREATED
   OFFICE_UPDATED
   OFFICE_DELETED
   POSITION_CREATED
   POSITION_UPDATED
   POSITION_DELETED
-  CATEGORY_CREATED
-  CATEGORY_UPDATED
-  CATEGORY_DELETED
-  SUBCATEGORY_CREATED
-  SUBCATEGORY_UPDATED
-  SUBCATEGORY_DELETED
+  REFERENCE_CREATED
+  REFERENCE_UPDATED
+  INCIDENT_CREATED
+  INCIDENT_UPDATED
   INCIDENT_DELETED
   INCIDENT_RESTORED
+  CASUALTY_CREATED
+  CASUALTY_UPDATED
+  CASUALTY_STATUS_CHANGED
+  CASUALTY_DELETED
+  CASUALTY_RESTORED
+  CASUALTY_PII_VIEWED
+  REPORT_EXPORTED
   ATTACHMENT_DOWNLOADED
 }
 
@@ -25,15 +31,18 @@ enum AuditEntityType {
   USER
   OFFICE
   POSITION
-  FIRE_INCIDENT_CATEGORY
-  FIRE_INCIDENT_SUBCATEGORY
-  FIRE_INCIDENT
+  INCIDENT_CATEGORY
+  AGENCY
+  INJURY_TYPE
+  INCIDENT
+  CASUALTY
+  REPORT
   ATTACHMENT
 }
 
-// General audit trail (REQUIREMENTS.md Q-23). Incident and investigation
-// workflow history stays in IncidentTimeline, FireIncidentEvent,
-// InvestigationReferral and InvestigationReportReview.
+// Audit trail (REQUIREMENTS.md §9.1). Append-only: no API updates or
+// deletes entries. Casualty status history and corrections are also kept in
+// CasualtyStatusEvent and CasualtyRevision.
 model AuditLog {
   id String @id @default(uuid())
 
@@ -45,12 +54,12 @@ model AuditLog {
   entityId   String
 
   // Snapshots of the affected office and its region, used to scope what
-  // REGIONAL_ADMIN can read. Plain ids, so entries outlive deleted offices.
+  // admins below NHQ can read. Plain ids, so entries outlive deleted offices.
   officeId String?
   regionId String?
 
   // Changed fields as { field: { from, to } }, or a snapshot on create and
-  // delete. Never holds passwords or tokens.
+  // delete. Never holds passwords, tokens, or casualty personal or health values.
   changes Json?
 
   createdAt DateTime @default(now())

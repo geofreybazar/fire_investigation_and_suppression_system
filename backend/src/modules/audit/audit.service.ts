@@ -1,26 +1,13 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client.js';
-import { AuditEntityType, ROLE } from '../../generated/prisma/enums.js';
+import { UserRole } from '../../generated/prisma/enums.js';
 import { CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 import { AuditRepository } from './audit.repository.js';
 import { type ListAuditLogsQuery } from './schema/audit.schema.js';
+import { hasPermission, Permission } from '../../common/authz/permissions.js';
+import { tierOf } from '../../common/authz/tier.js';
 
 const PAGE_SIZE = 20;
-
-// "Admin changes": everything except SUPER_ADMIN incident deletion/restore.
-const ADMIN_ENTITY_TYPES: AuditEntityType[] = [
-  AuditEntityType.USER,
-  AuditEntityType.OFFICE,
-  AuditEntityType.POSITION,
-  AuditEntityType.FIRE_INCIDENT_CATEGORY,
-  AuditEntityType.FIRE_INCIDENT_SUBCATEGORY,
-];
-
-// Region-scoped entities; positions and categories are national lists.
-const REGIONAL_ENTITY_TYPES: AuditEntityType[] = [
-  AuditEntityType.USER,
-  AuditEntityType.OFFICE,
-];
 
 @Injectable()
 export class AuditService {
@@ -29,7 +16,7 @@ export class AuditService {
   async findPaginated(query: ListAuditLogsQuery, user: CurrentUserJwtPayload) {
     const where: Prisma.AuditLogWhereInput = {
       AND: [
-        this.scopeWhere(user),
+        await this.scopeWhere(user),
         {
           ...(query.action && { action: query.action }),
           ...(query.entityType && { entityType: query.entityType }),
@@ -63,32 +50,39 @@ export class AuditService {
     };
   }
 
-  // SUPER_ADMIN reads everything, NHQ_ADMIN reads admin changes, and
-  // REGIONAL_ADMIN reads user and office changes in its region plus its own
-  // actions (Q-23).
-  private scopeWhere(user: CurrentUserJwtPayload): Prisma.AuditLogWhereInput {
-    switch (user.role) {
-      case ROLE.SUPER_ADMIN:
+  // REQUIREMENTS.md §7.2: SUPER_ADMIN and NHQ admins read everything; other
+  // admins read entries about offices in their jurisdiction, plus their own
+  // actions. Entries carry office and region snapshots for this.
+  private async scopeWhere(
+    user: CurrentUserJwtPayload,
+  ): Promise<Prisma.AuditLogWhereInput> {
+    if (!hasPermission(user, Permission.AUDIT_VIEW)) {
+      throw new ForbiddenException('You are not allowed to view the audit log.');
+    }
+
+    if (user.role === UserRole.SUPER_ADMIN) {
+      return {};
+    }
+
+    const own: Prisma.AuditLogWhereInput = { actorId: user.sub };
+
+    switch (tierOf(user.officeType)) {
+      case 'NHQ':
         return {};
-      case ROLE.NHQ_ADMIN:
-        return { entityType: { in: ADMIN_ENTITY_TYPES } };
-      case ROLE.REGIONAL_ADMIN:
+      case 'REGIONAL':
         return {
-          OR: [
-            {
-              entityType: { in: REGIONAL_ENTITY_TYPES },
-              OR: [{ officeId: user.officeId }, { regionId: user.officeId }],
-            },
-            {
-              actorId: user.sub,
-              entityType: { in: ADMIN_ENTITY_TYPES },
-            },
-          ],
+          OR: [{ officeId: user.officeId }, { regionId: user.officeId }, own],
         };
-      default:
-        throw new ForbiddenException(
-          'You are not allowed to view the audit log.',
+      case 'DISTRICT_PROVINCE': {
+        const stations = await this.auditRepository.findChildOfficeIds(
+          user.officeId,
         );
+        return {
+          OR: [{ officeId: { in: [user.officeId, ...stations] } }, own],
+        };
+      }
+      case 'STATION':
+        return { OR: [{ officeId: user.officeId }, own] };
     }
   }
 }

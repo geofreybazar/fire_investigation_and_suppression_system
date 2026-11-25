@@ -219,11 +219,9 @@ export type OfficeWhereInput = {
   region?: Prisma.XOR<Prisma.OfficeNullableScalarRelationFilter, Prisma.OfficeWhereInput> | null
   regionalOffices?: Prisma.OfficeListRelationFilter
   users?: Prisma.UserListRelationFilter
-  fireIncidents?: Prisma.FireIncidentListRelationFilter
-  handledIncidentInvestigations?: Prisma.FireIncidentListRelationFilter
-  conductedInvestigations?: Prisma.InvestigationListRelationFilter
-  referralsFrom?: Prisma.InvestigationReferralListRelationFilter
-  referralsTo?: Prisma.InvestigationReferralListRelationFilter
+  incidents?: Prisma.IncidentListRelationFilter
+  respondingUnits?: Prisma.IncidentRespondingUnitListRelationFilter
+  bfpCasualties?: Prisma.CasualtyListRelationFilter
 }
 
 export type OfficeOrderByWithRelationInput = {
@@ -241,11 +239,9 @@ export type OfficeOrderByWithRelationInput = {
   region?: Prisma.OfficeOrderByWithRelationInput
   regionalOffices?: Prisma.OfficeOrderByRelationAggregateInput
   users?: Prisma.UserOrderByRelationAggregateInput
-  fireIncidents?: Prisma.FireIncidentOrderByRelationAggregateInput
-  handledIncidentInvestigations?: Prisma.FireIncidentOrderByRelationAggregateInput
-  conductedInvestigations?: Prisma.InvestigationOrderByRelationAggregateInput
-  referralsFrom?: Prisma.InvestigationReferralOrderByRelationAggregateInput
-  referralsTo?: Prisma.InvestigationReferralOrderByRelationAggregateInput
+  incidents?: Prisma.IncidentOrderByRelationAggregateInput
+  respondingUnits?: Prisma.IncidentRespondingUnitOrderByRelationAggregateInput
+  bfpCasualties?: Prisma.CasualtyOrderByRelationAggregateInput
 }
 
 export type OfficeWhereUniqueInput = Prisma.AtLeast<{
@@ -267,11 +263,9 @@ export type OfficeWhereUniqueInput = Prisma.AtLeast<{
   region?: Prisma.XOR<Prisma.OfficeNullableScalarRelationFilter, Prisma.OfficeWhereInput> | null
   regionalOffices?: Prisma.OfficeListRelationFilter
   users?: Prisma.UserListRelationFilter
-  fireIncidents?: Prisma.FireIncidentListRelationFilter
-  handledIncidentInvestigations?: Prisma.FireIncidentListRelationFilter
-  conductedInvestigations?: Prisma.InvestigationListRelationFilter
-  referralsFrom?: Prisma.InvestigationReferralListRelationFilter
-  referralsTo?: Prisma.InvestigationReferralListRelationFilter
+  incidents?: Prisma.IncidentListRelationFilter
+  respondingUnits?: Prisma.IncidentRespondingUnitListRelationFilter
+  bfpCasualties?: Prisma.CasualtyListRelationFilter
 }, "id" | "regionCode" | "parentId_name">
 
 export type OfficeOrderByWithAggregationInput = {
@@ -317,11 +311,9 @@ export type OfficeCreateInput = {
   region?: Prisma.OfficeCreateNestedOneWithoutRegionalOfficesInput
   regionalOffices?: Prisma.OfficeCreateNestedManyWithoutRegionInput
   users?: Prisma.UserCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralCreateNestedManyWithoutToOfficeInput
+  incidents?: Prisma.IncidentCreateNestedManyWithoutReportingOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitCreateNestedManyWithoutOfficeInput
+  bfpCasualties?: Prisma.CasualtyCreateNestedManyWithoutBfpOfficeInput
 }
 
 export type OfficeUncheckedCreateInput = {
@@ -337,11 +329,9 @@ export type OfficeUncheckedCreateInput = {
   children?: Prisma.OfficeUncheckedCreateNestedManyWithoutParentInput
   regionalOffices?: Prisma.OfficeUncheckedCreateNestedManyWithoutRegionInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutToOfficeInput
+  incidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutReportingOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedCreateNestedManyWithoutOfficeInput
+  bfpCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpOfficeInput
 }
 
 export type OfficeUpdateInput = {
@@ -357,11 +347,9 @@ export type OfficeUpdateInput = {
   region?: Prisma.OfficeUpdateOneWithoutRegionalOfficesNestedInput
   regionalOffices?: Prisma.OfficeUpdateManyWithoutRegionNestedInput
   users?: Prisma.UserUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUpdateManyWithoutReportingOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUpdateManyWithoutOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUpdateManyWithoutBfpOfficeNestedInput
 }
 
 export type OfficeUncheckedUpdateInput = {
@@ -377,11 +365,9 @@ export type OfficeUncheckedUpdateInput = {
   children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
   regionalOffices?: Prisma.OfficeUncheckedUpdateManyWithoutRegionNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUncheckedUpdateManyWithoutReportingOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedUpdateManyWithoutOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpOfficeNestedInput
 }
 
 export type OfficeCreateManyInput = {
@@ -418,14 +404,14 @@ export type OfficeUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type OfficeScalarRelationFilter = {
-  is?: Prisma.OfficeWhereInput
-  isNot?: Prisma.OfficeWhereInput
-}
-
 export type OfficeNullableScalarRelationFilter = {
   is?: Prisma.OfficeWhereInput | null
   isNot?: Prisma.OfficeWhereInput | null
+}
+
+export type OfficeScalarRelationFilter = {
+  is?: Prisma.OfficeWhereInput
+  isNot?: Prisma.OfficeWhereInput
 }
 
 export type OfficeListRelationFilter = {
@@ -479,76 +465,48 @@ export type OfficeMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type OfficeCreateNestedOneWithoutConductedInvestigationsInput = {
-  create?: Prisma.XOR<Prisma.OfficeCreateWithoutConductedInvestigationsInput, Prisma.OfficeUncheckedCreateWithoutConductedInvestigationsInput>
-  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutConductedInvestigationsInput
+export type OfficeCreateNestedOneWithoutBfpCasualtiesInput = {
+  create?: Prisma.XOR<Prisma.OfficeCreateWithoutBfpCasualtiesInput, Prisma.OfficeUncheckedCreateWithoutBfpCasualtiesInput>
+  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutBfpCasualtiesInput
   connect?: Prisma.OfficeWhereUniqueInput
 }
 
-export type OfficeUpdateOneRequiredWithoutConductedInvestigationsNestedInput = {
-  create?: Prisma.XOR<Prisma.OfficeCreateWithoutConductedInvestigationsInput, Prisma.OfficeUncheckedCreateWithoutConductedInvestigationsInput>
-  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutConductedInvestigationsInput
-  upsert?: Prisma.OfficeUpsertWithoutConductedInvestigationsInput
-  connect?: Prisma.OfficeWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.OfficeUpdateToOneWithWhereWithoutConductedInvestigationsInput, Prisma.OfficeUpdateWithoutConductedInvestigationsInput>, Prisma.OfficeUncheckedUpdateWithoutConductedInvestigationsInput>
-}
-
-export type OfficeCreateNestedOneWithoutReferralsFromInput = {
-  create?: Prisma.XOR<Prisma.OfficeCreateWithoutReferralsFromInput, Prisma.OfficeUncheckedCreateWithoutReferralsFromInput>
-  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutReferralsFromInput
-  connect?: Prisma.OfficeWhereUniqueInput
-}
-
-export type OfficeCreateNestedOneWithoutReferralsToInput = {
-  create?: Prisma.XOR<Prisma.OfficeCreateWithoutReferralsToInput, Prisma.OfficeUncheckedCreateWithoutReferralsToInput>
-  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutReferralsToInput
-  connect?: Prisma.OfficeWhereUniqueInput
-}
-
-export type OfficeUpdateOneRequiredWithoutReferralsFromNestedInput = {
-  create?: Prisma.XOR<Prisma.OfficeCreateWithoutReferralsFromInput, Prisma.OfficeUncheckedCreateWithoutReferralsFromInput>
-  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutReferralsFromInput
-  upsert?: Prisma.OfficeUpsertWithoutReferralsFromInput
-  connect?: Prisma.OfficeWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.OfficeUpdateToOneWithWhereWithoutReferralsFromInput, Prisma.OfficeUpdateWithoutReferralsFromInput>, Prisma.OfficeUncheckedUpdateWithoutReferralsFromInput>
-}
-
-export type OfficeUpdateOneRequiredWithoutReferralsToNestedInput = {
-  create?: Prisma.XOR<Prisma.OfficeCreateWithoutReferralsToInput, Prisma.OfficeUncheckedCreateWithoutReferralsToInput>
-  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutReferralsToInput
-  upsert?: Prisma.OfficeUpsertWithoutReferralsToInput
-  connect?: Prisma.OfficeWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.OfficeUpdateToOneWithWhereWithoutReferralsToInput, Prisma.OfficeUpdateWithoutReferralsToInput>, Prisma.OfficeUncheckedUpdateWithoutReferralsToInput>
-}
-
-export type OfficeCreateNestedOneWithoutFireIncidentsInput = {
-  create?: Prisma.XOR<Prisma.OfficeCreateWithoutFireIncidentsInput, Prisma.OfficeUncheckedCreateWithoutFireIncidentsInput>
-  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutFireIncidentsInput
-  connect?: Prisma.OfficeWhereUniqueInput
-}
-
-export type OfficeCreateNestedOneWithoutHandledIncidentInvestigationsInput = {
-  create?: Prisma.XOR<Prisma.OfficeCreateWithoutHandledIncidentInvestigationsInput, Prisma.OfficeUncheckedCreateWithoutHandledIncidentInvestigationsInput>
-  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutHandledIncidentInvestigationsInput
-  connect?: Prisma.OfficeWhereUniqueInput
-}
-
-export type OfficeUpdateOneRequiredWithoutFireIncidentsNestedInput = {
-  create?: Prisma.XOR<Prisma.OfficeCreateWithoutFireIncidentsInput, Prisma.OfficeUncheckedCreateWithoutFireIncidentsInput>
-  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutFireIncidentsInput
-  upsert?: Prisma.OfficeUpsertWithoutFireIncidentsInput
-  connect?: Prisma.OfficeWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.OfficeUpdateToOneWithWhereWithoutFireIncidentsInput, Prisma.OfficeUpdateWithoutFireIncidentsInput>, Prisma.OfficeUncheckedUpdateWithoutFireIncidentsInput>
-}
-
-export type OfficeUpdateOneWithoutHandledIncidentInvestigationsNestedInput = {
-  create?: Prisma.XOR<Prisma.OfficeCreateWithoutHandledIncidentInvestigationsInput, Prisma.OfficeUncheckedCreateWithoutHandledIncidentInvestigationsInput>
-  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutHandledIncidentInvestigationsInput
-  upsert?: Prisma.OfficeUpsertWithoutHandledIncidentInvestigationsInput
+export type OfficeUpdateOneWithoutBfpCasualtiesNestedInput = {
+  create?: Prisma.XOR<Prisma.OfficeCreateWithoutBfpCasualtiesInput, Prisma.OfficeUncheckedCreateWithoutBfpCasualtiesInput>
+  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutBfpCasualtiesInput
+  upsert?: Prisma.OfficeUpsertWithoutBfpCasualtiesInput
   disconnect?: Prisma.OfficeWhereInput | boolean
   delete?: Prisma.OfficeWhereInput | boolean
   connect?: Prisma.OfficeWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.OfficeUpdateToOneWithWhereWithoutHandledIncidentInvestigationsInput, Prisma.OfficeUpdateWithoutHandledIncidentInvestigationsInput>, Prisma.OfficeUncheckedUpdateWithoutHandledIncidentInvestigationsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OfficeUpdateToOneWithWhereWithoutBfpCasualtiesInput, Prisma.OfficeUpdateWithoutBfpCasualtiesInput>, Prisma.OfficeUncheckedUpdateWithoutBfpCasualtiesInput>
+}
+
+export type OfficeCreateNestedOneWithoutIncidentsInput = {
+  create?: Prisma.XOR<Prisma.OfficeCreateWithoutIncidentsInput, Prisma.OfficeUncheckedCreateWithoutIncidentsInput>
+  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutIncidentsInput
+  connect?: Prisma.OfficeWhereUniqueInput
+}
+
+export type OfficeUpdateOneRequiredWithoutIncidentsNestedInput = {
+  create?: Prisma.XOR<Prisma.OfficeCreateWithoutIncidentsInput, Prisma.OfficeUncheckedCreateWithoutIncidentsInput>
+  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutIncidentsInput
+  upsert?: Prisma.OfficeUpsertWithoutIncidentsInput
+  connect?: Prisma.OfficeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OfficeUpdateToOneWithWhereWithoutIncidentsInput, Prisma.OfficeUpdateWithoutIncidentsInput>, Prisma.OfficeUncheckedUpdateWithoutIncidentsInput>
+}
+
+export type OfficeCreateNestedOneWithoutRespondingUnitsInput = {
+  create?: Prisma.XOR<Prisma.OfficeCreateWithoutRespondingUnitsInput, Prisma.OfficeUncheckedCreateWithoutRespondingUnitsInput>
+  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutRespondingUnitsInput
+  connect?: Prisma.OfficeWhereUniqueInput
+}
+
+export type OfficeUpdateOneRequiredWithoutRespondingUnitsNestedInput = {
+  create?: Prisma.XOR<Prisma.OfficeCreateWithoutRespondingUnitsInput, Prisma.OfficeUncheckedCreateWithoutRespondingUnitsInput>
+  connectOrCreate?: Prisma.OfficeCreateOrConnectWithoutRespondingUnitsInput
+  upsert?: Prisma.OfficeUpsertWithoutRespondingUnitsInput
+  connect?: Prisma.OfficeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OfficeUpdateToOneWithWhereWithoutRespondingUnitsInput, Prisma.OfficeUpdateWithoutRespondingUnitsInput>, Prisma.OfficeUncheckedUpdateWithoutRespondingUnitsInput>
 }
 
 export type OfficeCreateNestedOneWithoutChildrenInput = {
@@ -685,7 +643,7 @@ export type OfficeUpdateOneRequiredWithoutUsersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OfficeUpdateToOneWithWhereWithoutUsersInput, Prisma.OfficeUpdateWithoutUsersInput>, Prisma.OfficeUncheckedUpdateWithoutUsersInput>
 }
 
-export type OfficeCreateWithoutConductedInvestigationsInput = {
+export type OfficeCreateWithoutBfpCasualtiesInput = {
   id?: string
   name: string
   type: $Enums.OfficeType
@@ -698,13 +656,11 @@ export type OfficeCreateWithoutConductedInvestigationsInput = {
   region?: Prisma.OfficeCreateNestedOneWithoutRegionalOfficesInput
   regionalOffices?: Prisma.OfficeCreateNestedManyWithoutRegionInput
   users?: Prisma.UserCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralCreateNestedManyWithoutToOfficeInput
+  incidents?: Prisma.IncidentCreateNestedManyWithoutReportingOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitCreateNestedManyWithoutOfficeInput
 }
 
-export type OfficeUncheckedCreateWithoutConductedInvestigationsInput = {
+export type OfficeUncheckedCreateWithoutBfpCasualtiesInput = {
   id?: string
   name: string
   type: $Enums.OfficeType
@@ -717,29 +673,27 @@ export type OfficeUncheckedCreateWithoutConductedInvestigationsInput = {
   children?: Prisma.OfficeUncheckedCreateNestedManyWithoutParentInput
   regionalOffices?: Prisma.OfficeUncheckedCreateNestedManyWithoutRegionInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutToOfficeInput
+  incidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutReportingOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedCreateNestedManyWithoutOfficeInput
 }
 
-export type OfficeCreateOrConnectWithoutConductedInvestigationsInput = {
+export type OfficeCreateOrConnectWithoutBfpCasualtiesInput = {
   where: Prisma.OfficeWhereUniqueInput
-  create: Prisma.XOR<Prisma.OfficeCreateWithoutConductedInvestigationsInput, Prisma.OfficeUncheckedCreateWithoutConductedInvestigationsInput>
+  create: Prisma.XOR<Prisma.OfficeCreateWithoutBfpCasualtiesInput, Prisma.OfficeUncheckedCreateWithoutBfpCasualtiesInput>
 }
 
-export type OfficeUpsertWithoutConductedInvestigationsInput = {
-  update: Prisma.XOR<Prisma.OfficeUpdateWithoutConductedInvestigationsInput, Prisma.OfficeUncheckedUpdateWithoutConductedInvestigationsInput>
-  create: Prisma.XOR<Prisma.OfficeCreateWithoutConductedInvestigationsInput, Prisma.OfficeUncheckedCreateWithoutConductedInvestigationsInput>
+export type OfficeUpsertWithoutBfpCasualtiesInput = {
+  update: Prisma.XOR<Prisma.OfficeUpdateWithoutBfpCasualtiesInput, Prisma.OfficeUncheckedUpdateWithoutBfpCasualtiesInput>
+  create: Prisma.XOR<Prisma.OfficeCreateWithoutBfpCasualtiesInput, Prisma.OfficeUncheckedCreateWithoutBfpCasualtiesInput>
   where?: Prisma.OfficeWhereInput
 }
 
-export type OfficeUpdateToOneWithWhereWithoutConductedInvestigationsInput = {
+export type OfficeUpdateToOneWithWhereWithoutBfpCasualtiesInput = {
   where?: Prisma.OfficeWhereInput
-  data: Prisma.XOR<Prisma.OfficeUpdateWithoutConductedInvestigationsInput, Prisma.OfficeUncheckedUpdateWithoutConductedInvestigationsInput>
+  data: Prisma.XOR<Prisma.OfficeUpdateWithoutBfpCasualtiesInput, Prisma.OfficeUncheckedUpdateWithoutBfpCasualtiesInput>
 }
 
-export type OfficeUpdateWithoutConductedInvestigationsInput = {
+export type OfficeUpdateWithoutBfpCasualtiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
@@ -752,13 +706,11 @@ export type OfficeUpdateWithoutConductedInvestigationsInput = {
   region?: Prisma.OfficeUpdateOneWithoutRegionalOfficesNestedInput
   regionalOffices?: Prisma.OfficeUpdateManyWithoutRegionNestedInput
   users?: Prisma.UserUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUpdateManyWithoutReportingOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUpdateManyWithoutOfficeNestedInput
 }
 
-export type OfficeUncheckedUpdateWithoutConductedInvestigationsInput = {
+export type OfficeUncheckedUpdateWithoutBfpCasualtiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
@@ -771,13 +723,11 @@ export type OfficeUncheckedUpdateWithoutConductedInvestigationsInput = {
   children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
   regionalOffices?: Prisma.OfficeUncheckedUpdateManyWithoutRegionNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUncheckedUpdateManyWithoutReportingOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedUpdateManyWithoutOfficeNestedInput
 }
 
-export type OfficeCreateWithoutReferralsFromInput = {
+export type OfficeCreateWithoutIncidentsInput = {
   id?: string
   name: string
   type: $Enums.OfficeType
@@ -790,13 +740,11 @@ export type OfficeCreateWithoutReferralsFromInput = {
   region?: Prisma.OfficeCreateNestedOneWithoutRegionalOfficesInput
   regionalOffices?: Prisma.OfficeCreateNestedManyWithoutRegionInput
   users?: Prisma.UserCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutConductingOfficeInput
-  referralsTo?: Prisma.InvestigationReferralCreateNestedManyWithoutToOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitCreateNestedManyWithoutOfficeInput
+  bfpCasualties?: Prisma.CasualtyCreateNestedManyWithoutBfpOfficeInput
 }
 
-export type OfficeUncheckedCreateWithoutReferralsFromInput = {
+export type OfficeUncheckedCreateWithoutIncidentsInput = {
   id?: string
   name: string
   type: $Enums.OfficeType
@@ -809,18 +757,61 @@ export type OfficeUncheckedCreateWithoutReferralsFromInput = {
   children?: Prisma.OfficeUncheckedCreateNestedManyWithoutParentInput
   regionalOffices?: Prisma.OfficeUncheckedCreateNestedManyWithoutRegionInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutConductingOfficeInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutToOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedCreateNestedManyWithoutOfficeInput
+  bfpCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpOfficeInput
 }
 
-export type OfficeCreateOrConnectWithoutReferralsFromInput = {
+export type OfficeCreateOrConnectWithoutIncidentsInput = {
   where: Prisma.OfficeWhereUniqueInput
-  create: Prisma.XOR<Prisma.OfficeCreateWithoutReferralsFromInput, Prisma.OfficeUncheckedCreateWithoutReferralsFromInput>
+  create: Prisma.XOR<Prisma.OfficeCreateWithoutIncidentsInput, Prisma.OfficeUncheckedCreateWithoutIncidentsInput>
 }
 
-export type OfficeCreateWithoutReferralsToInput = {
+export type OfficeUpsertWithoutIncidentsInput = {
+  update: Prisma.XOR<Prisma.OfficeUpdateWithoutIncidentsInput, Prisma.OfficeUncheckedUpdateWithoutIncidentsInput>
+  create: Prisma.XOR<Prisma.OfficeCreateWithoutIncidentsInput, Prisma.OfficeUncheckedCreateWithoutIncidentsInput>
+  where?: Prisma.OfficeWhereInput
+}
+
+export type OfficeUpdateToOneWithWhereWithoutIncidentsInput = {
+  where?: Prisma.OfficeWhereInput
+  data: Prisma.XOR<Prisma.OfficeUpdateWithoutIncidentsInput, Prisma.OfficeUncheckedUpdateWithoutIncidentsInput>
+}
+
+export type OfficeUpdateWithoutIncidentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  parent?: Prisma.OfficeUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.OfficeUpdateManyWithoutParentNestedInput
+  region?: Prisma.OfficeUpdateOneWithoutRegionalOfficesNestedInput
+  regionalOffices?: Prisma.OfficeUpdateManyWithoutRegionNestedInput
+  users?: Prisma.UserUpdateManyWithoutOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUpdateManyWithoutOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUpdateManyWithoutBfpOfficeNestedInput
+}
+
+export type OfficeUncheckedUpdateWithoutIncidentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
+  regionalOffices?: Prisma.OfficeUncheckedUpdateManyWithoutRegionNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedUpdateManyWithoutOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpOfficeNestedInput
+}
+
+export type OfficeCreateWithoutRespondingUnitsInput = {
   id?: string
   name: string
   type: $Enums.OfficeType
@@ -833,13 +824,11 @@ export type OfficeCreateWithoutReferralsToInput = {
   region?: Prisma.OfficeCreateNestedOneWithoutRegionalOfficesInput
   regionalOffices?: Prisma.OfficeCreateNestedManyWithoutRegionInput
   users?: Prisma.UserCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralCreateNestedManyWithoutFromOfficeInput
+  incidents?: Prisma.IncidentCreateNestedManyWithoutReportingOfficeInput
+  bfpCasualties?: Prisma.CasualtyCreateNestedManyWithoutBfpOfficeInput
 }
 
-export type OfficeUncheckedCreateWithoutReferralsToInput = {
+export type OfficeUncheckedCreateWithoutRespondingUnitsInput = {
   id?: string
   name: string
   type: $Enums.OfficeType
@@ -852,29 +841,27 @@ export type OfficeUncheckedCreateWithoutReferralsToInput = {
   children?: Prisma.OfficeUncheckedCreateNestedManyWithoutParentInput
   regionalOffices?: Prisma.OfficeUncheckedCreateNestedManyWithoutRegionInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFromOfficeInput
+  incidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutReportingOfficeInput
+  bfpCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpOfficeInput
 }
 
-export type OfficeCreateOrConnectWithoutReferralsToInput = {
+export type OfficeCreateOrConnectWithoutRespondingUnitsInput = {
   where: Prisma.OfficeWhereUniqueInput
-  create: Prisma.XOR<Prisma.OfficeCreateWithoutReferralsToInput, Prisma.OfficeUncheckedCreateWithoutReferralsToInput>
+  create: Prisma.XOR<Prisma.OfficeCreateWithoutRespondingUnitsInput, Prisma.OfficeUncheckedCreateWithoutRespondingUnitsInput>
 }
 
-export type OfficeUpsertWithoutReferralsFromInput = {
-  update: Prisma.XOR<Prisma.OfficeUpdateWithoutReferralsFromInput, Prisma.OfficeUncheckedUpdateWithoutReferralsFromInput>
-  create: Prisma.XOR<Prisma.OfficeCreateWithoutReferralsFromInput, Prisma.OfficeUncheckedCreateWithoutReferralsFromInput>
+export type OfficeUpsertWithoutRespondingUnitsInput = {
+  update: Prisma.XOR<Prisma.OfficeUpdateWithoutRespondingUnitsInput, Prisma.OfficeUncheckedUpdateWithoutRespondingUnitsInput>
+  create: Prisma.XOR<Prisma.OfficeCreateWithoutRespondingUnitsInput, Prisma.OfficeUncheckedCreateWithoutRespondingUnitsInput>
   where?: Prisma.OfficeWhereInput
 }
 
-export type OfficeUpdateToOneWithWhereWithoutReferralsFromInput = {
+export type OfficeUpdateToOneWithWhereWithoutRespondingUnitsInput = {
   where?: Prisma.OfficeWhereInput
-  data: Prisma.XOR<Prisma.OfficeUpdateWithoutReferralsFromInput, Prisma.OfficeUncheckedUpdateWithoutReferralsFromInput>
+  data: Prisma.XOR<Prisma.OfficeUpdateWithoutRespondingUnitsInput, Prisma.OfficeUncheckedUpdateWithoutRespondingUnitsInput>
 }
 
-export type OfficeUpdateWithoutReferralsFromInput = {
+export type OfficeUpdateWithoutRespondingUnitsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
@@ -887,13 +874,11 @@ export type OfficeUpdateWithoutReferralsFromInput = {
   region?: Prisma.OfficeUpdateOneWithoutRegionalOfficesNestedInput
   regionalOffices?: Prisma.OfficeUpdateManyWithoutRegionNestedInput
   users?: Prisma.UserUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUpdateManyWithoutConductingOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUpdateManyWithoutReportingOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUpdateManyWithoutBfpOfficeNestedInput
 }
 
-export type OfficeUncheckedUpdateWithoutReferralsFromInput = {
+export type OfficeUncheckedUpdateWithoutRespondingUnitsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
@@ -906,243 +891,8 @@ export type OfficeUncheckedUpdateWithoutReferralsFromInput = {
   children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
   regionalOffices?: Prisma.OfficeUncheckedUpdateManyWithoutRegionNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutConductingOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutToOfficeNestedInput
-}
-
-export type OfficeUpsertWithoutReferralsToInput = {
-  update: Prisma.XOR<Prisma.OfficeUpdateWithoutReferralsToInput, Prisma.OfficeUncheckedUpdateWithoutReferralsToInput>
-  create: Prisma.XOR<Prisma.OfficeCreateWithoutReferralsToInput, Prisma.OfficeUncheckedCreateWithoutReferralsToInput>
-  where?: Prisma.OfficeWhereInput
-}
-
-export type OfficeUpdateToOneWithWhereWithoutReferralsToInput = {
-  where?: Prisma.OfficeWhereInput
-  data: Prisma.XOR<Prisma.OfficeUpdateWithoutReferralsToInput, Prisma.OfficeUncheckedUpdateWithoutReferralsToInput>
-}
-
-export type OfficeUpdateWithoutReferralsToInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  parent?: Prisma.OfficeUpdateOneWithoutChildrenNestedInput
-  children?: Prisma.OfficeUpdateManyWithoutParentNestedInput
-  region?: Prisma.OfficeUpdateOneWithoutRegionalOfficesNestedInput
-  regionalOffices?: Prisma.OfficeUpdateManyWithoutRegionNestedInput
-  users?: Prisma.UserUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUpdateManyWithoutFromOfficeNestedInput
-}
-
-export type OfficeUncheckedUpdateWithoutReferralsToInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  regionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
-  regionalOffices?: Prisma.OfficeUncheckedUpdateManyWithoutRegionNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFromOfficeNestedInput
-}
-
-export type OfficeCreateWithoutFireIncidentsInput = {
-  id?: string
-  name: string
-  type: $Enums.OfficeType
-  isActive?: boolean
-  regionCode?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  parent?: Prisma.OfficeCreateNestedOneWithoutChildrenInput
-  children?: Prisma.OfficeCreateNestedManyWithoutParentInput
-  region?: Prisma.OfficeCreateNestedOneWithoutRegionalOfficesInput
-  regionalOffices?: Prisma.OfficeCreateNestedManyWithoutRegionInput
-  users?: Prisma.UserCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralCreateNestedManyWithoutToOfficeInput
-}
-
-export type OfficeUncheckedCreateWithoutFireIncidentsInput = {
-  id?: string
-  name: string
-  type: $Enums.OfficeType
-  isActive?: boolean
-  parentId?: string | null
-  regionId?: string | null
-  regionCode?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  children?: Prisma.OfficeUncheckedCreateNestedManyWithoutParentInput
-  regionalOffices?: Prisma.OfficeUncheckedCreateNestedManyWithoutRegionInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutToOfficeInput
-}
-
-export type OfficeCreateOrConnectWithoutFireIncidentsInput = {
-  where: Prisma.OfficeWhereUniqueInput
-  create: Prisma.XOR<Prisma.OfficeCreateWithoutFireIncidentsInput, Prisma.OfficeUncheckedCreateWithoutFireIncidentsInput>
-}
-
-export type OfficeCreateWithoutHandledIncidentInvestigationsInput = {
-  id?: string
-  name: string
-  type: $Enums.OfficeType
-  isActive?: boolean
-  regionCode?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  parent?: Prisma.OfficeCreateNestedOneWithoutChildrenInput
-  children?: Prisma.OfficeCreateNestedManyWithoutParentInput
-  region?: Prisma.OfficeCreateNestedOneWithoutRegionalOfficesInput
-  regionalOffices?: Prisma.OfficeCreateNestedManyWithoutRegionInput
-  users?: Prisma.UserCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutOfficeInput
-  conductedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralCreateNestedManyWithoutToOfficeInput
-}
-
-export type OfficeUncheckedCreateWithoutHandledIncidentInvestigationsInput = {
-  id?: string
-  name: string
-  type: $Enums.OfficeType
-  isActive?: boolean
-  parentId?: string | null
-  regionId?: string | null
-  regionCode?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  children?: Prisma.OfficeUncheckedCreateNestedManyWithoutParentInput
-  regionalOffices?: Prisma.OfficeUncheckedCreateNestedManyWithoutRegionInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutOfficeInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutToOfficeInput
-}
-
-export type OfficeCreateOrConnectWithoutHandledIncidentInvestigationsInput = {
-  where: Prisma.OfficeWhereUniqueInput
-  create: Prisma.XOR<Prisma.OfficeCreateWithoutHandledIncidentInvestigationsInput, Prisma.OfficeUncheckedCreateWithoutHandledIncidentInvestigationsInput>
-}
-
-export type OfficeUpsertWithoutFireIncidentsInput = {
-  update: Prisma.XOR<Prisma.OfficeUpdateWithoutFireIncidentsInput, Prisma.OfficeUncheckedUpdateWithoutFireIncidentsInput>
-  create: Prisma.XOR<Prisma.OfficeCreateWithoutFireIncidentsInput, Prisma.OfficeUncheckedCreateWithoutFireIncidentsInput>
-  where?: Prisma.OfficeWhereInput
-}
-
-export type OfficeUpdateToOneWithWhereWithoutFireIncidentsInput = {
-  where?: Prisma.OfficeWhereInput
-  data: Prisma.XOR<Prisma.OfficeUpdateWithoutFireIncidentsInput, Prisma.OfficeUncheckedUpdateWithoutFireIncidentsInput>
-}
-
-export type OfficeUpdateWithoutFireIncidentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  parent?: Prisma.OfficeUpdateOneWithoutChildrenNestedInput
-  children?: Prisma.OfficeUpdateManyWithoutParentNestedInput
-  region?: Prisma.OfficeUpdateOneWithoutRegionalOfficesNestedInput
-  regionalOffices?: Prisma.OfficeUpdateManyWithoutRegionNestedInput
-  users?: Prisma.UserUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUpdateManyWithoutToOfficeNestedInput
-}
-
-export type OfficeUncheckedUpdateWithoutFireIncidentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  regionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
-  regionalOffices?: Prisma.OfficeUncheckedUpdateManyWithoutRegionNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutToOfficeNestedInput
-}
-
-export type OfficeUpsertWithoutHandledIncidentInvestigationsInput = {
-  update: Prisma.XOR<Prisma.OfficeUpdateWithoutHandledIncidentInvestigationsInput, Prisma.OfficeUncheckedUpdateWithoutHandledIncidentInvestigationsInput>
-  create: Prisma.XOR<Prisma.OfficeCreateWithoutHandledIncidentInvestigationsInput, Prisma.OfficeUncheckedCreateWithoutHandledIncidentInvestigationsInput>
-  where?: Prisma.OfficeWhereInput
-}
-
-export type OfficeUpdateToOneWithWhereWithoutHandledIncidentInvestigationsInput = {
-  where?: Prisma.OfficeWhereInput
-  data: Prisma.XOR<Prisma.OfficeUpdateWithoutHandledIncidentInvestigationsInput, Prisma.OfficeUncheckedUpdateWithoutHandledIncidentInvestigationsInput>
-}
-
-export type OfficeUpdateWithoutHandledIncidentInvestigationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  parent?: Prisma.OfficeUpdateOneWithoutChildrenNestedInput
-  children?: Prisma.OfficeUpdateManyWithoutParentNestedInput
-  region?: Prisma.OfficeUpdateOneWithoutRegionalOfficesNestedInput
-  regionalOffices?: Prisma.OfficeUpdateManyWithoutRegionNestedInput
-  users?: Prisma.UserUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUpdateManyWithoutToOfficeNestedInput
-}
-
-export type OfficeUncheckedUpdateWithoutHandledIncidentInvestigationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOfficeTypeFieldUpdateOperationsInput | $Enums.OfficeType
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  regionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
-  regionalOffices?: Prisma.OfficeUncheckedUpdateManyWithoutRegionNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUncheckedUpdateManyWithoutReportingOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpOfficeNestedInput
 }
 
 export type OfficeCreateWithoutChildrenInput = {
@@ -1157,11 +907,9 @@ export type OfficeCreateWithoutChildrenInput = {
   region?: Prisma.OfficeCreateNestedOneWithoutRegionalOfficesInput
   regionalOffices?: Prisma.OfficeCreateNestedManyWithoutRegionInput
   users?: Prisma.UserCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralCreateNestedManyWithoutToOfficeInput
+  incidents?: Prisma.IncidentCreateNestedManyWithoutReportingOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitCreateNestedManyWithoutOfficeInput
+  bfpCasualties?: Prisma.CasualtyCreateNestedManyWithoutBfpOfficeInput
 }
 
 export type OfficeUncheckedCreateWithoutChildrenInput = {
@@ -1176,11 +924,9 @@ export type OfficeUncheckedCreateWithoutChildrenInput = {
   updatedAt?: Date | string
   regionalOffices?: Prisma.OfficeUncheckedCreateNestedManyWithoutRegionInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutToOfficeInput
+  incidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutReportingOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedCreateNestedManyWithoutOfficeInput
+  bfpCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpOfficeInput
 }
 
 export type OfficeCreateOrConnectWithoutChildrenInput = {
@@ -1200,11 +946,9 @@ export type OfficeCreateWithoutParentInput = {
   region?: Prisma.OfficeCreateNestedOneWithoutRegionalOfficesInput
   regionalOffices?: Prisma.OfficeCreateNestedManyWithoutRegionInput
   users?: Prisma.UserCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralCreateNestedManyWithoutToOfficeInput
+  incidents?: Prisma.IncidentCreateNestedManyWithoutReportingOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitCreateNestedManyWithoutOfficeInput
+  bfpCasualties?: Prisma.CasualtyCreateNestedManyWithoutBfpOfficeInput
 }
 
 export type OfficeUncheckedCreateWithoutParentInput = {
@@ -1219,11 +963,9 @@ export type OfficeUncheckedCreateWithoutParentInput = {
   children?: Prisma.OfficeUncheckedCreateNestedManyWithoutParentInput
   regionalOffices?: Prisma.OfficeUncheckedCreateNestedManyWithoutRegionInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutToOfficeInput
+  incidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutReportingOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedCreateNestedManyWithoutOfficeInput
+  bfpCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpOfficeInput
 }
 
 export type OfficeCreateOrConnectWithoutParentInput = {
@@ -1248,11 +990,9 @@ export type OfficeCreateWithoutRegionalOfficesInput = {
   children?: Prisma.OfficeCreateNestedManyWithoutParentInput
   region?: Prisma.OfficeCreateNestedOneWithoutRegionalOfficesInput
   users?: Prisma.UserCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralCreateNestedManyWithoutToOfficeInput
+  incidents?: Prisma.IncidentCreateNestedManyWithoutReportingOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitCreateNestedManyWithoutOfficeInput
+  bfpCasualties?: Prisma.CasualtyCreateNestedManyWithoutBfpOfficeInput
 }
 
 export type OfficeUncheckedCreateWithoutRegionalOfficesInput = {
@@ -1267,11 +1007,9 @@ export type OfficeUncheckedCreateWithoutRegionalOfficesInput = {
   updatedAt?: Date | string
   children?: Prisma.OfficeUncheckedCreateNestedManyWithoutParentInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutToOfficeInput
+  incidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutReportingOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedCreateNestedManyWithoutOfficeInput
+  bfpCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpOfficeInput
 }
 
 export type OfficeCreateOrConnectWithoutRegionalOfficesInput = {
@@ -1291,11 +1029,9 @@ export type OfficeCreateWithoutRegionInput = {
   children?: Prisma.OfficeCreateNestedManyWithoutParentInput
   regionalOffices?: Prisma.OfficeCreateNestedManyWithoutRegionInput
   users?: Prisma.UserCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralCreateNestedManyWithoutToOfficeInput
+  incidents?: Prisma.IncidentCreateNestedManyWithoutReportingOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitCreateNestedManyWithoutOfficeInput
+  bfpCasualties?: Prisma.CasualtyCreateNestedManyWithoutBfpOfficeInput
 }
 
 export type OfficeUncheckedCreateWithoutRegionInput = {
@@ -1310,11 +1046,9 @@ export type OfficeUncheckedCreateWithoutRegionInput = {
   children?: Prisma.OfficeUncheckedCreateNestedManyWithoutParentInput
   regionalOffices?: Prisma.OfficeUncheckedCreateNestedManyWithoutRegionInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutOfficeInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutToOfficeInput
+  incidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutReportingOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedCreateNestedManyWithoutOfficeInput
+  bfpCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpOfficeInput
 }
 
 export type OfficeCreateOrConnectWithoutRegionInput = {
@@ -1350,11 +1084,9 @@ export type OfficeUpdateWithoutChildrenInput = {
   region?: Prisma.OfficeUpdateOneWithoutRegionalOfficesNestedInput
   regionalOffices?: Prisma.OfficeUpdateManyWithoutRegionNestedInput
   users?: Prisma.UserUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUpdateManyWithoutReportingOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUpdateManyWithoutOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUpdateManyWithoutBfpOfficeNestedInput
 }
 
 export type OfficeUncheckedUpdateWithoutChildrenInput = {
@@ -1369,11 +1101,9 @@ export type OfficeUncheckedUpdateWithoutChildrenInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   regionalOffices?: Prisma.OfficeUncheckedUpdateManyWithoutRegionNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUncheckedUpdateManyWithoutReportingOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedUpdateManyWithoutOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpOfficeNestedInput
 }
 
 export type OfficeUpsertWithWhereUniqueWithoutParentInput = {
@@ -1430,11 +1160,9 @@ export type OfficeUpdateWithoutRegionalOfficesInput = {
   children?: Prisma.OfficeUpdateManyWithoutParentNestedInput
   region?: Prisma.OfficeUpdateOneWithoutRegionalOfficesNestedInput
   users?: Prisma.UserUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUpdateManyWithoutReportingOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUpdateManyWithoutOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUpdateManyWithoutBfpOfficeNestedInput
 }
 
 export type OfficeUncheckedUpdateWithoutRegionalOfficesInput = {
@@ -1449,11 +1177,9 @@ export type OfficeUncheckedUpdateWithoutRegionalOfficesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUncheckedUpdateManyWithoutReportingOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedUpdateManyWithoutOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpOfficeNestedInput
 }
 
 export type OfficeUpsertWithWhereUniqueWithoutRegionInput = {
@@ -1484,11 +1210,9 @@ export type OfficeCreateWithoutUsersInput = {
   children?: Prisma.OfficeCreateNestedManyWithoutParentInput
   region?: Prisma.OfficeCreateNestedOneWithoutRegionalOfficesInput
   regionalOffices?: Prisma.OfficeCreateNestedManyWithoutRegionInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralCreateNestedManyWithoutToOfficeInput
+  incidents?: Prisma.IncidentCreateNestedManyWithoutReportingOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitCreateNestedManyWithoutOfficeInput
+  bfpCasualties?: Prisma.CasualtyCreateNestedManyWithoutBfpOfficeInput
 }
 
 export type OfficeUncheckedCreateWithoutUsersInput = {
@@ -1503,11 +1227,9 @@ export type OfficeUncheckedCreateWithoutUsersInput = {
   updatedAt?: Date | string
   children?: Prisma.OfficeUncheckedCreateNestedManyWithoutParentInput
   regionalOffices?: Prisma.OfficeUncheckedCreateNestedManyWithoutRegionInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutOfficeInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutInvestigationHandlingOfficeInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutConductingOfficeInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutFromOfficeInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutToOfficeInput
+  incidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutReportingOfficeInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedCreateNestedManyWithoutOfficeInput
+  bfpCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpOfficeInput
 }
 
 export type OfficeCreateOrConnectWithoutUsersInput = {
@@ -1538,11 +1260,9 @@ export type OfficeUpdateWithoutUsersInput = {
   children?: Prisma.OfficeUpdateManyWithoutParentNestedInput
   region?: Prisma.OfficeUpdateOneWithoutRegionalOfficesNestedInput
   regionalOffices?: Prisma.OfficeUpdateManyWithoutRegionNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUpdateManyWithoutReportingOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUpdateManyWithoutOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUpdateManyWithoutBfpOfficeNestedInput
 }
 
 export type OfficeUncheckedUpdateWithoutUsersInput = {
@@ -1557,11 +1277,9 @@ export type OfficeUncheckedUpdateWithoutUsersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
   regionalOffices?: Prisma.OfficeUncheckedUpdateManyWithoutRegionNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUncheckedUpdateManyWithoutReportingOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedUpdateManyWithoutOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpOfficeNestedInput
 }
 
 export type OfficeCreateManyParentInput = {
@@ -1598,11 +1316,9 @@ export type OfficeUpdateWithoutParentInput = {
   region?: Prisma.OfficeUpdateOneWithoutRegionalOfficesNestedInput
   regionalOffices?: Prisma.OfficeUpdateManyWithoutRegionNestedInput
   users?: Prisma.UserUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUpdateManyWithoutReportingOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUpdateManyWithoutOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUpdateManyWithoutBfpOfficeNestedInput
 }
 
 export type OfficeUncheckedUpdateWithoutParentInput = {
@@ -1617,11 +1333,9 @@ export type OfficeUncheckedUpdateWithoutParentInput = {
   children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
   regionalOffices?: Prisma.OfficeUncheckedUpdateManyWithoutRegionNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUncheckedUpdateManyWithoutReportingOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedUpdateManyWithoutOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpOfficeNestedInput
 }
 
 export type OfficeUncheckedUpdateManyWithoutParentInput = {
@@ -1647,11 +1361,9 @@ export type OfficeUpdateWithoutRegionInput = {
   children?: Prisma.OfficeUpdateManyWithoutParentNestedInput
   regionalOffices?: Prisma.OfficeUpdateManyWithoutRegionNestedInput
   users?: Prisma.UserUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUpdateManyWithoutReportingOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUpdateManyWithoutOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUpdateManyWithoutBfpOfficeNestedInput
 }
 
 export type OfficeUncheckedUpdateWithoutRegionInput = {
@@ -1666,11 +1378,9 @@ export type OfficeUncheckedUpdateWithoutRegionInput = {
   children?: Prisma.OfficeUncheckedUpdateManyWithoutParentNestedInput
   regionalOffices?: Prisma.OfficeUncheckedUpdateManyWithoutRegionNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutOfficeNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutOfficeNestedInput
-  handledIncidentInvestigations?: Prisma.FireIncidentUncheckedUpdateManyWithoutInvestigationHandlingOfficeNestedInput
-  conductedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutConductingOfficeNestedInput
-  referralsFrom?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutFromOfficeNestedInput
-  referralsTo?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutToOfficeNestedInput
+  incidents?: Prisma.IncidentUncheckedUpdateManyWithoutReportingOfficeNestedInput
+  respondingUnits?: Prisma.IncidentRespondingUnitUncheckedUpdateManyWithoutOfficeNestedInput
+  bfpCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpOfficeNestedInput
 }
 
 export type OfficeUncheckedUpdateManyWithoutRegionInput = {
@@ -1693,22 +1403,18 @@ export type OfficeCountOutputType = {
   children: number
   regionalOffices: number
   users: number
-  fireIncidents: number
-  handledIncidentInvestigations: number
-  conductedInvestigations: number
-  referralsFrom: number
-  referralsTo: number
+  incidents: number
+  respondingUnits: number
+  bfpCasualties: number
 }
 
 export type OfficeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   children?: boolean | OfficeCountOutputTypeCountChildrenArgs
   regionalOffices?: boolean | OfficeCountOutputTypeCountRegionalOfficesArgs
   users?: boolean | OfficeCountOutputTypeCountUsersArgs
-  fireIncidents?: boolean | OfficeCountOutputTypeCountFireIncidentsArgs
-  handledIncidentInvestigations?: boolean | OfficeCountOutputTypeCountHandledIncidentInvestigationsArgs
-  conductedInvestigations?: boolean | OfficeCountOutputTypeCountConductedInvestigationsArgs
-  referralsFrom?: boolean | OfficeCountOutputTypeCountReferralsFromArgs
-  referralsTo?: boolean | OfficeCountOutputTypeCountReferralsToArgs
+  incidents?: boolean | OfficeCountOutputTypeCountIncidentsArgs
+  respondingUnits?: boolean | OfficeCountOutputTypeCountRespondingUnitsArgs
+  bfpCasualties?: boolean | OfficeCountOutputTypeCountBfpCasualtiesArgs
 }
 
 /**
@@ -1745,36 +1451,22 @@ export type OfficeCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Ex
 /**
  * OfficeCountOutputType without action
  */
-export type OfficeCountOutputTypeCountFireIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.FireIncidentWhereInput
+export type OfficeCountOutputTypeCountIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IncidentWhereInput
 }
 
 /**
  * OfficeCountOutputType without action
  */
-export type OfficeCountOutputTypeCountHandledIncidentInvestigationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.FireIncidentWhereInput
+export type OfficeCountOutputTypeCountRespondingUnitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IncidentRespondingUnitWhereInput
 }
 
 /**
  * OfficeCountOutputType without action
  */
-export type OfficeCountOutputTypeCountConductedInvestigationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.InvestigationWhereInput
-}
-
-/**
- * OfficeCountOutputType without action
- */
-export type OfficeCountOutputTypeCountReferralsFromArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.InvestigationReferralWhereInput
-}
-
-/**
- * OfficeCountOutputType without action
- */
-export type OfficeCountOutputTypeCountReferralsToArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.InvestigationReferralWhereInput
+export type OfficeCountOutputTypeCountBfpCasualtiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CasualtyWhereInput
 }
 
 
@@ -1793,11 +1485,9 @@ export type OfficeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   region?: boolean | Prisma.Office$regionArgs<ExtArgs>
   regionalOffices?: boolean | Prisma.Office$regionalOfficesArgs<ExtArgs>
   users?: boolean | Prisma.Office$usersArgs<ExtArgs>
-  fireIncidents?: boolean | Prisma.Office$fireIncidentsArgs<ExtArgs>
-  handledIncidentInvestigations?: boolean | Prisma.Office$handledIncidentInvestigationsArgs<ExtArgs>
-  conductedInvestigations?: boolean | Prisma.Office$conductedInvestigationsArgs<ExtArgs>
-  referralsFrom?: boolean | Prisma.Office$referralsFromArgs<ExtArgs>
-  referralsTo?: boolean | Prisma.Office$referralsToArgs<ExtArgs>
+  incidents?: boolean | Prisma.Office$incidentsArgs<ExtArgs>
+  respondingUnits?: boolean | Prisma.Office$respondingUnitsArgs<ExtArgs>
+  bfpCasualties?: boolean | Prisma.Office$bfpCasualtiesArgs<ExtArgs>
   _count?: boolean | Prisma.OfficeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["office"]>
 
@@ -1848,11 +1538,9 @@ export type OfficeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   region?: boolean | Prisma.Office$regionArgs<ExtArgs>
   regionalOffices?: boolean | Prisma.Office$regionalOfficesArgs<ExtArgs>
   users?: boolean | Prisma.Office$usersArgs<ExtArgs>
-  fireIncidents?: boolean | Prisma.Office$fireIncidentsArgs<ExtArgs>
-  handledIncidentInvestigations?: boolean | Prisma.Office$handledIncidentInvestigationsArgs<ExtArgs>
-  conductedInvestigations?: boolean | Prisma.Office$conductedInvestigationsArgs<ExtArgs>
-  referralsFrom?: boolean | Prisma.Office$referralsFromArgs<ExtArgs>
-  referralsTo?: boolean | Prisma.Office$referralsToArgs<ExtArgs>
+  incidents?: boolean | Prisma.Office$incidentsArgs<ExtArgs>
+  respondingUnits?: boolean | Prisma.Office$respondingUnitsArgs<ExtArgs>
+  bfpCasualties?: boolean | Prisma.Office$bfpCasualtiesArgs<ExtArgs>
   _count?: boolean | Prisma.OfficeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OfficeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1872,11 +1560,9 @@ export type $OfficePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     region: Prisma.$OfficePayload<ExtArgs> | null
     regionalOffices: Prisma.$OfficePayload<ExtArgs>[]
     users: Prisma.$UserPayload<ExtArgs>[]
-    fireIncidents: Prisma.$FireIncidentPayload<ExtArgs>[]
-    handledIncidentInvestigations: Prisma.$FireIncidentPayload<ExtArgs>[]
-    conductedInvestigations: Prisma.$InvestigationPayload<ExtArgs>[]
-    referralsFrom: Prisma.$InvestigationReferralPayload<ExtArgs>[]
-    referralsTo: Prisma.$InvestigationReferralPayload<ExtArgs>[]
+    incidents: Prisma.$IncidentPayload<ExtArgs>[]
+    respondingUnits: Prisma.$IncidentRespondingUnitPayload<ExtArgs>[]
+    bfpCasualties: Prisma.$CasualtyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2287,11 +1973,9 @@ export interface Prisma__OfficeClient<T, Null = never, ExtArgs extends runtime.T
   region<T extends Prisma.Office$regionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Office$regionArgs<ExtArgs>>): Prisma.Prisma__OfficeClient<runtime.Types.Result.GetResult<Prisma.$OfficePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   regionalOffices<T extends Prisma.Office$regionalOfficesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Office$regionalOfficesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OfficePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   users<T extends Prisma.Office$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Office$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  fireIncidents<T extends Prisma.Office$fireIncidentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Office$fireIncidentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FireIncidentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  handledIncidentInvestigations<T extends Prisma.Office$handledIncidentInvestigationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Office$handledIncidentInvestigationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FireIncidentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  conductedInvestigations<T extends Prisma.Office$conductedInvestigationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Office$conductedInvestigationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestigationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  referralsFrom<T extends Prisma.Office$referralsFromArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Office$referralsFromArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestigationReferralPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  referralsTo<T extends Prisma.Office$referralsToArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Office$referralsToArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestigationReferralPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  incidents<T extends Prisma.Office$incidentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Office$incidentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncidentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  respondingUnits<T extends Prisma.Office$respondingUnitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Office$respondingUnitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncidentRespondingUnitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  bfpCasualties<T extends Prisma.Office$bfpCasualtiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Office$bfpCasualtiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CasualtyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2841,123 +2525,75 @@ export type Office$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 }
 
 /**
- * Office.fireIncidents
+ * Office.incidents
  */
-export type Office$fireIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Office$incidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the FireIncident
+   * Select specific fields to fetch from the Incident
    */
-  select?: Prisma.FireIncidentSelect<ExtArgs> | null
+  select?: Prisma.IncidentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the FireIncident
+   * Omit specific fields from the Incident
    */
-  omit?: Prisma.FireIncidentOmit<ExtArgs> | null
+  omit?: Prisma.IncidentOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.FireIncidentInclude<ExtArgs> | null
-  where?: Prisma.FireIncidentWhereInput
-  orderBy?: Prisma.FireIncidentOrderByWithRelationInput | Prisma.FireIncidentOrderByWithRelationInput[]
-  cursor?: Prisma.FireIncidentWhereUniqueInput
+  include?: Prisma.IncidentInclude<ExtArgs> | null
+  where?: Prisma.IncidentWhereInput
+  orderBy?: Prisma.IncidentOrderByWithRelationInput | Prisma.IncidentOrderByWithRelationInput[]
+  cursor?: Prisma.IncidentWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.FireIncidentScalarFieldEnum | Prisma.FireIncidentScalarFieldEnum[]
+  distinct?: Prisma.IncidentScalarFieldEnum | Prisma.IncidentScalarFieldEnum[]
 }
 
 /**
- * Office.handledIncidentInvestigations
+ * Office.respondingUnits
  */
-export type Office$handledIncidentInvestigationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Office$respondingUnitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the FireIncident
+   * Select specific fields to fetch from the IncidentRespondingUnit
    */
-  select?: Prisma.FireIncidentSelect<ExtArgs> | null
+  select?: Prisma.IncidentRespondingUnitSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the FireIncident
+   * Omit specific fields from the IncidentRespondingUnit
    */
-  omit?: Prisma.FireIncidentOmit<ExtArgs> | null
+  omit?: Prisma.IncidentRespondingUnitOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.FireIncidentInclude<ExtArgs> | null
-  where?: Prisma.FireIncidentWhereInput
-  orderBy?: Prisma.FireIncidentOrderByWithRelationInput | Prisma.FireIncidentOrderByWithRelationInput[]
-  cursor?: Prisma.FireIncidentWhereUniqueInput
+  include?: Prisma.IncidentRespondingUnitInclude<ExtArgs> | null
+  where?: Prisma.IncidentRespondingUnitWhereInput
+  orderBy?: Prisma.IncidentRespondingUnitOrderByWithRelationInput | Prisma.IncidentRespondingUnitOrderByWithRelationInput[]
+  cursor?: Prisma.IncidentRespondingUnitWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.FireIncidentScalarFieldEnum | Prisma.FireIncidentScalarFieldEnum[]
+  distinct?: Prisma.IncidentRespondingUnitScalarFieldEnum | Prisma.IncidentRespondingUnitScalarFieldEnum[]
 }
 
 /**
- * Office.conductedInvestigations
+ * Office.bfpCasualties
  */
-export type Office$conductedInvestigationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Office$bfpCasualtiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Investigation
+   * Select specific fields to fetch from the Casualty
    */
-  select?: Prisma.InvestigationSelect<ExtArgs> | null
+  select?: Prisma.CasualtySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Investigation
+   * Omit specific fields from the Casualty
    */
-  omit?: Prisma.InvestigationOmit<ExtArgs> | null
+  omit?: Prisma.CasualtyOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.InvestigationInclude<ExtArgs> | null
-  where?: Prisma.InvestigationWhereInput
-  orderBy?: Prisma.InvestigationOrderByWithRelationInput | Prisma.InvestigationOrderByWithRelationInput[]
-  cursor?: Prisma.InvestigationWhereUniqueInput
+  include?: Prisma.CasualtyInclude<ExtArgs> | null
+  where?: Prisma.CasualtyWhereInput
+  orderBy?: Prisma.CasualtyOrderByWithRelationInput | Prisma.CasualtyOrderByWithRelationInput[]
+  cursor?: Prisma.CasualtyWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.InvestigationScalarFieldEnum | Prisma.InvestigationScalarFieldEnum[]
-}
-
-/**
- * Office.referralsFrom
- */
-export type Office$referralsFromArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the InvestigationReferral
-   */
-  select?: Prisma.InvestigationReferralSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the InvestigationReferral
-   */
-  omit?: Prisma.InvestigationReferralOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.InvestigationReferralInclude<ExtArgs> | null
-  where?: Prisma.InvestigationReferralWhereInput
-  orderBy?: Prisma.InvestigationReferralOrderByWithRelationInput | Prisma.InvestigationReferralOrderByWithRelationInput[]
-  cursor?: Prisma.InvestigationReferralWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.InvestigationReferralScalarFieldEnum | Prisma.InvestigationReferralScalarFieldEnum[]
-}
-
-/**
- * Office.referralsTo
- */
-export type Office$referralsToArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the InvestigationReferral
-   */
-  select?: Prisma.InvestigationReferralSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the InvestigationReferral
-   */
-  omit?: Prisma.InvestigationReferralOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.InvestigationReferralInclude<ExtArgs> | null
-  where?: Prisma.InvestigationReferralWhereInput
-  orderBy?: Prisma.InvestigationReferralOrderByWithRelationInput | Prisma.InvestigationReferralOrderByWithRelationInput[]
-  cursor?: Prisma.InvestigationReferralWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.InvestigationReferralScalarFieldEnum | Prisma.InvestigationReferralScalarFieldEnum[]
+  distinct?: Prisma.CasualtyScalarFieldEnum | Prisma.CasualtyScalarFieldEnum[]
 }
 
 /**

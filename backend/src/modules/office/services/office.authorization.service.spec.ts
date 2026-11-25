@@ -2,111 +2,138 @@ import { ForbiddenException } from '@nestjs/common';
 import { type UUID } from 'crypto';
 import { OfficeAuthorizationService } from './office.authorization.service.js';
 import { type CurrentUserJwtPayload } from '../../../types/jwt.payload.js';
-import { type ROLE } from '../../../generated/prisma/enums.js';
+import {
+  type OfficeType,
+  type UserRole,
+} from '../../../generated/prisma/enums.js';
 
-const userWithRole = (role: ROLE): CurrentUserJwtPayload => ({
+const user = (
+  role: UserRole,
+  officeType: OfficeType,
+  officeId = 'office-1',
+): CurrentUserJwtPayload => ({
   sub: '11111111-1111-4111-8111-111111111111' as UUID,
   account_number: 'ACC001',
   role,
+  section: null,
   positionId: 'position-1',
-  officeId: 'office-1',
+  officeId,
+  officeType,
 });
 
 describe('OfficeAuthorizationService', () => {
   const service = new OfficeAuthorizationService();
 
-  it('allows SUPER_ADMIN to manage National Headquarters', () => {
-    expect(() =>
-      service.canManageOffice(
-        userWithRole('SUPER_ADMIN'),
-        'NATIONAL_HEADQUARTERS',
-      ),
-    ).not.toThrow();
-  });
+  describe('canManageOffice', () => {
+    it('allows SUPER_ADMIN to manage National Headquarters', () => {
+      expect(() =>
+        service.canManageOffice(
+          user('SUPER_ADMIN', 'NATIONAL_HEADQUARTERS'),
+          'NATIONAL_HEADQUARTERS',
+        ),
+      ).not.toThrow();
+    });
 
-  it('allows NHQ_ADMIN to manage regional offices but not NHQ', () => {
-    const user = userWithRole('NHQ_ADMIN');
+    it('allows an NHQ admin to manage regional offices but not NHQ', () => {
+      const nhqAdmin = user('ADMIN', 'NATIONAL_HEADQUARTERS');
 
-    expect(() =>
-      service.canManageOffice(user, 'REGIONAL_OFFICE'),
-    ).not.toThrow();
-    expect(() =>
-      service.canManageOffice(user, 'NATIONAL_HEADQUARTERS'),
-    ).toThrow(ForbiddenException);
-  });
+      expect(() =>
+        service.canManageOffice(nhqAdmin, 'REGIONAL_OFFICE'),
+      ).not.toThrow();
+      expect(() =>
+        service.canManageOffice(nhqAdmin, 'NATIONAL_HEADQUARTERS'),
+      ).toThrow(ForbiddenException);
+    });
 
-  it('allows REGIONAL_ADMIN to manage stations but not regional offices', () => {
-    const user = userWithRole('REGIONAL_ADMIN');
+    it('allows a regional admin to manage stations but not regional offices', () => {
+      const regionalAdmin = user('ADMIN', 'REGIONAL_OFFICE');
 
-    expect(() =>
-      service.canManageOffice(user, 'MUNICIPAL_FIRE_STATION'),
-    ).not.toThrow();
-    expect(() => service.canManageOffice(user, 'REGIONAL_OFFICE')).toThrow(
-      'REGIONAL_ADMIN is not allowed to manage a REGIONAL_OFFICE',
-    );
-  });
+      expect(() =>
+        service.canManageOffice(regionalAdmin, 'MUNICIPAL_FIRE_STATION'),
+      ).not.toThrow();
+      expect(() =>
+        service.canManageOffice(regionalAdmin, 'REGIONAL_OFFICE'),
+      ).toThrow('You are not allowed to manage a REGIONAL_OFFICE');
+    });
 
-  it('forbids non-admin roles from managing any office', () => {
-    expect(() =>
-      service.canManageOffice(
-        userWithRole('NHQ_INVESTIGATOR'),
-        'CITY_FIRE_STATION',
-      ),
-    ).toThrow(ForbiddenException);
+    it('forbids provincial and station admins, encoders and viewers', () => {
+      for (const actor of [
+        user('ADMIN', 'PROVINCIAL_FIRE_STATION'),
+        user('ADMIN', 'CITY_FIRE_STATION'),
+        user('ENCODER', 'CITY_FIRE_STATION'),
+        user('VIEWER', 'NATIONAL_HEADQUARTERS'),
+      ]) {
+        expect(() =>
+          service.canManageOffice(actor, 'CITY_FIRE_STATION'),
+        ).toThrow(ForbiddenException);
+      }
+    });
   });
 
   describe('assertOfficeInScope', () => {
-    const regionalAdmin = userWithRole('REGIONAL_ADMIN');
+    const regionalAdmin = user('ADMIN', 'REGIONAL_OFFICE', 'region-1');
 
-    it.each(['SUPER_ADMIN', 'NHQ_ADMIN'] as ROLE[])(
-      'lets %s act on offices in any region',
-      (role) => {
-        expect(() =>
-          service.assertOfficeInScope(userWithRole(role), {
-            id: 'station-9',
-            regionId: 'other-region',
-          }),
-        ).not.toThrow();
-      },
-    );
+    it('allows national users everywhere', () => {
+      const office = { id: 'x', parentId: 'y', regionId: 'other-region' };
+      expect(() =>
+        service.assertOfficeInScope(
+          user('SUPER_ADMIN', 'NATIONAL_HEADQUARTERS'),
+          office,
+        ),
+      ).not.toThrow();
+      expect(() =>
+        service.assertOfficeInScope(
+          user('ADMIN', 'NATIONAL_HEADQUARTERS'),
+          office,
+        ),
+      ).not.toThrow();
+    });
 
-    it('lets REGIONAL_ADMIN act on their own office and offices in their region', () => {
+    it('allows a regional admin within their own region', () => {
       expect(() =>
         service.assertOfficeInScope(regionalAdmin, {
-          id: 'office-1',
+          id: 'region-1',
+          parentId: 'nhq',
           regionId: null,
         }),
       ).not.toThrow();
       expect(() =>
         service.assertOfficeInScope(regionalAdmin, {
           id: 'station-1',
-          regionId: 'office-1',
+          parentId: 'district-1',
+          regionId: 'region-1',
         }),
       ).not.toThrow();
     });
 
-    it.each(['CITY_MUNICIPALITY_OPERATION_STAFF', 'NHQ_VIEWER'] as ROLE[])(
-      'forbids non-admin role %s even for an office in its own region',
-      (role) => {
-        expect(() =>
-          service.assertOfficeInScope(userWithRole(role), {
-            id: 'station-1',
-            regionId: 'office-1',
-          }),
-        ).toThrow(ForbiddenException);
-      },
-    );
+    it('forbids a regional admin outside their region, with the given message', () => {
+      expect(() =>
+        service.assertOfficeInScope(
+          regionalAdmin,
+          { id: 'station-2', parentId: 'district-2', regionId: 'region-2' },
+          'custom message',
+        ),
+      ).toThrow('custom message');
+    });
 
-    it('forbids REGIONAL_ADMIN from acting on offices outside their region', () => {
+    it('limits a provincial admin to its own office and stations', () => {
+      const provincialAdmin = user(
+        'ADMIN',
+        'PROVINCIAL_FIRE_STATION',
+        'province-1',
+      );
+
       expect(() =>
-        service.assertOfficeInScope(regionalAdmin, {
-          id: 'station-9',
-          regionId: 'other-region',
+        service.assertOfficeInScope(provincialAdmin, {
+          id: 'station-1',
+          parentId: 'province-1',
+          regionId: 'region-1',
         }),
-      ).toThrow(ForbiddenException);
+      ).not.toThrow();
       expect(() =>
-        service.assertOfficeInScope(regionalAdmin, {
-          id: 'nhq',
+        service.assertOfficeInScope(provincialAdmin, {
+          id: 'region-1',
+          parentId: 'nhq',
           regionId: null,
         }),
       ).toThrow(ForbiddenException);

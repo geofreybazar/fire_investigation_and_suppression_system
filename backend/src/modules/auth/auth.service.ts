@@ -10,6 +10,8 @@ import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 
 import { LoginInput } from '../users/schema/user.schema.js';
+import { OfficeType, Section, UserRole } from '../../generated/prisma/enums.js';
+import { CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 import { AuthRepository } from './auth.repository.js';
 
 // Q-19: 5 failed logins lock the account for 15 minutes.
@@ -20,20 +22,26 @@ const LOCK_MINUTES = 15;
 // reveals which account numbers exist.
 const LOGIN_FAILED_MESSAGE = `Invalid account number or password. After ${MAX_FAILED_LOGINS} failed tries, an account is locked for ${LOCK_MINUTES} minutes.`;
 
+// Read filters may use these claims; writes to incidents and casualties
+// re-read role, section and office from the database (FR-USR-005).
 function tokenClaims(user: {
   id: string;
   account_number: string;
-  role: string;
+  role: UserRole;
+  section: Section | null;
   positionId: string;
   officeId: string;
+  office: { type: OfficeType };
   mustChangePassword: boolean;
-}) {
+}): Omit<CurrentUserJwtPayload, 'sub'> & { sub: string } {
   return {
     sub: user.id,
     account_number: user.account_number,
     role: user.role,
+    section: user.section,
     positionId: user.positionId,
     officeId: user.officeId,
+    officeType: user.office.type,
     mustChangePassword: user.mustChangePassword,
   };
 }

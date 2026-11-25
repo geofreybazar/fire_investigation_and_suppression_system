@@ -1,8 +1,11 @@
 import { z } from 'zod';
 import { normalizInput } from '../../../common/utils/normalizeInput.js';
 
-import { ROLE } from '../../../generated/prisma/enums.js';
-import { RANK } from '../../../generated/prisma/enums.js';
+import {
+  RANK,
+  Section,
+  UserRole,
+} from '../../../generated/prisma/enums.js';
 
 export const userSchema = z.object({
   account_number: z
@@ -18,7 +21,16 @@ export const userSchema = z.object({
     .email()
     .trim()
     .transform((value) => value.trim().toLowerCase()),
-  role: z.enum(ROLE),
+  role: z.enum(UserRole),
+  // Checked against the role and office in the service (FR-USR-002).
+  section: z.enum(Section).nullish().transform((value) => value ?? null),
+  // The Special Order or office order assigning the section (FR-USR-003).
+  sectionDesignationRef: z
+    .string()
+    .trim()
+    .max(120)
+    .nullish()
+    .transform((value) => (value ? value : null)),
   officeId: z.uuid(),
   positionId: z.uuid(),
 });

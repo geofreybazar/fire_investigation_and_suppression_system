@@ -12,9 +12,11 @@ const otherUserId = '55555555-5555-4555-8555-555555555555' as UUID;
 const currentUser: CurrentUserJwtPayload = {
   sub: userId,
   account_number: 'ACC001',
-  role: 'REGIONAL_INVESTIGATOR',
+  role: 'VIEWER',
+  section: null,
   positionId: 'position-1',
   officeId: 'office-1',
+  officeType: 'REGIONAL_OFFICE',
 };
 
 describe('NotificationService', () => {

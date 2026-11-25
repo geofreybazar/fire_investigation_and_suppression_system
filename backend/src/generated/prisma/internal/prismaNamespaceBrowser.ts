@@ -51,27 +51,29 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  InvestigationReport: 'InvestigationReport',
-  InvestigationReportReview: 'InvestigationReportReview',
-  Investigation: 'Investigation',
-  InvestigationReferral: 'InvestigationReferral',
   Attachment: 'Attachment',
   AuditLog: 'AuditLog',
-  FireOpertaionResources: 'FireOpertaionResources',
-  IncidentImpact: 'IncidentImpact',
-  IncidentLocation: 'IncidentLocation',
+  Casualty: 'Casualty',
+  CasualtyPerson: 'CasualtyPerson',
+  CasualtyMedical: 'CasualtyMedical',
+  CasualtyInjury: 'CasualtyInjury',
+  CasualtyStatusEvent: 'CasualtyStatusEvent',
+  CasualtyRevision: 'CasualtyRevision',
+  Incident: 'Incident',
+  IncidentCategory: 'IncidentCategory',
+  FireIncidentDetail: 'FireIncidentDetail',
+  EmsIncidentDetail: 'EmsIncidentDetail',
+  RescueIncidentDetail: 'RescueIncidentDetail',
+  IncidentExternalRef: 'IncidentExternalRef',
+  IncidentRespondingUnit: 'IncidentRespondingUnit',
   IncidentPersonnel: 'IncidentPersonnel',
-  IncidentTimeline: 'IncidentTimeline',
-  Establishment: 'Establishment',
-  FireIncident: 'FireIncident',
-  FireIncidentCategory: 'FireIncidentCategory',
-  FireIncidentEvent: 'FireIncidentEvent',
-  FireIncidentSubcategory: 'FireIncidentSubcategory',
   IncidentNumberCounter: 'IncidentNumberCounter',
   NotificationPreference: 'NotificationPreference',
   Notification: 'Notification',
   Office: 'Office',
   Position: 'Position',
+  Agency: 'Agency',
+  InjuryType: 'InjuryType',
   RefreshToken: 'RefreshToken',
   User: 'User'
 } as const
@@ -92,73 +94,11 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const InvestigationReportScalarFieldEnum = {
-  id: 'id',
-  investigationId: 'investigationId',
-  findings: 'findings',
-  cause: 'cause',
-  conclusion: 'conclusion',
-  recommendations: 'recommendations',
-  status: 'status',
-  submittedAt: 'submittedAt',
-  reviewedAt: 'reviewedAt',
-  reviewedById: 'reviewedById',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type InvestigationReportScalarFieldEnum = (typeof InvestigationReportScalarFieldEnum)[keyof typeof InvestigationReportScalarFieldEnum]
-
-
-export const InvestigationReportReviewScalarFieldEnum = {
-  id: 'id',
-  reportId: 'reportId',
-  decision: 'decision',
-  reviewerId: 'reviewerId',
-  remarks: 'remarks',
-  createdAt: 'createdAt'
-} as const
-
-export type InvestigationReportReviewScalarFieldEnum = (typeof InvestigationReportReviewScalarFieldEnum)[keyof typeof InvestigationReportReviewScalarFieldEnum]
-
-
-export const InvestigationScalarFieldEnum = {
-  id: 'id',
-  investigationNo: 'investigationNo',
-  causeOfFire: 'causeOfFire',
-  classification: 'classification',
-  originOfFire: 'originOfFire',
-  startedAt: 'startedAt',
-  completedAt: 'completedAt',
-  fireIncidentId: 'fireIncidentId',
-  conductingOfficeId: 'conductingOfficeId',
-  assignedInvestigatorId: 'assignedInvestigatorId',
-  assignedById: 'assignedById',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type InvestigationScalarFieldEnum = (typeof InvestigationScalarFieldEnum)[keyof typeof InvestigationScalarFieldEnum]
-
-
-export const InvestigationReferralScalarFieldEnum = {
-  id: 'id',
-  fireIncidentId: 'fireIncidentId',
-  fromOfficeId: 'fromOfficeId',
-  toOfficeId: 'toOfficeId',
-  direction: 'direction',
-  referredById: 'referredById',
-  remarks: 'remarks',
-  createdAt: 'createdAt'
-} as const
-
-export type InvestigationReferralScalarFieldEnum = (typeof InvestigationReferralScalarFieldEnum)[keyof typeof InvestigationReferralScalarFieldEnum]
-
-
 export const AttachmentScalarFieldEnum = {
   id: 'id',
-  fireIncidentId: 'fireIncidentId',
-  investigationId: 'investigationId',
+  incidentId: 'incidentId',
+  casualtyId: 'casualtyId',
+  isSensitive: 'isSensitive',
   uploadedById: 'uploadedById',
   originalName: 'originalName',
   mimeType: 'mimeType',
@@ -189,160 +129,212 @@ export const AuditLogScalarFieldEnum = {
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
-export const FireOpertaionResourcesScalarFieldEnum = {
+export const CasualtyScalarFieldEnum = {
   id: 'id',
-  respondingTeam: 'respondingTeam',
-  fireTrucksResponded: 'fireTrucksResponded',
-  trucksBFPOwned: 'trucksBFPOwned',
-  trucksVolunteer: 'trucksVolunteer',
-  trucksBFPManned: 'trucksBFPManned',
-  ambulancesResponded: 'ambulancesResponded',
-  ambulancesBFPOwned: 'ambulancesBFPOwned',
-  ambulancesVolunteer: 'ambulancesVolunteer',
-  ambulancesBFPManned: 'ambulancesBFPManned',
-  fireIncidentId: 'fireIncidentId'
+  casualtyNo: 'casualtyNo',
+  incidentId: 'incidentId',
+  affiliation: 'affiliation',
+  agencyId: 'agencyId',
+  bfpOfficeId: 'bfpOfficeId',
+  bfpUserId: 'bfpUserId',
+  bfpRank: 'bfpRank',
+  currentStatus: 'currentStatus',
+  severity: 'severity',
+  activityAtTime: 'activityAtTime',
+  isIdentified: 'isIdentified',
+  isComplete: 'isComplete',
+  extra: 'extra',
+  createdById: 'createdById',
+  updatedById: 'updatedById',
+  deletedAt: 'deletedAt',
+  deletedById: 'deletedById',
+  deletionReason: 'deletionReason',
+  anonymizedAt: 'anonymizedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type FireOpertaionResourcesScalarFieldEnum = (typeof FireOpertaionResourcesScalarFieldEnum)[keyof typeof FireOpertaionResourcesScalarFieldEnum]
+export type CasualtyScalarFieldEnum = (typeof CasualtyScalarFieldEnum)[keyof typeof CasualtyScalarFieldEnum]
 
 
-export const IncidentImpactScalarFieldEnum = {
+export const CasualtyPersonScalarFieldEnum = {
   id: 'id',
-  fatalitiesCiv: 'fatalitiesCiv',
-  injuredCiv: 'injuredCiv',
-  fatalitiesBFP: 'fatalitiesBFP',
-  injuredBFP: 'injuredBFP',
-  fatalitiesLEA: 'fatalitiesLEA',
-  injuredLEA: 'injuredLEA',
-  establishmentsBurned: 'establishmentsBurned',
-  familiesAffected: 'familiesAffected',
-  individualsAffected: 'individualsAffected',
-  estimatedDamages: 'estimatedDamages',
-  finalEstimatedDamages: 'finalEstimatedDamages',
-  fireIncidentId: 'fireIncidentId'
-} as const
-
-export type IncidentImpactScalarFieldEnum = (typeof IncidentImpactScalarFieldEnum)[keyof typeof IncidentImpactScalarFieldEnum]
-
-
-export const IncidentLocationScalarFieldEnum = {
-  id: 'id',
-  placeOfOccurence: 'placeOfOccurence',
+  lastName: 'lastName',
+  firstName: 'firstName',
+  middleName: 'middleName',
+  suffix: 'suffix',
+  dateOfBirth: 'dateOfBirth',
+  ageYears: 'ageYears',
+  ageIsEstimated: 'ageIsEstimated',
+  sex: 'sex',
+  nationality: 'nationality',
+  addressLine: 'addressLine',
   barangay: 'barangay',
-  region: 'region',
-  province_district: 'province_district',
-  city_municipality: 'city_municipality',
-  latitude: 'latitude',
-  longitude: 'longitude',
-  fireIncidentId: 'fireIncidentId'
+  cityMunicipality: 'cityMunicipality',
+  province: 'province',
+  contactNumberEnc: 'contactNumberEnc',
+  casualtyId: 'casualtyId'
 } as const
 
-export type IncidentLocationScalarFieldEnum = (typeof IncidentLocationScalarFieldEnum)[keyof typeof IncidentLocationScalarFieldEnum]
+export type CasualtyPersonScalarFieldEnum = (typeof CasualtyPersonScalarFieldEnum)[keyof typeof CasualtyPersonScalarFieldEnum]
 
 
-export const IncidentPersonnelScalarFieldEnum = {
+export const CasualtyMedicalScalarFieldEnum = {
   id: 'id',
-  groundCommander: 'groundCommander',
-  arsonInvestigator: 'arsonInvestigator',
-  sender: 'sender',
-  fireIncidentId: 'fireIncidentId'
+  bodyParts: 'bodyParts',
+  treatment: 'treatment',
+  receivingFacility: 'receivingFacility',
+  transportedBy: 'transportedBy',
+  dateOfDeath: 'dateOfDeath',
+  placeOfDeath: 'placeOfDeath',
+  causeOfDeathNoteEnc: 'causeOfDeathNoteEnc',
+  casualtyId: 'casualtyId'
 } as const
 
-export type IncidentPersonnelScalarFieldEnum = (typeof IncidentPersonnelScalarFieldEnum)[keyof typeof IncidentPersonnelScalarFieldEnum]
+export type CasualtyMedicalScalarFieldEnum = (typeof CasualtyMedicalScalarFieldEnum)[keyof typeof CasualtyMedicalScalarFieldEnum]
 
 
-export const IncidentTimelineScalarFieldEnum = {
+export const CasualtyInjuryScalarFieldEnum = {
+  medicalId: 'medicalId',
+  injuryTypeId: 'injuryTypeId'
+} as const
+
+export type CasualtyInjuryScalarFieldEnum = (typeof CasualtyInjuryScalarFieldEnum)[keyof typeof CasualtyInjuryScalarFieldEnum]
+
+
+export const CasualtyStatusEventScalarFieldEnum = {
   id: 'id',
-  fireIncidentId: 'fireIncidentId',
-  status: 'status',
-  alarmLevel: 'alarmLevel',
+  fromStatus: 'fromStatus',
+  toStatus: 'toStatus',
   occurredAt: 'occurredAt',
   remarks: 'remarks',
   createdById: 'createdById',
   createdAt: 'createdAt',
-  voidedAt: 'voidedAt',
-  voidedById: 'voidedById',
-  voidReason: 'voidReason',
-  correctsEntryId: 'correctsEntryId'
+  casualtyId: 'casualtyId'
 } as const
 
-export type IncidentTimelineScalarFieldEnum = (typeof IncidentTimelineScalarFieldEnum)[keyof typeof IncidentTimelineScalarFieldEnum]
+export type CasualtyStatusEventScalarFieldEnum = (typeof CasualtyStatusEventScalarFieldEnum)[keyof typeof CasualtyStatusEventScalarFieldEnum]
 
 
-export const EstablishmentScalarFieldEnum = {
+export const CasualtyRevisionScalarFieldEnum = {
   id: 'id',
-  binBanNumber: 'binBanNumber',
-  name: 'name',
-  ownerName: 'ownerName',
-  occupantName: 'occupantName',
-  totalLotFloorArea: 'totalLotFloorArea',
-  contentStorage: 'contentStorage',
-  numberOfStoreys: 'numberOfStoreys'
+  revisionNo: 'revisionNo',
+  reason: 'reason',
+  changedFields: 'changedFields',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  casualtyId: 'casualtyId'
 } as const
 
-export type EstablishmentScalarFieldEnum = (typeof EstablishmentScalarFieldEnum)[keyof typeof EstablishmentScalarFieldEnum]
+export type CasualtyRevisionScalarFieldEnum = (typeof CasualtyRevisionScalarFieldEnum)[keyof typeof CasualtyRevisionScalarFieldEnum]
 
 
-export const FireIncidentScalarFieldEnum = {
+export const IncidentScalarFieldEnum = {
   id: 'id',
   incidentNo: 'incidentNo',
-  dateTimeReported: 'dateTimeReported',
-  dateTimeFireIncident: 'dateTimeFireIncident',
-  dateTimeCallReceived: 'dateTimeCallReceived',
-  dateTimeUnresponded: 'dateTimeUnresponded',
-  fireIncidentStatus: 'fireIncidentStatus',
-  currentAlarmLevel: 'currentAlarmLevel',
-  approvalStatus: 'approvalStatus',
+  responseType: 'responseType',
   categoryId: 'categoryId',
-  subcategoryId: 'subcategoryId',
-  establishmentId: 'establishmentId',
-  officeId: 'officeId',
-  investigationHandlingOfficeId: 'investigationHandlingOfficeId',
+  reportingOfficeId: 'reportingOfficeId',
+  occurredAt: 'occurredAt',
+  reportedAt: 'reportedAt',
+  placeOfOccurrence: 'placeOfOccurrence',
+  barangay: 'barangay',
+  cityMunicipality: 'cityMunicipality',
+  provinceDistrict: 'provinceDistrict',
+  region: 'region',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  narrative: 'narrative',
+  extra: 'extra',
+  lastCasualtySeq: 'lastCasualtySeq',
   createdById: 'createdById',
+  updatedById: 'updatedById',
   deletedAt: 'deletedAt',
   deletedById: 'deletedById',
   deletionReason: 'deletionReason',
-  deletionMemoReference: 'deletionMemoReference',
-  remarks: 'remarks',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type FireIncidentScalarFieldEnum = (typeof FireIncidentScalarFieldEnum)[keyof typeof FireIncidentScalarFieldEnum]
+export type IncidentScalarFieldEnum = (typeof IncidentScalarFieldEnum)[keyof typeof IncidentScalarFieldEnum]
 
 
-export const FireIncidentCategoryScalarFieldEnum = {
+export const IncidentCategoryScalarFieldEnum = {
   id: 'id',
+  responseType: 'responseType',
   name: 'name',
-  type: 'type',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type FireIncidentCategoryScalarFieldEnum = (typeof FireIncidentCategoryScalarFieldEnum)[keyof typeof FireIncidentCategoryScalarFieldEnum]
+export type IncidentCategoryScalarFieldEnum = (typeof IncidentCategoryScalarFieldEnum)[keyof typeof IncidentCategoryScalarFieldEnum]
 
 
-export const FireIncidentEventScalarFieldEnum = {
+export const FireIncidentDetailScalarFieldEnum = {
   id: 'id',
-  fireIncidentId: 'fireIncidentId',
-  type: 'type',
-  actorId: 'actorId',
-  remarks: 'remarks',
+  highestAlarmLevel: 'highestAlarmLevel',
+  finalStatus: 'finalStatus',
+  structuresAffected: 'structuresAffected',
+  incidentId: 'incidentId'
+} as const
+
+export type FireIncidentDetailScalarFieldEnum = (typeof FireIncidentDetailScalarFieldEnum)[keyof typeof FireIncidentDetailScalarFieldEnum]
+
+
+export const EmsIncidentDetailScalarFieldEnum = {
+  id: 'id',
+  natureOfCall: 'natureOfCall',
+  incidentId: 'incidentId'
+} as const
+
+export type EmsIncidentDetailScalarFieldEnum = (typeof EmsIncidentDetailScalarFieldEnum)[keyof typeof EmsIncidentDetailScalarFieldEnum]
+
+
+export const RescueIncidentDetailScalarFieldEnum = {
+  id: 'id',
+  hazardClass: 'hazardClass',
+  personsRescued: 'personsRescued',
+  incidentId: 'incidentId'
+} as const
+
+export type RescueIncidentDetailScalarFieldEnum = (typeof RescueIncidentDetailScalarFieldEnum)[keyof typeof RescueIncidentDetailScalarFieldEnum]
+
+
+export const IncidentExternalRefScalarFieldEnum = {
+  id: 'id',
+  sourceSystem: 'sourceSystem',
+  externalId: 'externalId',
+  url: 'url',
+  incidentId: 'incidentId',
   createdAt: 'createdAt'
 } as const
 
-export type FireIncidentEventScalarFieldEnum = (typeof FireIncidentEventScalarFieldEnum)[keyof typeof FireIncidentEventScalarFieldEnum]
+export type IncidentExternalRefScalarFieldEnum = (typeof IncidentExternalRefScalarFieldEnum)[keyof typeof IncidentExternalRefScalarFieldEnum]
 
 
-export const FireIncidentSubcategoryScalarFieldEnum = {
+export const IncidentRespondingUnitScalarFieldEnum = {
   id: 'id',
-  name: 'name',
-  categoryId: 'categoryId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  unitDesignation: 'unitDesignation',
+  isLead: 'isLead',
+  arrivedAt: 'arrivedAt',
+  officeId: 'officeId',
+  incidentId: 'incidentId'
 } as const
 
-export type FireIncidentSubcategoryScalarFieldEnum = (typeof FireIncidentSubcategoryScalarFieldEnum)[keyof typeof FireIncidentSubcategoryScalarFieldEnum]
+export type IncidentRespondingUnitScalarFieldEnum = (typeof IncidentRespondingUnitScalarFieldEnum)[keyof typeof IncidentRespondingUnitScalarFieldEnum]
+
+
+export const IncidentPersonnelScalarFieldEnum = {
+  id: 'id',
+  role: 'role',
+  fullName: 'fullName',
+  rank: 'rank',
+  userId: 'userId',
+  incidentId: 'incidentId'
+} as const
+
+export type IncidentPersonnelScalarFieldEnum = (typeof IncidentPersonnelScalarFieldEnum)[keyof typeof IncidentPersonnelScalarFieldEnum]
 
 
 export const IncidentNumberCounterScalarFieldEnum = {
@@ -350,6 +342,7 @@ export const IncidentNumberCounterScalarFieldEnum = {
   year: 'year',
   month: 'month',
   regionCode: 'regionCode',
+  responseType: 'responseType',
   lastNumber: 'lastNumber'
 } as const
 
@@ -358,10 +351,9 @@ export type IncidentNumberCounterScalarFieldEnum = (typeof IncidentNumberCounter
 
 export const NotificationPreferenceScalarFieldEnum = {
   id: 'id',
-  investigationUpdates: 'investigationUpdates',
-  reportReview: 'reportReview',
+  casualtyAlerts: 'casualtyAlerts',
+  recordCorrections: 'recordCorrections',
   systemAnnouncements: 'systemAnnouncements',
-  incidentUpdates: 'incidentUpdates',
   userId: 'userId'
 } as const
 
@@ -409,6 +401,29 @@ export const PositionScalarFieldEnum = {
 export type PositionScalarFieldEnum = (typeof PositionScalarFieldEnum)[keyof typeof PositionScalarFieldEnum]
 
 
+export const AgencyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  affiliation: 'affiliation',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AgencyScalarFieldEnum = (typeof AgencyScalarFieldEnum)[keyof typeof AgencyScalarFieldEnum]
+
+
+export const InjuryTypeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InjuryTypeScalarFieldEnum = (typeof InjuryTypeScalarFieldEnum)[keyof typeof InjuryTypeScalarFieldEnum]
+
+
 export const RefreshTokenScalarFieldEnum = {
   id: 'id',
   refreshToken: 'refreshToken',
@@ -435,7 +450,9 @@ export const UserScalarFieldEnum = {
   lockedUntil: 'lockedUntil',
   officeId: 'officeId',
   positionId: 'positionId',
-  role: 'role'
+  role: 'role',
+  section: 'section',
+  sectionDesignationRef: 'sectionDesignationRef'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -455,6 +472,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

@@ -4,7 +4,7 @@ import { normalizeInput } from "@/utils/normalizeInput";
 import type { Office } from "../office/office";
 import type { Position } from "../positions/positions";
 import type { Pagination } from "../pagination";
-import { RANKS, ROLE } from "@/constants/personnel";
+import { RANKS, SECTIONS, USER_ROLES } from "@/constants/personnel";
 
 export const changePasswordSchema = z.object({
   userId: z.string(),
@@ -22,24 +22,44 @@ export const changePasswordSchema = z.object({
 });
 export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
 
-export const addNewUserSchema = z.object({
-  account_number: z
-    .string()
-    .min(6, "Invalid Account number")
-    .max(10, "Invalid Account number")
-    .transform((value) => value.toUpperCase()),
-  rank: z.enum(RANKS),
-  first_name: z.string().trim().min(2).transform(normalizeInput),
-  last_name: z.string().trim().min(2).transform(normalizeInput),
-  middle_name: z.string().trim().transform(normalizeInput).optional(),
-  email: z
-    .email()
-    .trim()
-    .transform((value) => value.trim().toLowerCase()),
-  role: z.enum(ROLE),
-  officeId: z.uuid(),
-  positionId: z.uuid(),
-});
+export const addNewUserSchema = z
+  .object({
+    account_number: z
+      .string()
+      .min(6, "Invalid Account number")
+      .max(10, "Invalid Account number")
+      .transform((value) => value.toUpperCase()),
+    rank: z.enum(RANKS),
+    first_name: z.string().trim().min(2).transform(normalizeInput),
+    last_name: z.string().trim().min(2).transform(normalizeInput),
+    middle_name: z.string().trim().transform(normalizeInput).optional(),
+    email: z
+      .email()
+      .trim()
+      .transform((value) => value.trim().toLowerCase()),
+    role: z.enum(USER_ROLES, { error: "Please select a role." }),
+    // Required for encoders and station viewers (REQUIREMENTS.md FR-USR-002);
+    // the backend checks it against the office too.
+    section: z.enum(SECTIONS).nullable(),
+    sectionDesignationRef: z
+      .string()
+      .trim()
+      .max(120)
+      .nullable()
+      .transform((value) => (value ? value : null)),
+    officeId: z.uuid("Please select an office."),
+    positionId: z.uuid("Please select a position."),
+  })
+  .refine((data) => data.role !== "ENCODER" || data.section !== null, {
+    path: ["section"],
+    message: "Encoders need a section.",
+  })
+  .refine(
+    (data) =>
+      (data.role !== "ADMIN" && data.role !== "SUPER_ADMIN") ||
+      data.section === null,
+    { path: ["section"], message: "Administrators have no section." },
+  );
 export type AddNewUserInput = z.infer<typeof addNewUserSchema>;
 
 export interface User extends AddNewUserInput {

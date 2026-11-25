@@ -1,10 +1,12 @@
-# FIIS Architecture
+# BFP-CMS Architecture
 
 How the code is organized and how a request moves through it. Business rules live in [REQUIREMENTS.md](REQUIREMENTS.md); tables and relations are in [DATA_MODEL.md](DATA_MODEL.md).
 
+This describes the code as of roadmap Phase 1 (foundation). Incident, casualty, report, notification-event and attachment modules are added in Phases 2–5 (REQUIREMENTS.md §13).
+
 ## 1. Runtime topology
 
-FIIS is two independent npm projects deployed as one process.
+BFP-CMS is two independent npm projects deployed as one process.
 
 ```
 Browser ──► NestJS (PORT)
@@ -15,8 +17,12 @@ Browser ──► NestJS (PORT)
                                 PostgreSQL (Prisma 7, @prisma/adapter-pg)
 ```
 
-- `backend/src/main.ts` sets the global `api` prefix, `cookie-parser`, the global `StandardSchemaValidationPipe` (Zod) and the global `PrismaExceptionFilter`.
-- `backend/src/app.module.ts` registers `ServeStaticModule` only if `frontend/dist/index.html` exists (override with `FRONTEND_DIST`), so the backend runs API-only during development.
+- `backend/src/main.ts` sets:
+  - the global `api` prefix;
+  - `cookie-parser`;
+  - the global `StandardSchemaValidationPipe` (Zod);
+  - the global `PrismaExceptionFilter`.
+- `backend/src/app.module.ts` registers `ServeStaticModule` only if `frontend/dist/index.html` exists (override with `FRONTEND_DIST`). The backend therefore runs API-only during development.
 - In development, Vite (`frontend/vite.config.ts`) proxies `/api` to `localhost:3000`.
 
 ## 2. Backend
@@ -27,13 +33,25 @@ Each feature in `backend/src/modules/<feature>/` follows the same shape:
 
 | File | Responsibility |
 |---|---|
-| `*.controller.ts` | HTTP only: route, guards, `@Roles`, `@CurrentUser()`, `@Body({ schema })` |
+| `*.controller.ts` | HTTP only: route, guards, `@RequirePermission`, `@CurrentUser()`, `@Body({ schema })` |
 | `*.service.ts` | Business rules and resource-level authorization |
 | `*.repository.ts` | The only layer that uses `PrismaService`; owns transactions |
 | `schema/*.schema.ts` | Zod input schemas (often with the `normalizInput` transform) |
 | `utils/*.ts` | Pure rule functions, unit-tested without a database |
 
 Relative imports use the `.js` extension (ESM). Prisma types come from `src/generated/prisma/` (`client.js`, `enums.js`).
+
+Shared code lives in `backend/src/common/`:
+
+| Folder | Contents |
+|---|---|
+| `authz/` | `tier.ts` (office type → tier), `permissions.ts` (role × tier permission matrix), `section.ts` (section → response type, `assertSectionMayRecord`), `user-assignment.ts` (`canAssign`, `canManageAccount`, `sectionError`) |
+| `scope/` | `jurisdiction.ts`: `officeScopeWhere`, `isOfficeInScope`, `jurisdictionWhere`, `isInJurisdiction` |
+| `numbering/` | `generate-incident-number.ts` (`<FIR\|EMS\|SRF>-YYYY-MM-<REGIONCODE>-NNNNNN`) |
+| `files/` | `attachment.storage.ts`, `file-type.ts` (file signature checks); used by attachments in Phase 5 |
+| `guards/`, `decorators/` | `PermissionGuard` + `@RequirePermission`, `RoleGuard` + `@Roles`, `@CurrentUser`, `@AllowPendingPasswordChange` |
+| `filters/` | `PrismaExceptionFilter` |
+| `utils/` | `normalizeInput.ts`, `csv.ts` (CSV with a formula-injection guard) |
 
 ### 2.2 Modules and endpoints
 
@@ -42,92 +60,75 @@ All paths are under `/api`.
 | Module | Prefix | Endpoints | Who |
 |---|---|---|---|
 | auth | `auth` | `POST login`, `POST logout`, `POST refresh_token` | public / cookie |
-| users | `users` | `POST /`, `GET /`, `GET :id`, `PATCH /` (own password), `PATCH :id` (status), `PATCH edituser/:id` | admins; `GET :id` and `PATCH /` for the current user |
-| office | `office_api` | `POST /`, `GET /`, `GET alloffices`, `PATCH :id`, `DELETE :id` | `SUPER_ADMIN`, `NHQ_ADMIN`, `REGIONAL_ADMIN` |
-| position | `position_api` | `POST /`, `GET /`, `GET allpositions`, `PATCH :id`, `DELETE :id` | admins |
+| users | `users` | `POST /`, `GET /`, `GET :id`, `PATCH /` (own password), `PATCH :id` (status), `PATCH edituser/:id`, `POST :id/reset-password` | `USER_MANAGE`; `GET :id` and `PATCH /` also for the current user |
+| office | `office_api` | `POST /`, `GET /`, `GET alloffices`, `PATCH :id`, `DELETE :id` | writes `OFFICE_MANAGE`; lists also `USER_MANAGE` |
+| position | `position_api` | `POST /`, `GET /`, `GET allpositions`, `PATCH :id`, `DELETE :id` | writes `POSITION_MANAGE`; lists also `USER_MANAGE` |
 | notification | `notification` | `GET inbox`, `GET unread-count`, `POST read-all`, `POST :id/read`, `GET :id` and `PATCH :id` (preferences) | current user only |
-| fire-incident-categories | `fire_incident_categories_api` | `POST /`, `GET /`, `GET :id`, `PATCH :id`, `DELETE :id` | NHQ writes; incident roles read |
-| fire-incident-subcategories | `fire_incident_subcategories_api` | `POST /`, `GET :id`, `PATCH :id` (name), `DELETE :id` | NHQ writes; incident roles read |
-| fire-incident | `fire-incident` | `POST /`, `GET /`, `GET deleted`, `GET :id`, `PATCH :id`, `POST :id/resubmit`, `POST :id/approve`, `POST :id/reject`, `POST :id/timeline`, `POST :id/timeline/:entryId/void`, `POST :id/timeline/:entryId/correct`, `DELETE :id`, `POST :id/restore` | see §2.4 |
-| statistics | `statistics` | `GET summary`, `GET incidents` (paginated report), `GET incidents.csv`, `GET map` (filters: from, to, status, categoryType) | incident viewers; approved incidents in scope only; admins without incident access get 403 |
-| attachments | `attachments` | `GET /` (Evidence list), `GET`/`POST incident/:incidentId`, `GET`/`POST investigation/:investigationId` (multipart `file`, optional `description`), `GET :id/download`, `DELETE :id` | incident viewers read; station staff/COMMEL upload to incidents; the assigned investigator uploads evidence while open; uploader removes |
-| audit | `audit` | `GET /` (paginated; filter by action, entity, actor, date) | `SUPER_ADMIN` all; `NHQ_ADMIN` admin changes; `REGIONAL_ADMIN` its region plus its own actions |
-| investigation | `investigation` | `GET queue`, `GET assigned`, `GET incident/:incidentId`, `GET incident/:incidentId/candidates`, `POST incident/:incidentId/refer`, `POST incident/:incidentId/start`, `GET :id`, `PATCH :id`, `POST :id/submit`, `POST :id/review` | chiefs, investigators, incident viewers |
+| audit | `audit` | `GET /` (paginated; filter by action, entity, actor, date) | `AUDIT_VIEW`, scoped (§2.5) |
 
 ### 2.3 Request lifecycle
 
 ```
 cookie access_token
   → AuthGuard          verifies JWT, sets request.user (CurrentUserJwtPayload); any failure → 401 { error: "TOKEN_EXPIRED" }
-  → RoleGuard          checks @Roles(...) against user.role
+  → PermissionGuard    checks @RequirePermission(...) against the role × tier matrix
   → Validation pipe    Zod schema from @Body({ schema })
   → Controller         passes @CurrentUser() to the service
-  → Service            resource-level authorization (office scope, ownership, state) and business rules
-  → Repository         Prisma queries; multi-step writes in $transaction
+  → Service            resource-level authorization (jurisdiction, section, assignment rules) and business rules
+  → Repository         Prisma queries; multi-step writes in $transaction, with recordAudit(tx, …)
   → PrismaExceptionFilter  maps Prisma errors (P2002 unique, etc.) to HTTP errors
 ```
 
-`CurrentUserJwtPayload` (`src/types/jwt.payload.ts`) carries `sub`, `account_number`, `role`, `positionId` and `officeId`. Every authorization decision starts from it.
+`CurrentUserJwtPayload` (`src/types/jwt.payload.ts`) carries `sub`, `account_number`, `role`, `section`, `positionId`, `officeId` and `officeType`. Every authorization decision starts from it. Writes to incidents and casualties (from Phase 2) re-read the user's role, section, office and active flag from the database (FR-USR-005).
 
 ### 2.4 Authentication
 
-- `POST /api/auth/login` checks the password with bcrypt and rejects inactive users. It sets two httpOnly cookies: `access_token` (15 min) and `refresh_token` (7 days). The password hash is never returned. After 5 failed logins the account is locked for 15 minutes (Q-19).
-- Users created through the API have `mustChangePassword` set, and the flag is carried in the JWT. `AuthGuard` answers 403 `PASSWORD_CHANGE_REQUIRED` except on routes marked `@AllowPendingPasswordChange()`. The frontend shows `ForcePasswordChange`, then refreshes the tokens once the password changes.
-- Refresh tokens are stored in the `RefreshToken` table as SHA-256 hashes (`auth.repository.ts`). `POST /api/auth/refresh_token` validates the stored token and the user's `isActive` flag, then rotates both cookies. `POST /api/auth/logout` deletes the stored token and clears both cookies.
+- `POST /api/auth/login` checks the password with bcrypt and rejects inactive users. It sets two httpOnly cookies: `access_token` (15 min) and `refresh_token` (7 days). The password hash is never returned. After 5 failed logins the account is locked for 15 minutes.
+- Users created through the API, and users whose password an admin reset, have `mustChangePassword` set. The flag is carried in the JWT. `AuthGuard` answers 403 `PASSWORD_CHANGE_REQUIRED` except on routes marked `@AllowPendingPasswordChange()`.
+- Refresh tokens are stored in the `RefreshToken` table as SHA-256 hashes.
+  - `POST /api/auth/refresh_token` validates the stored token and the user's `isActive` flag, then rotates both cookies.
+  - `POST /api/auth/logout` deletes the stored token and clears both cookies.
+  - An admin password reset deletes all of the user's refresh tokens.
 - The frontend depends on the exact error string `TOKEN_EXPIRED` to trigger a refresh (§3.2).
 
 ### 2.5 Authorization
 
 There are two layers.
 
-1. **Coarse role checks:** `@Roles(...)` with `@UseGuards(AuthGuard, RoleGuard)` on controllers and methods.
+1. **Coarse permission checks:** `@RequirePermission(...)` with `@UseGuards(AuthGuard, PermissionGuard)`. `common/authz/permissions.ts` is REQUIREMENTS.md §7.2 as data: for each role, the tiers at which it holds each permission. Tiers come from `common/authz/tier.ts`: NHQ, REGIONAL, DISTRICT_PROVINCE and STATION.
 2. **Resource and scope checks in services.**
-   - Administration: `users/service/users.authorization.service.ts` and `office/services/office.authorization.service.ts`, driven by the exhaustive `Record<ROLE, …>` maps in `users/utils/users.permissions.ts`, `users/utils/users.role_office.permissions.ts` and `office/utils/office.permissions.ts`. They decide which roles and office types an admin may create or assign, and they limit `REGIONAL_ADMIN` to its own region (`regionId`).
-   - Incidents: `fire-incident/utils/incident-scope.ts` defines the role groups (`INCIDENT_EDITOR_ROLES`, `STATION_OPERATIONS_ROLES`, `INCIDENT_VIEWER_ROLES`). It also defines the visibility rules, `incidentScopeWhere()` for lists and `isIncidentVisible()` for one incident:
-     - Deleted incidents are never listed. `SUPER_ADMIN` reads them through `GET deleted`.
-     - `SUPER_ADMIN` and NHQ users see all offices. Everyone else sees incidents where the owning office is theirs, their child (`parentId`) or in their region (`regionId`).
-     - Only `SUPER_ADMIN` and the station operations group see `PENDING`/`REJECTED` incidents.
-     - Admin roles have no incident access.
-   - Investigations: `investigation/utils/investigation-rules.ts` defines `CHIEF_INVESTIGATOR_ROLES`, `INVESTIGATOR_ROLES`, the station chain, referral targets and direction, and the conclusion check.
+   - **Jurisdiction** (`common/scope/jurisdiction.ts`). An office is in a user's jurisdiction when one of these holds:
+     - it is the user's office;
+     - for district/provincial users, its `parentId` is the user's office;
+     - for regional users, its `regionId` is the user's office;
+     - the user is at NHQ or is SUPER_ADMIN (no filter).
+
+     For incidents, `jurisdictionWhere` adds `deletedAt: null` and, for encoders and section viewers, the section's response type. Out-of-scope records answer 404.
+   - **Accounts** (`common/authz/user-assignment.ts`).
+     - `canAssign(actor, role, office)`: SUPER_ADMIN can never be granted. Encoders exist only at stations. Regional admins work within their region but cannot create regional admins. District/provincial admins work in their stations and create viewers in their own office. Station admins create encoders and viewers of their own station.
+     - `canManageAccount`: an admin manages an account they could have created.
+     - `sectionError`: a section is required for encoders and station viewers, optional for viewers above station level, and refused for admins.
+   - **Offices** (`office/utils/office.permissions.ts`): SUPER_ADMIN manages every type, NHQ admins every type below NHQ, and regional admins every type below regional. Each check also requires jurisdiction.
+   - **Audit reading** (`audit.service.ts`): SUPER_ADMIN and NHQ admins read everything. Regional admins read entries whose office or region is theirs. District/provincial admins read their office and its stations. Station admins read their own office. Everyone also reads their own actions.
 
 ### 2.6 Office hierarchy
 
-`office/utils/office-heirarchy.validator.ts` enforces NHQ → Regional → District/Provincial → City/Municipal station. A regional office has a unique `regionCode` (`office/utils/validateRegionCode.ts`), and every office below it stores `regionId`, so region-scoped queries need one filter instead of walking the tree.
+`office/utils/office-heirarchy.validator.ts` enforces NHQ → Regional → District/Provincial → City/Municipal station. A regional office has a unique `regionCode` (`office/utils/validateRegionCode.ts`). Every office below it stores `regionId`, so region-scoped queries need one filter instead of walking the tree. When an office moves, its descendants are re-regioned in the same transaction, and their records follow them.
 
-### 2.7 Fire-incident workflow
-
-- **Submit** (`CITY_MUNICIPALITY_OPERATION_STAFF`, `CITY_MUNICIPALITY_COMMEL`): creates the incident as `PENDING`, owned by the submitter's station. Location region, province/district and city/municipality come from the office hierarchy, never from the client. The initial timeline entry is created in the same write.
-- **Approve / reject** (`CITY_MUNICIPALITY_OPERATION` of the owning station): approval runs in one transaction. It flips the status, calls `generateIncidentNumber(tx, regionCode)` (`fire-incident/utils/generate-incident-number.ts`), and writes a `FireIncidentEvent`. The number format is `YYYY-MM-<REGIONCODE>-NNNNNN`, using the Asia/Manila month and the `IncidentNumberCounter` upsert. Rejected incidents can be resubmitted.
-- **Timeline:** every status and alarm change is an `IncidentTimeline` entry. The transition and alarm rules are pure functions in `fire-incident/utils/incident-rules.ts` (`assertValidTransition`, `assertValidTimeline`, `currentTimelineState`, `ALARM_ORDER`). Corrections void the old entry and add a replacement linked through `correctsEntryId`.
-- **Delete / restore:** staff may remove only rejected, never-approved incidents. `SUPER_ADMIN` soft-deletes approved incidents with a reason and the Chief, BFP memo reference (`deletedAt`, `deletedById`, `deletionReason`, `deletionMemoReference`; the `DELETED` event keeps the memo after a restore) and can restore them.
-
-### 2.8 Investigation workflow
-
-The handling office starts as the owning station (`FireIncident.investigationHandlingOfficeId`). Its chief investigator can:
-
-- **refer** the case up to an ancestor or down the station chain (`InvestigationReferral`), or
-- **start** an investigation. This creates the `Investigation`, assigns an investigator of the handling office, and generates `INV-<incidentNo>-<NN>`. The `InvestigationReport` is created as `DRAFT` on the investigator's first draft save.
-
-Only `FIRE_OUT` and `FIRE_OUT_UPON_ARRIVAL` incidents are investigable (`INVESTIGABLE_STATUSES`), and at most one investigation can be open at a time. The assigned investigator edits and submits the report; the handling chief reviews it (`InvestigationReportReview`). Approval requires `classification` and `causeOfFire` other than `UNDER_INVESTIGATION`, and it completes and locks the investigation. Users with an open investigation cannot be deactivated, moved or edited (`users.service.ts`, `countOpenAssignedInvestigations`).
-
-### 2.9 Cross-cutting
+### 2.7 Cross-cutting
 
 | Concern | Where |
 |---|---|
-| Notifications | `modules/notification/notification.dispatcher.ts`: `NotificationDispatcher.notify(event)`, called by the fire-incident and investigation services after a change commits. Resolves recipients (specific users, or active holders of roles in an office), applies preferences, skips the actor, and never throws. Wording in `notification.messages.ts` |
-| Audit trail | `modules/audit/audit.writer.ts`: `recordAudit(tx, entry)`, called by the users, office, position, category, subcategory and fire-incident repositories inside the transaction that makes the change; `auditChanges`/`auditSnapshot` record only listed, non-sensitive fields |
-| Statistics | `modules/statistics/utils/statistics-aggregate.ts` (pure aggregation over approved, in-scope incidents loaded with `incidentScopeWhere()`), `utils/csv.ts` (CSV with formula-injection guard) |
-| Attachments | `modules/attachment`: file type by signature (`utils/file-type.ts`), 20 MB limit (multer, 413), `AttachmentStorage` writes to `UPLOAD_DIR` (default `./uploads`, git-ignored) under random keys; downloads are `attachment` + `nosniff` and audited |
+| Notifications | `modules/notification/notification.dispatcher.ts`: `NotificationDispatcher.notify(event)`, called after a change commits. Recipients are specific users, or active holders of some roles in some offices. It applies preferences (`casualtyAlerts`, `recordCorrections`), skips the actor, and never throws. Wording is in `notification.messages.ts` (record numbers only, never names). Event triggers come with the incident and casualty modules |
+| Audit trail | `modules/audit/audit.writer.ts`: `recordAudit(tx, entry)`, called by repositories inside the transaction that makes the change. `auditChanges`/`auditSnapshot` record only listed, non-sensitive fields. User audits include `role`, `section` and `sectionDesignationRef` |
+| Seed | `src/seed/seed.ts`, run with `npm run seed`. It loads reference data idempotently. `SEED_DEV=true` adds a sample office tree and a SUPER_ADMIN from environment variables, and is refused in production |
 | Prisma error mapping | `common/filters/prisma-exception.filter.ts` |
-| Role decorator / guard | `common/decorators/roles.decorator.ts`, `common/guards/role.guard.ts` |
-| Current user | `common/decorators/current-user.decorator.ts` |
-| Input normalization | `common/utils/normalizeInput.ts` (`normalizInput`) |
 | Config | `config/configuration.ts` (`DATABASE_URL`, `JWT_SECRET`, `REFRESH_SECRET`, `DEFAULT_PASSWORD`, `PORT`); optional `FRONTEND_DIST`, `UPLOAD_DIR` |
 | Prisma client | `prisma.service.ts`, `prisma.module.ts`; config `prisma7.config.ts` |
 
-### 2.10 Tests
+### 2.8 Tests
 
-Vitest specs sit next to each controller, service and repository, plus `utils/*.spec.ts` for the pure rule modules (`incident-rules`, `incident-scope`, `investigation-rules`). E2E tests use `test/*.e2e-spec.ts` with `vitest.config.e2e.ts`.
+Vitest specs sit next to each controller, service and repository. The pure rule modules have `*.spec.ts` beside them, in `common/authz`, `common/scope` and `common/numbering`. `permissions.spec.ts` walks the §7.2 matrix row by row. E2E tests use `test/*.e2e-spec.ts` with `vitest.config.e2e.ts`, against the database in `backend/.env`.
 
 ## 3. Frontend
 
@@ -143,36 +144,34 @@ service/*.service.ts            axios calls through axiosJWT("/api/<prefix>")
 
 | Folder | Contents |
 |---|---|
-| `service/` | `auth`, `user`, `office`, `position`, `notification`, `incidentSubClassification`, `fireIncident`, `investigation` services and `AxiosCreate.ts` |
-| `hooks/` | per-feature query and mutation hooks (`fireIncidents/`, `investigations/`, `users/`, `offices/`, `position/`, `notifications/`, …) |
+| `service/` | `auth`, `user`, `office`, `position`, `notification`, `audit` services and `AxiosCreate.ts` |
+| `hooks/` | per-feature query and mutation hooks |
 | `interface/` | request and response types and Zod form schemas |
 | `components/ui/` | shadcn components (`base-vega` style on `@base-ui/react`) |
-| `components/common/` | shared dialogs, pagination, skeletons, `form/FormFields.tsx`; `PageHeader` (the one page heading: icon, title, description, actions), `EmptyState`, `ComingSoon` (placeholder sections) |
-| `components/layout/` | `Layout`, `AppSidebar` (one `NavGroup` per link group, icons in `navIcons.tsx`), `Navbar` (clock, notification bell, theme toggle) |
-| `store/userStore.ts` | Zustand global user state |
-| `utils/incidentPermissions.ts` | decides which incident controls to show (display only) |
-| `constants/` | enum labels and options, sidebar links |
+| `components/common/` | shared dialogs, pagination, skeletons, `form/FormFields.tsx`, `PageHeader`, `EmptyState`, `ComingSoon` |
+| `components/layout/` | `Layout`, `AppSidebar` (one group per `NAV_GROUPS` entry, icons in `navIcons.tsx`), `Navbar` (clock, notification bell, theme toggle) |
+| `store/userStore.ts` | Zustand global user state (the login response: role, section, office) |
+| `utils/permissions.ts` | display-only mirror of `common/authz`: `hasPermission`, `can`, `assignableRoles`, `sectionRule` |
+| `constants/` | role, section and rank labels (`personnel.ts`), sidebar groups (`links.ts`) |
 
-`@/` aliases `src/`. React Compiler is enabled through Babel.
-
-Theme tokens live in `src/index.css`: BFP red as `--primary` (light and dark), plus `--success`, `--warning` and `--info` for status badges (`StatusBadges.tsx` maps each incident, approval and report status to one of them). The theme follows the device setting until the user picks one; `ThemeProvider` wraps the whole app, including the login page.
+`@/` aliases `src/`. React Compiler is enabled through Babel. Theme tokens live in `src/index.css`.
 
 ### 3.2 API client and token refresh
 
-`service/AxiosCreate.ts` creates an axios instance with `withCredentials: true`. On a `TOKEN_EXPIRED` response it runs a single shared `POST /api/auth/refresh_token`, so concurrent requests wait on one promise, and then retries the original request once. On `Unauthorized` or a failed refresh it clears the stored user and redirects to `/login`.
+`service/AxiosCreate.ts` creates an axios instance with `withCredentials: true`.
+
+- On a `TOKEN_EXPIRED` response it runs a single shared `POST /api/auth/refresh_token`, so concurrent requests wait on one promise. It then retries the original request once.
+- On `Unauthorized`, or when the refresh fails, it clears the stored user and redirects to `/login`.
 
 ### 3.3 Routes
 
-The navbar bell (`components/layout/Navbar/NotificationBell.tsx`) polls the unread count every 60 s and loads the latest notifications when opened.
-
-`components/app/Router.tsx` holds a flat route list. Each route uses the `canAccess` rule of its sidebar link in `constants/links.ts`, and the sidebar hides links and empty groups the role can't use (display only). `FireIncidents`, `FireIncidentDetail`, `Investigations` and `InvestigationDetail` are code-split with `@loadable/component`.
+`components/app/Router.tsx` holds a flat route list. Each route uses the `canAccess` rule of its link in `constants/links.ts`, and the sidebar hides links and empty groups the user can't use. Both are display only.
 
 | Status | Pages |
 |---|---|
-| Implemented | `FireIncidents`, `FireIncidentDetail`, `Investigations`, `InvestigationDetail`, `Personnel`, `Offices`, `Positions`, `IncidentClassification`, `Settings`, `MyProfile`, `LoginPage` |
-| Implemented (admin) | `AuditLog` (`/auditlog`, lazy-loaded) |
-| Implemented (phase 4) | `Dashboard` (year KPIs, my tasks, shortcuts), `Statistics` (recharts), `IncidentReports` (table and CSV), `IncidentMap` (react-leaflet, OpenStreetMap tiles); the last three are lazy-loaded so the chart and map libraries stay out of the main bundle |
-| Implemented (phase 5) | `Evidence` (lazy-loaded); attachments card on incident and investigation pages |
-| Coming soon | `FireStations`, `Monitoring`, `ResponseUnits` (unscoped, hidden from the sidebar) |
+| Implemented | `Dashboard` (shortcuts; casualty KPIs come in Phase 4), `Personnel` (role, section and designation-order fields), `Offices`, `Positions`, `AuditLog` (lazy-loaded), `Settings`, `MyProfile`, `LoginPage`, `ForcePasswordChange` |
+| Planned | Incidents (Phase 2), Casualties (Phase 3), Statistics, Reports, Map and exports (Phase 4), attachments (Phase 5) |
+
+The navbar bell polls the unread count every 60 s. Notifications link to `/incidents/:id` or `/casualties/:id`.
 
 The frontend hides controls by role for usability only. The backend enforces every rule.

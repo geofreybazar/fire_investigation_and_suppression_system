@@ -9,12 +9,12 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import type { User } from "@/interface/users/users";
+import { formatRole } from "@/utils/formatRole";
 
 const AccountInformation = ({ user }: { user: User }) => {
-  const role = user.role
-    .split("_")
-    .map((word) => word.toLowerCase())
-    .join(" ");
+  const role = formatRole(user.role, user.section, {
+    viewerAllSections: true,
+  });
 
   const officeType = user.office.type
     .split("_")
@@ -26,7 +26,7 @@ const AccountInformation = ({ user }: { user: User }) => {
       <CardHeader>
         <CardTitle>Account Information</CardTitle>
         <CardDescription>
-          Your FIIS account and organizational details.
+          Your BFP-CMS account and organizational details.
         </CardDescription>
       </CardHeader>
 
@@ -39,7 +39,7 @@ const AccountInformation = ({ user }: { user: User }) => {
 
         <Separator />
 
-        <ProfileItem icon={Shield} label='Role' value={role} capitalize />
+        <ProfileItem icon={Shield} label='Role' value={role} />
 
         <Separator />
 

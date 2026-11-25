@@ -11,9 +11,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
-import { Roles } from '../../common/decorators/roles.decorator.js';
 import { AuthGuard } from '../auth/auth.guard.js';
-import { RoleGuard } from '../../common/guards/role.guard.js';
+import { PermissionGuard } from '../../common/guards/permission.guard.js';
+import { RequirePermission } from '../../common/decorators/require-permission.decorator.js';
+import { Permission } from '../../common/authz/permissions.js';
 import { UsersService } from './users.service.js';
 
 import {
@@ -34,8 +35,8 @@ import { AllowPendingPasswordChange } from '../../common/decorators/allow-pendin
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
-  @UseGuards(AuthGuard, RoleGuard)
+  @RequirePermission(Permission.USER_MANAGE)
+  @UseGuards(AuthGuard, PermissionGuard)
   @Post()
   async createUser(
     @Body({ schema: userSchema }) userData: UserInput,
@@ -54,7 +55,7 @@ export class UsersController {
   }
 
   @AllowPendingPasswordChange()
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(AuthGuard)
   @Patch()
   async changePassword(
     @Body({ schema: changePasswordSchema }) passwordData: ChangePasswordInput,
@@ -63,8 +64,8 @@ export class UsersController {
     return this.usersService.changePassword(passwordData, user.sub);
   }
 
-  @Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
-  @UseGuards(AuthGuard, RoleGuard)
+  @RequirePermission(Permission.USER_MANAGE)
+  @UseGuards(AuthGuard, PermissionGuard)
   @Get()
   async findPaginatedUsers(
     @CurrentUser() user: CurrentUserJwtPayload,
@@ -89,8 +90,8 @@ export class UsersController {
     );
   }
 
-  @Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
-  @UseGuards(AuthGuard, RoleGuard)
+  @RequirePermission(Permission.USER_MANAGE)
+  @UseGuards(AuthGuard, PermissionGuard)
   @Patch(':id')
   async changeUserStatus(
     @Param('id', new ParseUUIDPipe()) id: UUID,
@@ -100,8 +101,8 @@ export class UsersController {
     return this.usersService.changeUserStatus(id, data, user);
   }
 
-  @Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
-  @UseGuards(AuthGuard, RoleGuard)
+  @RequirePermission(Permission.USER_MANAGE)
+  @UseGuards(AuthGuard, PermissionGuard)
   @Patch('/edituser/:id')
   async editUser(
     @Param('id', new ParseUUIDPipe()) id: UUID,
@@ -109,5 +110,15 @@ export class UsersController {
     @CurrentUser() user: CurrentUserJwtPayload,
   ) {
     return this.usersService.editUser(id, userData, user);
+  }
+
+  @RequirePermission(Permission.USER_MANAGE)
+  @UseGuards(AuthGuard, PermissionGuard)
+  @Post(':id/reset-password')
+  async resetPassword(
+    @Param('id', new ParseUUIDPipe()) id: UUID,
+    @CurrentUser() user: CurrentUserJwtPayload,
+  ) {
+    return this.usersService.resetPassword(id, user);
   }
 }

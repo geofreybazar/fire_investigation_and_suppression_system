@@ -15,13 +15,7 @@ import configuration from './config/configuration.js';
 import { PrismaModule } from './prisma.module.js';
 import { PositionModule } from './modules/position/position.module.js';
 import { NotificationModule } from './modules/notification/notification.module.js';
-import { FireIncidentCategoriesModule } from './modules/fire-incident-categories/fire-incident-categories.module.js';
-import { FireIncidentSubcategoriesModule } from './modules/fire-incident-subcategories/fire-incident-subcategories.module.js';
-import { FireIncidentModule } from './modules/fire-incident/fire-incident.module.js';
-import { InvestigationModule } from './modules/investigation/investigation.module.js';
 import { AuditModule } from './modules/audit/audit.module.js';
-import { StatisticsModule } from './modules/statistics/statistics.module.js';
-import { AttachmentModule } from './modules/attachment/attachment.module.js';
 
 // Built React app. Only served when it exists, so `start:dev` alongside the
 // Vite dev server keeps working without a frontend build.
@@ -50,13 +44,7 @@ const serveFrontend = existsSync(join(frontendDist, 'index.html'))
     OfficeModule,
     PositionModule,
     NotificationModule,
-    FireIncidentCategoriesModule,
-    FireIncidentSubcategoriesModule,
-    FireIncidentModule,
-    InvestigationModule,
     AuditModule,
-    StatisticsModule,
-    AttachmentModule,
     ...serveFrontend,
   ],
   controllers: [AppController],

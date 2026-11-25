@@ -16,14 +16,16 @@ import {
   type PositionInput,
 } from './schema/position.schema.js';
 import { AuthGuard } from '../auth/auth.guard.js';
-import { RoleGuard } from '../../common/guards/role.guard.js';
-import { Roles } from '../../common/decorators/roles.decorator.js';
+import { PermissionGuard } from '../../common/guards/permission.guard.js';
+import { RequirePermission } from '../../common/decorators/require-permission.decorator.js';
+import { Permission } from '../../common/authz/permissions.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { type CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 import { type UUID } from 'crypto';
 
-@Roles('SUPER_ADMIN', 'NHQ_ADMIN', 'REGIONAL_ADMIN')
-@UseGuards(AuthGuard, RoleGuard)
+// Writes need POSITION_MANAGE; user managers also read the list.
+@RequirePermission(Permission.POSITION_MANAGE)
+@UseGuards(AuthGuard, PermissionGuard)
 @Controller('position_api')
 export class PositionController {
   constructor(private readonly positionService: PositionService) {}
@@ -36,6 +38,7 @@ export class PositionController {
     return await this.positionService.create(positionData, user.sub);
   }
 
+  @RequirePermission(Permission.POSITION_MANAGE, Permission.USER_MANAGE)
   @Get()
   async findPaginatedPositions(
     @Query('page') page: number,
@@ -44,6 +47,7 @@ export class PositionController {
     return await this.positionService.findPaginatedPositions(page, search);
   }
 
+  @RequirePermission(Permission.POSITION_MANAGE, Permission.USER_MANAGE)
   @Get('/allpositions')
   async findAllPositions() {
     return await this.positionService.findAllPositions();

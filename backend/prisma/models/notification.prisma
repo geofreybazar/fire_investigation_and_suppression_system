@@ -1,35 +1,28 @@
 model NotificationPreference {
   id String @id @default(uuid())
 
-  investigationUpdates Boolean @default(true)
-  reportReview         Boolean @default(true)
-  systemAnnouncements  Boolean @default(true)
-  // Incident submission, approval and rejection (REQUIREMENTS.md Q-21).
-  incidentUpdates      Boolean @default(true)
+  // Casualty alerts: BFP personnel casualties and deaths (FR-NOT-001/002).
+  casualtyAlerts      Boolean @default(true)
+  // Corrections to records the user created (FR-NOT-003).
+  recordCorrections   Boolean @default(true)
+  systemAnnouncements Boolean @default(true)
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum NotificationType {
-  INCIDENT_SUBMITTED
-  INCIDENT_RESUBMITTED
-  INCIDENT_APPROVED
-  INCIDENT_REJECTED
-  INCIDENT_INVESTIGABLE
-  CASE_REFERRED
-  INVESTIGATOR_ASSIGNED
-  REPORT_SUBMITTED
-  REPORT_APPROVED
-  REPORT_REJECTED
+  BFP_PERSONNEL_CASUALTY
+  CASUALTY_DECEASED
+  RECORD_CORRECTED
 }
 
 enum NotificationEntityType {
-  FIRE_INCIDENT
-  INVESTIGATION
+  INCIDENT
+  CASUALTY
 }
 
-// In-app notification inbox (REQUIREMENTS.md Q-21). No email or SMS yet.
+// In-app notification inbox (REQUIREMENTS.md §9.2). No email or SMS.
 model Notification {
   id String @id @default(uuid())
 

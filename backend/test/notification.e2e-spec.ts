@@ -10,7 +10,9 @@ import { App } from 'supertest/types.js';
 import { AppModule } from './../src/app.module.js';
 import { PrismaService } from './../src/prisma.service.js';
 import { PrismaExceptionFilter } from './../src/common/filters/prisma-exception.filter.js';
-import { ROLE } from './../src/generated/prisma/enums.js';
+import { Section, UserRole } from './../src/generated/prisma/enums.js';
+import { NotificationDispatcher } from './../src/modules/notification/notification.dispatcher.js';
+import { notificationMessages } from './../src/modules/notification/notification.messages.js';
 
 // Runs against the database in .env. Every record it creates carries a unique
 // suffix and is deleted in afterAll, so existing data is never touched.
@@ -30,7 +32,6 @@ describe('Notifications (e2e)', () => {
   const officeIds: string[] = [];
   const userIds: string[] = [];
   let positionId: string;
-  let categoryId: string;
   let stationId: string;
 
   let staff: Account;
@@ -41,8 +42,9 @@ describe('Notifications (e2e)', () => {
 
   async function createAccount(
     tag: string,
-    role: ROLE,
-    notifications?: { incidentUpdates: boolean },
+    role: UserRole,
+    section: Section | null,
+    notifications?: { casualtyAlerts: boolean },
   ): Promise<Account> {
     const accountNumber = `E3${tag}${suffix}`.slice(0, 10);
     const user = await prisma.user.create({
@@ -54,6 +56,7 @@ describe('Notifications (e2e)', () => {
         last_name: tag,
         password: await bcrypt.hash(password, 10),
         role,
+        section,
         officeId: stationId,
         positionId,
         notification: { create: notifications ?? {} },
@@ -116,11 +119,6 @@ describe('Notifications (e2e)', () => {
         data: { name: `E2E Notify Position ${suffix}` },
       })
     ).id;
-    categoryId = (
-      await prisma.fireIncidentCategory.create({
-        data: { name: `E2E Notify Category ${suffix}`, type: 'STRUCTURAL' },
-      })
-    ).id;
 
     const create = async (
       data: Parameters<typeof prisma.office.create>[0]['data'],
@@ -152,28 +150,17 @@ describe('Notifications (e2e)', () => {
       regionId: region,
     });
 
-    staff = await createAccount('ST', 'CITY_MUNICIPALITY_OPERATION_STAFF');
-    chief = await createAccount('CH', 'CITY_MUNICIPALITY_OPERATION');
-    mutedChief = await createAccount('MU', 'CITY_MUNICIPALITY_OPERATION', {
-      incidentUpdates: false,
+    staff = await createAccount('ST', 'ENCODER', 'OPERATIONS');
+    chief = await createAccount('CH', 'ADMIN', null);
+    mutedChief = await createAccount('MU', 'ADMIN', null, {
+      casualtyAlerts: false,
     });
   });
 
   afterAll(async () => {
-    // The location restricts incident deletion (REQUIREMENTS.md D-05); the
-    // timeline and events cascade with the incident, notifications with users.
-    await prisma.incidentLocation.deleteMany({
-      where: { fireIncident: { officeId: stationId } },
-    });
-    await prisma.fireIncident.deleteMany({
-      where: { officeId: stationId },
-    });
-    await prisma.incidentNumberCounter.deleteMany({
-      where: { regionCode: `EN${suffix}` },
-    });
+    // Notifications cascade with their users.
     await prisma.auditLog.deleteMany({ where: { actorId: { in: userIds } } });
     await prisma.user.deleteMany({ where: { id: { in: userIds } } });
-    await prisma.fireIncidentCategory.deleteMany({ where: { id: categoryId } });
     await prisma.position.deleteMany({ where: { id: positionId } });
     for (const id of officeIds) {
       await prisma.office.deleteMany({ where: { id } });
@@ -181,37 +168,20 @@ describe('Notifications (e2e)', () => {
     await app.close();
   });
 
-  it('notifies the chief of a submission and the submitter of the approval', async () => {
-    const submitted = await request(server())
-      .post('/api/fire-incident')
-      .set('Cookie', staff.cookie)
-      .send({
-        categoryId,
-        location: { placeOfOccurence: '12 Rizal St.', barangay: 'San Isidro' },
-        initialEntry: {
-          status: 'VERIFICATION',
-          occurredAt: new Date(Date.now() - 60_000).toISOString(),
-        },
-      })
-      .expect(201);
-    const incidentId = submitted.body.id as string;
+  it('delivers to the recipient roles of the offices, honoring preferences and skipping the actor', async () => {
+    await app.get(NotificationDispatcher).notify({
+      ...notificationMessages.casualtyDeceased('casualty-1', `C-${suffix}`),
+      actorId: staff.id,
+      recipients: { officeIds: [stationId], roles: ['ADMIN', 'ENCODER'] },
+    });
 
-    // The chief gets it; the chief who turned incident updates off and the
-    // submitter do not.
+    // The admin gets it; the admin who turned casualty alerts off and the
+    // encoder who caused it do not.
     await expect(inbox(chief)).resolves.toMatchObject([
-      { type: 'INCIDENT_SUBMITTED', entityId: incidentId, readAt: null },
+      { type: 'CASUALTY_DECEASED', entityId: 'casualty-1', readAt: null },
     ]);
     await expect(inbox(mutedChief)).resolves.toHaveLength(0);
     await expect(inbox(staff)).resolves.toHaveLength(0);
-
-    await request(server())
-      .post(`/api/fire-incident/${incidentId}/approve`)
-      .set('Cookie', chief.cookie)
-      .expect(201);
-
-    await expect(inbox(staff)).resolves.toMatchObject([
-      { type: 'INCIDENT_APPROVED', entityId: incidentId },
-    ]);
   });
 
   it('marks notifications read, only for their owner', async () => {
@@ -244,6 +214,9 @@ describe('Notifications (e2e)', () => {
       .set('Cookie', chief.cookie)
       .expect(200);
 
-    expect(response.body).toMatchObject({ incidentUpdates: true });
+    expect(response.body).toMatchObject({
+      casualtyAlerts: true,
+      recordCorrections: true,
+    });
   });
 });

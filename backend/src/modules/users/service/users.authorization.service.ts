@@ -1,29 +1,32 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 
 import { UUID } from 'crypto';
-import { ROLE } from '../../../generated/prisma/enums.js';
 import { CurrentUserJwtPayload } from '../../../types/jwt.payload.js';
 import { UsersRepository } from '../users.repository.js';
-import { OfficeAuthorizationService } from '../../office/services/office.authorization.service.js';
-import { rolePermissions } from '../utils/users.permissions.js';
-
-const USER_SCOPE_MESSAGE = 'You can only manage users within your own region';
+import {
+  canAssign,
+  canManageAccount,
+  sectionError,
+  TargetOffice,
+} from '../../../common/authz/user-assignment.js';
+import {
+  OfficeType,
+  Section,
+  UserRole,
+} from '../../../generated/prisma/enums.js';
 
 @Injectable()
 export class UsersAuthorizationService {
-  constructor(
-    private readonly usersRepository: UsersRepository,
-    private readonly officeAuthorizationService: OfficeAuthorizationService,
-  ) {}
+  constructor(private readonly usersRepository: UsersRepository) {}
 
-  // An admin may only manage users whose current role they could grant;
-  // SUPER_ADMIN may additionally manage the SUPER_ADMIN account.
-  // Returns the target's current role and office, which callers need to
-  // compare against the change they are about to make.
+  // An admin may manage an account whose current role they could grant at
+  // its current office (REQUIREMENTS.md §7.2). Returns the target's role
+  // and office for callers comparing them with the requested change.
   async assertCanManageUser(userId: UUID, currentUser: CurrentUserJwtPayload) {
     const target = await this.usersRepository.findUserRoleById(userId);
 
@@ -31,23 +34,35 @@ export class UsersAuthorizationService {
       throw new NotFoundException('User not found.');
     }
 
-    const canManage =
-      rolePermissions[currentUser.role]?.includes(target.role) ||
-      (currentUser.role === ROLE.SUPER_ADMIN &&
-        target.role === ROLE.SUPER_ADMIN);
+    if (!canManageAccount(currentUser, target)) {
+      throw new ForbiddenException('You are not allowed to manage this user.');
+    }
 
-    if (!canManage) {
+    return target;
+  }
+
+  // The role, office and section a create or edit asks for.
+  assertCanAssign(
+    currentUser: CurrentUserJwtPayload,
+    role: UserRole,
+    office: TargetOffice & { type: OfficeType },
+    section: Section | null,
+  ): void {
+    if (role === UserRole.SUPER_ADMIN) {
       throw new ForbiddenException(
-        `${currentUser.role} is not allowed to manage a user with role ${target.role}`,
+        'The SUPER_ADMIN role cannot be granted through the API.',
       );
     }
 
-    this.officeAuthorizationService.assertOfficeInScope(
-      currentUser,
-      target.office,
-      USER_SCOPE_MESSAGE,
-    );
+    if (!canAssign(currentUser, role, office)) {
+      throw new ForbiddenException(
+        `You are not allowed to assign the ${role} role at this office.`,
+      );
+    }
 
-    return target;
+    const error = sectionError(role, office.type, section);
+    if (error) {
+      throw new BadRequestException(error);
+    }
   }
 }

@@ -1,10 +1,9 @@
 import { z } from 'zod';
 
 export const notificationSchema = z.object({
-  investigationUpdates: z.boolean(),
-  reportReview: z.boolean(),
+  casualtyAlerts: z.boolean(),
+  recordCorrections: z.boolean(),
   systemAnnouncements: z.boolean(),
-  incidentUpdates: z.boolean(),
 });
 
 export const inboxQuerySchema = z.object({

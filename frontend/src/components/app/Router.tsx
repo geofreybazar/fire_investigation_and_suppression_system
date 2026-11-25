@@ -1,73 +1,28 @@
 import { Routes, Route } from "react-router";
 import loadable from "@loadable/component";
 import Dashboard from "@/pages/Dashboard";
-import FireStations from "@/pages/FireStations";
-import Monitoring from "@/pages/Monitoring";
-import ResponseUnits from "@/pages/ResponseUnits";
 import Personnel from "@/pages/Personnel";
 import Offices from "@/pages/Offices";
 import Settings from "@/pages/Settings";
 import MyProfile from "@/pages/MyProfile";
 import Positions from "@/pages/Positions";
-import IncidentClassification from "@/pages/IncidentClassification";
 import { useUserStore } from "@/store/userStore";
-import {
-  ADMINISTRATION_LINKS,
-  FIRE_OPERATIONS_LINKS,
-  INVESTIGATION_LINKS,
-  OVERVIEW_LINKS,
-  REPORTS_LINKS,
-} from "@/constants/links";
-import { canViewIncidents } from "@/utils/incidentPermissions";
+import { ALL_LINKS } from "@/constants/links";
 
-// The incident and investigation pages are split out of the main bundle.
-const FireIncidents = loadable(() => import("@/pages/FireIncidents"));
-const FireIncidentDetail = loadable(() => import("@/pages/FireIncidentDetail"));
-const Investigations = loadable(() => import("@/pages/Investigations"));
-const InvestigationDetail = loadable(
-  () => import("@/pages/InvestigationDetail"),
-);
 const AuditLog = loadable(() => import("@/pages/AuditLog"));
-// Charts and the map bring large libraries, so they load only when opened.
-const Statistics = loadable(() => import("@/pages/Statistics"));
-const IncidentReports = loadable(() => import("@/pages/IncidentReports"));
-const IncidentMap = loadable(() => import("@/pages/IncidentMap"));
-const Evidence = loadable(() => import("@/pages/Evidence"));
 
 const routes = [
   { path: "/", element: <Dashboard /> },
-  { path: "/incidentmap", element: <IncidentMap /> },
-  { path: "/fireincidents", element: <FireIncidents /> },
-  { path: "/fireincidents/:id", element: <FireIncidentDetail /> },
-  { path: "/firestations", element: <FireStations /> },
-  { path: "/monitoring", element: <Monitoring /> },
-  { path: "/responseunits", element: <ResponseUnits /> },
-  { path: "/investigations", element: <Investigations /> },
-  { path: "/investigations/:id", element: <InvestigationDetail /> },
-  { path: "/evidence", element: <Evidence /> },
-  { path: "/incidentreports", element: <IncidentReports /> },
-  { path: "/statistics", element: <Statistics /> },
   { path: "/personnel", element: <Personnel /> },
   { path: "/offices", element: <Offices /> },
   { path: "/settings", element: <Settings /> },
   { path: "/profile", element: <MyProfile /> },
   { path: "/positions", element: <Positions /> },
-  { path: "/incidentclassifications", element: <IncidentClassification /> },
   { path: "/auditlog", element: <AuditLog /> },
 ];
 
 // Each page uses its sidebar link's rule; detail pages follow their list.
-const linkAccess = new Map(
-  [
-    ...OVERVIEW_LINKS,
-    ...FIRE_OPERATIONS_LINKS,
-    ...INVESTIGATION_LINKS,
-    ...REPORTS_LINKS,
-    ...ADMINISTRATION_LINKS,
-  ].map((link) => [link.link, link.canAccess]),
-);
-linkAccess.set("/fireincidents/:id", canViewIncidents);
-linkAccess.set("/investigations/:id", canViewIncidents);
+const linkAccess = new Map(ALL_LINKS.map((link) => [link.link, link.canAccess]));
 
 // Display only: the backend rejects every request the role can't make.
 const RequireAccess = ({

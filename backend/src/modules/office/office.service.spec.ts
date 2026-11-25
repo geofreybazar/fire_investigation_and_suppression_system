@@ -8,7 +8,6 @@ import {
 import { type UUID } from 'crypto';
 import { OfficeService } from './office.service.js';
 import { OfficeRepository } from './office.repository.js';
-import { NotificationDispatcher } from '../notification/notification.dispatcher.js';
 import { OfficeAuthorizationService } from './services/office.authorization.service.js';
 import { type OfficeInput } from './schema/office.schema.js';
 import { type CurrentUserJwtPayload } from '../../types/jwt.payload.js';
@@ -21,17 +20,20 @@ const superAdmin: CurrentUserJwtPayload = {
   sub: '44444444-4444-4444-8444-444444444444' as UUID,
   account_number: 'ADMIN001',
   role: 'SUPER_ADMIN',
+  section: null,
   positionId: 'position-1',
   officeId: nhqId,
+  officeType: 'NATIONAL_HEADQUARTERS',
 };
 
 const regionalAdmin: CurrentUserJwtPayload = {
   ...superAdmin,
-  role: 'REGIONAL_ADMIN',
+  role: 'ADMIN',
   officeId: regionalId,
+  officeType: 'REGIONAL_OFFICE',
 };
 
-const nhqAdmin: CurrentUserJwtPayload = { ...superAdmin, role: 'NHQ_ADMIN' };
+const nhqAdmin: CurrentUserJwtPayload = { ...superAdmin, role: 'ADMIN' };
 
 const districtId = '55555555-5555-4555-8555-555555555555';
 const otherDistrictId = '66666666-6666-4666-8666-666666666666';
@@ -39,21 +41,38 @@ const otherDistrictId = '66666666-6666-4666-8666-666666666666';
 // Offices that the repository "contains", looked up by id.
 const offices: Record<
   string,
-  { id: string; type: string; regionId: string | null }
+  { id: string; type: string; parentId: string | null; regionId: string | null }
 > = {
-  [nhqId]: { id: nhqId, type: 'NATIONAL_HEADQUARTERS', regionId: null },
-  [regionalId]: { id: regionalId, type: 'REGIONAL_OFFICE', regionId: null },
+  [nhqId]: {
+    id: nhqId,
+    type: 'NATIONAL_HEADQUARTERS',
+    parentId: null,
+    regionId: null,
+  },
+  [regionalId]: {
+    id: regionalId,
+    type: 'REGIONAL_OFFICE',
+    parentId: nhqId,
+    regionId: null,
+  },
   [districtId]: {
     id: districtId,
     type: 'DISTRICT_FIRE_STATION',
+    parentId: regionalId,
     regionId: regionalId,
   },
   [otherDistrictId]: {
     id: otherDistrictId,
     type: 'DISTRICT_FIRE_STATION',
+    parentId: 'other-region',
     regionId: 'other-region',
   },
-  [officeId]: { id: officeId, type: 'CITY_FIRE_STATION', regionId: regionalId },
+  [officeId]: {
+    id: officeId,
+    type: 'CITY_FIRE_STATION',
+    parentId: districtId,
+    regionId: regionalId,
+  },
 };
 
 const cityStation: OfficeInput = {
@@ -64,7 +83,6 @@ const cityStation: OfficeInput = {
 
 describe('OfficeService', () => {
   let service: OfficeService;
-  let dispatcher: { notify: ReturnType<typeof vi.fn> };
   let repository: {
     findById: ReturnType<typeof vi.fn>;
     findByNameUnderParent: ReturnType<typeof vi.fn>;
@@ -78,7 +96,6 @@ describe('OfficeService', () => {
   };
 
   beforeEach(async () => {
-    dispatcher = { notify: vi.fn() };
     repository = {
       findById: vi.fn(),
       // By default no other office has the name.
@@ -87,9 +104,7 @@ describe('OfficeService', () => {
       findAllOffices: vi.fn(),
       findPaginatedOffices: vi.fn(),
       createOffice: vi.fn(),
-      updateOffice: vi
-        .fn()
-        .mockResolvedValue({ office: {}, returnedCases: [] }),
+      updateOffice: vi.fn().mockResolvedValue({}),
       deleteById: vi.fn(),
       isRegionCodeUsed: vi.fn().mockResolvedValue(false),
     };
@@ -101,7 +116,6 @@ describe('OfficeService', () => {
         OfficeService,
         OfficeAuthorizationService,
         { provide: OfficeRepository, useValue: repository },
-        { provide: NotificationDispatcher, useValue: dispatcher },
       ],
     }).compile();
 
@@ -232,7 +246,7 @@ describe('OfficeService', () => {
       expect(repository.createOffice).not.toHaveBeenCalled();
     });
 
-    it('allows REGIONAL_ADMIN to create a station under a district in their region', async () => {
+    it('allows a regional admin to create a station under a district in their region', async () => {
       repository.findById.mockResolvedValue(offices[districtId]);
       repository.createOffice.mockResolvedValue({ id: officeId });
 
@@ -262,7 +276,7 @@ describe('OfficeService', () => {
       expect(repository.createOffice).not.toHaveBeenCalled();
     });
 
-    it('forbids REGIONAL_ADMIN from creating an office under a parent in another region', async () => {
+    it('forbids a regional admin from creating an office under a parent in another region', async () => {
       repository.findById.mockResolvedValue(offices[otherDistrictId]);
 
       await expect(
@@ -270,7 +284,7 @@ describe('OfficeService', () => {
           { ...cityStation, parentId: otherDistrictId },
           regionalAdmin,
         ),
-      ).rejects.toThrow('You can only manage offices within your own region');
+      ).rejects.toThrow('You can only manage offices within your own jurisdiction');
       expect(repository.createOffice).not.toHaveBeenCalled();
     });
   });
@@ -320,30 +334,9 @@ describe('OfficeService', () => {
 
     const station = { ...cityStation, parentId: districtId };
 
-    it("tells the station's chief investigators about returned cases (Q-51)", async () => {
-      repository.updateOffice.mockResolvedValue({
-        office: { id: officeId, ...station },
-        returnedCases: [
-          { incidentId: 'i-1', incidentNo: 'NO-1', stationId: officeId },
-        ],
-      });
-
-      await service.updateOffice(officeId, station, regionalAdmin);
-
-      expect(dispatcher.notify).toHaveBeenCalledWith(
-        expect.objectContaining({
-          actorId: regionalAdmin.sub,
-          recipients: expect.objectContaining({ officeId }),
-        }),
-      );
-    });
-
     it('updates an office that passes all checks', async () => {
       const updated = { id: officeId, ...station };
-      repository.updateOffice.mockResolvedValue({
-        office: updated,
-        returnedCases: [],
-      });
+      repository.updateOffice.mockResolvedValue(updated);
 
       await expect(
         service.updateOffice(officeId, station, regionalAdmin),
@@ -378,16 +371,16 @@ describe('OfficeService', () => {
     });
 
     it('rejects a role that cannot manage the office as it is now', async () => {
-      // A REGIONAL_ADMIN may not turn their own regional office into a station.
+      // A a regional admin may not turn their own regional office into a station.
       await expect(
         service.updateOffice(regionalId as UUID, station, regionalAdmin),
       ).rejects.toThrow(
-        'REGIONAL_ADMIN is not allowed to manage a REGIONAL_OFFICE',
+        'You are not allowed to manage a REGIONAL_OFFICE',
       );
       expect(repository.updateOffice).not.toHaveBeenCalled();
     });
 
-    it('forbids REGIONAL_ADMIN from updating an office in another region', async () => {
+    it('forbids a regional admin from updating an office in another region', async () => {
       await expect(
         service.updateOffice(
           otherDistrictId as UUID,
@@ -398,18 +391,18 @@ describe('OfficeService', () => {
           },
           regionalAdmin,
         ),
-      ).rejects.toThrow('You can only manage offices within your own region');
+      ).rejects.toThrow('You can only manage offices within your own jurisdiction');
       expect(repository.updateOffice).not.toHaveBeenCalled();
     });
 
-    it('forbids REGIONAL_ADMIN from moving an office under a parent in another region', async () => {
+    it('forbids a regional admin from moving an office under a parent in another region', async () => {
       await expect(
         service.updateOffice(
           officeId,
           { ...station, parentId: otherDistrictId },
           regionalAdmin,
         ),
-      ).rejects.toThrow('You can only manage offices within your own region');
+      ).rejects.toThrow('You can only manage offices within your own jurisdiction');
       expect(repository.updateOffice).not.toHaveBeenCalled();
     });
 
@@ -425,10 +418,7 @@ describe('OfficeService', () => {
     });
 
     it('ignores the office itself when checking the name', async () => {
-      repository.updateOffice.mockResolvedValue({
-        office: { id: officeId },
-        returnedCases: [],
-      });
+      repository.updateOffice.mockResolvedValue({ id: officeId });
 
       await service.updateOffice(officeId, station, regionalAdmin);
 
@@ -475,11 +465,9 @@ describe('OfficeService', () => {
       _count: {
         users,
         children,
-        fireIncidents: 0,
-        handledIncidentInvestigations: 0,
-        conductedInvestigations: 0,
-        referralsFrom: 0,
-        referralsTo: 0,
+        incidents: 0,
+        respondingUnits: 0,
+        bfpCasualties: 0,
         ...records,
       },
     });
@@ -498,7 +486,7 @@ describe('OfficeService', () => {
       );
     });
 
-    it('allows REGIONAL_ADMIN to delete an office in their region', async () => {
+    it('allows a regional admin to delete an office in their region', async () => {
       repository.findByIdForDeletion.mockResolvedValue(forDeletion(officeId));
 
       await service.deleteOffice(officeId, regionalAdmin);
@@ -518,7 +506,7 @@ describe('OfficeService', () => {
       expect(repository.deleteById).not.toHaveBeenCalled();
     });
 
-    it('forbids NHQ_ADMIN from deleting the National Headquarters', async () => {
+    it('forbids an NHQ admin from deleting the National Headquarters', async () => {
       repository.findByIdForDeletion.mockResolvedValue(forDeletion(nhqId));
 
       await expect(
@@ -527,7 +515,7 @@ describe('OfficeService', () => {
       expect(repository.deleteById).not.toHaveBeenCalled();
     });
 
-    it('forbids REGIONAL_ADMIN from deleting their regional office', async () => {
+    it('forbids a regional admin from deleting their regional office', async () => {
       repository.findByIdForDeletion.mockResolvedValue(forDeletion(regionalId));
 
       await expect(
@@ -536,14 +524,14 @@ describe('OfficeService', () => {
       expect(repository.deleteById).not.toHaveBeenCalled();
     });
 
-    it('forbids REGIONAL_ADMIN from deleting an office in another region', async () => {
+    it('forbids a regional admin from deleting an office in another region', async () => {
       repository.findByIdForDeletion.mockResolvedValue(
         forDeletion(otherDistrictId),
       );
 
       await expect(
         service.deleteOffice(otherDistrictId as UUID, regionalAdmin),
-      ).rejects.toThrow('You can only manage offices within your own region');
+      ).rejects.toThrow('You can only manage offices within your own jurisdiction');
       expect(repository.deleteById).not.toHaveBeenCalled();
     });
 
@@ -569,19 +557,13 @@ describe('OfficeService', () => {
       expect(repository.deleteById).not.toHaveBeenCalled();
     });
 
-    it.each([
-      'fireIncidents',
-      'handledIncidentInvestigations',
-      'conductedInvestigations',
-      'referralsFrom',
-      'referralsTo',
-    ])('throws ConflictException when the office has %s', async (record) => {
+    it.each(['incidents', 'respondingUnits', 'bfpCasualties'])('throws ConflictException when the office has %s', async (record) => {
       repository.findByIdForDeletion.mockResolvedValue(
         forDeletion(officeId, 0, 0, { [record]: 1 }),
       );
 
       await expect(service.deleteOffice(officeId, superAdmin)).rejects.toThrow(
-        'This office cannot be deleted because it has fire incident or investigation records.',
+        'This office cannot be deleted because it has incident or casualty records.',
       );
       expect(repository.deleteById).not.toHaveBeenCalled();
     });

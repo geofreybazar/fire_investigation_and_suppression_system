@@ -36,8 +36,9 @@ export type AttachmentSumAggregateOutputType = {
 
 export type AttachmentMinAggregateOutputType = {
   id: string | null
-  fireIncidentId: string | null
-  investigationId: string | null
+  incidentId: string | null
+  casualtyId: string | null
+  isSensitive: boolean | null
   uploadedById: string | null
   originalName: string | null
   mimeType: string | null
@@ -52,8 +53,9 @@ export type AttachmentMinAggregateOutputType = {
 
 export type AttachmentMaxAggregateOutputType = {
   id: string | null
-  fireIncidentId: string | null
-  investigationId: string | null
+  incidentId: string | null
+  casualtyId: string | null
+  isSensitive: boolean | null
   uploadedById: string | null
   originalName: string | null
   mimeType: string | null
@@ -68,8 +70,9 @@ export type AttachmentMaxAggregateOutputType = {
 
 export type AttachmentCountAggregateOutputType = {
   id: number
-  fireIncidentId: number
-  investigationId: number
+  incidentId: number
+  casualtyId: number
+  isSensitive: number
   uploadedById: number
   originalName: number
   mimeType: number
@@ -94,8 +97,9 @@ export type AttachmentSumAggregateInputType = {
 
 export type AttachmentMinAggregateInputType = {
   id?: true
-  fireIncidentId?: true
-  investigationId?: true
+  incidentId?: true
+  casualtyId?: true
+  isSensitive?: true
   uploadedById?: true
   originalName?: true
   mimeType?: true
@@ -110,8 +114,9 @@ export type AttachmentMinAggregateInputType = {
 
 export type AttachmentMaxAggregateInputType = {
   id?: true
-  fireIncidentId?: true
-  investigationId?: true
+  incidentId?: true
+  casualtyId?: true
+  isSensitive?: true
   uploadedById?: true
   originalName?: true
   mimeType?: true
@@ -126,8 +131,9 @@ export type AttachmentMaxAggregateInputType = {
 
 export type AttachmentCountAggregateInputType = {
   id?: true
-  fireIncidentId?: true
-  investigationId?: true
+  incidentId?: true
+  casualtyId?: true
+  isSensitive?: true
   uploadedById?: true
   originalName?: true
   mimeType?: true
@@ -229,8 +235,9 @@ export type AttachmentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 
 export type AttachmentGroupByOutputType = {
   id: string
-  fireIncidentId: string
-  investigationId: string | null
+  incidentId: string
+  casualtyId: string | null
+  isSensitive: boolean
   uploadedById: string
   originalName: string
   mimeType: string
@@ -268,8 +275,9 @@ export type AttachmentWhereInput = {
   OR?: Prisma.AttachmentWhereInput[]
   NOT?: Prisma.AttachmentWhereInput | Prisma.AttachmentWhereInput[]
   id?: Prisma.StringFilter<"Attachment"> | string
-  fireIncidentId?: Prisma.StringFilter<"Attachment"> | string
-  investigationId?: Prisma.StringNullableFilter<"Attachment"> | string | null
+  incidentId?: Prisma.StringFilter<"Attachment"> | string
+  casualtyId?: Prisma.StringNullableFilter<"Attachment"> | string | null
+  isSensitive?: Prisma.BoolFilter<"Attachment"> | boolean
   uploadedById?: Prisma.StringFilter<"Attachment"> | string
   originalName?: Prisma.StringFilter<"Attachment"> | string
   mimeType?: Prisma.StringFilter<"Attachment"> | string
@@ -280,16 +288,17 @@ export type AttachmentWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Attachment"> | Date | string
   removedAt?: Prisma.DateTimeNullableFilter<"Attachment"> | Date | string | null
   removedById?: Prisma.StringNullableFilter<"Attachment"> | string | null
-  fireIncident?: Prisma.XOR<Prisma.FireIncidentScalarRelationFilter, Prisma.FireIncidentWhereInput>
-  investigation?: Prisma.XOR<Prisma.InvestigationNullableScalarRelationFilter, Prisma.InvestigationWhereInput> | null
+  incident?: Prisma.XOR<Prisma.IncidentScalarRelationFilter, Prisma.IncidentWhereInput>
+  casualty?: Prisma.XOR<Prisma.CasualtyNullableScalarRelationFilter, Prisma.CasualtyWhereInput> | null
   uploadedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   removedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type AttachmentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  fireIncidentId?: Prisma.SortOrder
-  investigationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  incidentId?: Prisma.SortOrder
+  casualtyId?: Prisma.SortOrderInput | Prisma.SortOrder
+  isSensitive?: Prisma.SortOrder
   uploadedById?: Prisma.SortOrder
   originalName?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
@@ -300,8 +309,8 @@ export type AttachmentOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedById?: Prisma.SortOrderInput | Prisma.SortOrder
-  fireIncident?: Prisma.FireIncidentOrderByWithRelationInput
-  investigation?: Prisma.InvestigationOrderByWithRelationInput
+  incident?: Prisma.IncidentOrderByWithRelationInput
+  casualty?: Prisma.CasualtyOrderByWithRelationInput
   uploadedBy?: Prisma.UserOrderByWithRelationInput
   removedBy?: Prisma.UserOrderByWithRelationInput
 }
@@ -312,8 +321,9 @@ export type AttachmentWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.AttachmentWhereInput | Prisma.AttachmentWhereInput[]
   OR?: Prisma.AttachmentWhereInput[]
   NOT?: Prisma.AttachmentWhereInput | Prisma.AttachmentWhereInput[]
-  fireIncidentId?: Prisma.StringFilter<"Attachment"> | string
-  investigationId?: Prisma.StringNullableFilter<"Attachment"> | string | null
+  incidentId?: Prisma.StringFilter<"Attachment"> | string
+  casualtyId?: Prisma.StringNullableFilter<"Attachment"> | string | null
+  isSensitive?: Prisma.BoolFilter<"Attachment"> | boolean
   uploadedById?: Prisma.StringFilter<"Attachment"> | string
   originalName?: Prisma.StringFilter<"Attachment"> | string
   mimeType?: Prisma.StringFilter<"Attachment"> | string
@@ -323,16 +333,17 @@ export type AttachmentWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Attachment"> | Date | string
   removedAt?: Prisma.DateTimeNullableFilter<"Attachment"> | Date | string | null
   removedById?: Prisma.StringNullableFilter<"Attachment"> | string | null
-  fireIncident?: Prisma.XOR<Prisma.FireIncidentScalarRelationFilter, Prisma.FireIncidentWhereInput>
-  investigation?: Prisma.XOR<Prisma.InvestigationNullableScalarRelationFilter, Prisma.InvestigationWhereInput> | null
+  incident?: Prisma.XOR<Prisma.IncidentScalarRelationFilter, Prisma.IncidentWhereInput>
+  casualty?: Prisma.XOR<Prisma.CasualtyNullableScalarRelationFilter, Prisma.CasualtyWhereInput> | null
   uploadedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   removedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id" | "storageKey">
 
 export type AttachmentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  fireIncidentId?: Prisma.SortOrder
-  investigationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  incidentId?: Prisma.SortOrder
+  casualtyId?: Prisma.SortOrderInput | Prisma.SortOrder
+  isSensitive?: Prisma.SortOrder
   uploadedById?: Prisma.SortOrder
   originalName?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
@@ -355,8 +366,9 @@ export type AttachmentScalarWhereWithAggregatesInput = {
   OR?: Prisma.AttachmentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.AttachmentScalarWhereWithAggregatesInput | Prisma.AttachmentScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Attachment"> | string
-  fireIncidentId?: Prisma.StringWithAggregatesFilter<"Attachment"> | string
-  investigationId?: Prisma.StringNullableWithAggregatesFilter<"Attachment"> | string | null
+  incidentId?: Prisma.StringWithAggregatesFilter<"Attachment"> | string
+  casualtyId?: Prisma.StringNullableWithAggregatesFilter<"Attachment"> | string | null
+  isSensitive?: Prisma.BoolWithAggregatesFilter<"Attachment"> | boolean
   uploadedById?: Prisma.StringWithAggregatesFilter<"Attachment"> | string
   originalName?: Prisma.StringWithAggregatesFilter<"Attachment"> | string
   mimeType?: Prisma.StringWithAggregatesFilter<"Attachment"> | string
@@ -371,6 +383,7 @@ export type AttachmentScalarWhereWithAggregatesInput = {
 
 export type AttachmentCreateInput = {
   id?: string
+  isSensitive?: boolean
   originalName: string
   mimeType: string
   sizeBytes: number
@@ -379,16 +392,17 @@ export type AttachmentCreateInput = {
   description?: string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
-  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutAttachmentsInput
-  investigation?: Prisma.InvestigationCreateNestedOneWithoutAttachmentsInput
+  incident: Prisma.IncidentCreateNestedOneWithoutAttachmentsInput
+  casualty?: Prisma.CasualtyCreateNestedOneWithoutAttachmentsInput
   uploadedBy: Prisma.UserCreateNestedOneWithoutUploadedAttachmentsInput
   removedBy?: Prisma.UserCreateNestedOneWithoutRemovedAttachmentsInput
 }
 
 export type AttachmentUncheckedCreateInput = {
   id?: string
-  fireIncidentId: string
-  investigationId?: string | null
+  incidentId: string
+  casualtyId?: string | null
+  isSensitive?: boolean
   uploadedById: string
   originalName: string
   mimeType: string
@@ -403,6 +417,7 @@ export type AttachmentUncheckedCreateInput = {
 
 export type AttachmentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   sizeBytes?: Prisma.IntFieldUpdateOperationsInput | number
@@ -411,16 +426,17 @@ export type AttachmentUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutAttachmentsNestedInput
-  investigation?: Prisma.InvestigationUpdateOneWithoutAttachmentsNestedInput
+  incident?: Prisma.IncidentUpdateOneRequiredWithoutAttachmentsNestedInput
+  casualty?: Prisma.CasualtyUpdateOneWithoutAttachmentsNestedInput
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutUploadedAttachmentsNestedInput
   removedBy?: Prisma.UserUpdateOneWithoutRemovedAttachmentsNestedInput
 }
 
 export type AttachmentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
-  investigationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  incidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  casualtyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -435,8 +451,9 @@ export type AttachmentUncheckedUpdateInput = {
 
 export type AttachmentCreateManyInput = {
   id?: string
-  fireIncidentId: string
-  investigationId?: string | null
+  incidentId: string
+  casualtyId?: string | null
+  isSensitive?: boolean
   uploadedById: string
   originalName: string
   mimeType: string
@@ -451,6 +468,7 @@ export type AttachmentCreateManyInput = {
 
 export type AttachmentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   sizeBytes?: Prisma.IntFieldUpdateOperationsInput | number
@@ -463,8 +481,9 @@ export type AttachmentUpdateManyMutationInput = {
 
 export type AttachmentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
-  investigationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  incidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  casualtyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -477,20 +496,11 @@ export type AttachmentUncheckedUpdateManyInput = {
   removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type AttachmentListRelationFilter = {
-  every?: Prisma.AttachmentWhereInput
-  some?: Prisma.AttachmentWhereInput
-  none?: Prisma.AttachmentWhereInput
-}
-
-export type AttachmentOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
 export type AttachmentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  fireIncidentId?: Prisma.SortOrder
-  investigationId?: Prisma.SortOrder
+  incidentId?: Prisma.SortOrder
+  casualtyId?: Prisma.SortOrder
+  isSensitive?: Prisma.SortOrder
   uploadedById?: Prisma.SortOrder
   originalName?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
@@ -509,8 +519,9 @@ export type AttachmentAvgOrderByAggregateInput = {
 
 export type AttachmentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  fireIncidentId?: Prisma.SortOrder
-  investigationId?: Prisma.SortOrder
+  incidentId?: Prisma.SortOrder
+  casualtyId?: Prisma.SortOrder
+  isSensitive?: Prisma.SortOrder
   uploadedById?: Prisma.SortOrder
   originalName?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
@@ -525,8 +536,9 @@ export type AttachmentMaxOrderByAggregateInput = {
 
 export type AttachmentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  fireIncidentId?: Prisma.SortOrder
-  investigationId?: Prisma.SortOrder
+  incidentId?: Prisma.SortOrder
+  casualtyId?: Prisma.SortOrder
+  isSensitive?: Prisma.SortOrder
   uploadedById?: Prisma.SortOrder
   originalName?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
@@ -543,46 +555,22 @@ export type AttachmentSumOrderByAggregateInput = {
   sizeBytes?: Prisma.SortOrder
 }
 
-export type AttachmentCreateNestedManyWithoutInvestigationInput = {
-  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutInvestigationInput, Prisma.AttachmentUncheckedCreateWithoutInvestigationInput> | Prisma.AttachmentCreateWithoutInvestigationInput[] | Prisma.AttachmentUncheckedCreateWithoutInvestigationInput[]
-  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutInvestigationInput | Prisma.AttachmentCreateOrConnectWithoutInvestigationInput[]
-  createMany?: Prisma.AttachmentCreateManyInvestigationInputEnvelope
-  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+export type AttachmentListRelationFilter = {
+  every?: Prisma.AttachmentWhereInput
+  some?: Prisma.AttachmentWhereInput
+  none?: Prisma.AttachmentWhereInput
 }
 
-export type AttachmentUncheckedCreateNestedManyWithoutInvestigationInput = {
-  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutInvestigationInput, Prisma.AttachmentUncheckedCreateWithoutInvestigationInput> | Prisma.AttachmentCreateWithoutInvestigationInput[] | Prisma.AttachmentUncheckedCreateWithoutInvestigationInput[]
-  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutInvestigationInput | Prisma.AttachmentCreateOrConnectWithoutInvestigationInput[]
-  createMany?: Prisma.AttachmentCreateManyInvestigationInputEnvelope
-  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+export type AttachmentOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
-export type AttachmentUpdateManyWithoutInvestigationNestedInput = {
-  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutInvestigationInput, Prisma.AttachmentUncheckedCreateWithoutInvestigationInput> | Prisma.AttachmentCreateWithoutInvestigationInput[] | Prisma.AttachmentUncheckedCreateWithoutInvestigationInput[]
-  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutInvestigationInput | Prisma.AttachmentCreateOrConnectWithoutInvestigationInput[]
-  upsert?: Prisma.AttachmentUpsertWithWhereUniqueWithoutInvestigationInput | Prisma.AttachmentUpsertWithWhereUniqueWithoutInvestigationInput[]
-  createMany?: Prisma.AttachmentCreateManyInvestigationInputEnvelope
-  set?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
-  disconnect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
-  delete?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
-  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
-  update?: Prisma.AttachmentUpdateWithWhereUniqueWithoutInvestigationInput | Prisma.AttachmentUpdateWithWhereUniqueWithoutInvestigationInput[]
-  updateMany?: Prisma.AttachmentUpdateManyWithWhereWithoutInvestigationInput | Prisma.AttachmentUpdateManyWithWhereWithoutInvestigationInput[]
-  deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
+export type StringFieldUpdateOperationsInput = {
+  set?: string
 }
 
-export type AttachmentUncheckedUpdateManyWithoutInvestigationNestedInput = {
-  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutInvestigationInput, Prisma.AttachmentUncheckedCreateWithoutInvestigationInput> | Prisma.AttachmentCreateWithoutInvestigationInput[] | Prisma.AttachmentUncheckedCreateWithoutInvestigationInput[]
-  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutInvestigationInput | Prisma.AttachmentCreateOrConnectWithoutInvestigationInput[]
-  upsert?: Prisma.AttachmentUpsertWithWhereUniqueWithoutInvestigationInput | Prisma.AttachmentUpsertWithWhereUniqueWithoutInvestigationInput[]
-  createMany?: Prisma.AttachmentCreateManyInvestigationInputEnvelope
-  set?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
-  disconnect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
-  delete?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
-  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
-  update?: Prisma.AttachmentUpdateWithWhereUniqueWithoutInvestigationInput | Prisma.AttachmentUpdateWithWhereUniqueWithoutInvestigationInput[]
-  updateMany?: Prisma.AttachmentUpdateManyWithWhereWithoutInvestigationInput | Prisma.AttachmentUpdateManyWithWhereWithoutInvestigationInput[]
-  deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -593,45 +581,99 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type AttachmentCreateNestedManyWithoutFireIncidentInput = {
-  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutFireIncidentInput, Prisma.AttachmentUncheckedCreateWithoutFireIncidentInput> | Prisma.AttachmentCreateWithoutFireIncidentInput[] | Prisma.AttachmentUncheckedCreateWithoutFireIncidentInput[]
-  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutFireIncidentInput | Prisma.AttachmentCreateOrConnectWithoutFireIncidentInput[]
-  createMany?: Prisma.AttachmentCreateManyFireIncidentInputEnvelope
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
+export type AttachmentCreateNestedManyWithoutCasualtyInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutCasualtyInput, Prisma.AttachmentUncheckedCreateWithoutCasualtyInput> | Prisma.AttachmentCreateWithoutCasualtyInput[] | Prisma.AttachmentUncheckedCreateWithoutCasualtyInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutCasualtyInput | Prisma.AttachmentCreateOrConnectWithoutCasualtyInput[]
+  createMany?: Prisma.AttachmentCreateManyCasualtyInputEnvelope
   connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
 }
 
-export type AttachmentUncheckedCreateNestedManyWithoutFireIncidentInput = {
-  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutFireIncidentInput, Prisma.AttachmentUncheckedCreateWithoutFireIncidentInput> | Prisma.AttachmentCreateWithoutFireIncidentInput[] | Prisma.AttachmentUncheckedCreateWithoutFireIncidentInput[]
-  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutFireIncidentInput | Prisma.AttachmentCreateOrConnectWithoutFireIncidentInput[]
-  createMany?: Prisma.AttachmentCreateManyFireIncidentInputEnvelope
+export type AttachmentUncheckedCreateNestedManyWithoutCasualtyInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutCasualtyInput, Prisma.AttachmentUncheckedCreateWithoutCasualtyInput> | Prisma.AttachmentCreateWithoutCasualtyInput[] | Prisma.AttachmentUncheckedCreateWithoutCasualtyInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutCasualtyInput | Prisma.AttachmentCreateOrConnectWithoutCasualtyInput[]
+  createMany?: Prisma.AttachmentCreateManyCasualtyInputEnvelope
   connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
 }
 
-export type AttachmentUpdateManyWithoutFireIncidentNestedInput = {
-  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutFireIncidentInput, Prisma.AttachmentUncheckedCreateWithoutFireIncidentInput> | Prisma.AttachmentCreateWithoutFireIncidentInput[] | Prisma.AttachmentUncheckedCreateWithoutFireIncidentInput[]
-  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutFireIncidentInput | Prisma.AttachmentCreateOrConnectWithoutFireIncidentInput[]
-  upsert?: Prisma.AttachmentUpsertWithWhereUniqueWithoutFireIncidentInput | Prisma.AttachmentUpsertWithWhereUniqueWithoutFireIncidentInput[]
-  createMany?: Prisma.AttachmentCreateManyFireIncidentInputEnvelope
+export type AttachmentUpdateManyWithoutCasualtyNestedInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutCasualtyInput, Prisma.AttachmentUncheckedCreateWithoutCasualtyInput> | Prisma.AttachmentCreateWithoutCasualtyInput[] | Prisma.AttachmentUncheckedCreateWithoutCasualtyInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutCasualtyInput | Prisma.AttachmentCreateOrConnectWithoutCasualtyInput[]
+  upsert?: Prisma.AttachmentUpsertWithWhereUniqueWithoutCasualtyInput | Prisma.AttachmentUpsertWithWhereUniqueWithoutCasualtyInput[]
+  createMany?: Prisma.AttachmentCreateManyCasualtyInputEnvelope
   set?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
   disconnect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
   delete?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
   connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
-  update?: Prisma.AttachmentUpdateWithWhereUniqueWithoutFireIncidentInput | Prisma.AttachmentUpdateWithWhereUniqueWithoutFireIncidentInput[]
-  updateMany?: Prisma.AttachmentUpdateManyWithWhereWithoutFireIncidentInput | Prisma.AttachmentUpdateManyWithWhereWithoutFireIncidentInput[]
+  update?: Prisma.AttachmentUpdateWithWhereUniqueWithoutCasualtyInput | Prisma.AttachmentUpdateWithWhereUniqueWithoutCasualtyInput[]
+  updateMany?: Prisma.AttachmentUpdateManyWithWhereWithoutCasualtyInput | Prisma.AttachmentUpdateManyWithWhereWithoutCasualtyInput[]
   deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
 }
 
-export type AttachmentUncheckedUpdateManyWithoutFireIncidentNestedInput = {
-  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutFireIncidentInput, Prisma.AttachmentUncheckedCreateWithoutFireIncidentInput> | Prisma.AttachmentCreateWithoutFireIncidentInput[] | Prisma.AttachmentUncheckedCreateWithoutFireIncidentInput[]
-  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutFireIncidentInput | Prisma.AttachmentCreateOrConnectWithoutFireIncidentInput[]
-  upsert?: Prisma.AttachmentUpsertWithWhereUniqueWithoutFireIncidentInput | Prisma.AttachmentUpsertWithWhereUniqueWithoutFireIncidentInput[]
-  createMany?: Prisma.AttachmentCreateManyFireIncidentInputEnvelope
+export type AttachmentUncheckedUpdateManyWithoutCasualtyNestedInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutCasualtyInput, Prisma.AttachmentUncheckedCreateWithoutCasualtyInput> | Prisma.AttachmentCreateWithoutCasualtyInput[] | Prisma.AttachmentUncheckedCreateWithoutCasualtyInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutCasualtyInput | Prisma.AttachmentCreateOrConnectWithoutCasualtyInput[]
+  upsert?: Prisma.AttachmentUpsertWithWhereUniqueWithoutCasualtyInput | Prisma.AttachmentUpsertWithWhereUniqueWithoutCasualtyInput[]
+  createMany?: Prisma.AttachmentCreateManyCasualtyInputEnvelope
   set?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
   disconnect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
   delete?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
   connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
-  update?: Prisma.AttachmentUpdateWithWhereUniqueWithoutFireIncidentInput | Prisma.AttachmentUpdateWithWhereUniqueWithoutFireIncidentInput[]
-  updateMany?: Prisma.AttachmentUpdateManyWithWhereWithoutFireIncidentInput | Prisma.AttachmentUpdateManyWithWhereWithoutFireIncidentInput[]
+  update?: Prisma.AttachmentUpdateWithWhereUniqueWithoutCasualtyInput | Prisma.AttachmentUpdateWithWhereUniqueWithoutCasualtyInput[]
+  updateMany?: Prisma.AttachmentUpdateManyWithWhereWithoutCasualtyInput | Prisma.AttachmentUpdateManyWithWhereWithoutCasualtyInput[]
+  deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
+}
+
+export type AttachmentCreateNestedManyWithoutIncidentInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutIncidentInput, Prisma.AttachmentUncheckedCreateWithoutIncidentInput> | Prisma.AttachmentCreateWithoutIncidentInput[] | Prisma.AttachmentUncheckedCreateWithoutIncidentInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutIncidentInput | Prisma.AttachmentCreateOrConnectWithoutIncidentInput[]
+  createMany?: Prisma.AttachmentCreateManyIncidentInputEnvelope
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+}
+
+export type AttachmentUncheckedCreateNestedManyWithoutIncidentInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutIncidentInput, Prisma.AttachmentUncheckedCreateWithoutIncidentInput> | Prisma.AttachmentCreateWithoutIncidentInput[] | Prisma.AttachmentUncheckedCreateWithoutIncidentInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutIncidentInput | Prisma.AttachmentCreateOrConnectWithoutIncidentInput[]
+  createMany?: Prisma.AttachmentCreateManyIncidentInputEnvelope
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+}
+
+export type AttachmentUpdateManyWithoutIncidentNestedInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutIncidentInput, Prisma.AttachmentUncheckedCreateWithoutIncidentInput> | Prisma.AttachmentCreateWithoutIncidentInput[] | Prisma.AttachmentUncheckedCreateWithoutIncidentInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutIncidentInput | Prisma.AttachmentCreateOrConnectWithoutIncidentInput[]
+  upsert?: Prisma.AttachmentUpsertWithWhereUniqueWithoutIncidentInput | Prisma.AttachmentUpsertWithWhereUniqueWithoutIncidentInput[]
+  createMany?: Prisma.AttachmentCreateManyIncidentInputEnvelope
+  set?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  disconnect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  delete?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  update?: Prisma.AttachmentUpdateWithWhereUniqueWithoutIncidentInput | Prisma.AttachmentUpdateWithWhereUniqueWithoutIncidentInput[]
+  updateMany?: Prisma.AttachmentUpdateManyWithWhereWithoutIncidentInput | Prisma.AttachmentUpdateManyWithWhereWithoutIncidentInput[]
+  deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
+}
+
+export type AttachmentUncheckedUpdateManyWithoutIncidentNestedInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutIncidentInput, Prisma.AttachmentUncheckedCreateWithoutIncidentInput> | Prisma.AttachmentCreateWithoutIncidentInput[] | Prisma.AttachmentUncheckedCreateWithoutIncidentInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutIncidentInput | Prisma.AttachmentCreateOrConnectWithoutIncidentInput[]
+  upsert?: Prisma.AttachmentUpsertWithWhereUniqueWithoutIncidentInput | Prisma.AttachmentUpsertWithWhereUniqueWithoutIncidentInput[]
+  createMany?: Prisma.AttachmentCreateManyIncidentInputEnvelope
+  set?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  disconnect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  delete?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  update?: Prisma.AttachmentUpdateWithWhereUniqueWithoutIncidentInput | Prisma.AttachmentUpdateWithWhereUniqueWithoutIncidentInput[]
+  updateMany?: Prisma.AttachmentUpdateManyWithWhereWithoutIncidentInput | Prisma.AttachmentUpdateManyWithWhereWithoutIncidentInput[]
   deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
 }
 
@@ -719,8 +761,9 @@ export type AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput = {
   deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
 }
 
-export type AttachmentCreateWithoutInvestigationInput = {
+export type AttachmentCreateWithoutCasualtyInput = {
   id?: string
+  isSensitive?: boolean
   originalName: string
   mimeType: string
   sizeBytes: number
@@ -729,14 +772,15 @@ export type AttachmentCreateWithoutInvestigationInput = {
   description?: string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
-  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutAttachmentsInput
+  incident: Prisma.IncidentCreateNestedOneWithoutAttachmentsInput
   uploadedBy: Prisma.UserCreateNestedOneWithoutUploadedAttachmentsInput
   removedBy?: Prisma.UserCreateNestedOneWithoutRemovedAttachmentsInput
 }
 
-export type AttachmentUncheckedCreateWithoutInvestigationInput = {
+export type AttachmentUncheckedCreateWithoutCasualtyInput = {
   id?: string
-  fireIncidentId: string
+  incidentId: string
+  isSensitive?: boolean
   uploadedById: string
   originalName: string
   mimeType: string
@@ -749,30 +793,30 @@ export type AttachmentUncheckedCreateWithoutInvestigationInput = {
   removedById?: string | null
 }
 
-export type AttachmentCreateOrConnectWithoutInvestigationInput = {
+export type AttachmentCreateOrConnectWithoutCasualtyInput = {
   where: Prisma.AttachmentWhereUniqueInput
-  create: Prisma.XOR<Prisma.AttachmentCreateWithoutInvestigationInput, Prisma.AttachmentUncheckedCreateWithoutInvestigationInput>
+  create: Prisma.XOR<Prisma.AttachmentCreateWithoutCasualtyInput, Prisma.AttachmentUncheckedCreateWithoutCasualtyInput>
 }
 
-export type AttachmentCreateManyInvestigationInputEnvelope = {
-  data: Prisma.AttachmentCreateManyInvestigationInput | Prisma.AttachmentCreateManyInvestigationInput[]
+export type AttachmentCreateManyCasualtyInputEnvelope = {
+  data: Prisma.AttachmentCreateManyCasualtyInput | Prisma.AttachmentCreateManyCasualtyInput[]
   skipDuplicates?: boolean
 }
 
-export type AttachmentUpsertWithWhereUniqueWithoutInvestigationInput = {
+export type AttachmentUpsertWithWhereUniqueWithoutCasualtyInput = {
   where: Prisma.AttachmentWhereUniqueInput
-  update: Prisma.XOR<Prisma.AttachmentUpdateWithoutInvestigationInput, Prisma.AttachmentUncheckedUpdateWithoutInvestigationInput>
-  create: Prisma.XOR<Prisma.AttachmentCreateWithoutInvestigationInput, Prisma.AttachmentUncheckedCreateWithoutInvestigationInput>
+  update: Prisma.XOR<Prisma.AttachmentUpdateWithoutCasualtyInput, Prisma.AttachmentUncheckedUpdateWithoutCasualtyInput>
+  create: Prisma.XOR<Prisma.AttachmentCreateWithoutCasualtyInput, Prisma.AttachmentUncheckedCreateWithoutCasualtyInput>
 }
 
-export type AttachmentUpdateWithWhereUniqueWithoutInvestigationInput = {
+export type AttachmentUpdateWithWhereUniqueWithoutCasualtyInput = {
   where: Prisma.AttachmentWhereUniqueInput
-  data: Prisma.XOR<Prisma.AttachmentUpdateWithoutInvestigationInput, Prisma.AttachmentUncheckedUpdateWithoutInvestigationInput>
+  data: Prisma.XOR<Prisma.AttachmentUpdateWithoutCasualtyInput, Prisma.AttachmentUncheckedUpdateWithoutCasualtyInput>
 }
 
-export type AttachmentUpdateManyWithWhereWithoutInvestigationInput = {
+export type AttachmentUpdateManyWithWhereWithoutCasualtyInput = {
   where: Prisma.AttachmentScalarWhereInput
-  data: Prisma.XOR<Prisma.AttachmentUpdateManyMutationInput, Prisma.AttachmentUncheckedUpdateManyWithoutInvestigationInput>
+  data: Prisma.XOR<Prisma.AttachmentUpdateManyMutationInput, Prisma.AttachmentUncheckedUpdateManyWithoutCasualtyInput>
 }
 
 export type AttachmentScalarWhereInput = {
@@ -780,8 +824,9 @@ export type AttachmentScalarWhereInput = {
   OR?: Prisma.AttachmentScalarWhereInput[]
   NOT?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
   id?: Prisma.StringFilter<"Attachment"> | string
-  fireIncidentId?: Prisma.StringFilter<"Attachment"> | string
-  investigationId?: Prisma.StringNullableFilter<"Attachment"> | string | null
+  incidentId?: Prisma.StringFilter<"Attachment"> | string
+  casualtyId?: Prisma.StringNullableFilter<"Attachment"> | string | null
+  isSensitive?: Prisma.BoolFilter<"Attachment"> | boolean
   uploadedById?: Prisma.StringFilter<"Attachment"> | string
   originalName?: Prisma.StringFilter<"Attachment"> | string
   mimeType?: Prisma.StringFilter<"Attachment"> | string
@@ -794,8 +839,9 @@ export type AttachmentScalarWhereInput = {
   removedById?: Prisma.StringNullableFilter<"Attachment"> | string | null
 }
 
-export type AttachmentCreateWithoutFireIncidentInput = {
+export type AttachmentCreateWithoutIncidentInput = {
   id?: string
+  isSensitive?: boolean
   originalName: string
   mimeType: string
   sizeBytes: number
@@ -804,14 +850,15 @@ export type AttachmentCreateWithoutFireIncidentInput = {
   description?: string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
-  investigation?: Prisma.InvestigationCreateNestedOneWithoutAttachmentsInput
+  casualty?: Prisma.CasualtyCreateNestedOneWithoutAttachmentsInput
   uploadedBy: Prisma.UserCreateNestedOneWithoutUploadedAttachmentsInput
   removedBy?: Prisma.UserCreateNestedOneWithoutRemovedAttachmentsInput
 }
 
-export type AttachmentUncheckedCreateWithoutFireIncidentInput = {
+export type AttachmentUncheckedCreateWithoutIncidentInput = {
   id?: string
-  investigationId?: string | null
+  casualtyId?: string | null
+  isSensitive?: boolean
   uploadedById: string
   originalName: string
   mimeType: string
@@ -824,34 +871,35 @@ export type AttachmentUncheckedCreateWithoutFireIncidentInput = {
   removedById?: string | null
 }
 
-export type AttachmentCreateOrConnectWithoutFireIncidentInput = {
+export type AttachmentCreateOrConnectWithoutIncidentInput = {
   where: Prisma.AttachmentWhereUniqueInput
-  create: Prisma.XOR<Prisma.AttachmentCreateWithoutFireIncidentInput, Prisma.AttachmentUncheckedCreateWithoutFireIncidentInput>
+  create: Prisma.XOR<Prisma.AttachmentCreateWithoutIncidentInput, Prisma.AttachmentUncheckedCreateWithoutIncidentInput>
 }
 
-export type AttachmentCreateManyFireIncidentInputEnvelope = {
-  data: Prisma.AttachmentCreateManyFireIncidentInput | Prisma.AttachmentCreateManyFireIncidentInput[]
+export type AttachmentCreateManyIncidentInputEnvelope = {
+  data: Prisma.AttachmentCreateManyIncidentInput | Prisma.AttachmentCreateManyIncidentInput[]
   skipDuplicates?: boolean
 }
 
-export type AttachmentUpsertWithWhereUniqueWithoutFireIncidentInput = {
+export type AttachmentUpsertWithWhereUniqueWithoutIncidentInput = {
   where: Prisma.AttachmentWhereUniqueInput
-  update: Prisma.XOR<Prisma.AttachmentUpdateWithoutFireIncidentInput, Prisma.AttachmentUncheckedUpdateWithoutFireIncidentInput>
-  create: Prisma.XOR<Prisma.AttachmentCreateWithoutFireIncidentInput, Prisma.AttachmentUncheckedCreateWithoutFireIncidentInput>
+  update: Prisma.XOR<Prisma.AttachmentUpdateWithoutIncidentInput, Prisma.AttachmentUncheckedUpdateWithoutIncidentInput>
+  create: Prisma.XOR<Prisma.AttachmentCreateWithoutIncidentInput, Prisma.AttachmentUncheckedCreateWithoutIncidentInput>
 }
 
-export type AttachmentUpdateWithWhereUniqueWithoutFireIncidentInput = {
+export type AttachmentUpdateWithWhereUniqueWithoutIncidentInput = {
   where: Prisma.AttachmentWhereUniqueInput
-  data: Prisma.XOR<Prisma.AttachmentUpdateWithoutFireIncidentInput, Prisma.AttachmentUncheckedUpdateWithoutFireIncidentInput>
+  data: Prisma.XOR<Prisma.AttachmentUpdateWithoutIncidentInput, Prisma.AttachmentUncheckedUpdateWithoutIncidentInput>
 }
 
-export type AttachmentUpdateManyWithWhereWithoutFireIncidentInput = {
+export type AttachmentUpdateManyWithWhereWithoutIncidentInput = {
   where: Prisma.AttachmentScalarWhereInput
-  data: Prisma.XOR<Prisma.AttachmentUpdateManyMutationInput, Prisma.AttachmentUncheckedUpdateManyWithoutFireIncidentInput>
+  data: Prisma.XOR<Prisma.AttachmentUpdateManyMutationInput, Prisma.AttachmentUncheckedUpdateManyWithoutIncidentInput>
 }
 
 export type AttachmentCreateWithoutUploadedByInput = {
   id?: string
+  isSensitive?: boolean
   originalName: string
   mimeType: string
   sizeBytes: number
@@ -860,15 +908,16 @@ export type AttachmentCreateWithoutUploadedByInput = {
   description?: string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
-  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutAttachmentsInput
-  investigation?: Prisma.InvestigationCreateNestedOneWithoutAttachmentsInput
+  incident: Prisma.IncidentCreateNestedOneWithoutAttachmentsInput
+  casualty?: Prisma.CasualtyCreateNestedOneWithoutAttachmentsInput
   removedBy?: Prisma.UserCreateNestedOneWithoutRemovedAttachmentsInput
 }
 
 export type AttachmentUncheckedCreateWithoutUploadedByInput = {
   id?: string
-  fireIncidentId: string
-  investigationId?: string | null
+  incidentId: string
+  casualtyId?: string | null
+  isSensitive?: boolean
   originalName: string
   mimeType: string
   sizeBytes: number
@@ -892,6 +941,7 @@ export type AttachmentCreateManyUploadedByInputEnvelope = {
 
 export type AttachmentCreateWithoutRemovedByInput = {
   id?: string
+  isSensitive?: boolean
   originalName: string
   mimeType: string
   sizeBytes: number
@@ -900,15 +950,16 @@ export type AttachmentCreateWithoutRemovedByInput = {
   description?: string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
-  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutAttachmentsInput
-  investigation?: Prisma.InvestigationCreateNestedOneWithoutAttachmentsInput
+  incident: Prisma.IncidentCreateNestedOneWithoutAttachmentsInput
+  casualty?: Prisma.CasualtyCreateNestedOneWithoutAttachmentsInput
   uploadedBy: Prisma.UserCreateNestedOneWithoutUploadedAttachmentsInput
 }
 
 export type AttachmentUncheckedCreateWithoutRemovedByInput = {
   id?: string
-  fireIncidentId: string
-  investigationId?: string | null
+  incidentId: string
+  casualtyId?: string | null
+  isSensitive?: boolean
   uploadedById: string
   originalName: string
   mimeType: string
@@ -962,9 +1013,10 @@ export type AttachmentUpdateManyWithWhereWithoutRemovedByInput = {
   data: Prisma.XOR<Prisma.AttachmentUpdateManyMutationInput, Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByInput>
 }
 
-export type AttachmentCreateManyInvestigationInput = {
+export type AttachmentCreateManyCasualtyInput = {
   id?: string
-  fireIncidentId: string
+  incidentId: string
+  isSensitive?: boolean
   uploadedById: string
   originalName: string
   mimeType: string
@@ -977,8 +1029,9 @@ export type AttachmentCreateManyInvestigationInput = {
   removedById?: string | null
 }
 
-export type AttachmentUpdateWithoutInvestigationInput = {
+export type AttachmentUpdateWithoutCasualtyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   sizeBytes?: Prisma.IntFieldUpdateOperationsInput | number
@@ -987,14 +1040,15 @@ export type AttachmentUpdateWithoutInvestigationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutAttachmentsNestedInput
+  incident?: Prisma.IncidentUpdateOneRequiredWithoutAttachmentsNestedInput
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutUploadedAttachmentsNestedInput
   removedBy?: Prisma.UserUpdateOneWithoutRemovedAttachmentsNestedInput
 }
 
-export type AttachmentUncheckedUpdateWithoutInvestigationInput = {
+export type AttachmentUncheckedUpdateWithoutCasualtyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1007,9 +1061,10 @@ export type AttachmentUncheckedUpdateWithoutInvestigationInput = {
   removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type AttachmentUncheckedUpdateManyWithoutInvestigationInput = {
+export type AttachmentUncheckedUpdateManyWithoutCasualtyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  incidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1022,9 +1077,10 @@ export type AttachmentUncheckedUpdateManyWithoutInvestigationInput = {
   removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type AttachmentCreateManyFireIncidentInput = {
+export type AttachmentCreateManyIncidentInput = {
   id?: string
-  investigationId?: string | null
+  casualtyId?: string | null
+  isSensitive?: boolean
   uploadedById: string
   originalName: string
   mimeType: string
@@ -1037,8 +1093,9 @@ export type AttachmentCreateManyFireIncidentInput = {
   removedById?: string | null
 }
 
-export type AttachmentUpdateWithoutFireIncidentInput = {
+export type AttachmentUpdateWithoutIncidentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   sizeBytes?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1047,14 +1104,15 @@ export type AttachmentUpdateWithoutFireIncidentInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  investigation?: Prisma.InvestigationUpdateOneWithoutAttachmentsNestedInput
+  casualty?: Prisma.CasualtyUpdateOneWithoutAttachmentsNestedInput
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutUploadedAttachmentsNestedInput
   removedBy?: Prisma.UserUpdateOneWithoutRemovedAttachmentsNestedInput
 }
 
-export type AttachmentUncheckedUpdateWithoutFireIncidentInput = {
+export type AttachmentUncheckedUpdateWithoutIncidentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  investigationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  casualtyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1067,9 +1125,10 @@ export type AttachmentUncheckedUpdateWithoutFireIncidentInput = {
   removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type AttachmentUncheckedUpdateManyWithoutFireIncidentInput = {
+export type AttachmentUncheckedUpdateManyWithoutIncidentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  investigationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  casualtyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1084,8 +1143,9 @@ export type AttachmentUncheckedUpdateManyWithoutFireIncidentInput = {
 
 export type AttachmentCreateManyUploadedByInput = {
   id?: string
-  fireIncidentId: string
-  investigationId?: string | null
+  incidentId: string
+  casualtyId?: string | null
+  isSensitive?: boolean
   originalName: string
   mimeType: string
   sizeBytes: number
@@ -1099,8 +1159,9 @@ export type AttachmentCreateManyUploadedByInput = {
 
 export type AttachmentCreateManyRemovedByInput = {
   id?: string
-  fireIncidentId: string
-  investigationId?: string | null
+  incidentId: string
+  casualtyId?: string | null
+  isSensitive?: boolean
   uploadedById: string
   originalName: string
   mimeType: string
@@ -1114,6 +1175,7 @@ export type AttachmentCreateManyRemovedByInput = {
 
 export type AttachmentUpdateWithoutUploadedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   sizeBytes?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1122,15 +1184,16 @@ export type AttachmentUpdateWithoutUploadedByInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutAttachmentsNestedInput
-  investigation?: Prisma.InvestigationUpdateOneWithoutAttachmentsNestedInput
+  incident?: Prisma.IncidentUpdateOneRequiredWithoutAttachmentsNestedInput
+  casualty?: Prisma.CasualtyUpdateOneWithoutAttachmentsNestedInput
   removedBy?: Prisma.UserUpdateOneWithoutRemovedAttachmentsNestedInput
 }
 
 export type AttachmentUncheckedUpdateWithoutUploadedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
-  investigationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  incidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  casualtyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   sizeBytes?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1144,8 +1207,9 @@ export type AttachmentUncheckedUpdateWithoutUploadedByInput = {
 
 export type AttachmentUncheckedUpdateManyWithoutUploadedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
-  investigationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  incidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  casualtyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   sizeBytes?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1159,6 +1223,7 @@ export type AttachmentUncheckedUpdateManyWithoutUploadedByInput = {
 
 export type AttachmentUpdateWithoutRemovedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   sizeBytes?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1167,15 +1232,16 @@ export type AttachmentUpdateWithoutRemovedByInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutAttachmentsNestedInput
-  investigation?: Prisma.InvestigationUpdateOneWithoutAttachmentsNestedInput
+  incident?: Prisma.IncidentUpdateOneRequiredWithoutAttachmentsNestedInput
+  casualty?: Prisma.CasualtyUpdateOneWithoutAttachmentsNestedInput
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutUploadedAttachmentsNestedInput
 }
 
 export type AttachmentUncheckedUpdateWithoutRemovedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
-  investigationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  incidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  casualtyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1189,8 +1255,9 @@ export type AttachmentUncheckedUpdateWithoutRemovedByInput = {
 
 export type AttachmentUncheckedUpdateManyWithoutRemovedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
-  investigationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  incidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  casualtyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSensitive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1206,8 +1273,9 @@ export type AttachmentUncheckedUpdateManyWithoutRemovedByInput = {
 
 export type AttachmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  fireIncidentId?: boolean
-  investigationId?: boolean
+  incidentId?: boolean
+  casualtyId?: boolean
+  isSensitive?: boolean
   uploadedById?: boolean
   originalName?: boolean
   mimeType?: boolean
@@ -1218,16 +1286,17 @@ export type AttachmentSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   createdAt?: boolean
   removedAt?: boolean
   removedById?: boolean
-  fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
-  investigation?: boolean | Prisma.Attachment$investigationArgs<ExtArgs>
+  incident?: boolean | Prisma.IncidentDefaultArgs<ExtArgs>
+  casualty?: boolean | Prisma.Attachment$casualtyArgs<ExtArgs>
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   removedBy?: boolean | Prisma.Attachment$removedByArgs<ExtArgs>
 }, ExtArgs["result"]["attachment"]>
 
 export type AttachmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  fireIncidentId?: boolean
-  investigationId?: boolean
+  incidentId?: boolean
+  casualtyId?: boolean
+  isSensitive?: boolean
   uploadedById?: boolean
   originalName?: boolean
   mimeType?: boolean
@@ -1238,16 +1307,17 @@ export type AttachmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   createdAt?: boolean
   removedAt?: boolean
   removedById?: boolean
-  fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
-  investigation?: boolean | Prisma.Attachment$investigationArgs<ExtArgs>
+  incident?: boolean | Prisma.IncidentDefaultArgs<ExtArgs>
+  casualty?: boolean | Prisma.Attachment$casualtyArgs<ExtArgs>
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   removedBy?: boolean | Prisma.Attachment$removedByArgs<ExtArgs>
 }, ExtArgs["result"]["attachment"]>
 
 export type AttachmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  fireIncidentId?: boolean
-  investigationId?: boolean
+  incidentId?: boolean
+  casualtyId?: boolean
+  isSensitive?: boolean
   uploadedById?: boolean
   originalName?: boolean
   mimeType?: boolean
@@ -1258,16 +1328,17 @@ export type AttachmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   createdAt?: boolean
   removedAt?: boolean
   removedById?: boolean
-  fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
-  investigation?: boolean | Prisma.Attachment$investigationArgs<ExtArgs>
+  incident?: boolean | Prisma.IncidentDefaultArgs<ExtArgs>
+  casualty?: boolean | Prisma.Attachment$casualtyArgs<ExtArgs>
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   removedBy?: boolean | Prisma.Attachment$removedByArgs<ExtArgs>
 }, ExtArgs["result"]["attachment"]>
 
 export type AttachmentSelectScalar = {
   id?: boolean
-  fireIncidentId?: boolean
-  investigationId?: boolean
+  incidentId?: boolean
+  casualtyId?: boolean
+  isSensitive?: boolean
   uploadedById?: boolean
   originalName?: boolean
   mimeType?: boolean
@@ -1280,22 +1351,22 @@ export type AttachmentSelectScalar = {
   removedById?: boolean
 }
 
-export type AttachmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fireIncidentId" | "investigationId" | "uploadedById" | "originalName" | "mimeType" | "sizeBytes" | "storageKey" | "sha256" | "description" | "createdAt" | "removedAt" | "removedById", ExtArgs["result"]["attachment"]>
+export type AttachmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "incidentId" | "casualtyId" | "isSensitive" | "uploadedById" | "originalName" | "mimeType" | "sizeBytes" | "storageKey" | "sha256" | "description" | "createdAt" | "removedAt" | "removedById", ExtArgs["result"]["attachment"]>
 export type AttachmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
-  investigation?: boolean | Prisma.Attachment$investigationArgs<ExtArgs>
+  incident?: boolean | Prisma.IncidentDefaultArgs<ExtArgs>
+  casualty?: boolean | Prisma.Attachment$casualtyArgs<ExtArgs>
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   removedBy?: boolean | Prisma.Attachment$removedByArgs<ExtArgs>
 }
 export type AttachmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
-  investigation?: boolean | Prisma.Attachment$investigationArgs<ExtArgs>
+  incident?: boolean | Prisma.IncidentDefaultArgs<ExtArgs>
+  casualty?: boolean | Prisma.Attachment$casualtyArgs<ExtArgs>
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   removedBy?: boolean | Prisma.Attachment$removedByArgs<ExtArgs>
 }
 export type AttachmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
-  investigation?: boolean | Prisma.Attachment$investigationArgs<ExtArgs>
+  incident?: boolean | Prisma.IncidentDefaultArgs<ExtArgs>
+  casualty?: boolean | Prisma.Attachment$casualtyArgs<ExtArgs>
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   removedBy?: boolean | Prisma.Attachment$removedByArgs<ExtArgs>
 }
@@ -1303,15 +1374,16 @@ export type AttachmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.E
 export type $AttachmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Attachment"
   objects: {
-    fireIncident: Prisma.$FireIncidentPayload<ExtArgs>
-    investigation: Prisma.$InvestigationPayload<ExtArgs> | null
+    incident: Prisma.$IncidentPayload<ExtArgs>
+    casualty: Prisma.$CasualtyPayload<ExtArgs> | null
     uploadedBy: Prisma.$UserPayload<ExtArgs>
     removedBy: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    fireIncidentId: string
-    investigationId: string | null
+    incidentId: string
+    casualtyId: string | null
+    isSensitive: boolean
     uploadedById: string
     originalName: string
     mimeType: string
@@ -1716,8 +1788,8 @@ readonly fields: AttachmentFieldRefs;
  */
 export interface Prisma__AttachmentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  fireIncident<T extends Prisma.FireIncidentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncidentDefaultArgs<ExtArgs>>): Prisma.Prisma__FireIncidentClient<runtime.Types.Result.GetResult<Prisma.$FireIncidentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  investigation<T extends Prisma.Attachment$investigationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Attachment$investigationArgs<ExtArgs>>): Prisma.Prisma__InvestigationClient<runtime.Types.Result.GetResult<Prisma.$InvestigationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  incident<T extends Prisma.IncidentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IncidentDefaultArgs<ExtArgs>>): Prisma.Prisma__IncidentClient<runtime.Types.Result.GetResult<Prisma.$IncidentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  casualty<T extends Prisma.Attachment$casualtyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Attachment$casualtyArgs<ExtArgs>>): Prisma.Prisma__CasualtyClient<runtime.Types.Result.GetResult<Prisma.$CasualtyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   uploadedBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   removedBy<T extends Prisma.Attachment$removedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Attachment$removedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1750,8 +1822,9 @@ export interface Prisma__AttachmentClient<T, Null = never, ExtArgs extends runti
  */
 export interface AttachmentFieldRefs {
   readonly id: Prisma.FieldRef<"Attachment", 'String'>
-  readonly fireIncidentId: Prisma.FieldRef<"Attachment", 'String'>
-  readonly investigationId: Prisma.FieldRef<"Attachment", 'String'>
+  readonly incidentId: Prisma.FieldRef<"Attachment", 'String'>
+  readonly casualtyId: Prisma.FieldRef<"Attachment", 'String'>
+  readonly isSensitive: Prisma.FieldRef<"Attachment", 'Boolean'>
   readonly uploadedById: Prisma.FieldRef<"Attachment", 'String'>
   readonly originalName: Prisma.FieldRef<"Attachment", 'String'>
   readonly mimeType: Prisma.FieldRef<"Attachment", 'String'>
@@ -2163,22 +2236,22 @@ export type AttachmentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
- * Attachment.investigation
+ * Attachment.casualty
  */
-export type Attachment$investigationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Attachment$casualtyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Investigation
+   * Select specific fields to fetch from the Casualty
    */
-  select?: Prisma.InvestigationSelect<ExtArgs> | null
+  select?: Prisma.CasualtySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Investigation
+   * Omit specific fields from the Casualty
    */
-  omit?: Prisma.InvestigationOmit<ExtArgs> | null
+  omit?: Prisma.CasualtyOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.InvestigationInclude<ExtArgs> | null
-  where?: Prisma.InvestigationWhereInput
+  include?: Prisma.CasualtyInclude<ExtArgs> | null
+  where?: Prisma.CasualtyWhereInput
 }
 
 /**

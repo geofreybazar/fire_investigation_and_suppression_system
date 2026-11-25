@@ -1,133 +1,79 @@
-import {
-  canManageClassifications,
-  canViewIncidents,
-  isAdmin,
-} from "@/utils/incidentPermissions";
+import { can } from "@/utils/permissions";
 
 // `canAccess` only decides what the sidebar shows and which pages render; the
-// backend enforces every permission.
+// backend enforces every permission (REQUIREMENTS.md §7.2).
 
 interface LinkUser {
-  id: string;
   role: string;
-  officeId: string;
+  office?: { type: string } | null;
 }
 
 export interface NavLinkItem {
   link: string;
   label: string;
   icon: string;
+  // What the page is for, shown on its dashboard shortcut.
+  description: string;
   canAccess: (user?: LinkUser | null) => boolean;
-  // Planned but not built yet: shown with a "Soon" tag.
-  comingSoon?: boolean;
+}
+
+export interface NavGroup {
+  label: string;
+  links: NavLinkItem[];
 }
 
 const everyone = (user?: LinkUser | null) => !!user;
 
-export const OVERVIEW_LINKS: NavLinkItem[] = [
+// Incident, casualty and report pages join in roadmap phases 2–4
+// (REQUIREMENTS.md §13).
+export const NAV_GROUPS: NavGroup[] = [
   {
-    link: "/",
-    label: "Dashboard",
-    icon: "Dashboard",
-    canAccess: everyone,
+    label: "Overview",
+    links: [
+      {
+        link: "/",
+        label: "Dashboard",
+        icon: "Dashboard",
+        description: "Your overview.",
+        canAccess: everyone,
+      },
+    ],
   },
   {
-    link: "/incidentmap",
-    label: "Incident Map",
-    icon: "Map",
-    canAccess: canViewIncidents,
-  },
-  {
-    link: "/fireincidents",
-    label: "Fire Incidents",
-    icon: "Flame",
-    canAccess: canViewIncidents,
-  },
-];
-
-// Hidden until these pages are scoped (REQUIREMENTS.md Q-01).
-export const FIRE_OPERATIONS_LINKS: NavLinkItem[] = [
-  {
-    link: "/firestations",
-    label: "Fire Stations",
-    icon: "Building2",
-    canAccess: () => false,
-  },
-  {
-    link: "/monitoring",
-    label: "Monitoring",
-    icon: "Radio",
-    canAccess: () => false,
-  },
-  {
-    link: "/responseunits",
-    label: "Response Units",
-    icon: "Truck",
-    canAccess: () => false,
-  },
-];
-
-export const INVESTIGATION_LINKS: NavLinkItem[] = [
-  {
-    link: "/investigations",
-    label: "Investigations",
-    icon: "Search",
-    canAccess: canViewIncidents,
-  },
-
-  {
-    link: "/evidence",
-    label: "Evidence",
-    icon: "Shield",
-    canAccess: canViewIncidents,
+    label: "Administration",
+    links: [
+      {
+        link: "/personnel",
+        label: "Personnel",
+        icon: "Users",
+        description: "Manage accounts, roles and sections.",
+        canAccess: can("USER_MANAGE"),
+      },
+      {
+        link: "/positions",
+        label: "Positions",
+        icon: "BriefcaseBusiness",
+        description: "Manage the list of positions.",
+        canAccess: can("POSITION_MANAGE"),
+      },
+      {
+        link: "/offices",
+        label: "Offices",
+        icon: "Building",
+        description: "Manage offices and their hierarchy.",
+        canAccess: can("OFFICE_MANAGE"),
+      },
+      {
+        link: "/auditlog",
+        label: "Audit Log",
+        icon: "History",
+        description: "See who changed what, and when.",
+        canAccess: can("AUDIT_VIEW"),
+      },
+    ],
   },
 ];
 
-export const REPORTS_LINKS: NavLinkItem[] = [
-  {
-    link: "/incidentreports",
-    label: "Incident Reports",
-    icon: "FileText",
-    canAccess: canViewIncidents,
-  },
-
-  {
-    link: "/statistics",
-    label: "Statistics & Analytics",
-    icon: "BarChart3",
-    canAccess: canViewIncidents,
-  },
-];
-
-export const ADMINISTRATION_LINKS: NavLinkItem[] = [
-  {
-    link: "/personnel",
-    label: "Personnel",
-    icon: "Users",
-    canAccess: isAdmin,
-  },
-  {
-    link: "/positions",
-    label: "Positions",
-    icon: "BriefcaseBusiness",
-    canAccess: isAdmin,
-  },
-  {
-    link: "/offices",
-    label: "Offices",
-    icon: "Building",
-    canAccess: isAdmin,
-  },
-  {
-    link: "/incidentclassifications",
-    label: "Incident Classifications",
-    icon: "Shapes",
-    canAccess: canManageClassifications,
-  },
-  {
-    link: "/auditlog",
-    label: "Audit Log",
-    icon: "History",
-    canAccess: isAdmin,
-  },
-];
+export const ALL_LINKS: NavLinkItem[] = NAV_GROUPS.flatMap(
+  (group) => group.links,
+);

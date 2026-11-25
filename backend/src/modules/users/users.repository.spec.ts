@@ -8,25 +8,29 @@ import { type CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 const userId = '11111111-1111-4111-8111-111111111111' as UUID;
 const officeId = '22222222-2222-4222-8222-222222222222' as UUID;
 
-const newInvestigator = {
-  account_number: 'INV001',
+const newEncoder: UserInput = {
+  account_number: 'ENC001',
   rank: 'FO2',
   first_name: 'Juan',
   last_name: 'Dela Cruz',
   email: 'juan@example.com',
-  role: 'REGIONAL_INVESTIGATOR',
+  role: 'ENCODER',
+  section: 'OPERATIONS',
+  sectionDesignationRef: 'SO-2026-118',
   officeId,
   positionId: '44444444-4444-4444-8444-444444444444',
-} as UserInput;
+};
 
 const admin = (
-  role: 'NHQ_ADMIN' | 'REGIONAL_ADMIN',
+  officeType: 'NATIONAL_HEADQUARTERS' | 'REGIONAL_OFFICE',
 ): CurrentUserJwtPayload => ({
   sub: '33333333-3333-4333-8333-333333333333' as UUID,
   account_number: 'ADMIN001',
-  role,
+  role: 'ADMIN',
+  section: null,
   positionId: 'position-1',
   officeId,
+  officeType,
 });
 
 describe('UsersRepository', () => {
@@ -40,6 +44,7 @@ describe('UsersRepository', () => {
       update: ReturnType<typeof vi.fn>;
     };
     office: { findUnique: ReturnType<typeof vi.fn> };
+    refreshToken: { deleteMany: ReturnType<typeof vi.fn> };
     auditLog: { create: ReturnType<typeof vi.fn> };
     $transaction: ReturnType<typeof vi.fn>;
   };
@@ -56,6 +61,7 @@ describe('UsersRepository', () => {
       office: {
         findUnique: vi.fn().mockResolvedValue({ regionId: 'region-1' }),
       },
+      refreshToken: { deleteMany: vi.fn() },
       auditLog: { create: vi.fn() },
       $transaction: vi.fn(),
     };
@@ -73,13 +79,13 @@ describe('UsersRepository', () => {
 
   describe('createUser', () => {
     it('stores the password hash but omits it from the returned user', async () => {
-      prisma.user.create.mockResolvedValue({ id: userId, ...newInvestigator });
+      prisma.user.create.mockResolvedValue({ id: userId, ...newEncoder });
 
-      await repository.createUser('hashed-default', newInvestigator, 'actor-1');
+      await repository.createUser('hashed-default', newEncoder, 'actor-1');
 
       expect(prisma.user.create).toHaveBeenCalledWith({
         data: expect.objectContaining({
-          ...newInvestigator,
+          ...newEncoder,
           password: 'hashed-default',
           mustChangePassword: true,
         }),
@@ -88,9 +94,9 @@ describe('UsersRepository', () => {
     });
 
     it('records the new user without the password', async () => {
-      prisma.user.create.mockResolvedValue({ id: userId, ...newInvestigator });
+      prisma.user.create.mockResolvedValue({ id: userId, ...newEncoder });
 
-      await repository.createUser('hashed-default', newInvestigator, 'actor-1');
+      await repository.createUser('hashed-default', newEncoder, 'actor-1');
 
       const { data } = prisma.auditLog.create.mock.calls[0][0];
       expect(data).toMatchObject({
@@ -101,24 +107,25 @@ describe('UsersRepository', () => {
         officeId,
         regionId: 'region-1',
       });
-      expect(data.changes).toMatchObject({ role: 'REGIONAL_INVESTIGATOR' });
+      expect(data.changes).toMatchObject({ role: 'ENCODER', section: 'OPERATIONS' });
       expect(JSON.stringify(data.changes)).not.toContain('hashed-default');
     });
   });
 
   describe('audit entries', () => {
-    const stored = { id: userId, ...newInvestigator, isActive: true };
+    const stored = { id: userId, ...newEncoder, isActive: true };
 
-    it('records only the changed fields on edit', async () => {
+    it('records a section change with its designation reference (FR-USR-004)', async () => {
       prisma.user.findUnique.mockResolvedValue(stored);
       prisma.user.update.mockResolvedValue({
         ...stored,
-        role: 'REGIONAL_CHIEF_INVESTIGATOR',
+        section: 'EMS',
+        sectionDesignationRef: 'SO-2026-200',
       });
 
       await repository.editUser(
         userId,
-        { ...newInvestigator, role: 'REGIONAL_CHIEF_INVESTIGATOR' },
+        { ...newEncoder, section: 'EMS', sectionDesignationRef: 'SO-2026-200' },
         'actor-1',
       );
 
@@ -126,9 +133,10 @@ describe('UsersRepository', () => {
         data: expect.objectContaining({
           action: 'USER_UPDATED',
           changes: {
-            role: {
-              from: 'REGIONAL_INVESTIGATOR',
-              to: 'REGIONAL_CHIEF_INVESTIGATOR',
+            section: { from: 'OPERATIONS', to: 'EMS' },
+            sectionDesignationRef: {
+              from: 'SO-2026-118',
+              to: 'SO-2026-200',
             },
           },
         }),
@@ -139,7 +147,7 @@ describe('UsersRepository', () => {
       prisma.user.findUnique.mockResolvedValue(stored);
       prisma.user.update.mockResolvedValue(stored);
 
-      await repository.editUser(userId, newInvestigator, 'actor-1');
+      await repository.editUser(userId, newEncoder, 'actor-1');
 
       expect(prisma.auditLog.create).not.toHaveBeenCalled();
     });
@@ -148,7 +156,7 @@ describe('UsersRepository', () => {
       prisma.user.findUnique.mockResolvedValue(null);
 
       await expect(
-        repository.editUser(userId, newInvestigator, 'actor-1'),
+        repository.editUser(userId, newEncoder, 'actor-1'),
       ).resolves.toBeNull();
       expect(prisma.user.update).not.toHaveBeenCalled();
       expect(prisma.auditLog.create).not.toHaveBeenCalled();
@@ -182,6 +190,31 @@ describe('UsersRepository', () => {
     });
   });
 
+  describe('resetPassword', () => {
+    it('forces a password change, ends every session and audits without the hash', async () => {
+      prisma.user.update.mockResolvedValue({ officeId });
+
+      await repository.resetPassword(userId, 'hashed-default', 'actor-1');
+
+      expect(prisma.user.update).toHaveBeenCalledWith({
+        where: { id: userId },
+        data: {
+          password: 'hashed-default',
+          mustChangePassword: true,
+          failedLoginCount: 0,
+          lockedUntil: null,
+        },
+        select: { officeId: true },
+      });
+      expect(prisma.refreshToken.deleteMany).toHaveBeenCalledWith({
+        where: { userId },
+      });
+      const { data } = prisma.auditLog.create.mock.calls[0][0];
+      expect(data.action).toBe('USER_PASSWORD_RESET');
+      expect(JSON.stringify(data)).not.toContain('hashed-default');
+    });
+  });
+
   describe('findUserRoleById', () => {
     it('selects only id, role and office scope, without an isActive filter', async () => {
       await repository.findUserRoleById(userId);
@@ -191,7 +224,9 @@ describe('UsersRepository', () => {
         select: {
           id: true,
           role: true,
-          office: { select: { id: true, regionId: true } },
+          office: {
+            select: { id: true, type: true, parentId: true, regionId: true },
+          },
         },
       });
     });
@@ -200,7 +235,7 @@ describe('UsersRepository', () => {
   describe('findPaginatedUsers', () => {
     it('omits the password hash from listed users', async () => {
       await repository.findPaginatedUsers(
-        admin('NHQ_ADMIN'),
+        admin('NATIONAL_HEADQUARTERS'),
         '',
         officeId,
         10,
@@ -215,9 +250,9 @@ describe('UsersRepository', () => {
       );
     });
 
-    it('limits REGIONAL_ADMIN to users in their own office and region', async () => {
+    it('limits a regional admin to users in their own office and region', async () => {
       await repository.findPaginatedUsers(
-        admin('REGIONAL_ADMIN'),
+        admin('REGIONAL_OFFICE'),
         '',
         '' as UUID,
         10,
@@ -238,9 +273,9 @@ describe('UsersRepository', () => {
       });
     });
 
-    it('applies no region filter for NHQ_ADMIN', async () => {
+    it('applies no office filter for an NHQ admin', async () => {
       await repository.findPaginatedUsers(
-        admin('NHQ_ADMIN'),
+        admin('NATIONAL_HEADQUARTERS'),
         '',
         '' as UUID,
         10,

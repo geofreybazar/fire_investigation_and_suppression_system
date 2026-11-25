@@ -2,10 +2,9 @@ import { z } from "zod";
 import type { Pagination } from "../pagination";
 
 export const notificationSchema = z.object({
-  investigationUpdates: z.boolean(),
-  reportReview: z.boolean(),
+  casualtyAlerts: z.boolean(),
+  recordCorrections: z.boolean(),
   systemAnnouncements: z.boolean(),
-  incidentUpdates: z.boolean(),
 });
 
 export type NotificationInput = z.infer<typeof notificationSchema>;
@@ -17,13 +16,13 @@ export interface NotificationSettings extends NotificationInput {
 
 export type UpdateNotifSettings = Omit<NotificationSettings, "id">;
 
-// In-app notifications (REQUIREMENTS.md Q-21).
+// In-app notifications (REQUIREMENTS.md §9.2).
 export interface AppNotification {
   id: string;
   type: string;
   title: string;
   body: string;
-  entityType: "FIRE_INCIDENT" | "INVESTIGATION";
+  entityType: "INCIDENT" | "CASUALTY";
   entityId: string;
   readAt: string | null;
   createdAt: string;

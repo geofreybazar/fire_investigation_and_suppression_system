@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  ConflictException,
   ForbiddenException,
   Injectable,
   Logger,
@@ -22,28 +21,12 @@ import {
 import bcrypt from 'bcrypt';
 import { UUID } from 'crypto';
 
-import { RANK, ROLE } from '../../generated/prisma/enums.js';
-import { rolePermissions } from './utils/users.permissions.js';
-import { role_officePermissions } from './utils/users.role_office.permissions.js';
-import { OfficeAuthorizationService } from '../office/services/office.authorization.service.js';
+import { RANK, UserRole } from '../../generated/prisma/enums.js';
 import { CurrentUserJwtPayload } from '../../types/jwt.payload.js';
+import { hasPermission, Permission } from '../../common/authz/permissions.js';
+import { canManageAccount } from '../../common/authz/user-assignment.js';
 
-// Station roles the system can't work without (FR-USR-015). Losing the last
-// active one is allowed, but the admin is warned about the consequence.
-const STATION_LEADER_ROLES: Partial<Record<ROLE, string>> = {
-  [ROLE.CITY_MUNICIPALITY_OPERATION]:
-    'chief of operations, so its pending incidents cannot be approved until one is assigned',
-  [ROLE.CITY_MUNICIPALITY_CHIEF_INVESTIGATOR]:
-    'chief investigator, so its investigation cases cannot be decided until one is assigned',
-};
-
-const USER_SCOPE_MESSAGE = 'You can only manage users within your own region';
-
-const ADMIN_ROLES: ROLE[] = [
-  ROLE.SUPER_ADMIN,
-  ROLE.NHQ_ADMIN,
-  ROLE.REGIONAL_ADMIN,
-];
+const SALT_ROUNDS = 10;
 
 @Injectable()
 export class UsersService {
@@ -53,54 +36,38 @@ export class UsersService {
     private usersRepository: UsersRepository,
     private officeRepository: OfficeRepository,
     private configService: ConfigService,
-    private officeAuthorizationService: OfficeAuthorizationService,
     private usersAuthorizationService: UsersAuthorizationService,
   ) {}
 
-  async createUser(userData: UserInput, user: CurrentUserJwtPayload) {
-    this.logger.log(`Creating user: ${userData.email}`);
+  private async defaultPasswordHash() {
+    const defaultPassword = this.configService.get<string>(
+      'defaultPassword',
+    ) as string;
+    return bcrypt.hash(defaultPassword, SALT_ROUNDS);
+  }
 
-    // check allowed role creation by user role
-    const allowedRoles = rolePermissions[user.role];
-
-    if (!allowedRoles?.includes(userData.role)) {
-      throw new ForbiddenException(
-        `${user.role} is not allowed to create a user with role ${userData.role}`,
-      );
-    }
-
-    // check allow role to office permission
-    const allowedOfficeTypes = role_officePermissions[userData.role];
-
-    const office = await this.officeRepository.findById(userData.officeId);
+  private async findTargetOffice(officeId: string) {
+    const office = await this.officeRepository.findById(officeId);
 
     if (!office) {
       throw new NotFoundException('Selected office not found');
     }
 
-    if (!allowedOfficeTypes.includes(office.type)) {
-      throw new ForbiddenException(
-        `Role ${userData.role} cannot be assigned to ${office.type}`,
-      );
-    }
+    return office;
+  }
 
-    this.officeAuthorizationService.assertOfficeInScope(
+  async createUser(userData: UserInput, user: CurrentUserJwtPayload) {
+    const office = await this.findTargetOffice(userData.officeId);
+
+    this.usersAuthorizationService.assertCanAssign(
       user,
+      userData.role,
       office,
-      USER_SCOPE_MESSAGE,
+      userData.section,
     );
 
-    const defaultPassword = this.configService.get<string>(
-      'defaultPassword',
-    ) as string;
-
-    const saltRound = 10;
-
-    const passwordHash = await bcrypt.hash(defaultPassword, saltRound);
-
-    // create new user
     const newUser = await this.usersRepository.createUser(
-      passwordHash,
+      await this.defaultPasswordHash(),
       userData,
       user.sub,
     );
@@ -110,19 +77,12 @@ export class UsersService {
     return newUser;
   }
 
-  // Users may read their own profile; admins may read users in their scope.
+  // Users may read their own profile; admins may read accounts they manage.
   async getUser(userId: UUID, currentUser: CurrentUserJwtPayload) {
     const isSelf = userId === currentUser.sub;
-    const isNationalAdmin =
-      currentUser.role === ROLE.SUPER_ADMIN ||
-      currentUser.role === ROLE.NHQ_ADMIN;
 
     // Reject before the lookup so non-admins can't probe which ids exist.
-    if (
-      !isSelf &&
-      !isNationalAdmin &&
-      currentUser.role !== ROLE.REGIONAL_ADMIN
-    ) {
+    if (!isSelf && !hasPermission(currentUser, Permission.USER_MANAGE)) {
       throw new ForbiddenException('You are not allowed to view this user.');
     }
 
@@ -132,11 +92,7 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    const isInRegion =
-      user.officeId === currentUser.officeId ||
-      user.office.regionId === currentUser.officeId;
-
-    if (!isSelf && !isNationalAdmin && !isInRegion) {
+    if (!isSelf && !canManageAccount(currentUser, user)) {
       throw new ForbiddenException('You are not allowed to view this user.');
     }
 
@@ -147,10 +103,8 @@ export class UsersService {
   async changePassword(passwordData: ChangePasswordInput, userId: UUID) {
     const { currentPassword, newPassword } = passwordData;
 
-    // find user
     const user = await this.usersRepository.findUserForChangePassword(userId);
 
-    // check if user entered valid old pasword
     const passwordCorrect =
       user === null
         ? false
@@ -175,17 +129,36 @@ export class UsersService {
       );
     }
 
-    const saltRound = 10;
-
-    const passwordHash = await bcrypt.hash(newPassword, saltRound);
-
-    // store new password
-    const returnedUser = await this.usersRepository.changePassowrd(
-      passwordHash,
+    await this.usersRepository.changePassowrd(
+      await bcrypt.hash(newPassword, SALT_ROUNDS),
       userId,
     );
+  }
 
-    return;
+  // Sets the default password and makes the user change it at next login
+  // (FR-USR-007). Signs the user out everywhere.
+  async resetPassword(userId: UUID, currentUser: CurrentUserJwtPayload) {
+    if (userId === currentUser.sub) {
+      throw new ForbiddenException(
+        'Change your own password from your profile instead.',
+      );
+    }
+
+    await this.usersAuthorizationService.assertCanManageUser(
+      userId,
+      currentUser,
+    );
+
+    await this.usersRepository.resetPassword(
+      userId,
+      await this.defaultPasswordHash(),
+      currentUser.sub,
+    );
+
+    return {
+      message:
+        'Password reset. The user must change the default password at next login.',
+    };
   }
 
   async findPaginatedUsers(
@@ -196,7 +169,7 @@ export class UsersService {
     status: 'Active' | 'Inactive',
     rank?: RANK,
   ) {
-    if (!ADMIN_ROLES.includes(currentUser.role)) {
+    if (!hasPermission(currentUser, Permission.USER_MANAGE)) {
       throw new ForbiddenException('You are not allowed to list users.');
     }
 
@@ -233,14 +206,10 @@ export class UsersService {
       throw new ForbiddenException('You cannot deactivate your own account.');
     }
 
-    const target = await this.usersAuthorizationService.assertCanManageUser(
+    await this.usersAuthorizationService.assertCanManageUser(
       userId,
       currentUser,
     );
-
-    if (!isActive.isActive) {
-      await this.assertNoOpenInvestigation(userId);
-    }
 
     const user = await this.usersRepository.deactivateUser(
       userId,
@@ -252,15 +221,10 @@ export class UsersService {
       throw new NotFoundException('User not found.');
     }
 
-    const warning = isActive.isActive
-      ? undefined
-      : await this.stationLeaderWarning(target.role, target.office.id);
-
     return {
       message: isActive.isActive
         ? 'User activated successfully.'
         : 'User deactivated successfully.',
-      ...(warning && { warning }),
     };
   }
 
@@ -269,56 +233,32 @@ export class UsersService {
     userData: UserInput,
     user: CurrentUserJwtPayload,
   ) {
-    this.logger.log(`Creating user: ${userData.email}`);
-
     const target = await this.usersAuthorizationService.assertCanManageUser(
       userId,
       user,
     );
-    const targetRole = target.role;
 
-    // The SUPER_ADMIN account keeps its role: the API can neither grant nor remove it.
-    if (targetRole === ROLE.SUPER_ADMIN || userData.role === ROLE.SUPER_ADMIN) {
-      if (targetRole !== userData.role) {
+    // The SUPER_ADMIN account keeps its role, office and (no) section.
+    if (target.role === UserRole.SUPER_ADMIN) {
+      if (
+        userData.role !== UserRole.SUPER_ADMIN ||
+        userData.officeId !== target.office.id ||
+        userData.section !== null
+      ) {
         throw new ForbiddenException(
-          'The SUPER_ADMIN role cannot be granted or removed through the API',
+          'The SUPER_ADMIN role, office and section cannot be changed through the API.',
         );
       }
     } else {
-      // check allowed role creation by user role
-      const allowedRoles = rolePermissions[user.role];
-
-      if (!allowedRoles?.includes(userData.role)) {
-        throw new ForbiddenException(
-          `${user.role} is not allowed to assign a user with role ${userData.role}`,
-        );
-      }
-    }
-
-    // check allow role to office permission
-    const allowedOfficeTypes = role_officePermissions[userData.role];
-
-    const office = await this.officeRepository.findById(userData.officeId);
-
-    if (!office) {
-      throw new NotFoundException('Selected office not found');
-    }
-
-    if (!allowedOfficeTypes.includes(office.type)) {
-      throw new ForbiddenException(
-        `Role ${userData.role} cannot be assigned to ${office.type}`,
+      const office = await this.findTargetOffice(userData.officeId);
+      this.usersAuthorizationService.assertCanAssign(
+        user,
+        userData.role,
+        office,
+        userData.section,
       );
     }
 
-    this.officeAuthorizationService.assertOfficeInScope(
-      user,
-      office,
-      USER_SCOPE_MESSAGE,
-    );
-
-    await this.assertNoOpenInvestigation(userId);
-
-    // edit user info
     const editedUser = await this.usersRepository.editUser(
       userId,
       userData,
@@ -326,55 +266,11 @@ export class UsersService {
     );
 
     if (!editedUser) {
-      throw new NotFoundException('for editing user cannot found');
+      throw new NotFoundException('User not found.');
     }
 
     this.logger.log(`User edited: ${editedUser.id}`);
 
-    const leftOldRole =
-      targetRole !== userData.role || target.office.id !== userData.officeId;
-    const warning = leftOldRole
-      ? await this.stationLeaderWarning(targetRole, target.office.id)
-      : undefined;
-
-    return {
-      message: 'user successfully updated',
-      ...(warning && { warning }),
-    };
-  }
-
-  // Called after the change, so the count no longer includes the edited user.
-  private async stationLeaderWarning(role: ROLE, officeId: string) {
-    const consequence = STATION_LEADER_ROLES[role];
-
-    if (!consequence) {
-      return undefined;
-    }
-
-    const remaining = await this.usersRepository.countActiveUsersWithRole(
-      officeId,
-      role,
-    );
-
-    if (remaining > 0) {
-      return undefined;
-    }
-
-    const office = await this.officeRepository.findById(officeId);
-
-    return `${office?.name ?? 'The station'} now has no active ${consequence}.`;
-  }
-
-  // An investigator with an open investigation can't be deactivated, moved or
-  // edited until it is finished (FR-USR-013/014).
-  private async assertNoOpenInvestigation(userId: UUID) {
-    const open =
-      await this.usersRepository.countOpenAssignedInvestigations(userId);
-
-    if (open > 0) {
-      throw new ConflictException(
-        'This user has an open investigation and cannot be changed until it is finished.',
-      );
-    }
+    return { message: 'user successfully updated' };
   }
 }

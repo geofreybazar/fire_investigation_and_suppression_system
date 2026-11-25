@@ -1,0 +1,29 @@
+// Response-specific details, one row per incident of that type (REQUIREMENTS.md §4.3).
+
+model FireIncidentDetail {
+  id                 String              @id @default(uuid())
+  highestAlarmLevel  FireAlarmLevel?
+  finalStatus        FireIncidentStatus?
+  structuresAffected Int?
+
+  incidentId String   @unique
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+}
+
+model EmsIncidentDetail {
+  id           String  @id @default(uuid())
+  natureOfCall String?
+
+  incidentId String   @unique
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+}
+
+model RescueIncidentDetail {
+  id             String  @id @default(uuid())
+  // HAZMAT hazard class, when applicable. The rescue kind is the category.
+  hazardClass    String?
+  personsRescued Int?
+
+  incidentId String   @unique
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+}

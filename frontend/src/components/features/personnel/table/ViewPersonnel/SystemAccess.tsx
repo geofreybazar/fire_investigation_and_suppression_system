@@ -15,7 +15,19 @@ const SystemAccess = ({ user }: { user: User }) => {
       />
 
       <div className='mt-4 grid gap-4 sm:grid-cols-2'>
-        <InfoItem label='Role' value={formatRole(user.role)} />
+        <InfoItem
+          label='Role'
+          value={formatRole(user.role, user.section, {
+            viewerAllSections: true,
+          })}
+        />
+
+        {user.sectionDesignationRef && (
+          <InfoItem
+            label='Designation order'
+            value={user.sectionDesignationRef}
+          />
+        )}
 
         <div className='space-y-1.5'>
           <p className='text-xs font-medium text-muted-foreground'>

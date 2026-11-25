@@ -49,7 +49,9 @@ export type UserMinAggregateOutputType = {
   lockedUntil: Date | null
   officeId: string | null
   positionId: string | null
-  role: $Enums.ROLE | null
+  role: $Enums.UserRole | null
+  section: $Enums.Section | null
+  sectionDesignationRef: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -67,7 +69,9 @@ export type UserMaxAggregateOutputType = {
   lockedUntil: Date | null
   officeId: string | null
   positionId: string | null
-  role: $Enums.ROLE | null
+  role: $Enums.UserRole | null
+  section: $Enums.Section | null
+  sectionDesignationRef: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -86,6 +90,8 @@ export type UserCountAggregateOutputType = {
   officeId: number
   positionId: number
   role: number
+  section: number
+  sectionDesignationRef: number
   _all: number
 }
 
@@ -114,6 +120,8 @@ export type UserMinAggregateInputType = {
   officeId?: true
   positionId?: true
   role?: true
+  section?: true
+  sectionDesignationRef?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -132,6 +140,8 @@ export type UserMaxAggregateInputType = {
   officeId?: true
   positionId?: true
   role?: true
+  section?: true
+  sectionDesignationRef?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -150,6 +160,8 @@ export type UserCountAggregateInputType = {
   officeId?: true
   positionId?: true
   role?: true
+  section?: true
+  sectionDesignationRef?: true
   _all?: true
 }
 
@@ -254,7 +266,9 @@ export type UserGroupByOutputType = {
   lockedUntil: Date | null
   officeId: string
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section: $Enums.Section | null
+  sectionDesignationRef: string | null
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
   _sum: UserSumAggregateOutputType | null
@@ -295,21 +309,23 @@ export type UserWhereInput = {
   lockedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   officeId?: Prisma.StringFilter<"User"> | string
   positionId?: Prisma.StringFilter<"User"> | string
-  role?: Prisma.EnumROLEFilter<"User"> | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
+  section?: Prisma.EnumSectionNullableFilter<"User"> | $Enums.Section | null
+  sectionDesignationRef?: Prisma.StringNullableFilter<"User"> | string | null
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
   office?: Prisma.XOR<Prisma.OfficeScalarRelationFilter, Prisma.OfficeWhereInput>
   position?: Prisma.XOR<Prisma.PositionScalarRelationFilter, Prisma.PositionWhereInput>
   notification?: Prisma.XOR<Prisma.NotificationPreferenceNullableScalarRelationFilter, Prisma.NotificationPreferenceWhereInput> | null
-  fireIncidents?: Prisma.FireIncidentListRelationFilter
-  deletedFireIncidents?: Prisma.FireIncidentListRelationFilter
-  fireIncidentEvents?: Prisma.FireIncidentEventListRelationFilter
-  createdTimelineEntries?: Prisma.IncidentTimelineListRelationFilter
-  voidedTimelineEntries?: Prisma.IncidentTimelineListRelationFilter
-  assignedInvestigations?: Prisma.InvestigationListRelationFilter
-  investigationsAssigned?: Prisma.InvestigationListRelationFilter
-  investigationReferrals?: Prisma.InvestigationReferralListRelationFilter
-  reviewedReports?: Prisma.InvestigationReportListRelationFilter
-  reportReviews?: Prisma.InvestigationReportReviewListRelationFilter
+  createdIncidents?: Prisma.IncidentListRelationFilter
+  updatedIncidents?: Prisma.IncidentListRelationFilter
+  deletedIncidents?: Prisma.IncidentListRelationFilter
+  incidentPersonnel?: Prisma.IncidentPersonnelListRelationFilter
+  createdCasualties?: Prisma.CasualtyListRelationFilter
+  updatedCasualties?: Prisma.CasualtyListRelationFilter
+  deletedCasualties?: Prisma.CasualtyListRelationFilter
+  bfpCasualtyRecords?: Prisma.CasualtyListRelationFilter
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventListRelationFilter
+  casualtyRevisions?: Prisma.CasualtyRevisionListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   uploadedAttachments?: Prisma.AttachmentListRelationFilter
@@ -332,20 +348,22 @@ export type UserOrderByWithRelationInput = {
   officeId?: Prisma.SortOrder
   positionId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  section?: Prisma.SortOrderInput | Prisma.SortOrder
+  sectionDesignationRef?: Prisma.SortOrderInput | Prisma.SortOrder
   refreshTokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
   office?: Prisma.OfficeOrderByWithRelationInput
   position?: Prisma.PositionOrderByWithRelationInput
   notification?: Prisma.NotificationPreferenceOrderByWithRelationInput
-  fireIncidents?: Prisma.FireIncidentOrderByRelationAggregateInput
-  deletedFireIncidents?: Prisma.FireIncidentOrderByRelationAggregateInput
-  fireIncidentEvents?: Prisma.FireIncidentEventOrderByRelationAggregateInput
-  createdTimelineEntries?: Prisma.IncidentTimelineOrderByRelationAggregateInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineOrderByRelationAggregateInput
-  assignedInvestigations?: Prisma.InvestigationOrderByRelationAggregateInput
-  investigationsAssigned?: Prisma.InvestigationOrderByRelationAggregateInput
-  investigationReferrals?: Prisma.InvestigationReferralOrderByRelationAggregateInput
-  reviewedReports?: Prisma.InvestigationReportOrderByRelationAggregateInput
-  reportReviews?: Prisma.InvestigationReportReviewOrderByRelationAggregateInput
+  createdIncidents?: Prisma.IncidentOrderByRelationAggregateInput
+  updatedIncidents?: Prisma.IncidentOrderByRelationAggregateInput
+  deletedIncidents?: Prisma.IncidentOrderByRelationAggregateInput
+  incidentPersonnel?: Prisma.IncidentPersonnelOrderByRelationAggregateInput
+  createdCasualties?: Prisma.CasualtyOrderByRelationAggregateInput
+  updatedCasualties?: Prisma.CasualtyOrderByRelationAggregateInput
+  deletedCasualties?: Prisma.CasualtyOrderByRelationAggregateInput
+  bfpCasualtyRecords?: Prisma.CasualtyOrderByRelationAggregateInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventOrderByRelationAggregateInput
+  casualtyRevisions?: Prisma.CasualtyRevisionOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   uploadedAttachments?: Prisma.AttachmentOrderByRelationAggregateInput
@@ -370,21 +388,23 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   lockedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   officeId?: Prisma.StringFilter<"User"> | string
   positionId?: Prisma.StringFilter<"User"> | string
-  role?: Prisma.EnumROLEFilter<"User"> | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
+  section?: Prisma.EnumSectionNullableFilter<"User"> | $Enums.Section | null
+  sectionDesignationRef?: Prisma.StringNullableFilter<"User"> | string | null
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
   office?: Prisma.XOR<Prisma.OfficeScalarRelationFilter, Prisma.OfficeWhereInput>
   position?: Prisma.XOR<Prisma.PositionScalarRelationFilter, Prisma.PositionWhereInput>
   notification?: Prisma.XOR<Prisma.NotificationPreferenceNullableScalarRelationFilter, Prisma.NotificationPreferenceWhereInput> | null
-  fireIncidents?: Prisma.FireIncidentListRelationFilter
-  deletedFireIncidents?: Prisma.FireIncidentListRelationFilter
-  fireIncidentEvents?: Prisma.FireIncidentEventListRelationFilter
-  createdTimelineEntries?: Prisma.IncidentTimelineListRelationFilter
-  voidedTimelineEntries?: Prisma.IncidentTimelineListRelationFilter
-  assignedInvestigations?: Prisma.InvestigationListRelationFilter
-  investigationsAssigned?: Prisma.InvestigationListRelationFilter
-  investigationReferrals?: Prisma.InvestigationReferralListRelationFilter
-  reviewedReports?: Prisma.InvestigationReportListRelationFilter
-  reportReviews?: Prisma.InvestigationReportReviewListRelationFilter
+  createdIncidents?: Prisma.IncidentListRelationFilter
+  updatedIncidents?: Prisma.IncidentListRelationFilter
+  deletedIncidents?: Prisma.IncidentListRelationFilter
+  incidentPersonnel?: Prisma.IncidentPersonnelListRelationFilter
+  createdCasualties?: Prisma.CasualtyListRelationFilter
+  updatedCasualties?: Prisma.CasualtyListRelationFilter
+  deletedCasualties?: Prisma.CasualtyListRelationFilter
+  bfpCasualtyRecords?: Prisma.CasualtyListRelationFilter
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventListRelationFilter
+  casualtyRevisions?: Prisma.CasualtyRevisionListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   uploadedAttachments?: Prisma.AttachmentListRelationFilter
@@ -407,6 +427,8 @@ export type UserOrderByWithAggregationInput = {
   officeId?: Prisma.SortOrder
   positionId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  section?: Prisma.SortOrderInput | Prisma.SortOrder
+  sectionDesignationRef?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -432,7 +454,9 @@ export type UserScalarWhereWithAggregatesInput = {
   lockedUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   officeId?: Prisma.StringWithAggregatesFilter<"User"> | string
   positionId?: Prisma.StringWithAggregatesFilter<"User"> | string
-  role?: Prisma.EnumROLEWithAggregatesFilter<"User"> | $Enums.ROLE
+  role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
+  section?: Prisma.EnumSectionNullableWithAggregatesFilter<"User"> | $Enums.Section | null
+  sectionDesignationRef?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
 }
 
 export type UserCreateInput = {
@@ -448,21 +472,23 @@ export type UserCreateInput = {
   mustChangePassword?: boolean
   failedLoginCount?: number
   lockedUntil?: Date | string | null
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
   position: Prisma.PositionCreateNestedOneWithoutUsersInput
   notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
@@ -484,19 +510,21 @@ export type UserUncheckedCreateInput = {
   lockedUntil?: Date | string | null
   officeId: string
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
@@ -516,21 +544,23 @@ export type UserUpdateInput = {
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
   position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
   notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
@@ -552,19 +582,21 @@ export type UserUncheckedUpdateInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
@@ -586,7 +618,9 @@ export type UserCreateManyInput = {
   lockedUntil?: Date | string | null
   officeId: string
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -602,7 +636,9 @@ export type UserUpdateManyMutationInput = {
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -620,17 +656,19 @@ export type UserUncheckedUpdateManyInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-}
-
-export type UserNullableScalarRelationFilter = {
-  is?: Prisma.UserWhereInput | null
-  isNot?: Prisma.UserWhereInput | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserScalarRelationFilter = {
   is?: Prisma.UserWhereInput
   isNot?: Prisma.UserWhereInput
+}
+
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
 }
 
 export type UserListRelationFilter = {
@@ -659,6 +697,8 @@ export type UserCountOrderByAggregateInput = {
   officeId?: Prisma.SortOrder
   positionId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  section?: Prisma.SortOrder
+  sectionDesignationRef?: Prisma.SortOrder
 }
 
 export type UserAvgOrderByAggregateInput = {
@@ -681,6 +721,8 @@ export type UserMaxOrderByAggregateInput = {
   officeId?: Prisma.SortOrder
   positionId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  section?: Prisma.SortOrder
+  sectionDesignationRef?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -699,82 +741,12 @@ export type UserMinOrderByAggregateInput = {
   officeId?: Prisma.SortOrder
   positionId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  section?: Prisma.SortOrder
+  sectionDesignationRef?: Prisma.SortOrder
 }
 
 export type UserSumOrderByAggregateInput = {
   failedLoginCount?: Prisma.SortOrder
-}
-
-export type UserCreateNestedOneWithoutReviewedReportsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedReportsInput, Prisma.UserUncheckedCreateWithoutReviewedReportsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedReportsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneWithoutReviewedReportsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedReportsInput, Prisma.UserUncheckedCreateWithoutReviewedReportsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedReportsInput
-  upsert?: Prisma.UserUpsertWithoutReviewedReportsInput
-  disconnect?: Prisma.UserWhereInput | boolean
-  delete?: Prisma.UserWhereInput | boolean
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewedReportsInput, Prisma.UserUpdateWithoutReviewedReportsInput>, Prisma.UserUncheckedUpdateWithoutReviewedReportsInput>
-}
-
-export type UserCreateNestedOneWithoutReportReviewsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutReportReviewsInput, Prisma.UserUncheckedCreateWithoutReportReviewsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReportReviewsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutReportReviewsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutReportReviewsInput, Prisma.UserUncheckedCreateWithoutReportReviewsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReportReviewsInput
-  upsert?: Prisma.UserUpsertWithoutReportReviewsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReportReviewsInput, Prisma.UserUpdateWithoutReportReviewsInput>, Prisma.UserUncheckedUpdateWithoutReportReviewsInput>
-}
-
-export type UserCreateNestedOneWithoutAssignedInvestigationsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedInvestigationsInput, Prisma.UserUncheckedCreateWithoutAssignedInvestigationsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedInvestigationsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserCreateNestedOneWithoutInvestigationsAssignedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutInvestigationsAssignedInput, Prisma.UserUncheckedCreateWithoutInvestigationsAssignedInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvestigationsAssignedInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutAssignedInvestigationsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedInvestigationsInput, Prisma.UserUncheckedCreateWithoutAssignedInvestigationsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedInvestigationsInput
-  upsert?: Prisma.UserUpsertWithoutAssignedInvestigationsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssignedInvestigationsInput, Prisma.UserUpdateWithoutAssignedInvestigationsInput>, Prisma.UserUncheckedUpdateWithoutAssignedInvestigationsInput>
-}
-
-export type UserUpdateOneRequiredWithoutInvestigationsAssignedNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutInvestigationsAssignedInput, Prisma.UserUncheckedCreateWithoutInvestigationsAssignedInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvestigationsAssignedInput
-  upsert?: Prisma.UserUpsertWithoutInvestigationsAssignedInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvestigationsAssignedInput, Prisma.UserUpdateWithoutInvestigationsAssignedInput>, Prisma.UserUncheckedUpdateWithoutInvestigationsAssignedInput>
-}
-
-export type UserCreateNestedOneWithoutInvestigationReferralsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutInvestigationReferralsInput, Prisma.UserUncheckedCreateWithoutInvestigationReferralsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvestigationReferralsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutInvestigationReferralsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutInvestigationReferralsInput, Prisma.UserUncheckedCreateWithoutInvestigationReferralsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvestigationReferralsInput
-  upsert?: Prisma.UserUpsertWithoutInvestigationReferralsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvestigationReferralsInput, Prisma.UserUpdateWithoutInvestigationReferralsInput>, Prisma.UserUncheckedUpdateWithoutInvestigationReferralsInput>
 }
 
 export type UserCreateNestedOneWithoutUploadedAttachmentsInput = {
@@ -821,78 +793,156 @@ export type UserUpdateOneRequiredWithoutAuditLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
 }
 
-export type UserCreateNestedOneWithoutCreatedTimelineEntriesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedTimelineEntriesInput, Prisma.UserUncheckedCreateWithoutCreatedTimelineEntriesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedTimelineEntriesInput
+export type UserCreateNestedOneWithoutBfpCasualtyRecordsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBfpCasualtyRecordsInput, Prisma.UserUncheckedCreateWithoutBfpCasualtyRecordsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBfpCasualtyRecordsInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserCreateNestedOneWithoutVoidedTimelineEntriesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutVoidedTimelineEntriesInput, Prisma.UserUncheckedCreateWithoutVoidedTimelineEntriesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVoidedTimelineEntriesInput
+export type UserCreateNestedOneWithoutCreatedCasualtiesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedCasualtiesInput, Prisma.UserUncheckedCreateWithoutCreatedCasualtiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedCasualtiesInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutCreatedTimelineEntriesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedTimelineEntriesInput, Prisma.UserUncheckedCreateWithoutCreatedTimelineEntriesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedTimelineEntriesInput
-  upsert?: Prisma.UserUpsertWithoutCreatedTimelineEntriesInput
+export type UserCreateNestedOneWithoutUpdatedCasualtiesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUpdatedCasualtiesInput, Prisma.UserUncheckedCreateWithoutUpdatedCasualtiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUpdatedCasualtiesInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedTimelineEntriesInput, Prisma.UserUpdateWithoutCreatedTimelineEntriesInput>, Prisma.UserUncheckedUpdateWithoutCreatedTimelineEntriesInput>
 }
 
-export type UserUpdateOneWithoutVoidedTimelineEntriesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutVoidedTimelineEntriesInput, Prisma.UserUncheckedCreateWithoutVoidedTimelineEntriesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVoidedTimelineEntriesInput
-  upsert?: Prisma.UserUpsertWithoutVoidedTimelineEntriesInput
+export type UserCreateNestedOneWithoutDeletedCasualtiesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeletedCasualtiesInput, Prisma.UserUncheckedCreateWithoutDeletedCasualtiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeletedCasualtiesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutBfpCasualtyRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBfpCasualtyRecordsInput, Prisma.UserUncheckedCreateWithoutBfpCasualtyRecordsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBfpCasualtyRecordsInput
+  upsert?: Prisma.UserUpsertWithoutBfpCasualtyRecordsInput
   disconnect?: Prisma.UserWhereInput | boolean
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVoidedTimelineEntriesInput, Prisma.UserUpdateWithoutVoidedTimelineEntriesInput>, Prisma.UserUncheckedUpdateWithoutVoidedTimelineEntriesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBfpCasualtyRecordsInput, Prisma.UserUpdateWithoutBfpCasualtyRecordsInput>, Prisma.UserUncheckedUpdateWithoutBfpCasualtyRecordsInput>
 }
 
-export type UserCreateNestedOneWithoutFireIncidentsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutFireIncidentsInput, Prisma.UserUncheckedCreateWithoutFireIncidentsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFireIncidentsInput
+export type UserUpdateOneRequiredWithoutCreatedCasualtiesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedCasualtiesInput, Prisma.UserUncheckedCreateWithoutCreatedCasualtiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedCasualtiesInput
+  upsert?: Prisma.UserUpsertWithoutCreatedCasualtiesInput
   connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedCasualtiesInput, Prisma.UserUpdateWithoutCreatedCasualtiesInput>, Prisma.UserUncheckedUpdateWithoutCreatedCasualtiesInput>
 }
 
-export type UserCreateNestedOneWithoutDeletedFireIncidentsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutDeletedFireIncidentsInput, Prisma.UserUncheckedCreateWithoutDeletedFireIncidentsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeletedFireIncidentsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutFireIncidentsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutFireIncidentsInput, Prisma.UserUncheckedCreateWithoutFireIncidentsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFireIncidentsInput
-  upsert?: Prisma.UserUpsertWithoutFireIncidentsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFireIncidentsInput, Prisma.UserUpdateWithoutFireIncidentsInput>, Prisma.UserUncheckedUpdateWithoutFireIncidentsInput>
-}
-
-export type UserUpdateOneWithoutDeletedFireIncidentsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutDeletedFireIncidentsInput, Prisma.UserUncheckedCreateWithoutDeletedFireIncidentsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeletedFireIncidentsInput
-  upsert?: Prisma.UserUpsertWithoutDeletedFireIncidentsInput
+export type UserUpdateOneWithoutUpdatedCasualtiesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUpdatedCasualtiesInput, Prisma.UserUncheckedCreateWithoutUpdatedCasualtiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUpdatedCasualtiesInput
+  upsert?: Prisma.UserUpsertWithoutUpdatedCasualtiesInput
   disconnect?: Prisma.UserWhereInput | boolean
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDeletedFireIncidentsInput, Prisma.UserUpdateWithoutDeletedFireIncidentsInput>, Prisma.UserUncheckedUpdateWithoutDeletedFireIncidentsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUpdatedCasualtiesInput, Prisma.UserUpdateWithoutUpdatedCasualtiesInput>, Prisma.UserUncheckedUpdateWithoutUpdatedCasualtiesInput>
 }
 
-export type UserCreateNestedOneWithoutFireIncidentEventsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutFireIncidentEventsInput, Prisma.UserUncheckedCreateWithoutFireIncidentEventsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFireIncidentEventsInput
+export type UserUpdateOneWithoutDeletedCasualtiesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeletedCasualtiesInput, Prisma.UserUncheckedCreateWithoutDeletedCasualtiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeletedCasualtiesInput
+  upsert?: Prisma.UserUpsertWithoutDeletedCasualtiesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDeletedCasualtiesInput, Prisma.UserUpdateWithoutDeletedCasualtiesInput>, Prisma.UserUncheckedUpdateWithoutDeletedCasualtiesInput>
+}
+
+export type UserCreateNestedOneWithoutCasualtyStatusEventsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCasualtyStatusEventsInput, Prisma.UserUncheckedCreateWithoutCasualtyStatusEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCasualtyStatusEventsInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutFireIncidentEventsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutFireIncidentEventsInput, Prisma.UserUncheckedCreateWithoutFireIncidentEventsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFireIncidentEventsInput
-  upsert?: Prisma.UserUpsertWithoutFireIncidentEventsInput
+export type UserUpdateOneRequiredWithoutCasualtyStatusEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCasualtyStatusEventsInput, Prisma.UserUncheckedCreateWithoutCasualtyStatusEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCasualtyStatusEventsInput
+  upsert?: Prisma.UserUpsertWithoutCasualtyStatusEventsInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFireIncidentEventsInput, Prisma.UserUpdateWithoutFireIncidentEventsInput>, Prisma.UserUncheckedUpdateWithoutFireIncidentEventsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCasualtyStatusEventsInput, Prisma.UserUpdateWithoutCasualtyStatusEventsInput>, Prisma.UserUncheckedUpdateWithoutCasualtyStatusEventsInput>
+}
+
+export type UserCreateNestedOneWithoutCasualtyRevisionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCasualtyRevisionsInput, Prisma.UserUncheckedCreateWithoutCasualtyRevisionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCasualtyRevisionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCasualtyRevisionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCasualtyRevisionsInput, Prisma.UserUncheckedCreateWithoutCasualtyRevisionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCasualtyRevisionsInput
+  upsert?: Prisma.UserUpsertWithoutCasualtyRevisionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCasualtyRevisionsInput, Prisma.UserUpdateWithoutCasualtyRevisionsInput>, Prisma.UserUncheckedUpdateWithoutCasualtyRevisionsInput>
+}
+
+export type UserCreateNestedOneWithoutCreatedIncidentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedIncidentsInput, Prisma.UserUncheckedCreateWithoutCreatedIncidentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedIncidentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutUpdatedIncidentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUpdatedIncidentsInput, Prisma.UserUncheckedCreateWithoutUpdatedIncidentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUpdatedIncidentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutDeletedIncidentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeletedIncidentsInput, Prisma.UserUncheckedCreateWithoutDeletedIncidentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeletedIncidentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCreatedIncidentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedIncidentsInput, Prisma.UserUncheckedCreateWithoutCreatedIncidentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedIncidentsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedIncidentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedIncidentsInput, Prisma.UserUpdateWithoutCreatedIncidentsInput>, Prisma.UserUncheckedUpdateWithoutCreatedIncidentsInput>
+}
+
+export type UserUpdateOneWithoutUpdatedIncidentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUpdatedIncidentsInput, Prisma.UserUncheckedCreateWithoutUpdatedIncidentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUpdatedIncidentsInput
+  upsert?: Prisma.UserUpsertWithoutUpdatedIncidentsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUpdatedIncidentsInput, Prisma.UserUpdateWithoutUpdatedIncidentsInput>, Prisma.UserUncheckedUpdateWithoutUpdatedIncidentsInput>
+}
+
+export type UserUpdateOneWithoutDeletedIncidentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeletedIncidentsInput, Prisma.UserUncheckedCreateWithoutDeletedIncidentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeletedIncidentsInput
+  upsert?: Prisma.UserUpsertWithoutDeletedIncidentsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDeletedIncidentsInput, Prisma.UserUpdateWithoutDeletedIncidentsInput>, Prisma.UserUncheckedUpdateWithoutDeletedIncidentsInput>
+}
+
+export type UserCreateNestedOneWithoutIncidentPersonnelInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutIncidentPersonnelInput, Prisma.UserUncheckedCreateWithoutIncidentPersonnelInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutIncidentPersonnelInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutIncidentPersonnelNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutIncidentPersonnelInput, Prisma.UserUncheckedCreateWithoutIncidentPersonnelInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutIncidentPersonnelInput
+  upsert?: Prisma.UserUpsertWithoutIncidentPersonnelInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutIncidentPersonnelInput, Prisma.UserUpdateWithoutIncidentPersonnelInput>, Prisma.UserUncheckedUpdateWithoutIncidentPersonnelInput>
 }
 
 export type UserCreateNestedOneWithoutNotificationInput = {
@@ -1025,748 +1075,12 @@ export type EnumRANKFieldUpdateOperationsInput = {
   set?: $Enums.RANK
 }
 
-export type EnumROLEFieldUpdateOperationsInput = {
-  set?: $Enums.ROLE
+export type EnumUserRoleFieldUpdateOperationsInput = {
+  set?: $Enums.UserRole
 }
 
-export type UserCreateWithoutReviewedReportsInput = {
-  id?: string
-  email: string
-  account_number: string
-  rank: $Enums.RANK
-  first_name: string
-  last_name: string
-  middle_name?: string | null
-  password: string
-  isActive?: boolean
-  mustChangePassword?: boolean
-  failedLoginCount?: number
-  lockedUntil?: Date | string | null
-  role: $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
-  office: Prisma.OfficeCreateNestedOneWithoutUsersInput
-  position: Prisma.PositionCreateNestedOneWithoutUsersInput
-  notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
-  removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
-}
-
-export type UserUncheckedCreateWithoutReviewedReportsInput = {
-  id?: string
-  email: string
-  account_number: string
-  rank: $Enums.RANK
-  first_name: string
-  last_name: string
-  middle_name?: string | null
-  password: string
-  isActive?: boolean
-  mustChangePassword?: boolean
-  failedLoginCount?: number
-  lockedUntil?: Date | string | null
-  officeId: string
-  positionId: string
-  role: $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-  notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
-  removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
-}
-
-export type UserCreateOrConnectWithoutReviewedReportsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedReportsInput, Prisma.UserUncheckedCreateWithoutReviewedReportsInput>
-}
-
-export type UserUpsertWithoutReviewedReportsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutReviewedReportsInput, Prisma.UserUncheckedUpdateWithoutReviewedReportsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedReportsInput, Prisma.UserUncheckedCreateWithoutReviewedReportsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutReviewedReportsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutReviewedReportsInput, Prisma.UserUncheckedUpdateWithoutReviewedReportsInput>
-}
-
-export type UserUpdateWithoutReviewedReportsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
-  first_name?: Prisma.StringFieldUpdateOperationsInput | string
-  last_name?: Prisma.StringFieldUpdateOperationsInput | string
-  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
-  office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
-  position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
-  notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
-  removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutReviewedReportsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
-  first_name?: Prisma.StringFieldUpdateOperationsInput | string
-  last_name?: Prisma.StringFieldUpdateOperationsInput | string
-  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  officeId?: Prisma.StringFieldUpdateOperationsInput | string
-  positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
-  removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
-}
-
-export type UserCreateWithoutReportReviewsInput = {
-  id?: string
-  email: string
-  account_number: string
-  rank: $Enums.RANK
-  first_name: string
-  last_name: string
-  middle_name?: string | null
-  password: string
-  isActive?: boolean
-  mustChangePassword?: boolean
-  failedLoginCount?: number
-  lockedUntil?: Date | string | null
-  role: $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
-  office: Prisma.OfficeCreateNestedOneWithoutUsersInput
-  position: Prisma.PositionCreateNestedOneWithoutUsersInput
-  notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
-  removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
-}
-
-export type UserUncheckedCreateWithoutReportReviewsInput = {
-  id?: string
-  email: string
-  account_number: string
-  rank: $Enums.RANK
-  first_name: string
-  last_name: string
-  middle_name?: string | null
-  password: string
-  isActive?: boolean
-  mustChangePassword?: boolean
-  failedLoginCount?: number
-  lockedUntil?: Date | string | null
-  officeId: string
-  positionId: string
-  role: $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-  notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
-  removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
-}
-
-export type UserCreateOrConnectWithoutReportReviewsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutReportReviewsInput, Prisma.UserUncheckedCreateWithoutReportReviewsInput>
-}
-
-export type UserUpsertWithoutReportReviewsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutReportReviewsInput, Prisma.UserUncheckedUpdateWithoutReportReviewsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutReportReviewsInput, Prisma.UserUncheckedCreateWithoutReportReviewsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutReportReviewsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutReportReviewsInput, Prisma.UserUncheckedUpdateWithoutReportReviewsInput>
-}
-
-export type UserUpdateWithoutReportReviewsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
-  first_name?: Prisma.StringFieldUpdateOperationsInput | string
-  last_name?: Prisma.StringFieldUpdateOperationsInput | string
-  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
-  office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
-  position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
-  notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
-  removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutReportReviewsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
-  first_name?: Prisma.StringFieldUpdateOperationsInput | string
-  last_name?: Prisma.StringFieldUpdateOperationsInput | string
-  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  officeId?: Prisma.StringFieldUpdateOperationsInput | string
-  positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
-  removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
-}
-
-export type UserCreateWithoutAssignedInvestigationsInput = {
-  id?: string
-  email: string
-  account_number: string
-  rank: $Enums.RANK
-  first_name: string
-  last_name: string
-  middle_name?: string | null
-  password: string
-  isActive?: boolean
-  mustChangePassword?: boolean
-  failedLoginCount?: number
-  lockedUntil?: Date | string | null
-  role: $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
-  office: Prisma.OfficeCreateNestedOneWithoutUsersInput
-  position: Prisma.PositionCreateNestedOneWithoutUsersInput
-  notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
-  removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
-}
-
-export type UserUncheckedCreateWithoutAssignedInvestigationsInput = {
-  id?: string
-  email: string
-  account_number: string
-  rank: $Enums.RANK
-  first_name: string
-  last_name: string
-  middle_name?: string | null
-  password: string
-  isActive?: boolean
-  mustChangePassword?: boolean
-  failedLoginCount?: number
-  lockedUntil?: Date | string | null
-  officeId: string
-  positionId: string
-  role: $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-  notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
-  removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
-}
-
-export type UserCreateOrConnectWithoutAssignedInvestigationsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedInvestigationsInput, Prisma.UserUncheckedCreateWithoutAssignedInvestigationsInput>
-}
-
-export type UserCreateWithoutInvestigationsAssignedInput = {
-  id?: string
-  email: string
-  account_number: string
-  rank: $Enums.RANK
-  first_name: string
-  last_name: string
-  middle_name?: string | null
-  password: string
-  isActive?: boolean
-  mustChangePassword?: boolean
-  failedLoginCount?: number
-  lockedUntil?: Date | string | null
-  role: $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
-  office: Prisma.OfficeCreateNestedOneWithoutUsersInput
-  position: Prisma.PositionCreateNestedOneWithoutUsersInput
-  notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
-  removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
-}
-
-export type UserUncheckedCreateWithoutInvestigationsAssignedInput = {
-  id?: string
-  email: string
-  account_number: string
-  rank: $Enums.RANK
-  first_name: string
-  last_name: string
-  middle_name?: string | null
-  password: string
-  isActive?: boolean
-  mustChangePassword?: boolean
-  failedLoginCount?: number
-  lockedUntil?: Date | string | null
-  officeId: string
-  positionId: string
-  role: $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-  notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
-  removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
-}
-
-export type UserCreateOrConnectWithoutInvestigationsAssignedInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutInvestigationsAssignedInput, Prisma.UserUncheckedCreateWithoutInvestigationsAssignedInput>
-}
-
-export type UserUpsertWithoutAssignedInvestigationsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAssignedInvestigationsInput, Prisma.UserUncheckedUpdateWithoutAssignedInvestigationsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedInvestigationsInput, Prisma.UserUncheckedCreateWithoutAssignedInvestigationsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutAssignedInvestigationsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAssignedInvestigationsInput, Prisma.UserUncheckedUpdateWithoutAssignedInvestigationsInput>
-}
-
-export type UserUpdateWithoutAssignedInvestigationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
-  first_name?: Prisma.StringFieldUpdateOperationsInput | string
-  last_name?: Prisma.StringFieldUpdateOperationsInput | string
-  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
-  office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
-  position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
-  notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
-  removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutAssignedInvestigationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
-  first_name?: Prisma.StringFieldUpdateOperationsInput | string
-  last_name?: Prisma.StringFieldUpdateOperationsInput | string
-  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  officeId?: Prisma.StringFieldUpdateOperationsInput | string
-  positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
-  removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
-}
-
-export type UserUpsertWithoutInvestigationsAssignedInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutInvestigationsAssignedInput, Prisma.UserUncheckedUpdateWithoutInvestigationsAssignedInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutInvestigationsAssignedInput, Prisma.UserUncheckedCreateWithoutInvestigationsAssignedInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutInvestigationsAssignedInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutInvestigationsAssignedInput, Prisma.UserUncheckedUpdateWithoutInvestigationsAssignedInput>
-}
-
-export type UserUpdateWithoutInvestigationsAssignedInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
-  first_name?: Prisma.StringFieldUpdateOperationsInput | string
-  last_name?: Prisma.StringFieldUpdateOperationsInput | string
-  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
-  office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
-  position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
-  notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
-  removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutInvestigationsAssignedInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
-  first_name?: Prisma.StringFieldUpdateOperationsInput | string
-  last_name?: Prisma.StringFieldUpdateOperationsInput | string
-  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  officeId?: Prisma.StringFieldUpdateOperationsInput | string
-  positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
-  removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
-}
-
-export type UserCreateWithoutInvestigationReferralsInput = {
-  id?: string
-  email: string
-  account_number: string
-  rank: $Enums.RANK
-  first_name: string
-  last_name: string
-  middle_name?: string | null
-  password: string
-  isActive?: boolean
-  mustChangePassword?: boolean
-  failedLoginCount?: number
-  lockedUntil?: Date | string | null
-  role: $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
-  office: Prisma.OfficeCreateNestedOneWithoutUsersInput
-  position: Prisma.PositionCreateNestedOneWithoutUsersInput
-  notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
-  removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
-}
-
-export type UserUncheckedCreateWithoutInvestigationReferralsInput = {
-  id?: string
-  email: string
-  account_number: string
-  rank: $Enums.RANK
-  first_name: string
-  last_name: string
-  middle_name?: string | null
-  password: string
-  isActive?: boolean
-  mustChangePassword?: boolean
-  failedLoginCount?: number
-  lockedUntil?: Date | string | null
-  officeId: string
-  positionId: string
-  role: $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-  notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
-  removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
-}
-
-export type UserCreateOrConnectWithoutInvestigationReferralsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutInvestigationReferralsInput, Prisma.UserUncheckedCreateWithoutInvestigationReferralsInput>
-}
-
-export type UserUpsertWithoutInvestigationReferralsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutInvestigationReferralsInput, Prisma.UserUncheckedUpdateWithoutInvestigationReferralsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutInvestigationReferralsInput, Prisma.UserUncheckedCreateWithoutInvestigationReferralsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutInvestigationReferralsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutInvestigationReferralsInput, Prisma.UserUncheckedUpdateWithoutInvestigationReferralsInput>
-}
-
-export type UserUpdateWithoutInvestigationReferralsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
-  first_name?: Prisma.StringFieldUpdateOperationsInput | string
-  last_name?: Prisma.StringFieldUpdateOperationsInput | string
-  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
-  office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
-  position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
-  notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
-  removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutInvestigationReferralsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
-  first_name?: Prisma.StringFieldUpdateOperationsInput | string
-  last_name?: Prisma.StringFieldUpdateOperationsInput | string
-  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  officeId?: Prisma.StringFieldUpdateOperationsInput | string
-  positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
-  removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
+export type NullableEnumSectionFieldUpdateOperationsInput = {
+  set?: $Enums.Section | null
 }
 
 export type UserCreateWithoutUploadedAttachmentsInput = {
@@ -1782,21 +1096,23 @@ export type UserCreateWithoutUploadedAttachmentsInput = {
   mustChangePassword?: boolean
   failedLoginCount?: number
   lockedUntil?: Date | string | null
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
   position: Prisma.PositionCreateNestedOneWithoutUsersInput
   notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
@@ -1817,19 +1133,21 @@ export type UserUncheckedCreateWithoutUploadedAttachmentsInput = {
   lockedUntil?: Date | string | null
   officeId: string
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
@@ -1853,21 +1171,23 @@ export type UserCreateWithoutRemovedAttachmentsInput = {
   mustChangePassword?: boolean
   failedLoginCount?: number
   lockedUntil?: Date | string | null
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
   position: Prisma.PositionCreateNestedOneWithoutUsersInput
   notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
@@ -1888,19 +1208,21 @@ export type UserUncheckedCreateWithoutRemovedAttachmentsInput = {
   lockedUntil?: Date | string | null
   officeId: string
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
@@ -1935,21 +1257,23 @@ export type UserUpdateWithoutUploadedAttachmentsInput = {
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
   position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
   notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
@@ -1970,19 +1294,21 @@ export type UserUncheckedUpdateWithoutUploadedAttachmentsInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
@@ -2012,21 +1338,23 @@ export type UserUpdateWithoutRemovedAttachmentsInput = {
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
   position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
   notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
@@ -2047,19 +1375,21 @@ export type UserUncheckedUpdateWithoutRemovedAttachmentsInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
@@ -2078,21 +1408,23 @@ export type UserCreateWithoutAuditLogsInput = {
   mustChangePassword?: boolean
   failedLoginCount?: number
   lockedUntil?: Date | string | null
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
   position: Prisma.PositionCreateNestedOneWithoutUsersInput
   notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
@@ -2113,19 +1445,21 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   lockedUntil?: Date | string | null
   officeId: string
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
@@ -2160,21 +1494,23 @@ export type UserUpdateWithoutAuditLogsInput = {
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
   position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
   notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
@@ -2195,25 +1531,27 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
 }
 
-export type UserCreateWithoutCreatedTimelineEntriesInput = {
+export type UserCreateWithoutBfpCasualtyRecordsInput = {
   id?: string
   email: string
   account_number: string
@@ -2226,27 +1564,29 @@ export type UserCreateWithoutCreatedTimelineEntriesInput = {
   mustChangePassword?: boolean
   failedLoginCount?: number
   lockedUntil?: Date | string | null
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
   position: Prisma.PositionCreateNestedOneWithoutUsersInput
   notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
 }
 
-export type UserUncheckedCreateWithoutCreatedTimelineEntriesInput = {
+export type UserUncheckedCreateWithoutBfpCasualtyRecordsInput = {
   id?: string
   email: string
   account_number: string
@@ -2261,30 +1601,32 @@ export type UserUncheckedCreateWithoutCreatedTimelineEntriesInput = {
   lockedUntil?: Date | string | null
   officeId: string
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
 }
 
-export type UserCreateOrConnectWithoutCreatedTimelineEntriesInput = {
+export type UserCreateOrConnectWithoutBfpCasualtyRecordsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedTimelineEntriesInput, Prisma.UserUncheckedCreateWithoutCreatedTimelineEntriesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBfpCasualtyRecordsInput, Prisma.UserUncheckedCreateWithoutBfpCasualtyRecordsInput>
 }
 
-export type UserCreateWithoutVoidedTimelineEntriesInput = {
+export type UserCreateWithoutCreatedCasualtiesInput = {
   id?: string
   email: string
   account_number: string
@@ -2297,27 +1639,29 @@ export type UserCreateWithoutVoidedTimelineEntriesInput = {
   mustChangePassword?: boolean
   failedLoginCount?: number
   lockedUntil?: Date | string | null
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
   position: Prisma.PositionCreateNestedOneWithoutUsersInput
   notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
 }
 
-export type UserUncheckedCreateWithoutVoidedTimelineEntriesInput = {
+export type UserUncheckedCreateWithoutCreatedCasualtiesInput = {
   id?: string
   email: string
   account_number: string
@@ -2332,41 +1676,193 @@ export type UserUncheckedCreateWithoutVoidedTimelineEntriesInput = {
   lockedUntil?: Date | string | null
   officeId: string
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
 }
 
-export type UserCreateOrConnectWithoutVoidedTimelineEntriesInput = {
+export type UserCreateOrConnectWithoutCreatedCasualtiesInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutVoidedTimelineEntriesInput, Prisma.UserUncheckedCreateWithoutVoidedTimelineEntriesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedCasualtiesInput, Prisma.UserUncheckedCreateWithoutCreatedCasualtiesInput>
 }
 
-export type UserUpsertWithoutCreatedTimelineEntriesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedTimelineEntriesInput, Prisma.UserUncheckedUpdateWithoutCreatedTimelineEntriesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedTimelineEntriesInput, Prisma.UserUncheckedCreateWithoutCreatedTimelineEntriesInput>
+export type UserCreateWithoutUpdatedCasualtiesInput = {
+  id?: string
+  email: string
+  account_number: string
+  rank: $Enums.RANK
+  first_name: string
+  last_name: string
+  middle_name?: string | null
+  password: string
+  isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  office: Prisma.OfficeCreateNestedOneWithoutUsersInput
+  position: Prisma.PositionCreateNestedOneWithoutUsersInput
+  notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
+}
+
+export type UserUncheckedCreateWithoutUpdatedCasualtiesInput = {
+  id?: string
+  email: string
+  account_number: string
+  rank: $Enums.RANK
+  first_name: string
+  last_name: string
+  middle_name?: string | null
+  password: string
+  isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
+  officeId: string
+  positionId: string
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
+}
+
+export type UserCreateOrConnectWithoutUpdatedCasualtiesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutUpdatedCasualtiesInput, Prisma.UserUncheckedCreateWithoutUpdatedCasualtiesInput>
+}
+
+export type UserCreateWithoutDeletedCasualtiesInput = {
+  id?: string
+  email: string
+  account_number: string
+  rank: $Enums.RANK
+  first_name: string
+  last_name: string
+  middle_name?: string | null
+  password: string
+  isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  office: Prisma.OfficeCreateNestedOneWithoutUsersInput
+  position: Prisma.PositionCreateNestedOneWithoutUsersInput
+  notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
+}
+
+export type UserUncheckedCreateWithoutDeletedCasualtiesInput = {
+  id?: string
+  email: string
+  account_number: string
+  rank: $Enums.RANK
+  first_name: string
+  last_name: string
+  middle_name?: string | null
+  password: string
+  isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
+  officeId: string
+  positionId: string
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
+}
+
+export type UserCreateOrConnectWithoutDeletedCasualtiesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeletedCasualtiesInput, Prisma.UserUncheckedCreateWithoutDeletedCasualtiesInput>
+}
+
+export type UserUpsertWithoutBfpCasualtyRecordsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBfpCasualtyRecordsInput, Prisma.UserUncheckedUpdateWithoutBfpCasualtyRecordsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBfpCasualtyRecordsInput, Prisma.UserUncheckedCreateWithoutBfpCasualtyRecordsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutCreatedTimelineEntriesInput = {
+export type UserUpdateToOneWithWhereWithoutBfpCasualtyRecordsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedTimelineEntriesInput, Prisma.UserUncheckedUpdateWithoutCreatedTimelineEntriesInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBfpCasualtyRecordsInput, Prisma.UserUncheckedUpdateWithoutBfpCasualtyRecordsInput>
 }
 
-export type UserUpdateWithoutCreatedTimelineEntriesInput = {
+export type UserUpdateWithoutBfpCasualtyRecordsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   account_number?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2379,27 +1875,29 @@ export type UserUpdateWithoutCreatedTimelineEntriesInput = {
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
   position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
   notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
 }
 
-export type UserUncheckedUpdateWithoutCreatedTimelineEntriesInput = {
+export type UserUncheckedUpdateWithoutBfpCasualtyRecordsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   account_number?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2414,36 +1912,38 @@ export type UserUncheckedUpdateWithoutCreatedTimelineEntriesInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
 }
 
-export type UserUpsertWithoutVoidedTimelineEntriesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutVoidedTimelineEntriesInput, Prisma.UserUncheckedUpdateWithoutVoidedTimelineEntriesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutVoidedTimelineEntriesInput, Prisma.UserUncheckedCreateWithoutVoidedTimelineEntriesInput>
+export type UserUpsertWithoutCreatedCasualtiesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedCasualtiesInput, Prisma.UserUncheckedUpdateWithoutCreatedCasualtiesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedCasualtiesInput, Prisma.UserUncheckedCreateWithoutCreatedCasualtiesInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutVoidedTimelineEntriesInput = {
+export type UserUpdateToOneWithWhereWithoutCreatedCasualtiesInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutVoidedTimelineEntriesInput, Prisma.UserUncheckedUpdateWithoutVoidedTimelineEntriesInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedCasualtiesInput, Prisma.UserUncheckedUpdateWithoutCreatedCasualtiesInput>
 }
 
-export type UserUpdateWithoutVoidedTimelineEntriesInput = {
+export type UserUpdateWithoutCreatedCasualtiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   account_number?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2456,27 +1956,29 @@ export type UserUpdateWithoutVoidedTimelineEntriesInput = {
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
   position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
   notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
 }
 
-export type UserUncheckedUpdateWithoutVoidedTimelineEntriesInput = {
+export type UserUncheckedUpdateWithoutCreatedCasualtiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   account_number?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2491,25 +1993,189 @@ export type UserUncheckedUpdateWithoutVoidedTimelineEntriesInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
 }
 
-export type UserCreateWithoutFireIncidentsInput = {
+export type UserUpsertWithoutUpdatedCasualtiesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutUpdatedCasualtiesInput, Prisma.UserUncheckedUpdateWithoutUpdatedCasualtiesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutUpdatedCasualtiesInput, Prisma.UserUncheckedCreateWithoutUpdatedCasualtiesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutUpdatedCasualtiesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutUpdatedCasualtiesInput, Prisma.UserUncheckedUpdateWithoutUpdatedCasualtiesInput>
+}
+
+export type UserUpdateWithoutUpdatedCasualtiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
+  position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
+  notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutUpdatedCasualtiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  positionId?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
+}
+
+export type UserUpsertWithoutDeletedCasualtiesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDeletedCasualtiesInput, Prisma.UserUncheckedUpdateWithoutDeletedCasualtiesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeletedCasualtiesInput, Prisma.UserUncheckedCreateWithoutDeletedCasualtiesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDeletedCasualtiesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDeletedCasualtiesInput, Prisma.UserUncheckedUpdateWithoutDeletedCasualtiesInput>
+}
+
+export type UserUpdateWithoutDeletedCasualtiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
+  position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
+  notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDeletedCasualtiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  positionId?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
+}
+
+export type UserCreateWithoutCasualtyStatusEventsInput = {
   id?: string
   email: string
   account_number: string
@@ -2522,27 +2188,29 @@ export type UserCreateWithoutFireIncidentsInput = {
   mustChangePassword?: boolean
   failedLoginCount?: number
   lockedUntil?: Date | string | null
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
   position: Prisma.PositionCreateNestedOneWithoutUsersInput
   notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
 }
 
-export type UserUncheckedCreateWithoutFireIncidentsInput = {
+export type UserUncheckedCreateWithoutCasualtyStatusEventsInput = {
   id?: string
   email: string
   account_number: string
@@ -2557,30 +2225,113 @@ export type UserUncheckedCreateWithoutFireIncidentsInput = {
   lockedUntil?: Date | string | null
   officeId: string
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
 }
 
-export type UserCreateOrConnectWithoutFireIncidentsInput = {
+export type UserCreateOrConnectWithoutCasualtyStatusEventsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutFireIncidentsInput, Prisma.UserUncheckedCreateWithoutFireIncidentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCasualtyStatusEventsInput, Prisma.UserUncheckedCreateWithoutCasualtyStatusEventsInput>
 }
 
-export type UserCreateWithoutDeletedFireIncidentsInput = {
+export type UserUpsertWithoutCasualtyStatusEventsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCasualtyStatusEventsInput, Prisma.UserUncheckedUpdateWithoutCasualtyStatusEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCasualtyStatusEventsInput, Prisma.UserUncheckedCreateWithoutCasualtyStatusEventsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCasualtyStatusEventsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCasualtyStatusEventsInput, Prisma.UserUncheckedUpdateWithoutCasualtyStatusEventsInput>
+}
+
+export type UserUpdateWithoutCasualtyStatusEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
+  position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
+  notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCasualtyStatusEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  positionId?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
+}
+
+export type UserCreateWithoutCasualtyRevisionsInput = {
   id?: string
   email: string
   account_number: string
@@ -2593,27 +2344,29 @@ export type UserCreateWithoutDeletedFireIncidentsInput = {
   mustChangePassword?: boolean
   failedLoginCount?: number
   lockedUntil?: Date | string | null
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
   position: Prisma.PositionCreateNestedOneWithoutUsersInput
   notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
 }
 
-export type UserUncheckedCreateWithoutDeletedFireIncidentsInput = {
+export type UserUncheckedCreateWithoutCasualtyRevisionsInput = {
   id?: string
   email: string
   account_number: string
@@ -2628,41 +2381,43 @@ export type UserUncheckedCreateWithoutDeletedFireIncidentsInput = {
   lockedUntil?: Date | string | null
   officeId: string
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
 }
 
-export type UserCreateOrConnectWithoutDeletedFireIncidentsInput = {
+export type UserCreateOrConnectWithoutCasualtyRevisionsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutDeletedFireIncidentsInput, Prisma.UserUncheckedCreateWithoutDeletedFireIncidentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCasualtyRevisionsInput, Prisma.UserUncheckedCreateWithoutCasualtyRevisionsInput>
 }
 
-export type UserUpsertWithoutFireIncidentsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutFireIncidentsInput, Prisma.UserUncheckedUpdateWithoutFireIncidentsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutFireIncidentsInput, Prisma.UserUncheckedCreateWithoutFireIncidentsInput>
+export type UserUpsertWithoutCasualtyRevisionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCasualtyRevisionsInput, Prisma.UserUncheckedUpdateWithoutCasualtyRevisionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCasualtyRevisionsInput, Prisma.UserUncheckedCreateWithoutCasualtyRevisionsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutFireIncidentsInput = {
+export type UserUpdateToOneWithWhereWithoutCasualtyRevisionsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutFireIncidentsInput, Prisma.UserUncheckedUpdateWithoutFireIncidentsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCasualtyRevisionsInput, Prisma.UserUncheckedUpdateWithoutCasualtyRevisionsInput>
 }
 
-export type UserUpdateWithoutFireIncidentsInput = {
+export type UserUpdateWithoutCasualtyRevisionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   account_number?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2675,27 +2430,29 @@ export type UserUpdateWithoutFireIncidentsInput = {
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
   position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
   notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
 }
 
-export type UserUncheckedUpdateWithoutFireIncidentsInput = {
+export type UserUncheckedUpdateWithoutCasualtyRevisionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   account_number?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2710,102 +2467,27 @@ export type UserUncheckedUpdateWithoutFireIncidentsInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
 }
 
-export type UserUpsertWithoutDeletedFireIncidentsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutDeletedFireIncidentsInput, Prisma.UserUncheckedUpdateWithoutDeletedFireIncidentsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutDeletedFireIncidentsInput, Prisma.UserUncheckedCreateWithoutDeletedFireIncidentsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutDeletedFireIncidentsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutDeletedFireIncidentsInput, Prisma.UserUncheckedUpdateWithoutDeletedFireIncidentsInput>
-}
-
-export type UserUpdateWithoutDeletedFireIncidentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
-  first_name?: Prisma.StringFieldUpdateOperationsInput | string
-  last_name?: Prisma.StringFieldUpdateOperationsInput | string
-  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
-  office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
-  position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
-  notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
-  removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutDeletedFireIncidentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
-  first_name?: Prisma.StringFieldUpdateOperationsInput | string
-  last_name?: Prisma.StringFieldUpdateOperationsInput | string
-  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  officeId?: Prisma.StringFieldUpdateOperationsInput | string
-  positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
-  removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
-}
-
-export type UserCreateWithoutFireIncidentEventsInput = {
+export type UserCreateWithoutCreatedIncidentsInput = {
   id?: string
   email: string
   account_number: string
@@ -2818,27 +2500,29 @@ export type UserCreateWithoutFireIncidentEventsInput = {
   mustChangePassword?: boolean
   failedLoginCount?: number
   lockedUntil?: Date | string | null
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
   position: Prisma.PositionCreateNestedOneWithoutUsersInput
   notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
 }
 
-export type UserUncheckedCreateWithoutFireIncidentEventsInput = {
+export type UserUncheckedCreateWithoutCreatedIncidentsInput = {
   id?: string
   email: string
   account_number: string
@@ -2853,41 +2537,193 @@ export type UserUncheckedCreateWithoutFireIncidentEventsInput = {
   lockedUntil?: Date | string | null
   officeId: string
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
 }
 
-export type UserCreateOrConnectWithoutFireIncidentEventsInput = {
+export type UserCreateOrConnectWithoutCreatedIncidentsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutFireIncidentEventsInput, Prisma.UserUncheckedCreateWithoutFireIncidentEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedIncidentsInput, Prisma.UserUncheckedCreateWithoutCreatedIncidentsInput>
 }
 
-export type UserUpsertWithoutFireIncidentEventsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutFireIncidentEventsInput, Prisma.UserUncheckedUpdateWithoutFireIncidentEventsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutFireIncidentEventsInput, Prisma.UserUncheckedCreateWithoutFireIncidentEventsInput>
+export type UserCreateWithoutUpdatedIncidentsInput = {
+  id?: string
+  email: string
+  account_number: string
+  rank: $Enums.RANK
+  first_name: string
+  last_name: string
+  middle_name?: string | null
+  password: string
+  isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  office: Prisma.OfficeCreateNestedOneWithoutUsersInput
+  position: Prisma.PositionCreateNestedOneWithoutUsersInput
+  notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
+}
+
+export type UserUncheckedCreateWithoutUpdatedIncidentsInput = {
+  id?: string
+  email: string
+  account_number: string
+  rank: $Enums.RANK
+  first_name: string
+  last_name: string
+  middle_name?: string | null
+  password: string
+  isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
+  officeId: string
+  positionId: string
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
+}
+
+export type UserCreateOrConnectWithoutUpdatedIncidentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutUpdatedIncidentsInput, Prisma.UserUncheckedCreateWithoutUpdatedIncidentsInput>
+}
+
+export type UserCreateWithoutDeletedIncidentsInput = {
+  id?: string
+  email: string
+  account_number: string
+  rank: $Enums.RANK
+  first_name: string
+  last_name: string
+  middle_name?: string | null
+  password: string
+  isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  office: Prisma.OfficeCreateNestedOneWithoutUsersInput
+  position: Prisma.PositionCreateNestedOneWithoutUsersInput
+  notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
+}
+
+export type UserUncheckedCreateWithoutDeletedIncidentsInput = {
+  id?: string
+  email: string
+  account_number: string
+  rank: $Enums.RANK
+  first_name: string
+  last_name: string
+  middle_name?: string | null
+  password: string
+  isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
+  officeId: string
+  positionId: string
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
+}
+
+export type UserCreateOrConnectWithoutDeletedIncidentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeletedIncidentsInput, Prisma.UserUncheckedCreateWithoutDeletedIncidentsInput>
+}
+
+export type UserUpsertWithoutCreatedIncidentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedIncidentsInput, Prisma.UserUncheckedUpdateWithoutCreatedIncidentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedIncidentsInput, Prisma.UserUncheckedCreateWithoutCreatedIncidentsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutFireIncidentEventsInput = {
+export type UserUpdateToOneWithWhereWithoutCreatedIncidentsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutFireIncidentEventsInput, Prisma.UserUncheckedUpdateWithoutFireIncidentEventsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedIncidentsInput, Prisma.UserUncheckedUpdateWithoutCreatedIncidentsInput>
 }
 
-export type UserUpdateWithoutFireIncidentEventsInput = {
+export type UserUpdateWithoutCreatedIncidentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   account_number?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2900,27 +2736,29 @@ export type UserUpdateWithoutFireIncidentEventsInput = {
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
   position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
   notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
 }
 
-export type UserUncheckedUpdateWithoutFireIncidentEventsInput = {
+export type UserUncheckedUpdateWithoutCreatedIncidentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   account_number?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2935,18 +2773,338 @@ export type UserUncheckedUpdateWithoutFireIncidentEventsInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
+}
+
+export type UserUpsertWithoutUpdatedIncidentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutUpdatedIncidentsInput, Prisma.UserUncheckedUpdateWithoutUpdatedIncidentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutUpdatedIncidentsInput, Prisma.UserUncheckedCreateWithoutUpdatedIncidentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutUpdatedIncidentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutUpdatedIncidentsInput, Prisma.UserUncheckedUpdateWithoutUpdatedIncidentsInput>
+}
+
+export type UserUpdateWithoutUpdatedIncidentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
+  position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
+  notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutUpdatedIncidentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  positionId?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
+}
+
+export type UserUpsertWithoutDeletedIncidentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDeletedIncidentsInput, Prisma.UserUncheckedUpdateWithoutDeletedIncidentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeletedIncidentsInput, Prisma.UserUncheckedCreateWithoutDeletedIncidentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDeletedIncidentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDeletedIncidentsInput, Prisma.UserUncheckedUpdateWithoutDeletedIncidentsInput>
+}
+
+export type UserUpdateWithoutDeletedIncidentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
+  position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
+  notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDeletedIncidentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  positionId?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
+}
+
+export type UserCreateWithoutIncidentPersonnelInput = {
+  id?: string
+  email: string
+  account_number: string
+  rank: $Enums.RANK
+  first_name: string
+  last_name: string
+  middle_name?: string | null
+  password: string
+  isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  office: Prisma.OfficeCreateNestedOneWithoutUsersInput
+  position: Prisma.PositionCreateNestedOneWithoutUsersInput
+  notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
+}
+
+export type UserUncheckedCreateWithoutIncidentPersonnelInput = {
+  id?: string
+  email: string
+  account_number: string
+  rank: $Enums.RANK
+  first_name: string
+  last_name: string
+  middle_name?: string | null
+  password: string
+  isActive?: boolean
+  mustChangePassword?: boolean
+  failedLoginCount?: number
+  lockedUntil?: Date | string | null
+  officeId: string
+  positionId: string
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
+}
+
+export type UserCreateOrConnectWithoutIncidentPersonnelInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutIncidentPersonnelInput, Prisma.UserUncheckedCreateWithoutIncidentPersonnelInput>
+}
+
+export type UserUpsertWithoutIncidentPersonnelInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutIncidentPersonnelInput, Prisma.UserUncheckedUpdateWithoutIncidentPersonnelInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutIncidentPersonnelInput, Prisma.UserUncheckedCreateWithoutIncidentPersonnelInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutIncidentPersonnelInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutIncidentPersonnelInput, Prisma.UserUncheckedUpdateWithoutIncidentPersonnelInput>
+}
+
+export type UserUpdateWithoutIncidentPersonnelInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
+  position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
+  notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutIncidentPersonnelInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.EnumRANKFieldUpdateOperationsInput | $Enums.RANK
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  middle_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officeId?: Prisma.StringFieldUpdateOperationsInput | string
+  positionId?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
@@ -2966,20 +3124,22 @@ export type UserCreateWithoutNotificationInput = {
   mustChangePassword?: boolean
   failedLoginCount?: number
   lockedUntil?: Date | string | null
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
   position: Prisma.PositionCreateNestedOneWithoutUsersInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
@@ -3001,18 +3161,20 @@ export type UserUncheckedCreateWithoutNotificationInput = {
   lockedUntil?: Date | string | null
   officeId: string
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
@@ -3048,20 +3210,22 @@ export type UserUpdateWithoutNotificationInput = {
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
   position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
@@ -3083,18 +3247,20 @@ export type UserUncheckedUpdateWithoutNotificationInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
@@ -3114,21 +3280,23 @@ export type UserCreateWithoutNotificationsInput = {
   mustChangePassword?: boolean
   failedLoginCount?: number
   lockedUntil?: Date | string | null
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
   position: Prisma.PositionCreateNestedOneWithoutUsersInput
   notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   removedAttachments?: Prisma.AttachmentCreateNestedManyWithoutRemovedByInput
@@ -3149,19 +3317,21 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   lockedUntil?: Date | string | null
   officeId: string
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   removedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRemovedByInput
@@ -3196,21 +3366,23 @@ export type UserUpdateWithoutNotificationsInput = {
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
   position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
   notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   removedAttachments?: Prisma.AttachmentUpdateManyWithoutRemovedByNestedInput
@@ -3231,19 +3403,21 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   removedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRemovedByNestedInput
@@ -3262,20 +3436,22 @@ export type UserCreateWithoutOfficeInput = {
   mustChangePassword?: boolean
   failedLoginCount?: number
   lockedUntil?: Date | string | null
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   position: Prisma.PositionCreateNestedOneWithoutUsersInput
   notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
@@ -3296,19 +3472,21 @@ export type UserUncheckedCreateWithoutOfficeInput = {
   failedLoginCount?: number
   lockedUntil?: Date | string | null
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
@@ -3359,7 +3537,9 @@ export type UserScalarWhereInput = {
   lockedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   officeId?: Prisma.StringFilter<"User"> | string
   positionId?: Prisma.StringFilter<"User"> | string
-  role?: Prisma.EnumROLEFilter<"User"> | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
+  section?: Prisma.EnumSectionNullableFilter<"User"> | $Enums.Section | null
+  sectionDesignationRef?: Prisma.StringNullableFilter<"User"> | string | null
 }
 
 export type UserCreateWithoutPositionInput = {
@@ -3375,20 +3555,22 @@ export type UserCreateWithoutPositionInput = {
   mustChangePassword?: boolean
   failedLoginCount?: number
   lockedUntil?: Date | string | null
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
   notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
@@ -3409,19 +3591,21 @@ export type UserUncheckedCreateWithoutPositionInput = {
   failedLoginCount?: number
   lockedUntil?: Date | string | null
   officeId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
@@ -3467,20 +3651,22 @@ export type UserCreateWithoutRefreshTokensInput = {
   mustChangePassword?: boolean
   failedLoginCount?: number
   lockedUntil?: Date | string | null
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   office: Prisma.OfficeCreateNestedOneWithoutUsersInput
   position: Prisma.PositionCreateNestedOneWithoutUsersInput
   notification?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
@@ -3502,18 +3688,20 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   lockedUntil?: Date | string | null
   officeId: string
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
   notification?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
-  fireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutCreatedByInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedCreateNestedManyWithoutDeletedByInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedCreateNestedManyWithoutActorInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedCreateNestedManyWithoutVoidedByInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedInvestigatorInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedCreateNestedManyWithoutAssignedByInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedCreateNestedManyWithoutReferredByInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedCreateNestedManyWithoutReviewedByInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedCreateNestedManyWithoutReviewerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDeletedByInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput
+  createdCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedCasualties?: Prisma.CasualtyUncheckedCreateNestedManyWithoutDeletedByInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedCreateNestedManyWithoutBfpUserInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedCreateNestedManyWithoutCreatedByInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
@@ -3549,20 +3737,22 @@ export type UserUpdateWithoutRefreshTokensInput = {
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
   position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
   notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
@@ -3584,18 +3774,20 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
@@ -3616,7 +3808,9 @@ export type UserCreateManyOfficeInput = {
   failedLoginCount?: number
   lockedUntil?: Date | string | null
   positionId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
 }
 
 export type UserUpdateWithoutOfficeInput = {
@@ -3632,20 +3826,22 @@ export type UserUpdateWithoutOfficeInput = {
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   position?: Prisma.PositionUpdateOneRequiredWithoutUsersNestedInput
   notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
@@ -3666,19 +3862,21 @@ export type UserUncheckedUpdateWithoutOfficeInput = {
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
@@ -3699,7 +3897,9 @@ export type UserUncheckedUpdateManyWithoutOfficeInput = {
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   positionId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserCreateManyPositionInput = {
@@ -3716,7 +3916,9 @@ export type UserCreateManyPositionInput = {
   failedLoginCount?: number
   lockedUntil?: Date | string | null
   officeId: string
-  role: $Enums.ROLE
+  role: $Enums.UserRole
+  section?: $Enums.Section | null
+  sectionDesignationRef?: string | null
 }
 
 export type UserUpdateWithoutPositionInput = {
@@ -3732,20 +3934,22 @@ export type UserUpdateWithoutPositionInput = {
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   office?: Prisma.OfficeUpdateOneRequiredWithoutUsersNestedInput
   notification?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
@@ -3766,19 +3970,21 @@ export type UserUncheckedUpdateWithoutPositionInput = {
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   notification?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  fireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutCreatedByNestedInput
-  deletedFireIncidents?: Prisma.FireIncidentUncheckedUpdateManyWithoutDeletedByNestedInput
-  fireIncidentEvents?: Prisma.FireIncidentEventUncheckedUpdateManyWithoutActorNestedInput
-  createdTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  voidedTimelineEntries?: Prisma.IncidentTimelineUncheckedUpdateManyWithoutVoidedByNestedInput
-  assignedInvestigations?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedInvestigatorNestedInput
-  investigationsAssigned?: Prisma.InvestigationUncheckedUpdateManyWithoutAssignedByNestedInput
-  investigationReferrals?: Prisma.InvestigationReferralUncheckedUpdateManyWithoutReferredByNestedInput
-  reviewedReports?: Prisma.InvestigationReportUncheckedUpdateManyWithoutReviewedByNestedInput
-  reportReviews?: Prisma.InvestigationReportReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDeletedByNestedInput
+  incidentPersonnel?: Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput
+  createdCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedCasualties?: Prisma.CasualtyUncheckedUpdateManyWithoutDeletedByNestedInput
+  bfpCasualtyRecords?: Prisma.CasualtyUncheckedUpdateManyWithoutBfpUserNestedInput
+  casualtyStatusEvents?: Prisma.CasualtyStatusEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  casualtyRevisions?: Prisma.CasualtyRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
@@ -3799,7 +4005,9 @@ export type UserUncheckedUpdateManyWithoutPositionInput = {
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   officeId?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  section?: Prisma.NullableEnumSectionFieldUpdateOperationsInput | $Enums.Section | null
+  sectionDesignationRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -3809,16 +4017,16 @@ export type UserUncheckedUpdateManyWithoutPositionInput = {
 
 export type UserCountOutputType = {
   refreshTokens: number
-  fireIncidents: number
-  deletedFireIncidents: number
-  fireIncidentEvents: number
-  createdTimelineEntries: number
-  voidedTimelineEntries: number
-  assignedInvestigations: number
-  investigationsAssigned: number
-  investigationReferrals: number
-  reviewedReports: number
-  reportReviews: number
+  createdIncidents: number
+  updatedIncidents: number
+  deletedIncidents: number
+  incidentPersonnel: number
+  createdCasualties: number
+  updatedCasualties: number
+  deletedCasualties: number
+  bfpCasualtyRecords: number
+  casualtyStatusEvents: number
+  casualtyRevisions: number
   auditLogs: number
   notifications: number
   uploadedAttachments: number
@@ -3827,16 +4035,16 @@ export type UserCountOutputType = {
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
-  fireIncidents?: boolean | UserCountOutputTypeCountFireIncidentsArgs
-  deletedFireIncidents?: boolean | UserCountOutputTypeCountDeletedFireIncidentsArgs
-  fireIncidentEvents?: boolean | UserCountOutputTypeCountFireIncidentEventsArgs
-  createdTimelineEntries?: boolean | UserCountOutputTypeCountCreatedTimelineEntriesArgs
-  voidedTimelineEntries?: boolean | UserCountOutputTypeCountVoidedTimelineEntriesArgs
-  assignedInvestigations?: boolean | UserCountOutputTypeCountAssignedInvestigationsArgs
-  investigationsAssigned?: boolean | UserCountOutputTypeCountInvestigationsAssignedArgs
-  investigationReferrals?: boolean | UserCountOutputTypeCountInvestigationReferralsArgs
-  reviewedReports?: boolean | UserCountOutputTypeCountReviewedReportsArgs
-  reportReviews?: boolean | UserCountOutputTypeCountReportReviewsArgs
+  createdIncidents?: boolean | UserCountOutputTypeCountCreatedIncidentsArgs
+  updatedIncidents?: boolean | UserCountOutputTypeCountUpdatedIncidentsArgs
+  deletedIncidents?: boolean | UserCountOutputTypeCountDeletedIncidentsArgs
+  incidentPersonnel?: boolean | UserCountOutputTypeCountIncidentPersonnelArgs
+  createdCasualties?: boolean | UserCountOutputTypeCountCreatedCasualtiesArgs
+  updatedCasualties?: boolean | UserCountOutputTypeCountUpdatedCasualtiesArgs
+  deletedCasualties?: boolean | UserCountOutputTypeCountDeletedCasualtiesArgs
+  bfpCasualtyRecords?: boolean | UserCountOutputTypeCountBfpCasualtyRecordsArgs
+  casualtyStatusEvents?: boolean | UserCountOutputTypeCountCasualtyStatusEventsArgs
+  casualtyRevisions?: boolean | UserCountOutputTypeCountCasualtyRevisionsArgs
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   uploadedAttachments?: boolean | UserCountOutputTypeCountUploadedAttachmentsArgs
@@ -3863,71 +4071,71 @@ export type UserCountOutputTypeCountRefreshTokensArgs<ExtArgs extends runtime.Ty
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountFireIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.FireIncidentWhereInput
+export type UserCountOutputTypeCountCreatedIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IncidentWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountDeletedFireIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.FireIncidentWhereInput
+export type UserCountOutputTypeCountUpdatedIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IncidentWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountFireIncidentEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.FireIncidentEventWhereInput
+export type UserCountOutputTypeCountDeletedIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IncidentWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountCreatedTimelineEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.IncidentTimelineWhereInput
+export type UserCountOutputTypeCountIncidentPersonnelArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IncidentPersonnelWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountVoidedTimelineEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.IncidentTimelineWhereInput
+export type UserCountOutputTypeCountCreatedCasualtiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CasualtyWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountAssignedInvestigationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.InvestigationWhereInput
+export type UserCountOutputTypeCountUpdatedCasualtiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CasualtyWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountInvestigationsAssignedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.InvestigationWhereInput
+export type UserCountOutputTypeCountDeletedCasualtiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CasualtyWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountInvestigationReferralsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.InvestigationReferralWhereInput
+export type UserCountOutputTypeCountBfpCasualtyRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CasualtyWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountReviewedReportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.InvestigationReportWhereInput
+export type UserCountOutputTypeCountCasualtyStatusEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CasualtyStatusEventWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountReportReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.InvestigationReportReviewWhereInput
+export type UserCountOutputTypeCountCasualtyRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CasualtyRevisionWhereInput
 }
 
 /**
@@ -3975,20 +4183,22 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   officeId?: boolean
   positionId?: boolean
   role?: boolean
+  section?: boolean
+  sectionDesignationRef?: boolean
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   office?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
   position?: boolean | Prisma.PositionDefaultArgs<ExtArgs>
   notification?: boolean | Prisma.User$notificationArgs<ExtArgs>
-  fireIncidents?: boolean | Prisma.User$fireIncidentsArgs<ExtArgs>
-  deletedFireIncidents?: boolean | Prisma.User$deletedFireIncidentsArgs<ExtArgs>
-  fireIncidentEvents?: boolean | Prisma.User$fireIncidentEventsArgs<ExtArgs>
-  createdTimelineEntries?: boolean | Prisma.User$createdTimelineEntriesArgs<ExtArgs>
-  voidedTimelineEntries?: boolean | Prisma.User$voidedTimelineEntriesArgs<ExtArgs>
-  assignedInvestigations?: boolean | Prisma.User$assignedInvestigationsArgs<ExtArgs>
-  investigationsAssigned?: boolean | Prisma.User$investigationsAssignedArgs<ExtArgs>
-  investigationReferrals?: boolean | Prisma.User$investigationReferralsArgs<ExtArgs>
-  reviewedReports?: boolean | Prisma.User$reviewedReportsArgs<ExtArgs>
-  reportReviews?: boolean | Prisma.User$reportReviewsArgs<ExtArgs>
+  createdIncidents?: boolean | Prisma.User$createdIncidentsArgs<ExtArgs>
+  updatedIncidents?: boolean | Prisma.User$updatedIncidentsArgs<ExtArgs>
+  deletedIncidents?: boolean | Prisma.User$deletedIncidentsArgs<ExtArgs>
+  incidentPersonnel?: boolean | Prisma.User$incidentPersonnelArgs<ExtArgs>
+  createdCasualties?: boolean | Prisma.User$createdCasualtiesArgs<ExtArgs>
+  updatedCasualties?: boolean | Prisma.User$updatedCasualtiesArgs<ExtArgs>
+  deletedCasualties?: boolean | Prisma.User$deletedCasualtiesArgs<ExtArgs>
+  bfpCasualtyRecords?: boolean | Prisma.User$bfpCasualtyRecordsArgs<ExtArgs>
+  casualtyStatusEvents?: boolean | Prisma.User$casualtyStatusEventsArgs<ExtArgs>
+  casualtyRevisions?: boolean | Prisma.User$casualtyRevisionsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   uploadedAttachments?: boolean | Prisma.User$uploadedAttachmentsArgs<ExtArgs>
@@ -4012,6 +4222,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   officeId?: boolean
   positionId?: boolean
   role?: boolean
+  section?: boolean
+  sectionDesignationRef?: boolean
   office?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
   position?: boolean | Prisma.PositionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -4032,6 +4244,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   officeId?: boolean
   positionId?: boolean
   role?: boolean
+  section?: boolean
+  sectionDesignationRef?: boolean
   office?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
   position?: boolean | Prisma.PositionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -4052,24 +4266,26 @@ export type UserSelectScalar = {
   officeId?: boolean
   positionId?: boolean
   role?: boolean
+  section?: boolean
+  sectionDesignationRef?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "account_number" | "rank" | "first_name" | "last_name" | "middle_name" | "password" | "isActive" | "mustChangePassword" | "failedLoginCount" | "lockedUntil" | "officeId" | "positionId" | "role", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "account_number" | "rank" | "first_name" | "last_name" | "middle_name" | "password" | "isActive" | "mustChangePassword" | "failedLoginCount" | "lockedUntil" | "officeId" | "positionId" | "role" | "section" | "sectionDesignationRef", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   office?: boolean | Prisma.OfficeDefaultArgs<ExtArgs>
   position?: boolean | Prisma.PositionDefaultArgs<ExtArgs>
   notification?: boolean | Prisma.User$notificationArgs<ExtArgs>
-  fireIncidents?: boolean | Prisma.User$fireIncidentsArgs<ExtArgs>
-  deletedFireIncidents?: boolean | Prisma.User$deletedFireIncidentsArgs<ExtArgs>
-  fireIncidentEvents?: boolean | Prisma.User$fireIncidentEventsArgs<ExtArgs>
-  createdTimelineEntries?: boolean | Prisma.User$createdTimelineEntriesArgs<ExtArgs>
-  voidedTimelineEntries?: boolean | Prisma.User$voidedTimelineEntriesArgs<ExtArgs>
-  assignedInvestigations?: boolean | Prisma.User$assignedInvestigationsArgs<ExtArgs>
-  investigationsAssigned?: boolean | Prisma.User$investigationsAssignedArgs<ExtArgs>
-  investigationReferrals?: boolean | Prisma.User$investigationReferralsArgs<ExtArgs>
-  reviewedReports?: boolean | Prisma.User$reviewedReportsArgs<ExtArgs>
-  reportReviews?: boolean | Prisma.User$reportReviewsArgs<ExtArgs>
+  createdIncidents?: boolean | Prisma.User$createdIncidentsArgs<ExtArgs>
+  updatedIncidents?: boolean | Prisma.User$updatedIncidentsArgs<ExtArgs>
+  deletedIncidents?: boolean | Prisma.User$deletedIncidentsArgs<ExtArgs>
+  incidentPersonnel?: boolean | Prisma.User$incidentPersonnelArgs<ExtArgs>
+  createdCasualties?: boolean | Prisma.User$createdCasualtiesArgs<ExtArgs>
+  updatedCasualties?: boolean | Prisma.User$updatedCasualtiesArgs<ExtArgs>
+  deletedCasualties?: boolean | Prisma.User$deletedCasualtiesArgs<ExtArgs>
+  bfpCasualtyRecords?: boolean | Prisma.User$bfpCasualtyRecordsArgs<ExtArgs>
+  casualtyStatusEvents?: boolean | Prisma.User$casualtyStatusEventsArgs<ExtArgs>
+  casualtyRevisions?: boolean | Prisma.User$casualtyRevisionsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   uploadedAttachments?: boolean | Prisma.User$uploadedAttachmentsArgs<ExtArgs>
@@ -4092,16 +4308,16 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     office: Prisma.$OfficePayload<ExtArgs>
     position: Prisma.$PositionPayload<ExtArgs>
     notification: Prisma.$NotificationPreferencePayload<ExtArgs> | null
-    fireIncidents: Prisma.$FireIncidentPayload<ExtArgs>[]
-    deletedFireIncidents: Prisma.$FireIncidentPayload<ExtArgs>[]
-    fireIncidentEvents: Prisma.$FireIncidentEventPayload<ExtArgs>[]
-    createdTimelineEntries: Prisma.$IncidentTimelinePayload<ExtArgs>[]
-    voidedTimelineEntries: Prisma.$IncidentTimelinePayload<ExtArgs>[]
-    assignedInvestigations: Prisma.$InvestigationPayload<ExtArgs>[]
-    investigationsAssigned: Prisma.$InvestigationPayload<ExtArgs>[]
-    investigationReferrals: Prisma.$InvestigationReferralPayload<ExtArgs>[]
-    reviewedReports: Prisma.$InvestigationReportPayload<ExtArgs>[]
-    reportReviews: Prisma.$InvestigationReportReviewPayload<ExtArgs>[]
+    createdIncidents: Prisma.$IncidentPayload<ExtArgs>[]
+    updatedIncidents: Prisma.$IncidentPayload<ExtArgs>[]
+    deletedIncidents: Prisma.$IncidentPayload<ExtArgs>[]
+    incidentPersonnel: Prisma.$IncidentPersonnelPayload<ExtArgs>[]
+    createdCasualties: Prisma.$CasualtyPayload<ExtArgs>[]
+    updatedCasualties: Prisma.$CasualtyPayload<ExtArgs>[]
+    deletedCasualties: Prisma.$CasualtyPayload<ExtArgs>[]
+    bfpCasualtyRecords: Prisma.$CasualtyPayload<ExtArgs>[]
+    casualtyStatusEvents: Prisma.$CasualtyStatusEventPayload<ExtArgs>[]
+    casualtyRevisions: Prisma.$CasualtyRevisionPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     uploadedAttachments: Prisma.$AttachmentPayload<ExtArgs>[]
@@ -4122,7 +4338,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     lockedUntil: Date | null
     officeId: string
     positionId: string
-    role: $Enums.ROLE
+    role: $Enums.UserRole
+    section: $Enums.Section | null
+    sectionDesignationRef: string | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -4521,16 +4739,16 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   office<T extends Prisma.OfficeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OfficeDefaultArgs<ExtArgs>>): Prisma.Prisma__OfficeClient<runtime.Types.Result.GetResult<Prisma.$OfficePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   position<T extends Prisma.PositionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PositionDefaultArgs<ExtArgs>>): Prisma.Prisma__PositionClient<runtime.Types.Result.GetResult<Prisma.$PositionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   notification<T extends Prisma.User$notificationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationArgs<ExtArgs>>): Prisma.Prisma__NotificationPreferenceClient<runtime.Types.Result.GetResult<Prisma.$NotificationPreferencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  fireIncidents<T extends Prisma.User$fireIncidentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$fireIncidentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FireIncidentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  deletedFireIncidents<T extends Prisma.User$deletedFireIncidentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deletedFireIncidentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FireIncidentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  fireIncidentEvents<T extends Prisma.User$fireIncidentEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$fireIncidentEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FireIncidentEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  createdTimelineEntries<T extends Prisma.User$createdTimelineEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdTimelineEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncidentTimelinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  voidedTimelineEntries<T extends Prisma.User$voidedTimelineEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$voidedTimelineEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncidentTimelinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  assignedInvestigations<T extends Prisma.User$assignedInvestigationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedInvestigationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestigationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  investigationsAssigned<T extends Prisma.User$investigationsAssignedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$investigationsAssignedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestigationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  investigationReferrals<T extends Prisma.User$investigationReferralsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$investigationReferralsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestigationReferralPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  reviewedReports<T extends Prisma.User$reviewedReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewedReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestigationReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  reportReviews<T extends Prisma.User$reportReviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reportReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestigationReportReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdIncidents<T extends Prisma.User$createdIncidentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdIncidentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncidentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  updatedIncidents<T extends Prisma.User$updatedIncidentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$updatedIncidentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncidentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deletedIncidents<T extends Prisma.User$deletedIncidentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deletedIncidentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncidentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  incidentPersonnel<T extends Prisma.User$incidentPersonnelArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$incidentPersonnelArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncidentPersonnelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdCasualties<T extends Prisma.User$createdCasualtiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdCasualtiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CasualtyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  updatedCasualties<T extends Prisma.User$updatedCasualtiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$updatedCasualtiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CasualtyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deletedCasualties<T extends Prisma.User$deletedCasualtiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deletedCasualtiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CasualtyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  bfpCasualtyRecords<T extends Prisma.User$bfpCasualtyRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$bfpCasualtyRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CasualtyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  casualtyStatusEvents<T extends Prisma.User$casualtyStatusEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$casualtyStatusEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CasualtyStatusEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  casualtyRevisions<T extends Prisma.User$casualtyRevisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$casualtyRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CasualtyRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   uploadedAttachments<T extends Prisma.User$uploadedAttachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$uploadedAttachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4578,7 +4796,9 @@ export interface UserFieldRefs {
   readonly lockedUntil: Prisma.FieldRef<"User", 'DateTime'>
   readonly officeId: Prisma.FieldRef<"User", 'String'>
   readonly positionId: Prisma.FieldRef<"User", 'String'>
-  readonly role: Prisma.FieldRef<"User", 'ROLE'>
+  readonly role: Prisma.FieldRef<"User", 'UserRole'>
+  readonly section: Prisma.FieldRef<"User", 'Section'>
+  readonly sectionDesignationRef: Prisma.FieldRef<"User", 'String'>
 }
     
 
@@ -5023,243 +5243,243 @@ export type User$notificationArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * User.fireIncidents
+ * User.createdIncidents
  */
-export type User$fireIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$createdIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the FireIncident
+   * Select specific fields to fetch from the Incident
    */
-  select?: Prisma.FireIncidentSelect<ExtArgs> | null
+  select?: Prisma.IncidentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the FireIncident
+   * Omit specific fields from the Incident
    */
-  omit?: Prisma.FireIncidentOmit<ExtArgs> | null
+  omit?: Prisma.IncidentOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.FireIncidentInclude<ExtArgs> | null
-  where?: Prisma.FireIncidentWhereInput
-  orderBy?: Prisma.FireIncidentOrderByWithRelationInput | Prisma.FireIncidentOrderByWithRelationInput[]
-  cursor?: Prisma.FireIncidentWhereUniqueInput
+  include?: Prisma.IncidentInclude<ExtArgs> | null
+  where?: Prisma.IncidentWhereInput
+  orderBy?: Prisma.IncidentOrderByWithRelationInput | Prisma.IncidentOrderByWithRelationInput[]
+  cursor?: Prisma.IncidentWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.FireIncidentScalarFieldEnum | Prisma.FireIncidentScalarFieldEnum[]
+  distinct?: Prisma.IncidentScalarFieldEnum | Prisma.IncidentScalarFieldEnum[]
 }
 
 /**
- * User.deletedFireIncidents
+ * User.updatedIncidents
  */
-export type User$deletedFireIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$updatedIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the FireIncident
+   * Select specific fields to fetch from the Incident
    */
-  select?: Prisma.FireIncidentSelect<ExtArgs> | null
+  select?: Prisma.IncidentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the FireIncident
+   * Omit specific fields from the Incident
    */
-  omit?: Prisma.FireIncidentOmit<ExtArgs> | null
+  omit?: Prisma.IncidentOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.FireIncidentInclude<ExtArgs> | null
-  where?: Prisma.FireIncidentWhereInput
-  orderBy?: Prisma.FireIncidentOrderByWithRelationInput | Prisma.FireIncidentOrderByWithRelationInput[]
-  cursor?: Prisma.FireIncidentWhereUniqueInput
+  include?: Prisma.IncidentInclude<ExtArgs> | null
+  where?: Prisma.IncidentWhereInput
+  orderBy?: Prisma.IncidentOrderByWithRelationInput | Prisma.IncidentOrderByWithRelationInput[]
+  cursor?: Prisma.IncidentWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.FireIncidentScalarFieldEnum | Prisma.FireIncidentScalarFieldEnum[]
+  distinct?: Prisma.IncidentScalarFieldEnum | Prisma.IncidentScalarFieldEnum[]
 }
 
 /**
- * User.fireIncidentEvents
+ * User.deletedIncidents
  */
-export type User$fireIncidentEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$deletedIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the FireIncidentEvent
+   * Select specific fields to fetch from the Incident
    */
-  select?: Prisma.FireIncidentEventSelect<ExtArgs> | null
+  select?: Prisma.IncidentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the FireIncidentEvent
+   * Omit specific fields from the Incident
    */
-  omit?: Prisma.FireIncidentEventOmit<ExtArgs> | null
+  omit?: Prisma.IncidentOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.FireIncidentEventInclude<ExtArgs> | null
-  where?: Prisma.FireIncidentEventWhereInput
-  orderBy?: Prisma.FireIncidentEventOrderByWithRelationInput | Prisma.FireIncidentEventOrderByWithRelationInput[]
-  cursor?: Prisma.FireIncidentEventWhereUniqueInput
+  include?: Prisma.IncidentInclude<ExtArgs> | null
+  where?: Prisma.IncidentWhereInput
+  orderBy?: Prisma.IncidentOrderByWithRelationInput | Prisma.IncidentOrderByWithRelationInput[]
+  cursor?: Prisma.IncidentWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.FireIncidentEventScalarFieldEnum | Prisma.FireIncidentEventScalarFieldEnum[]
+  distinct?: Prisma.IncidentScalarFieldEnum | Prisma.IncidentScalarFieldEnum[]
 }
 
 /**
- * User.createdTimelineEntries
+ * User.incidentPersonnel
  */
-export type User$createdTimelineEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$incidentPersonnelArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the IncidentTimeline
+   * Select specific fields to fetch from the IncidentPersonnel
    */
-  select?: Prisma.IncidentTimelineSelect<ExtArgs> | null
+  select?: Prisma.IncidentPersonnelSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the IncidentTimeline
+   * Omit specific fields from the IncidentPersonnel
    */
-  omit?: Prisma.IncidentTimelineOmit<ExtArgs> | null
+  omit?: Prisma.IncidentPersonnelOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.IncidentTimelineInclude<ExtArgs> | null
-  where?: Prisma.IncidentTimelineWhereInput
-  orderBy?: Prisma.IncidentTimelineOrderByWithRelationInput | Prisma.IncidentTimelineOrderByWithRelationInput[]
-  cursor?: Prisma.IncidentTimelineWhereUniqueInput
+  include?: Prisma.IncidentPersonnelInclude<ExtArgs> | null
+  where?: Prisma.IncidentPersonnelWhereInput
+  orderBy?: Prisma.IncidentPersonnelOrderByWithRelationInput | Prisma.IncidentPersonnelOrderByWithRelationInput[]
+  cursor?: Prisma.IncidentPersonnelWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.IncidentTimelineScalarFieldEnum | Prisma.IncidentTimelineScalarFieldEnum[]
+  distinct?: Prisma.IncidentPersonnelScalarFieldEnum | Prisma.IncidentPersonnelScalarFieldEnum[]
 }
 
 /**
- * User.voidedTimelineEntries
+ * User.createdCasualties
  */
-export type User$voidedTimelineEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$createdCasualtiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the IncidentTimeline
+   * Select specific fields to fetch from the Casualty
    */
-  select?: Prisma.IncidentTimelineSelect<ExtArgs> | null
+  select?: Prisma.CasualtySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the IncidentTimeline
+   * Omit specific fields from the Casualty
    */
-  omit?: Prisma.IncidentTimelineOmit<ExtArgs> | null
+  omit?: Prisma.CasualtyOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.IncidentTimelineInclude<ExtArgs> | null
-  where?: Prisma.IncidentTimelineWhereInput
-  orderBy?: Prisma.IncidentTimelineOrderByWithRelationInput | Prisma.IncidentTimelineOrderByWithRelationInput[]
-  cursor?: Prisma.IncidentTimelineWhereUniqueInput
+  include?: Prisma.CasualtyInclude<ExtArgs> | null
+  where?: Prisma.CasualtyWhereInput
+  orderBy?: Prisma.CasualtyOrderByWithRelationInput | Prisma.CasualtyOrderByWithRelationInput[]
+  cursor?: Prisma.CasualtyWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.IncidentTimelineScalarFieldEnum | Prisma.IncidentTimelineScalarFieldEnum[]
+  distinct?: Prisma.CasualtyScalarFieldEnum | Prisma.CasualtyScalarFieldEnum[]
 }
 
 /**
- * User.assignedInvestigations
+ * User.updatedCasualties
  */
-export type User$assignedInvestigationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$updatedCasualtiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Investigation
+   * Select specific fields to fetch from the Casualty
    */
-  select?: Prisma.InvestigationSelect<ExtArgs> | null
+  select?: Prisma.CasualtySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Investigation
+   * Omit specific fields from the Casualty
    */
-  omit?: Prisma.InvestigationOmit<ExtArgs> | null
+  omit?: Prisma.CasualtyOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.InvestigationInclude<ExtArgs> | null
-  where?: Prisma.InvestigationWhereInput
-  orderBy?: Prisma.InvestigationOrderByWithRelationInput | Prisma.InvestigationOrderByWithRelationInput[]
-  cursor?: Prisma.InvestigationWhereUniqueInput
+  include?: Prisma.CasualtyInclude<ExtArgs> | null
+  where?: Prisma.CasualtyWhereInput
+  orderBy?: Prisma.CasualtyOrderByWithRelationInput | Prisma.CasualtyOrderByWithRelationInput[]
+  cursor?: Prisma.CasualtyWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.InvestigationScalarFieldEnum | Prisma.InvestigationScalarFieldEnum[]
+  distinct?: Prisma.CasualtyScalarFieldEnum | Prisma.CasualtyScalarFieldEnum[]
 }
 
 /**
- * User.investigationsAssigned
+ * User.deletedCasualties
  */
-export type User$investigationsAssignedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$deletedCasualtiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Investigation
+   * Select specific fields to fetch from the Casualty
    */
-  select?: Prisma.InvestigationSelect<ExtArgs> | null
+  select?: Prisma.CasualtySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Investigation
+   * Omit specific fields from the Casualty
    */
-  omit?: Prisma.InvestigationOmit<ExtArgs> | null
+  omit?: Prisma.CasualtyOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.InvestigationInclude<ExtArgs> | null
-  where?: Prisma.InvestigationWhereInput
-  orderBy?: Prisma.InvestigationOrderByWithRelationInput | Prisma.InvestigationOrderByWithRelationInput[]
-  cursor?: Prisma.InvestigationWhereUniqueInput
+  include?: Prisma.CasualtyInclude<ExtArgs> | null
+  where?: Prisma.CasualtyWhereInput
+  orderBy?: Prisma.CasualtyOrderByWithRelationInput | Prisma.CasualtyOrderByWithRelationInput[]
+  cursor?: Prisma.CasualtyWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.InvestigationScalarFieldEnum | Prisma.InvestigationScalarFieldEnum[]
+  distinct?: Prisma.CasualtyScalarFieldEnum | Prisma.CasualtyScalarFieldEnum[]
 }
 
 /**
- * User.investigationReferrals
+ * User.bfpCasualtyRecords
  */
-export type User$investigationReferralsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$bfpCasualtyRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the InvestigationReferral
+   * Select specific fields to fetch from the Casualty
    */
-  select?: Prisma.InvestigationReferralSelect<ExtArgs> | null
+  select?: Prisma.CasualtySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the InvestigationReferral
+   * Omit specific fields from the Casualty
    */
-  omit?: Prisma.InvestigationReferralOmit<ExtArgs> | null
+  omit?: Prisma.CasualtyOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.InvestigationReferralInclude<ExtArgs> | null
-  where?: Prisma.InvestigationReferralWhereInput
-  orderBy?: Prisma.InvestigationReferralOrderByWithRelationInput | Prisma.InvestigationReferralOrderByWithRelationInput[]
-  cursor?: Prisma.InvestigationReferralWhereUniqueInput
+  include?: Prisma.CasualtyInclude<ExtArgs> | null
+  where?: Prisma.CasualtyWhereInput
+  orderBy?: Prisma.CasualtyOrderByWithRelationInput | Prisma.CasualtyOrderByWithRelationInput[]
+  cursor?: Prisma.CasualtyWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.InvestigationReferralScalarFieldEnum | Prisma.InvestigationReferralScalarFieldEnum[]
+  distinct?: Prisma.CasualtyScalarFieldEnum | Prisma.CasualtyScalarFieldEnum[]
 }
 
 /**
- * User.reviewedReports
+ * User.casualtyStatusEvents
  */
-export type User$reviewedReportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$casualtyStatusEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the InvestigationReport
+   * Select specific fields to fetch from the CasualtyStatusEvent
    */
-  select?: Prisma.InvestigationReportSelect<ExtArgs> | null
+  select?: Prisma.CasualtyStatusEventSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the InvestigationReport
+   * Omit specific fields from the CasualtyStatusEvent
    */
-  omit?: Prisma.InvestigationReportOmit<ExtArgs> | null
+  omit?: Prisma.CasualtyStatusEventOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.InvestigationReportInclude<ExtArgs> | null
-  where?: Prisma.InvestigationReportWhereInput
-  orderBy?: Prisma.InvestigationReportOrderByWithRelationInput | Prisma.InvestigationReportOrderByWithRelationInput[]
-  cursor?: Prisma.InvestigationReportWhereUniqueInput
+  include?: Prisma.CasualtyStatusEventInclude<ExtArgs> | null
+  where?: Prisma.CasualtyStatusEventWhereInput
+  orderBy?: Prisma.CasualtyStatusEventOrderByWithRelationInput | Prisma.CasualtyStatusEventOrderByWithRelationInput[]
+  cursor?: Prisma.CasualtyStatusEventWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.InvestigationReportScalarFieldEnum | Prisma.InvestigationReportScalarFieldEnum[]
+  distinct?: Prisma.CasualtyStatusEventScalarFieldEnum | Prisma.CasualtyStatusEventScalarFieldEnum[]
 }
 
 /**
- * User.reportReviews
+ * User.casualtyRevisions
  */
-export type User$reportReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$casualtyRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the InvestigationReportReview
+   * Select specific fields to fetch from the CasualtyRevision
    */
-  select?: Prisma.InvestigationReportReviewSelect<ExtArgs> | null
+  select?: Prisma.CasualtyRevisionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the InvestigationReportReview
+   * Omit specific fields from the CasualtyRevision
    */
-  omit?: Prisma.InvestigationReportReviewOmit<ExtArgs> | null
+  omit?: Prisma.CasualtyRevisionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.InvestigationReportReviewInclude<ExtArgs> | null
-  where?: Prisma.InvestigationReportReviewWhereInput
-  orderBy?: Prisma.InvestigationReportReviewOrderByWithRelationInput | Prisma.InvestigationReportReviewOrderByWithRelationInput[]
-  cursor?: Prisma.InvestigationReportReviewWhereUniqueInput
+  include?: Prisma.CasualtyRevisionInclude<ExtArgs> | null
+  where?: Prisma.CasualtyRevisionWhereInput
+  orderBy?: Prisma.CasualtyRevisionOrderByWithRelationInput | Prisma.CasualtyRevisionOrderByWithRelationInput[]
+  cursor?: Prisma.CasualtyRevisionWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.InvestigationReportReviewScalarFieldEnum | Prisma.InvestigationReportReviewScalarFieldEnum[]
+  distinct?: Prisma.CasualtyRevisionScalarFieldEnum | Prisma.CasualtyRevisionScalarFieldEnum[]
 }
 
 /**

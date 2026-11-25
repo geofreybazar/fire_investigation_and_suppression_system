@@ -24,7 +24,7 @@ const Apperance = () => {
             <CardTitle className='text-base'>Appearance</CardTitle>
 
             <CardDescription>
-              Customize how FIIS looks on your device.
+              Customize how BFP-CMS looks on your device.
             </CardDescription>
           </div>
         </div>

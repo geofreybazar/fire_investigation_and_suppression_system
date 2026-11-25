@@ -20,7 +20,7 @@ const SideHeader = () => {
             <span className=' font-semibold'>BUREAU OF FIRE PROTECTION</span>
 
             <span className=' text-xs text-muted-foreground'>
-              Fire Investigation and Suppression System
+              Casualty Monitoring System
             </span>
           </div>
         </SidebarMenuButton>

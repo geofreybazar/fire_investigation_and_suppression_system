@@ -15,30 +15,27 @@ export const RANKS = [
   "FO1",
 ] as const;
 
-export const ROLE = [
-  // "SUPER_ADMIN",
-  "NHQ_ADMIN",
-  "NHQ_VIEWER",
-  "NHQ_CHIEF_INVESTIGATOR",
-  "NHQ_INVESTIGATOR",
-  "NHQ_OPERATION",
-  "NHQ_OPERATION_STAFF",
-  "REGIONAL_ADMIN",
-  "REGIONAL_OPERATION",
-  "REGIONAL_OPERATION_STAFF",
-  "REGIONAL_CHIEF_INVESTIGATOR",
-  "REGIONAL_INVESTIGATOR",
-  "REGIONAL_VIEWER",
-  "DISTRICT_PROVINCE_OPERATION",
-  "DISTRICT_PROVINCE_OPERATION_STAFF",
-  "DISTRICT_PROVINCE_CHIEF_INVESTIGATOR",
-  "DISTRICT_PROVINCE_INVESTIGATOR",
-  "DISTRICT_PROVINCE_VIEWER",
-  "CITY_MUNICIPALITY_OPERATION",
-  "CITY_MUNICIPALITY_OPERATION_STAFF",
-  "CITY_MUNICIPALITY_INVESTIGATOR",
-  "CITY_MUNICIPALITY_COMMEL",
-  "CITY_MUNICIPALITY_CHIEF_INVESTIGATOR",
-] as const;
+// BFP-CMS roles (REQUIREMENTS.md §7.1). SUPER_ADMIN is never assignable.
+export const USER_ROLES = ["SUPER_ADMIN", "ADMIN", "ENCODER", "VIEWER"] as const;
+export type UserRole = (typeof USER_ROLES)[number];
+
+export const ASSIGNABLE_ROLES = ["ADMIN", "ENCODER", "VIEWER"] as const;
+
+export const ROLE_LABELS: Record<UserRole, string> = {
+  SUPER_ADMIN: "System Super Administrator",
+  ADMIN: "Administrator",
+  ENCODER: "Encoder",
+  VIEWER: "Reporting / Read-only",
+};
+
+// The section fixes the response type an encoder records (FR-RT-001).
+export const SECTIONS = ["OPERATIONS", "EMS", "SRF"] as const;
+export type Section = (typeof SECTIONS)[number];
+
+export const SECTION_LABELS: Record<Section, string> = {
+  OPERATIONS: "Operations (Fire)",
+  EMS: "EMS",
+  SRF: "SRF (Special Rescue)",
+};
 
 export type Rank = (typeof RANKS)[number];

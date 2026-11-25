@@ -15,6 +15,8 @@ import Rank from "../addPersonnel/Rank";
 import LastName from "../addPersonnel/LastName";
 import Email from "../addPersonnel/Email";
 import Office from "../addPersonnel/Office";
+import SectionField from "../addPersonnel/Section";
+import DesignationRef from "../addPersonnel/DesignationRef";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 
@@ -42,6 +44,8 @@ const EditForm = ({
       middle_name: selectedPersonnel.middle_name,
       email: selectedPersonnel.email,
       role: selectedPersonnel.role,
+      section: selectedPersonnel.section ?? null,
+      sectionDesignationRef: selectedPersonnel.sectionDesignationRef ?? null,
       officeId: selectedPersonnel.officeId,
       positionId: selectedPersonnel.positionId,
     },
@@ -81,6 +85,8 @@ const EditForm = ({
             <LastName />
             <Email />
             <Office />
+            <SectionField />
+            <DesignationRef />
           </div>
         </div>
 

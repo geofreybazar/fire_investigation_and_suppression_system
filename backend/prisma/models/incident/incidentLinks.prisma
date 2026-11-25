@@ -1,0 +1,63 @@
+// External references, e.g. the BFP-AIMS incident number (REQUIREMENTS.md
+// FR-INC-006). Unique per source system, so an AIMS incident is entered once.
+model IncidentExternalRef {
+  id           String               @id @default(uuid())
+  sourceSystem ExternalSourceSystem
+  externalId   String
+  url          String?
+
+  incidentId String
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([sourceSystem, externalId])
+  @@index([incidentId])
+}
+
+// Units that responded. They link to the incident, never to casualties, so
+// a casualty is counted once however many units responded (FR-INC-010/012).
+model IncidentRespondingUnit {
+  id              String    @id @default(uuid())
+  unitDesignation String?
+  isLead          Boolean   @default(false)
+  arrivedAt       DateTime? @db.Timestamptz(3)
+
+  officeId String
+  office   Office @relation(fields: [officeId], references: [id])
+
+  incidentId String
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  @@index([incidentId])
+  @@index([officeId])
+}
+
+// Responsible personnel (FR-INC-011), optionally linked to a user account.
+model IncidentPersonnel {
+  id       String                @id @default(uuid())
+  role     IncidentPersonnelRole
+  fullName String
+  rank     RANK?
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  incidentId String
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  @@index([incidentId])
+}
+
+// Incident number sequence per Asia/Manila month, region and response type.
+model IncidentNumberCounter {
+  id           String       @id @default(uuid())
+  year         Int
+  month        Int
+  regionCode   String
+  responseType ResponseType
+  lastNumber   Int          @default(0)
+
+  @@unique([year, month, regionCode, responseType])
+  @@map("incident_number_counters")
+}

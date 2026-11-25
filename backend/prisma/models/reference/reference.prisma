@@ -1,0 +1,23 @@
+// Organizations of other-government and law-enforcement casualties.
+model Agency {
+  id          String      @id @default(uuid())
+  name        String      @unique
+  affiliation Affiliation
+  isActive    Boolean     @default(true)
+
+  casualties Casualty[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model InjuryType {
+  id       String  @id @default(uuid())
+  name     String  @unique
+  isActive Boolean @default(true)
+
+  injuries CasualtyInjury[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

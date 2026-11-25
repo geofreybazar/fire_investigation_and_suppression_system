@@ -1,0 +1,15 @@
+// Categories per response type, managed by NHQ (REQUIREMENTS.md FR-RT-002).
+// Deactivated rather than deleted once used.
+model IncidentCategory {
+  id           String       @id @default(uuid())
+  responseType ResponseType
+  name         String
+  isActive     Boolean      @default(true)
+
+  incidents Incident[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([responseType, name])
+}

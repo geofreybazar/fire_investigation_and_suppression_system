@@ -37,11 +37,6 @@ const NavGroup = ({ links }: { links: NavLinkItem[] }) => {
             >
               {NAV_ICONS[link.icon]}
               <span>{link.label}</span>
-              {link.comingSoon && (
-                <span className='ml-auto rounded-sm border px-1 text-[10px] font-medium text-muted-foreground'>
-                  Soon
-                </span>
-              )}
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}

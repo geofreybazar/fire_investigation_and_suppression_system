@@ -1,30 +1,17 @@
-enum ROLE {
+// BFP-CMS roles (REQUIREMENTS.md §7.1). The tier comes from the office type.
+enum UserRole {
   SUPER_ADMIN
-  NHQ_ADMIN
-  NHQ_VIEWER
-  NHQ_CHIEF_INVESTIGATOR
-  NHQ_INVESTIGATOR
-  NHQ_OPERATION
-  NHQ_OPERATION_STAFF
+  ADMIN
+  ENCODER
+  VIEWER
+}
 
-  REGIONAL_ADMIN
-  REGIONAL_OPERATION
-  REGIONAL_OPERATION_STAFF
-  REGIONAL_CHIEF_INVESTIGATOR
-  REGIONAL_INVESTIGATOR
-  REGIONAL_VIEWER
-
-  DISTRICT_PROVINCE_OPERATION
-  DISTRICT_PROVINCE_OPERATION_STAFF
-  DISTRICT_PROVINCE_CHIEF_INVESTIGATOR
-  DISTRICT_PROVINCE_INVESTIGATOR
-  DISTRICT_PROVINCE_VIEWER
-
-  CITY_MUNICIPALITY_OPERATION
-  CITY_MUNICIPALITY_OPERATION_STAFF
-  CITY_MUNICIPALITY_INVESTIGATOR
-  CITY_MUNICIPALITY_COMMEL
-  CITY_MUNICIPALITY_CHIEF_INVESTIGATOR
+// The station section an encoder or viewer works in. It fixes the response
+// type the user may record (OPERATIONS → FIRE, EMS → EMS, SRF → SPECIAL_RESCUE).
+enum Section {
+  OPERATIONS
+  EMS
+  SRF
 }
 
 enum RANK {
@@ -67,23 +54,26 @@ model User {
 
   positionId String
   position   Position @relation(fields: [positionId], references: [id])
-  role       ROLE
+  role       UserRole
+
+  // Required for ENCODER and station VIEWER, refused for ADMIN and SUPER_ADMIN.
+  section               Section?
+  // The Special Order or office order assigning the person to the section.
+  sectionDesignationRef String?
 
   notification NotificationPreference?
 
-  // Fire incidents
-  fireIncidents          FireIncident[]      @relation("IncidentCreatedBy")
-  deletedFireIncidents   FireIncident[]      @relation("IncidentDeletedBy")
-  fireIncidentEvents     FireIncidentEvent[] @relation("FireIncidentEventActor")
-  createdTimelineEntries IncidentTimeline[]  @relation("TimelineCreatedBy")
-  voidedTimelineEntries  IncidentTimeline[]  @relation("TimelineVoidedBy")
-
-  // Investigations
-  assignedInvestigations Investigation[]             @relation("InvestigationAssignee")
-  investigationsAssigned Investigation[]             @relation("InvestigationAssigner")
-  investigationReferrals InvestigationReferral[]     @relation("ReferralReferredBy")
-  reviewedReports        InvestigationReport[]       @relation("ReportReviewedBy")
-  reportReviews          InvestigationReportReview[] @relation("ReportReviewReviewer")
+  // Incidents and casualties
+  createdIncidents     Incident[]            @relation("IncidentCreatedBy")
+  updatedIncidents     Incident[]            @relation("IncidentUpdatedBy")
+  deletedIncidents     Incident[]            @relation("IncidentDeletedBy")
+  incidentPersonnel    IncidentPersonnel[]
+  createdCasualties    Casualty[]            @relation("CasualtyCreatedBy")
+  updatedCasualties    Casualty[]            @relation("CasualtyUpdatedBy")
+  deletedCasualties    Casualty[]            @relation("CasualtyDeletedBy")
+  bfpCasualtyRecords   Casualty[]            @relation("CasualtyBfpUser")
+  casualtyStatusEvents CasualtyStatusEvent[]
+  casualtyRevisions    CasualtyRevision[]
 
   auditLogs           AuditLog[]     @relation("AuditActor")
   notifications       Notification[]
@@ -93,4 +83,5 @@ model User {
   @@index([officeId])
   @@index([positionId])
   @@index([role])
+  @@index([section])
 }

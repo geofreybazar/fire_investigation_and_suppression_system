@@ -7,7 +7,7 @@ interface PageHeaderProps {
   children?: React.ReactNode;
 }
 
-// The one page heading style used across FIIS.
+// The one page heading style used across BFP-CMS.
 const PageHeader = ({
   title,
   description,

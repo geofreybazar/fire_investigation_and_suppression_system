@@ -27,10 +27,9 @@ const NotificationSettingsForm = ({ userId }: { userId: string }) => {
   const methods = useForm<NotificationInput>({
     resolver: zodResolver(notificationSchema),
     defaultValues: {
-      investigationUpdates: notificationSettings.investigationUpdates,
-      reportReview: notificationSettings.reportReview,
+      casualtyAlerts: notificationSettings.casualtyAlerts,
+      recordCorrections: notificationSettings.recordCorrections,
       systemAnnouncements: notificationSettings.systemAnnouncements,
-      incidentUpdates: notificationSettings.incidentUpdates,
     },
   });
 
@@ -39,10 +38,9 @@ const NotificationSettingsForm = ({ userId }: { userId: string }) => {
   const onSubmit = async (data: NotificationInput) => {
     await updateSettings({
       userId,
-      investigationUpdates: data.investigationUpdates,
-      reportReview: data.reportReview,
+      casualtyAlerts: data.casualtyAlerts,
+      recordCorrections: data.recordCorrections,
       systemAnnouncements: data.systemAnnouncements,
-      incidentUpdates: data.incidentUpdates,
     });
   };
 
@@ -66,13 +64,13 @@ const NotificationSettingsForm = ({ userId }: { userId: string }) => {
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <CardContent className='space-y-5'>
           <Controller
-            name='incidentUpdates'
+            name='casualtyAlerts'
             control={methods.control}
             render={({ field }) => (
               <SettingSwitch
-                id='incident-updates'
-                label='Incident Updates'
-                description='Receive notifications when an incident needs your approval, or yours is approved or rejected.'
+                id='casualty-alerts'
+                label='Casualty Alerts'
+                description='Receive notifications when a BFP personnel casualty or a fatality is recorded in your jurisdiction.'
                 checked={field.value}
                 onCheckedChange={(checked) => {
                   field.onChange(checked);
@@ -86,33 +84,13 @@ const NotificationSettingsForm = ({ userId }: { userId: string }) => {
           <Separator />
 
           <Controller
-            name='investigationUpdates'
+            name='recordCorrections'
             control={methods.control}
             render={({ field }) => (
               <SettingSwitch
-                id='investigation-updates'
-                label='Investigation Updates'
-                description='Receive notifications when a finished fire awaits an investigation decision, a case is referred to you, or an investigation is assigned to you.'
-                checked={field.value}
-                onCheckedChange={(checked) => {
-                  field.onChange(checked);
-                  methods.handleSubmit(onSubmit)();
-                }}
-                disabled={isPending}
-              />
-            )}
-          />
-
-          <Separator />
-
-          <Controller
-            name='reportReview'
-            control={methods.control}
-            render={({ field }) => (
-              <SettingSwitch
-                id='report-review'
-                label='Report Review'
-                description='Receive notifications when a report needs your review, or your report is approved or rejected.'
+                id='record-corrections'
+                label='Record Corrections'
+                description='Receive notifications when someone else corrects a record you created.'
                 checked={field.value}
                 onCheckedChange={(checked) => {
                   field.onChange(checked);
@@ -132,7 +110,7 @@ const NotificationSettingsForm = ({ userId }: { userId: string }) => {
               <SettingSwitch
                 id='system-announcements'
                 label='System Announcements'
-                description='Receive important FIIS system announcements.'
+                description='Receive important BFP-CMS system announcements.'
                 checked={field.value}
                 onCheckedChange={(checked) => {
                   field.onChange(checked);

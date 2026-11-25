@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 import type { User } from "@/interface/users/users";
+import { formatRole } from "@/utils/formatRole";
 
 const Header = ({ user }: { user: User }) => {
   const initials = `${user.first_name[0]}${user.last_name[0]}`;
@@ -14,10 +15,9 @@ const Header = ({ user }: { user: User }) => {
     .filter(Boolean)
     .join(" ");
 
-  const role = user.role
-    .split("_")
-    .map((word) => word.toLowerCase())
-    .join(" ");
+  const role = formatRole(user.role, user.section, {
+    viewerAllSections: true,
+  });
 
   return (
     <Card>
@@ -39,7 +39,7 @@ const Header = ({ user }: { user: User }) => {
               {user.office.name}
             </p>
 
-            <Badge variant='secondary' className='mt-2 text-xs capitalize'>
+            <Badge variant='secondary' className='mt-2 text-xs'>
               {role}
             </Badge>
           </div>

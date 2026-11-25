@@ -1,0 +1,44 @@
+// Response types (REQUIREMENTS.md §3.1). Each is recorded by one section.
+enum ResponseType {
+  FIRE
+  EMS
+  SPECIAL_RESCUE
+}
+
+// Fire details: highest alarm reached (ascending order).
+enum FireAlarmLevel {
+  FIRST_ALARM
+  SECOND_ALARM
+  THIRD_ALARM
+  FOURTH_ALARM
+  FIFTH_ALARM
+  TASK_FORCE_ALPHA
+  TASK_FORCE_BRAVO
+  TASK_FORCE_CHARLIE
+  TASK_FORCE_DELTA
+  GENERAL_ALARM
+}
+
+// Fire details: final fire status.
+enum FireIncidentStatus {
+  VERIFICATION
+  ON_GOING
+  FIRE_UNDER_CONTROL
+  FIRE_OUT
+  FIRE_OUT_UPON_ARRIVAL
+  FALSE_ALARM
+  REKINDLE
+}
+
+// Systems an incident can reference (REQUIREMENTS.md FR-INC-006).
+enum ExternalSourceSystem {
+  AIMS
+  OTHER
+}
+
+enum IncidentPersonnelRole {
+  GROUND_COMMANDER
+  TEAM_LEADER
+  REPORTING_OFFICER
+  OTHER
+}

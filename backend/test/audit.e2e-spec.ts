@@ -10,7 +10,7 @@ import { App } from 'supertest/types.js';
 import { AppModule } from './../src/app.module.js';
 import { PrismaService } from './../src/prisma.service.js';
 import { PrismaExceptionFilter } from './../src/common/filters/prisma-exception.filter.js';
-import { ROLE } from './../src/generated/prisma/enums.js';
+import { Section, UserRole } from './../src/generated/prisma/enums.js';
 
 // Runs against the database in .env. Every record it creates carries a unique
 // suffix and is deleted in afterAll, so existing data is never touched.
@@ -55,8 +55,9 @@ describe('Audit log (e2e)', () => {
 
   async function createAdmin(
     tag: string,
-    role: ROLE,
+    role: UserRole,
     officeId: string,
+    section: Section | null = null,
   ): Promise<Admin> {
     const accountNumber = `E2${tag}${suffix}`.slice(0, 10);
     const user = await prisma.user.create({
@@ -68,6 +69,7 @@ describe('Audit log (e2e)', () => {
         last_name: tag,
         password: await bcrypt.hash(password, 10),
         role,
+        section,
         officeId,
         positionId,
       },
@@ -147,9 +149,9 @@ describe('Audit log (e2e)', () => {
       regionId: regionA,
     });
 
-    adminA = await createAdmin('RA', 'REGIONAL_ADMIN', regionA);
-    adminB = await createAdmin('RB', 'REGIONAL_ADMIN', regionB);
-    nhqAdmin = await createAdmin('NA', 'NHQ_ADMIN', nhq);
+    adminA = await createAdmin('RA', 'ADMIN', regionA);
+    adminB = await createAdmin('RB', 'ADMIN', regionB);
+    nhqAdmin = await createAdmin('NA', 'ADMIN', nhq);
   });
 
   afterAll(async () => {
@@ -175,7 +177,9 @@ describe('Audit log (e2e)', () => {
         first_name: 'New',
         last_name: 'Staff',
         email: `e2e-new-${suffix.toLowerCase()}@example.test`,
-        role: 'CITY_MUNICIPALITY_OPERATION_STAFF',
+        role: 'ENCODER',
+        section: 'EMS',
+        sectionDesignationRef: `SO-${suffix}`,
         officeId: stationA,
         positionId,
       })
@@ -184,7 +188,7 @@ describe('Audit log (e2e)', () => {
 
     const query = { entityType: 'USER', entityId: created.body.id };
 
-    // The creating regional admin and NHQ_ADMIN see it.
+    // The creating regional admin and the NHQ admin see it.
     const seenByA = await auditFor(adminA, query);
     expect(seenByA).toHaveLength(1);
     expect(seenByA[0]).toMatchObject({
@@ -194,6 +198,8 @@ describe('Audit log (e2e)', () => {
     expect(seenByA[0].changes).toMatchObject({
       account_number: accountNumber,
       officeId: stationA,
+      section: 'EMS',
+      sectionDesignationRef: `SO-${suffix}`,
     });
     expect(JSON.stringify(seenByA[0].changes)).not.toMatch(/password/i);
 
@@ -219,12 +225,8 @@ describe('Audit log (e2e)', () => {
     await expect(auditFor(adminB, query)).resolves.toHaveLength(0);
   });
 
-  it('forbids roles other than the three admins', async () => {
-    const staff = await createAdmin(
-      'ST',
-      'CITY_MUNICIPALITY_OPERATION_STAFF',
-      stationA,
-    );
+  it('forbids encoders and viewers', async () => {
+    const staff = await createAdmin('ST', 'ENCODER', stationA, 'OPERATIONS');
 
     await request(server())
       .get('/api/audit')

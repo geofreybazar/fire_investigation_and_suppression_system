@@ -22,7 +22,7 @@ const LoginPage = () => {
             />
           </div>
           <CardTitle className='text-xl tracking-wide'>
-            Fire Investigation and Suppression System
+            Casualty Monitoring System
           </CardTitle>
           <CardDescription>Sign in to your account to continue</CardDescription>
         </CardHeader>

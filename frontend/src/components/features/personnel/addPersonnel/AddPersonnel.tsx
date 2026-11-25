@@ -19,6 +19,8 @@ import MiddleName from "./MiddleName";
 import Email from "./Email";
 import Role from "./Role";
 import Office from "./Office";
+import SectionField from "./Section";
+import DesignationRef from "./DesignationRef";
 import Position from "./Position";
 
 interface AddPersonnelProps {
@@ -39,6 +41,8 @@ const AddPersonnel = ({ setOpenAddPersonnel }: AddPersonnelProps) => {
       middle_name: "",
       email: "",
       role: undefined,
+      section: null,
+      sectionDesignationRef: null,
       officeId: "",
       positionId: "",
     },
@@ -73,6 +77,8 @@ const AddPersonnel = ({ setOpenAddPersonnel }: AddPersonnelProps) => {
             <LastName />
             <Email />
             <Office />
+            <SectionField />
+            <DesignationRef />
           </div>
         </div>
 

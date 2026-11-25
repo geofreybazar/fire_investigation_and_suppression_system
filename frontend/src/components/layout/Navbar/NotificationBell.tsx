@@ -19,11 +19,11 @@ import {
 } from "@/components/ui/popover";
 
 const linkFor = (notification: AppNotification) =>
-  notification.entityType === "INVESTIGATION"
-    ? `/investigations/${notification.entityId}`
-    : `/fireincidents/${notification.entityId}`;
+  notification.entityType === "CASUALTY"
+    ? `/casualties/${notification.entityId}`
+    : `/incidents/${notification.entityId}`;
 
-// In-app notifications (REQUIREMENTS.md Q-21): the latest ten, newest first.
+// In-app notifications (REQUIREMENTS.md §9.2): the latest ten, newest first.
 const NotificationBell = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);

@@ -34,4 +34,13 @@ export class AuditRepository {
 
     return { auditLogs, total };
   }
+
+  // Ids of the offices directly below an office (a district or province's stations).
+  async findChildOfficeIds(officeId: string): Promise<string[]> {
+    const children = await this.prismaService.office.findMany({
+      where: { parentId: officeId },
+      select: { id: true },
+    });
+    return children.map((child) => child.id);
+  }
 }

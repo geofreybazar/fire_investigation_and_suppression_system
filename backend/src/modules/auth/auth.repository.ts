@@ -16,6 +16,7 @@ export class AuthRepository {
       where: {
         account_number: accountNumber,
       },
+      include: { office: { select: { id: true, name: true, type: true } } },
     });
   }
 
@@ -24,6 +25,7 @@ export class AuthRepository {
       where: {
         id: userId,
       },
+      include: { office: { select: { id: true, name: true, type: true } } },
     });
   }
 

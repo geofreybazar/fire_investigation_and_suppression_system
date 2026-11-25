@@ -26,12 +26,10 @@ model Office {
 
   users User[]
 
-  // Fire incidents and investigations
-  fireIncidents                 FireIncident[]          @relation("IncidentOwnerOffice")
-  handledIncidentInvestigations FireIncident[]          @relation("IncidentInvestigationHandlingOffice")
-  conductedInvestigations       Investigation[]         @relation("InvestigationConductingOffice")
-  referralsFrom                 InvestigationReferral[] @relation("ReferralFromOffice")
-  referralsTo                   InvestigationReferral[] @relation("ReferralToOffice")
+  // Incidents reported by this office, units it sent, and BFP casualties belonging to it
+  incidents       Incident[]               @relation("IncidentReportingOffice")
+  respondingUnits IncidentRespondingUnit[]
+  bfpCasualties   Casualty[]               @relation("CasualtyBfpOffice")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

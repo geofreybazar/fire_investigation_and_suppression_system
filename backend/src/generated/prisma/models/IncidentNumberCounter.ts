@@ -43,6 +43,7 @@ export type IncidentNumberCounterMinAggregateOutputType = {
   year: number | null
   month: number | null
   regionCode: string | null
+  responseType: $Enums.ResponseType | null
   lastNumber: number | null
 }
 
@@ -51,6 +52,7 @@ export type IncidentNumberCounterMaxAggregateOutputType = {
   year: number | null
   month: number | null
   regionCode: string | null
+  responseType: $Enums.ResponseType | null
   lastNumber: number | null
 }
 
@@ -59,6 +61,7 @@ export type IncidentNumberCounterCountAggregateOutputType = {
   year: number
   month: number
   regionCode: number
+  responseType: number
   lastNumber: number
   _all: number
 }
@@ -81,6 +84,7 @@ export type IncidentNumberCounterMinAggregateInputType = {
   year?: true
   month?: true
   regionCode?: true
+  responseType?: true
   lastNumber?: true
 }
 
@@ -89,6 +93,7 @@ export type IncidentNumberCounterMaxAggregateInputType = {
   year?: true
   month?: true
   regionCode?: true
+  responseType?: true
   lastNumber?: true
 }
 
@@ -97,6 +102,7 @@ export type IncidentNumberCounterCountAggregateInputType = {
   year?: true
   month?: true
   regionCode?: true
+  responseType?: true
   lastNumber?: true
   _all?: true
 }
@@ -192,6 +198,7 @@ export type IncidentNumberCounterGroupByOutputType = {
   year: number
   month: number
   regionCode: string
+  responseType: $Enums.ResponseType
   lastNumber: number
   _count: IncidentNumberCounterCountAggregateOutputType | null
   _avg: IncidentNumberCounterAvgAggregateOutputType | null
@@ -223,6 +230,7 @@ export type IncidentNumberCounterWhereInput = {
   year?: Prisma.IntFilter<"IncidentNumberCounter"> | number
   month?: Prisma.IntFilter<"IncidentNumberCounter"> | number
   regionCode?: Prisma.StringFilter<"IncidentNumberCounter"> | string
+  responseType?: Prisma.EnumResponseTypeFilter<"IncidentNumberCounter"> | $Enums.ResponseType
   lastNumber?: Prisma.IntFilter<"IncidentNumberCounter"> | number
 }
 
@@ -231,26 +239,29 @@ export type IncidentNumberCounterOrderByWithRelationInput = {
   year?: Prisma.SortOrder
   month?: Prisma.SortOrder
   regionCode?: Prisma.SortOrder
+  responseType?: Prisma.SortOrder
   lastNumber?: Prisma.SortOrder
 }
 
 export type IncidentNumberCounterWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  year_month_regionCode?: Prisma.IncidentNumberCounterYearMonthRegionCodeCompoundUniqueInput
+  year_month_regionCode_responseType?: Prisma.IncidentNumberCounterYearMonthRegionCodeResponseTypeCompoundUniqueInput
   AND?: Prisma.IncidentNumberCounterWhereInput | Prisma.IncidentNumberCounterWhereInput[]
   OR?: Prisma.IncidentNumberCounterWhereInput[]
   NOT?: Prisma.IncidentNumberCounterWhereInput | Prisma.IncidentNumberCounterWhereInput[]
   year?: Prisma.IntFilter<"IncidentNumberCounter"> | number
   month?: Prisma.IntFilter<"IncidentNumberCounter"> | number
   regionCode?: Prisma.StringFilter<"IncidentNumberCounter"> | string
+  responseType?: Prisma.EnumResponseTypeFilter<"IncidentNumberCounter"> | $Enums.ResponseType
   lastNumber?: Prisma.IntFilter<"IncidentNumberCounter"> | number
-}, "id" | "year_month_regionCode">
+}, "id" | "year_month_regionCode_responseType">
 
 export type IncidentNumberCounterOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   year?: Prisma.SortOrder
   month?: Prisma.SortOrder
   regionCode?: Prisma.SortOrder
+  responseType?: Prisma.SortOrder
   lastNumber?: Prisma.SortOrder
   _count?: Prisma.IncidentNumberCounterCountOrderByAggregateInput
   _avg?: Prisma.IncidentNumberCounterAvgOrderByAggregateInput
@@ -267,6 +278,7 @@ export type IncidentNumberCounterScalarWhereWithAggregatesInput = {
   year?: Prisma.IntWithAggregatesFilter<"IncidentNumberCounter"> | number
   month?: Prisma.IntWithAggregatesFilter<"IncidentNumberCounter"> | number
   regionCode?: Prisma.StringWithAggregatesFilter<"IncidentNumberCounter"> | string
+  responseType?: Prisma.EnumResponseTypeWithAggregatesFilter<"IncidentNumberCounter"> | $Enums.ResponseType
   lastNumber?: Prisma.IntWithAggregatesFilter<"IncidentNumberCounter"> | number
 }
 
@@ -275,6 +287,7 @@ export type IncidentNumberCounterCreateInput = {
   year: number
   month: number
   regionCode: string
+  responseType: $Enums.ResponseType
   lastNumber?: number
 }
 
@@ -283,6 +296,7 @@ export type IncidentNumberCounterUncheckedCreateInput = {
   year: number
   month: number
   regionCode: string
+  responseType: $Enums.ResponseType
   lastNumber?: number
 }
 
@@ -291,6 +305,7 @@ export type IncidentNumberCounterUpdateInput = {
   year?: Prisma.IntFieldUpdateOperationsInput | number
   month?: Prisma.IntFieldUpdateOperationsInput | number
   regionCode?: Prisma.StringFieldUpdateOperationsInput | string
+  responseType?: Prisma.EnumResponseTypeFieldUpdateOperationsInput | $Enums.ResponseType
   lastNumber?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -299,6 +314,7 @@ export type IncidentNumberCounterUncheckedUpdateInput = {
   year?: Prisma.IntFieldUpdateOperationsInput | number
   month?: Prisma.IntFieldUpdateOperationsInput | number
   regionCode?: Prisma.StringFieldUpdateOperationsInput | string
+  responseType?: Prisma.EnumResponseTypeFieldUpdateOperationsInput | $Enums.ResponseType
   lastNumber?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -307,6 +323,7 @@ export type IncidentNumberCounterCreateManyInput = {
   year: number
   month: number
   regionCode: string
+  responseType: $Enums.ResponseType
   lastNumber?: number
 }
 
@@ -315,6 +332,7 @@ export type IncidentNumberCounterUpdateManyMutationInput = {
   year?: Prisma.IntFieldUpdateOperationsInput | number
   month?: Prisma.IntFieldUpdateOperationsInput | number
   regionCode?: Prisma.StringFieldUpdateOperationsInput | string
+  responseType?: Prisma.EnumResponseTypeFieldUpdateOperationsInput | $Enums.ResponseType
   lastNumber?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -323,13 +341,15 @@ export type IncidentNumberCounterUncheckedUpdateManyInput = {
   year?: Prisma.IntFieldUpdateOperationsInput | number
   month?: Prisma.IntFieldUpdateOperationsInput | number
   regionCode?: Prisma.StringFieldUpdateOperationsInput | string
+  responseType?: Prisma.EnumResponseTypeFieldUpdateOperationsInput | $Enums.ResponseType
   lastNumber?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
-export type IncidentNumberCounterYearMonthRegionCodeCompoundUniqueInput = {
+export type IncidentNumberCounterYearMonthRegionCodeResponseTypeCompoundUniqueInput = {
   year: number
   month: number
   regionCode: string
+  responseType: $Enums.ResponseType
 }
 
 export type IncidentNumberCounterCountOrderByAggregateInput = {
@@ -337,6 +357,7 @@ export type IncidentNumberCounterCountOrderByAggregateInput = {
   year?: Prisma.SortOrder
   month?: Prisma.SortOrder
   regionCode?: Prisma.SortOrder
+  responseType?: Prisma.SortOrder
   lastNumber?: Prisma.SortOrder
 }
 
@@ -351,6 +372,7 @@ export type IncidentNumberCounterMaxOrderByAggregateInput = {
   year?: Prisma.SortOrder
   month?: Prisma.SortOrder
   regionCode?: Prisma.SortOrder
+  responseType?: Prisma.SortOrder
   lastNumber?: Prisma.SortOrder
 }
 
@@ -359,6 +381,7 @@ export type IncidentNumberCounterMinOrderByAggregateInput = {
   year?: Prisma.SortOrder
   month?: Prisma.SortOrder
   regionCode?: Prisma.SortOrder
+  responseType?: Prisma.SortOrder
   lastNumber?: Prisma.SortOrder
 }
 
@@ -375,6 +398,7 @@ export type IncidentNumberCounterSelect<ExtArgs extends runtime.Types.Extensions
   year?: boolean
   month?: boolean
   regionCode?: boolean
+  responseType?: boolean
   lastNumber?: boolean
 }, ExtArgs["result"]["incidentNumberCounter"]>
 
@@ -383,6 +407,7 @@ export type IncidentNumberCounterSelectCreateManyAndReturn<ExtArgs extends runti
   year?: boolean
   month?: boolean
   regionCode?: boolean
+  responseType?: boolean
   lastNumber?: boolean
 }, ExtArgs["result"]["incidentNumberCounter"]>
 
@@ -391,6 +416,7 @@ export type IncidentNumberCounterSelectUpdateManyAndReturn<ExtArgs extends runti
   year?: boolean
   month?: boolean
   regionCode?: boolean
+  responseType?: boolean
   lastNumber?: boolean
 }, ExtArgs["result"]["incidentNumberCounter"]>
 
@@ -399,10 +425,11 @@ export type IncidentNumberCounterSelectScalar = {
   year?: boolean
   month?: boolean
   regionCode?: boolean
+  responseType?: boolean
   lastNumber?: boolean
 }
 
-export type IncidentNumberCounterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "year" | "month" | "regionCode" | "lastNumber", ExtArgs["result"]["incidentNumberCounter"]>
+export type IncidentNumberCounterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "year" | "month" | "regionCode" | "responseType" | "lastNumber", ExtArgs["result"]["incidentNumberCounter"]>
 
 export type $IncidentNumberCounterPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "IncidentNumberCounter"
@@ -412,6 +439,7 @@ export type $IncidentNumberCounterPayload<ExtArgs extends runtime.Types.Extensio
     year: number
     month: number
     regionCode: string
+    responseType: $Enums.ResponseType
     lastNumber: number
   }, ExtArgs["result"]["incidentNumberCounter"]>
   composites: {}
@@ -840,6 +868,7 @@ export interface IncidentNumberCounterFieldRefs {
   readonly year: Prisma.FieldRef<"IncidentNumberCounter", 'Int'>
   readonly month: Prisma.FieldRef<"IncidentNumberCounter", 'Int'>
   readonly regionCode: Prisma.FieldRef<"IncidentNumberCounter", 'String'>
+  readonly responseType: Prisma.FieldRef<"IncidentNumberCounter", 'ResponseType'>
   readonly lastNumber: Prisma.FieldRef<"IncidentNumberCounter", 'Int'>
 }
     

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-FIIS is a fire incident / investigation information system for the BFP (Bureau of Fire Protection, Philippines). It is two independent npm projects with no root workspace:
+BFP-CMS (BFP Casualty Monitoring System) records and reports casualties of Bureau of Fire Protection (Philippines) emergency responses. It is being rebuilt from FIIS, a fire incident / investigation system (see BFP-CMS Domain Rules below). It is two independent npm projects with no root workspace:
 
 - `backend/` — NestJS 12 + Prisma 7 (PostgreSQL via `@prisma/adapter-pg`), ESM (`"type": "module"`)
 - `frontend/` — React 19 + Vite 8 + TanStack Query + Zustand + shadcn/ui (base-ui) + Tailwind v4
@@ -35,8 +35,10 @@ npx vitest run src/modules/office/office.service.spec.ts   # single test file
 npx vitest run -t "should be defined"                      # filter by test name
 npm run test:e2e                  # vitest with vitest.config.e2e.ts (test/*.e2e-spec.ts)
 # E2E tests run against the database in backend/.env. Each creates its own
-# records with a unique suffix and deletes them in afterAll (delete
-# IncidentLocation before FireIncident: that FK is RESTRICT, see D-05).
+# records with a unique suffix and deletes them in afterAll.
+npm run seed                      # reference data (categories, agencies, injury types); idempotent
+SEED_DEV=true npm run seed        # plus a sample office tree and a SUPER_ADMIN from
+                                  # SEED_SUPER_ADMIN_ACCOUNT/_PASSWORD/_EMAIL (refused in production)
 ```
 
 Prisma (config is `prisma7.config.ts`, which reads `DATABASE_URL` from `.env`):
@@ -65,17 +67,17 @@ There is no frontend test setup.
 - **ESM imports**: relative imports must use the `.js` extension (e.g. `'./office.service.js'`).
 - **Prisma schema is split** across `prisma/schema.prisma` (generator + datasource) and `prisma/models/**/*.prisma`; the config points `schema` at the `prisma/` folder. The client is generated into `src/generated/prisma/` — import types/enums from `generated/prisma/client.js` or `generated/prisma/enums.js`, never `@prisma/client`. Don't hand-edit generated files.
 - **Prisma errors** (`P2002` unique violations, etc.) are converted to HTTP exceptions globally by `common/filters/prisma-exception.filter.ts`, so repositories generally don't need to catch them.
-- **Audit log:** changes to users, offices, positions and categories, `SUPER_ADMIN` incident deletion/restore, and attachment downloads are recorded with `recordAudit(tx, entry)` from `modules/audit/audit.writer.ts`, called by the repository **inside the transaction that makes the change**. Record only listed, non-sensitive fields (`auditSnapshot` / `auditChanges`); never passwords or tokens. Incident and investigation workflow history stays in `IncidentTimeline`, `FireIncidentEvent`, `InvestigationReferral` and `InvestigationReportReview`.
+- **Audit log:** changes are recorded with `recordAudit(tx, entry)` from `modules/audit/audit.writer.ts`, called by the repository **inside the transaction that makes the change**, with the affected office's `officeId`/`regionId` (REQUIREMENTS.md §9.1 lists what must be audited). Record only listed, non-sensitive fields (`auditSnapshot` / `auditChanges`); never passwords, tokens, or casualty personal or health values. Casualty status history and corrections are also kept in `CasualtyStatusEvent` and `CasualtyRevision`.
 - **Notifications:** workflow notifications go through `NotificationDispatcher.notify()` (`modules/notification/notification.dispatcher.ts`) **after** the change commits; it applies user preferences, skips the actor and never throws. Wording lives in `notification.messages.ts`.
-- **Incident visibility** for any new read path reuses `incidentScopeWhere()` / `isIncidentVisible()` from `fire-incident/utils/incident-scope.ts` (statistics, attachments and investigations already do). Out-of-scope records return 404, not 403.
-- **Attachments** are stored by `AttachmentStorage` under `UPLOAD_DIR` (random keys, outside the web root) and only served through the download endpoint.
+- **Jurisdiction** for any read path reuses `common/scope/jurisdiction.ts`: `officeScopeWhere()` / `isOfficeInScope()` for offices and users, `jurisdictionWhere()` / `isInJurisdiction()` for incidents (office scope plus the section filter). Out-of-scope records return 404, not 403.
+- **Attachments** (rebuilt in roadmap Phase 5) are stored by `common/files/attachment.storage.ts` under `UPLOAD_DIR` (random keys, outside the web root) and only served through a download endpoint; `common/files/file-type.ts` checks file signatures.
 - **Auth**: login sets `access_token` (15m) and `refresh_token` (7d) as httpOnly cookies; refresh tokens are persisted in the `RefreshToken` table and rotated on `/auth/refresh_token`. `AuthGuard` reads the cookie, and on any failure throws `TokenExpiredException` with `error: "TOKEN_EXPIRED"` — the frontend depends on that exact string to trigger a refresh. It also answers 403 `PASSWORD_CHANGE_REQUIRED` for users who must still change the default password, except on routes marked `@AllowPendingPasswordChange()`. After 5 failed logins an account is locked for 15 minutes.
-- **Authorization** has two layers:
-  1. `@Roles(...)` + `@UseGuards(AuthGuard, RoleGuard)` on controllers for coarse role checks; `@CurrentUser()` yields the `CurrentUserJwtPayload`.
-  2. Role × office-type permission maps (`users/utils/*.permissions.ts`, `office/utils/office.permissions.ts`, `OfficeAuthorizationService`) restrict which office types a role may manage/assign. Roles (`ROLE` enum in `prisma/models/user.prisma`) are tiered NHQ / REGIONAL / DISTRICT_PROVINCE / station; `REGIONAL_ADMIN` queries are scoped to their own office and offices whose `regionId` is theirs.
+- **Authorization** has two layers, both in `common/authz/`:
+  1. `@RequirePermission(Permission.X)` + `@UseGuards(AuthGuard, PermissionGuard)` on controllers for coarse checks. `permissions.ts` is the role × tier matrix of REQUIREMENTS.md §7.2 (`hasPermission(user, permission)`); the tier comes from the office type (`tier.ts`). `@CurrentUser()` yields the `CurrentUserJwtPayload` (`role`, `section`, `officeId`, `officeType`). `RoleGuard`/`@Roles` remain for SUPER_ADMIN-only routes.
+  2. Resource checks in services: `user-assignment.ts` (`canAssign`, `canManageAccount`, `sectionError`) decides which accounts an admin may create or manage; `section.ts` (`assertSectionMayRecord`, `sectionResponseTypeFilter`) ties encoders to their section's response type; `office/utils/office.permissions.ts` lists the office types an office manager may manage.
 - **Office hierarchy** is enforced in `office/utils/office-heirarchy.validator.ts`: NHQ → Regional → District/Provincial → City/Municipal stations.
-- **Incident numbers** are generated inside a transaction via `fire-incident/utils/generate-incident-number.ts`, using the `IncidentNumberCounter` table keyed by (year, month, regionCode) in Asia/Manila time; regional offices carry a unique `regionCode`.
-- **Known gaps:** `docs/REQUIREMENTS.md` §10 lists past discrepancies between code and requirements; §10.1 records which were resolved in Phases 1–5 (D-24 renames are deferred, D-05 accepted). Not built yet: the unscoped FireStations, Monitoring and ResponseUnits pages (Q-01), which show "Coming soon"; official BFP report forms (Q-20) and attachment retention (Q-22) are still open.
+- **Incident numbers** are generated inside the create transaction via `common/numbering/generate-incident-number.ts` (`<FIR|EMS|SRF>-YYYY-MM-<REGIONCODE>-NNNNNN`), using the `IncidentNumberCounter` table keyed by (year, month, regionCode, responseType) in Asia/Manila time; regional offices carry a unique `regionCode`.
+- **Build state:** roadmap Phase 1 (foundation) is built: role + section, permission matrix, jurisdiction, users/offices/positions/audit, the full BFP-CMS schema and seed. Incident, casualty, report, notification-event and attachment modules come in Phases 2–5 (REQUIREMENTS.md §13); their tables already exist.
 - **Further docs:** `docs/ARCHITECTURE.md` (modules, request lifecycle, auth, workflows) and `docs/DATA_MODEL.md` (ER diagram, models, enums, migrations).
 
 ## Frontend architecture
@@ -83,6 +85,7 @@ There is no frontend test setup.
 - **Data flow**: `src/service/*.service.ts` (axios calls) → `src/hooks/<feature>/use*.ts` (one TanStack Query hook per query/mutation; mutations invalidate query keys and show toasts via `utils/resubaleToast.ts`) → `components/features/<feature>/` → `pages/`.
 - **API client**: every service calls `axiosJWT("/api/<controller-prefix>")` from `service/AxiosCreate.ts`, which sends cookies and, on a `TOKEN_EXPIRED` response, performs a single shared `POST /api/auth/refresh_token` and retries; `Unauthorized` redirects to `/login`.
 - **Dev proxy**: `vite.config.ts` proxies only `/api` to the backend; new controllers need no proxy changes.
+- **Permissions** for showing links and controls come from `utils/permissions.ts`, a display-only mirror of `backend/src/common/authz/permissions.ts`; keep the two in step. Sidebar groups and page access rules are `NAV_GROUPS` in `constants/links.ts`.
 - Global user state lives in `store/userStore.ts` (Zustand). Routes are a flat list in `components/app/Router.tsx`. `@/` aliases `src/`. shadcn components go in `src/components/ui` (style `base-vega`, built on `@base-ui/react`). React Compiler is enabled via Babel.
 
 ## Development Workflow
@@ -115,55 +118,42 @@ There is no frontend test setup.
 - Never claim a test, build, migration, or verification succeeded unless it was actually executed successfully.
 - Do not commit changes unless requested.
 
-## FIIS Domain Rules
+## BFP-CMS Domain Rules
 
-The approved business requirements are in `docs/REQUIREMENTS.md` (revision 12, last updated 2026-11-03). It is the source of truth for the rules below. Read the relevant section and its FR IDs before implementing a feature. Anything still tagged OPEN there must be asked about, not guessed.
+The system is being rebuilt from FIIS (fire incidents + investigations) into **BFP-CMS, the BFP Casualty Monitoring System**. `docs/REQUIREMENTS.md` (BFP-CMS revision 1, 2026-11-25) is the source of truth for the target rules below. Read the relevant section and its FR IDs before implementing a feature. Anything tagged OPEN there (§12) must be asked about, not guessed. Phase 1 (§13) is built; later phases are not. The FIIS rules are in git history (REQUIREMENTS.md revision 12, commit `936a920`). `docs/ARCHITECTURE.md` and `docs/DATA_MODEL.md` describe the current code and are updated per phase.
 
-### Roles
+### Scope and decisions
 
-- `SUPER_ADMIN` is a single developer-held account created manually in the database. No API may create or assign `SUPER_ADMIN`. For fire incidents it can only view, delete and restore. It has full access to investigations and administration.
-- `NHQ_ADMIN` and `REGIONAL_ADMIN` manage users, offices and positions only; they have no access to fire incidents. Only `NHQ_ADMIN` (and `SUPER_ADMIN`) may create `REGIONAL_ADMIN`.
-- `CITY_MUNICIPALITY_OPERATION` is the station's chief of operations; it approves incident creation and makes no incident changes. `CITY_MUNICIPALITY_COMMEL` (radio operator) has the same permissions as `CITY_MUNICIPALITY_OPERATION_STAFF`.
-- `CITY_MUNICIPALITY_CHIEF_INVESTIGATOR` is an approved new role (not yet in the enum).
-- Non-admin roles see approved incidents of their own office and all offices below it.
+- BFP-CMS records casualties (**fatalities and injured only**: `INJURED`, `DECEASED`) of Fire, EMS and Special Rescue (HAZMAT, CSSR, …) responses, one record per person.
+- Investigations are retired; do not rebuild them. FIIS data is test data, and the schema restarts from a new baseline (a dev DB reset still needs explicit approval).
+- Casualty records need no approval. Quality comes from validation, the `isComplete` flag, duplicate warnings, corrections with a reason and revision history, and soft deletion.
+- BFP-AIMS: an optional external reference per incident, unique per source system. No live integration yet.
 
-### Fire Incidents
+### Offices
 
-- Treat FireIncident as the authoritative incident record. It is owned by the submitter's office, which is always a city/municipal station.
-- Only `CITY_MUNICIPALITY_OPERATION_STAFF` and `CITY_MUNICIPALITY_COMMEL` create and update incidents and timeline entries. Creation is pending until the station's `CITY_MUNICIPALITY_OPERATION` approves it. Updates need no approval. Pending and rejected incidents are visible only to the station operations group and `SUPER_ADMIN`. Only the original submitter may edit, resubmit or remove a rejected incident (never-approved only).
-- Only `SUPER_ADMIN` deletes approved incidents. Deletion is soft: it hides the incident and all connected data. `SUPER_ADMIN` can restore.
-- Incident location is required and persisted with the incident. Region, province/district and city/municipality are derived from the submitter's office, never taken from the client. `placeOfOccurence` and `barangay` are typed by the user; latitude/longitude are optional. Incident date fields are optional.
-- Status uses the exact Prisma enum identifiers `VERIFICATION`, `ON_GOING`, `FIRE_UNDER_CONTROL`, `FIRE_OUT`, `FIRE_OUT_UPON_ARRIVAL`, `FALSE_ALARM`, plus the approved `REKINDLE`. Follow the transition table in `docs/REQUIREMENTS.md` §3.3:
-  - `FIRE_OUT` can only move to `REKINDLE`, and `REKINDLE` only back to `FIRE_OUT`.
-  - `FIRE_OUT_UPON_ARRIVAL` and `FALSE_ALARM` are final.
-- Alarm level only goes up (skips allowed), changes only through a timeline entry, and does not change on rekindle.
-- Validate status and alarm transitions in the backend. Do not rely on frontend controls to enforce business rules.
-- Every status or alarm change creates an `IncidentTimeline` entry. `occurredAt` is user-entered; ordering and "previous status" use `occurredAt`; `createdAt` is server-set. Corrections void the original entry and add a replacement; never overwrite or erase history.
+- The office structure is unchanged from FIIS: NHQ → Regional → District/Provincial → City/Municipal station (`office-heirarchy.validator.ts`), with `parentId`, `regionId` and `regionCode`. There are no substations.
+- Jurisdiction is the user's office plus the offices below it, using the existing `id OR parentId OR regionId` rule (to live in a shared `common/scope/jurisdiction.ts`). Out-of-scope records return 404.
 
-### Incident Numbering
+### Roles and sections
 
-- Reuse the existing incident-number generation utility; the format `YYYY-MM-<REGIONCODE>-NNNNNN` is approved.
-- Generate the incident number inside the transaction that approves the incident (pending incidents have no number).
-- Preserve the counter uniqueness constraint for year, month, and region code.
-- Use Asia/Manila consistently for incident-number date boundaries.
-- Do not introduce a second incident-numbering implementation or bypass the existing counter.
-- Investigation numbers are `INV-<incidentNo>-<NN>` (per-incident sequence), generated when the investigation starts. They do not use the incident counter.
+- Roles are `SUPER_ADMIN`, `ADMIN`, `ENCODER` and `VIEWER`. The tier comes from the user's office type. `section` is `OPERATIONS`, `EMS` or `SRF`, required for ENCODER and station VIEWER and refused for ADMIN.
+- The section fixes the response type: OPERATIONS → FIRE, EMS → EMS, SRF → SPECIAL_RESCUE. The incident's response type is taken from the encoder's section, never from the client. A wrong section returns 403 on writes and 404 on reads.
+- Only an admin over the user's office sets the section, with the designation reference (Special Order). Section changes are audited. Writes re-read the user's role, section, office and active flag from the DB.
+- `SUPER_ADMIN` is a single account created manually in the database. No API may create or assign it. Only NHQ `ADMIN` and `SUPER_ADMIN` create Regional admins.
+- Encoding happens at City/Municipal stations only. Higher offices monitor.
 
-### Investigations
+### Incidents and casualties
 
-- An incident may have several investigations, with **at most one open** (assigned and not yet approved). The unique `fireIncidentId` constraint is approved for removal.
-- Investigations can start only when the incident is `FIRE_OUT` or `FIRE_OUT_UPON_ARRIVAL`, and they are optional.
-- The handling office starts as the owning station. Its chief investigator may:
-  - start an investigation (create and assign an investigator of the handling office in one step), or
-  - refer the case up to any ancestor office, or down within the station's chain, or
-  - do nothing.
-- No referral and no reassignment while an investigation is open. An investigator with an open investigation cannot be deactivated, moved or edited.
-- Only the assigned investigator edits and submits the report. Only the handling chief investigator reviews, approves or rejects it.
-  - Rejected reports go back for editing.
-  - Approval requires `classification` and `causeOfFire` to not be `UNDER_INVESTIGATION`; it completes and locks the investigation.
-  - After approval, the case may be referred up or down for a new investigation. Statistics use the latest completed investigation.
-- Keep incident lifecycle state separate from investigation-specific fields, such as cause, classification, origin, and investigation dates. Rekindling does not affect an open investigation.
-- Do not invent investigation rules or classifications beyond `docs/REQUIREMENTS.md`.
+- The incident belongs to the reporting station. Region, province/district and city/municipality come from the office, never from the client.
+- Responding units and personnel are listed on the incident. A casualty belongs to one incident and is counted once, under the reporting office.
+- Incident numbers reuse `generate-incident-number.ts` and the `IncidentNumberCounter`, keyed additionally by response type, in Asia/Manila time, inside the create transaction. Do not add a second numbering implementation.
+- The only casualty status change is `INJURED → DECEASED`; `DECEASED` is final. Wrong entries are fixed by corrections (reason required, revision kept), never by overwriting history.
+- Soft deletion with a reason, by the station ADMIN or `SUPER_ADMIN`. Only `SUPER_ADMIN` restores. Deleted records are excluded from statistics.
+
+### Personal information (RA 10173)
+
+- Casualty personal information (names, DOB, address, contact) and sensitive information (injury and death details) are stored apart from classification fields. Statistics and de-identified exports never read them.
+- Mask personal information per the REQUIREMENTS.md §7.2 matrix, and audit views from outside the reporting station and exports that include personal information. Never put names or medical details in logs, errors or audit `changes`.
 
 ## Security and Authorization
 

@@ -16,9 +16,6 @@ import {
   normalizeRegionCode,
   validateRegionCode,
 } from './utils/validateRegionCode.js';
-import { CHIEF_INVESTIGATOR_ROLES } from '../investigation/utils/investigation-rules.js';
-import { NotificationDispatcher } from '../notification/notification.dispatcher.js';
-import { notificationMessages } from '../notification/notification.messages.js';
 
 @Injectable()
 export class OfficeService {
@@ -27,7 +24,6 @@ export class OfficeService {
   constructor(
     private readonly officeRepository: OfficeRepository,
     private readonly officeAuthorizationService: OfficeAuthorizationService,
-    private readonly notificationDispatcher: NotificationDispatcher,
   ) {}
 
   async createOffice(officeData: OfficeInput, user: CurrentUserJwtPayload) {
@@ -147,24 +143,13 @@ export class OfficeService {
       );
     }
 
-    const { office: updatedOffice, returnedCases } =
-      await this.officeRepository.updateOffice(id, officeData, user.sub);
+    const updatedOffice = await this.officeRepository.updateOffice(
+      id,
+      officeData,
+      user.sub,
+    );
 
     this.logger.log('Updating office successful');
-
-    for (const returned of returnedCases) {
-      await this.notificationDispatcher.notify({
-        ...notificationMessages.caseReferred(
-          returned.incidentId,
-          returned.incidentNo,
-        ),
-        actorId: user.sub,
-        recipients: {
-          officeId: returned.stationId,
-          roles: CHIEF_INVESTIGATOR_ROLES,
-        },
-      });
-    }
 
     return updatedOffice;
   }
@@ -191,19 +176,12 @@ export class OfficeService {
       );
     }
 
-    // Incident ownership, case handling and investigation history must keep
-    // their office, including for soft-deleted incidents.
+    // Incidents, responding units and BFP casualties keep their office,
+    // including soft-deleted ones.
     const { _count: counts } = office;
-    if (
-      counts.fireIncidents +
-        counts.handledIncidentInvestigations +
-        counts.conductedInvestigations +
-        counts.referralsFrom +
-        counts.referralsTo >
-      0
-    ) {
+    if (counts.incidents + counts.respondingUnits + counts.bfpCasualties > 0) {
       throw new ConflictException(
-        'This office cannot be deleted because it has fire incident or investigation records.',
+        'This office cannot be deleted because it has incident or casualty records.',
       );
     }
 

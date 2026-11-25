@@ -1,0 +1,49 @@
+// REQUIREMENTS.md §5.2
+enum Affiliation {
+  CIVILIAN
+  BFP_PERSONNEL
+  FIRE_AIDE
+  BFP_VOLUNTEER
+  OTHER_GOVERNMENT
+  OTHER_LAW_ENFORCEMENT
+  OTHER_UNCLASSIFIED
+}
+
+// Fatalities and injured only. The only change allowed is INJURED → DECEASED.
+enum CasualtyStatus {
+  INJURED
+  DECEASED
+}
+
+enum CasualtySeverity {
+  MINOR
+  SERIOUS
+  CRITICAL
+}
+
+enum CasualtyActivity {
+  SUPPRESSION
+  RESCUE
+  EMS_CARE
+  TRANSPORT
+  OTHER
+}
+
+enum Sex {
+  MALE
+  FEMALE
+  UNKNOWN
+}
+
+enum TreatmentType {
+  ON_SITE
+  TRANSPORTED
+  REFUSED
+  NONE
+}
+
+enum PlaceOfDeath {
+  ON_SCENE
+  IN_TRANSIT
+  HOSPITAL
+}

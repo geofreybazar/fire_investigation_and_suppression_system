@@ -26,52 +26,58 @@ export type AggregateIncidentPersonnel = {
 
 export type IncidentPersonnelMinAggregateOutputType = {
   id: string | null
-  groundCommander: string | null
-  arsonInvestigator: string | null
-  sender: string | null
-  fireIncidentId: string | null
+  role: $Enums.IncidentPersonnelRole | null
+  fullName: string | null
+  rank: $Enums.RANK | null
+  userId: string | null
+  incidentId: string | null
 }
 
 export type IncidentPersonnelMaxAggregateOutputType = {
   id: string | null
-  groundCommander: string | null
-  arsonInvestigator: string | null
-  sender: string | null
-  fireIncidentId: string | null
+  role: $Enums.IncidentPersonnelRole | null
+  fullName: string | null
+  rank: $Enums.RANK | null
+  userId: string | null
+  incidentId: string | null
 }
 
 export type IncidentPersonnelCountAggregateOutputType = {
   id: number
-  groundCommander: number
-  arsonInvestigator: number
-  sender: number
-  fireIncidentId: number
+  role: number
+  fullName: number
+  rank: number
+  userId: number
+  incidentId: number
   _all: number
 }
 
 
 export type IncidentPersonnelMinAggregateInputType = {
   id?: true
-  groundCommander?: true
-  arsonInvestigator?: true
-  sender?: true
-  fireIncidentId?: true
+  role?: true
+  fullName?: true
+  rank?: true
+  userId?: true
+  incidentId?: true
 }
 
 export type IncidentPersonnelMaxAggregateInputType = {
   id?: true
-  groundCommander?: true
-  arsonInvestigator?: true
-  sender?: true
-  fireIncidentId?: true
+  role?: true
+  fullName?: true
+  rank?: true
+  userId?: true
+  incidentId?: true
 }
 
 export type IncidentPersonnelCountAggregateInputType = {
   id?: true
-  groundCommander?: true
-  arsonInvestigator?: true
-  sender?: true
-  fireIncidentId?: true
+  role?: true
+  fullName?: true
+  rank?: true
+  userId?: true
+  incidentId?: true
   _all?: true
 }
 
@@ -149,10 +155,11 @@ export type IncidentPersonnelGroupByArgs<ExtArgs extends runtime.Types.Extension
 
 export type IncidentPersonnelGroupByOutputType = {
   id: string
-  groundCommander: string
-  arsonInvestigator: string
-  sender: string
-  fireIncidentId: string
+  role: $Enums.IncidentPersonnelRole
+  fullName: string
+  rank: $Enums.RANK | null
+  userId: string | null
+  incidentId: string
   _count: IncidentPersonnelCountAggregateOutputType | null
   _min: IncidentPersonnelMinAggregateOutputType | null
   _max: IncidentPersonnelMaxAggregateOutputType | null
@@ -178,40 +185,47 @@ export type IncidentPersonnelWhereInput = {
   OR?: Prisma.IncidentPersonnelWhereInput[]
   NOT?: Prisma.IncidentPersonnelWhereInput | Prisma.IncidentPersonnelWhereInput[]
   id?: Prisma.StringFilter<"IncidentPersonnel"> | string
-  groundCommander?: Prisma.StringFilter<"IncidentPersonnel"> | string
-  arsonInvestigator?: Prisma.StringFilter<"IncidentPersonnel"> | string
-  sender?: Prisma.StringFilter<"IncidentPersonnel"> | string
-  fireIncidentId?: Prisma.StringFilter<"IncidentPersonnel"> | string
-  fireIncident?: Prisma.XOR<Prisma.FireIncidentScalarRelationFilter, Prisma.FireIncidentWhereInput>
+  role?: Prisma.EnumIncidentPersonnelRoleFilter<"IncidentPersonnel"> | $Enums.IncidentPersonnelRole
+  fullName?: Prisma.StringFilter<"IncidentPersonnel"> | string
+  rank?: Prisma.EnumRANKNullableFilter<"IncidentPersonnel"> | $Enums.RANK | null
+  userId?: Prisma.StringNullableFilter<"IncidentPersonnel"> | string | null
+  incidentId?: Prisma.StringFilter<"IncidentPersonnel"> | string
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  incident?: Prisma.XOR<Prisma.IncidentScalarRelationFilter, Prisma.IncidentWhereInput>
 }
 
 export type IncidentPersonnelOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  groundCommander?: Prisma.SortOrder
-  arsonInvestigator?: Prisma.SortOrder
-  sender?: Prisma.SortOrder
-  fireIncidentId?: Prisma.SortOrder
-  fireIncident?: Prisma.FireIncidentOrderByWithRelationInput
+  role?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
+  rank?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  incidentId?: Prisma.SortOrder
+  user?: Prisma.UserOrderByWithRelationInput
+  incident?: Prisma.IncidentOrderByWithRelationInput
 }
 
 export type IncidentPersonnelWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  fireIncidentId?: string
   AND?: Prisma.IncidentPersonnelWhereInput | Prisma.IncidentPersonnelWhereInput[]
   OR?: Prisma.IncidentPersonnelWhereInput[]
   NOT?: Prisma.IncidentPersonnelWhereInput | Prisma.IncidentPersonnelWhereInput[]
-  groundCommander?: Prisma.StringFilter<"IncidentPersonnel"> | string
-  arsonInvestigator?: Prisma.StringFilter<"IncidentPersonnel"> | string
-  sender?: Prisma.StringFilter<"IncidentPersonnel"> | string
-  fireIncident?: Prisma.XOR<Prisma.FireIncidentScalarRelationFilter, Prisma.FireIncidentWhereInput>
-}, "id" | "fireIncidentId">
+  role?: Prisma.EnumIncidentPersonnelRoleFilter<"IncidentPersonnel"> | $Enums.IncidentPersonnelRole
+  fullName?: Prisma.StringFilter<"IncidentPersonnel"> | string
+  rank?: Prisma.EnumRANKNullableFilter<"IncidentPersonnel"> | $Enums.RANK | null
+  userId?: Prisma.StringNullableFilter<"IncidentPersonnel"> | string | null
+  incidentId?: Prisma.StringFilter<"IncidentPersonnel"> | string
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  incident?: Prisma.XOR<Prisma.IncidentScalarRelationFilter, Prisma.IncidentWhereInput>
+}, "id">
 
 export type IncidentPersonnelOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  groundCommander?: Prisma.SortOrder
-  arsonInvestigator?: Prisma.SortOrder
-  sender?: Prisma.SortOrder
-  fireIncidentId?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
+  rank?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  incidentId?: Prisma.SortOrder
   _count?: Prisma.IncidentPersonnelCountOrderByAggregateInput
   _max?: Prisma.IncidentPersonnelMaxOrderByAggregateInput
   _min?: Prisma.IncidentPersonnelMinOrderByAggregateInput
@@ -222,231 +236,430 @@ export type IncidentPersonnelScalarWhereWithAggregatesInput = {
   OR?: Prisma.IncidentPersonnelScalarWhereWithAggregatesInput[]
   NOT?: Prisma.IncidentPersonnelScalarWhereWithAggregatesInput | Prisma.IncidentPersonnelScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"IncidentPersonnel"> | string
-  groundCommander?: Prisma.StringWithAggregatesFilter<"IncidentPersonnel"> | string
-  arsonInvestigator?: Prisma.StringWithAggregatesFilter<"IncidentPersonnel"> | string
-  sender?: Prisma.StringWithAggregatesFilter<"IncidentPersonnel"> | string
-  fireIncidentId?: Prisma.StringWithAggregatesFilter<"IncidentPersonnel"> | string
+  role?: Prisma.EnumIncidentPersonnelRoleWithAggregatesFilter<"IncidentPersonnel"> | $Enums.IncidentPersonnelRole
+  fullName?: Prisma.StringWithAggregatesFilter<"IncidentPersonnel"> | string
+  rank?: Prisma.EnumRANKNullableWithAggregatesFilter<"IncidentPersonnel"> | $Enums.RANK | null
+  userId?: Prisma.StringNullableWithAggregatesFilter<"IncidentPersonnel"> | string | null
+  incidentId?: Prisma.StringWithAggregatesFilter<"IncidentPersonnel"> | string
 }
 
 export type IncidentPersonnelCreateInput = {
   id?: string
-  groundCommander: string
-  arsonInvestigator: string
-  sender: string
-  fireIncident: Prisma.FireIncidentCreateNestedOneWithoutPersonnelInput
+  role: $Enums.IncidentPersonnelRole
+  fullName: string
+  rank?: $Enums.RANK | null
+  user?: Prisma.UserCreateNestedOneWithoutIncidentPersonnelInput
+  incident: Prisma.IncidentCreateNestedOneWithoutPersonnelInput
 }
 
 export type IncidentPersonnelUncheckedCreateInput = {
   id?: string
-  groundCommander: string
-  arsonInvestigator: string
-  sender: string
-  fireIncidentId: string
+  role: $Enums.IncidentPersonnelRole
+  fullName: string
+  rank?: $Enums.RANK | null
+  userId?: string | null
+  incidentId: string
 }
 
 export type IncidentPersonnelUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  groundCommander?: Prisma.StringFieldUpdateOperationsInput | string
-  arsonInvestigator?: Prisma.StringFieldUpdateOperationsInput | string
-  sender?: Prisma.StringFieldUpdateOperationsInput | string
-  fireIncident?: Prisma.FireIncidentUpdateOneRequiredWithoutPersonnelNestedInput
+  role?: Prisma.EnumIncidentPersonnelRoleFieldUpdateOperationsInput | $Enums.IncidentPersonnelRole
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.NullableEnumRANKFieldUpdateOperationsInput | $Enums.RANK | null
+  user?: Prisma.UserUpdateOneWithoutIncidentPersonnelNestedInput
+  incident?: Prisma.IncidentUpdateOneRequiredWithoutPersonnelNestedInput
 }
 
 export type IncidentPersonnelUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  groundCommander?: Prisma.StringFieldUpdateOperationsInput | string
-  arsonInvestigator?: Prisma.StringFieldUpdateOperationsInput | string
-  sender?: Prisma.StringFieldUpdateOperationsInput | string
-  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumIncidentPersonnelRoleFieldUpdateOperationsInput | $Enums.IncidentPersonnelRole
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.NullableEnumRANKFieldUpdateOperationsInput | $Enums.RANK | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  incidentId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type IncidentPersonnelCreateManyInput = {
   id?: string
-  groundCommander: string
-  arsonInvestigator: string
-  sender: string
-  fireIncidentId: string
+  role: $Enums.IncidentPersonnelRole
+  fullName: string
+  rank?: $Enums.RANK | null
+  userId?: string | null
+  incidentId: string
 }
 
 export type IncidentPersonnelUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  groundCommander?: Prisma.StringFieldUpdateOperationsInput | string
-  arsonInvestigator?: Prisma.StringFieldUpdateOperationsInput | string
-  sender?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumIncidentPersonnelRoleFieldUpdateOperationsInput | $Enums.IncidentPersonnelRole
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.NullableEnumRANKFieldUpdateOperationsInput | $Enums.RANK | null
 }
 
 export type IncidentPersonnelUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  groundCommander?: Prisma.StringFieldUpdateOperationsInput | string
-  arsonInvestigator?: Prisma.StringFieldUpdateOperationsInput | string
-  sender?: Prisma.StringFieldUpdateOperationsInput | string
-  fireIncidentId?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumIncidentPersonnelRoleFieldUpdateOperationsInput | $Enums.IncidentPersonnelRole
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.NullableEnumRANKFieldUpdateOperationsInput | $Enums.RANK | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  incidentId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type IncidentPersonnelListRelationFilter = {
+  every?: Prisma.IncidentPersonnelWhereInput
+  some?: Prisma.IncidentPersonnelWhereInput
+  none?: Prisma.IncidentPersonnelWhereInput
+}
+
+export type IncidentPersonnelOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type IncidentPersonnelCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  groundCommander?: Prisma.SortOrder
-  arsonInvestigator?: Prisma.SortOrder
-  sender?: Prisma.SortOrder
-  fireIncidentId?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
+  rank?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  incidentId?: Prisma.SortOrder
 }
 
 export type IncidentPersonnelMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  groundCommander?: Prisma.SortOrder
-  arsonInvestigator?: Prisma.SortOrder
-  sender?: Prisma.SortOrder
-  fireIncidentId?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
+  rank?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  incidentId?: Prisma.SortOrder
 }
 
 export type IncidentPersonnelMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  groundCommander?: Prisma.SortOrder
-  arsonInvestigator?: Prisma.SortOrder
-  sender?: Prisma.SortOrder
-  fireIncidentId?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
+  rank?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  incidentId?: Prisma.SortOrder
 }
 
-export type IncidentPersonnelNullableScalarRelationFilter = {
-  is?: Prisma.IncidentPersonnelWhereInput | null
-  isNot?: Prisma.IncidentPersonnelWhereInput | null
+export type IncidentPersonnelCreateNestedManyWithoutIncidentInput = {
+  create?: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutIncidentInput, Prisma.IncidentPersonnelUncheckedCreateWithoutIncidentInput> | Prisma.IncidentPersonnelCreateWithoutIncidentInput[] | Prisma.IncidentPersonnelUncheckedCreateWithoutIncidentInput[]
+  connectOrCreate?: Prisma.IncidentPersonnelCreateOrConnectWithoutIncidentInput | Prisma.IncidentPersonnelCreateOrConnectWithoutIncidentInput[]
+  createMany?: Prisma.IncidentPersonnelCreateManyIncidentInputEnvelope
+  connect?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
 }
 
-export type IncidentPersonnelCreateNestedOneWithoutFireIncidentInput = {
-  create?: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutFireIncidentInput, Prisma.IncidentPersonnelUncheckedCreateWithoutFireIncidentInput>
-  connectOrCreate?: Prisma.IncidentPersonnelCreateOrConnectWithoutFireIncidentInput
-  connect?: Prisma.IncidentPersonnelWhereUniqueInput
+export type IncidentPersonnelUncheckedCreateNestedManyWithoutIncidentInput = {
+  create?: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutIncidentInput, Prisma.IncidentPersonnelUncheckedCreateWithoutIncidentInput> | Prisma.IncidentPersonnelCreateWithoutIncidentInput[] | Prisma.IncidentPersonnelUncheckedCreateWithoutIncidentInput[]
+  connectOrCreate?: Prisma.IncidentPersonnelCreateOrConnectWithoutIncidentInput | Prisma.IncidentPersonnelCreateOrConnectWithoutIncidentInput[]
+  createMany?: Prisma.IncidentPersonnelCreateManyIncidentInputEnvelope
+  connect?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
 }
 
-export type IncidentPersonnelUncheckedCreateNestedOneWithoutFireIncidentInput = {
-  create?: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutFireIncidentInput, Prisma.IncidentPersonnelUncheckedCreateWithoutFireIncidentInput>
-  connectOrCreate?: Prisma.IncidentPersonnelCreateOrConnectWithoutFireIncidentInput
-  connect?: Prisma.IncidentPersonnelWhereUniqueInput
+export type IncidentPersonnelUpdateManyWithoutIncidentNestedInput = {
+  create?: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutIncidentInput, Prisma.IncidentPersonnelUncheckedCreateWithoutIncidentInput> | Prisma.IncidentPersonnelCreateWithoutIncidentInput[] | Prisma.IncidentPersonnelUncheckedCreateWithoutIncidentInput[]
+  connectOrCreate?: Prisma.IncidentPersonnelCreateOrConnectWithoutIncidentInput | Prisma.IncidentPersonnelCreateOrConnectWithoutIncidentInput[]
+  upsert?: Prisma.IncidentPersonnelUpsertWithWhereUniqueWithoutIncidentInput | Prisma.IncidentPersonnelUpsertWithWhereUniqueWithoutIncidentInput[]
+  createMany?: Prisma.IncidentPersonnelCreateManyIncidentInputEnvelope
+  set?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  disconnect?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  delete?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  connect?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  update?: Prisma.IncidentPersonnelUpdateWithWhereUniqueWithoutIncidentInput | Prisma.IncidentPersonnelUpdateWithWhereUniqueWithoutIncidentInput[]
+  updateMany?: Prisma.IncidentPersonnelUpdateManyWithWhereWithoutIncidentInput | Prisma.IncidentPersonnelUpdateManyWithWhereWithoutIncidentInput[]
+  deleteMany?: Prisma.IncidentPersonnelScalarWhereInput | Prisma.IncidentPersonnelScalarWhereInput[]
 }
 
-export type IncidentPersonnelUpdateOneWithoutFireIncidentNestedInput = {
-  create?: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutFireIncidentInput, Prisma.IncidentPersonnelUncheckedCreateWithoutFireIncidentInput>
-  connectOrCreate?: Prisma.IncidentPersonnelCreateOrConnectWithoutFireIncidentInput
-  upsert?: Prisma.IncidentPersonnelUpsertWithoutFireIncidentInput
-  disconnect?: Prisma.IncidentPersonnelWhereInput | boolean
-  delete?: Prisma.IncidentPersonnelWhereInput | boolean
-  connect?: Prisma.IncidentPersonnelWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.IncidentPersonnelUpdateToOneWithWhereWithoutFireIncidentInput, Prisma.IncidentPersonnelUpdateWithoutFireIncidentInput>, Prisma.IncidentPersonnelUncheckedUpdateWithoutFireIncidentInput>
+export type IncidentPersonnelUncheckedUpdateManyWithoutIncidentNestedInput = {
+  create?: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutIncidentInput, Prisma.IncidentPersonnelUncheckedCreateWithoutIncidentInput> | Prisma.IncidentPersonnelCreateWithoutIncidentInput[] | Prisma.IncidentPersonnelUncheckedCreateWithoutIncidentInput[]
+  connectOrCreate?: Prisma.IncidentPersonnelCreateOrConnectWithoutIncidentInput | Prisma.IncidentPersonnelCreateOrConnectWithoutIncidentInput[]
+  upsert?: Prisma.IncidentPersonnelUpsertWithWhereUniqueWithoutIncidentInput | Prisma.IncidentPersonnelUpsertWithWhereUniqueWithoutIncidentInput[]
+  createMany?: Prisma.IncidentPersonnelCreateManyIncidentInputEnvelope
+  set?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  disconnect?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  delete?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  connect?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  update?: Prisma.IncidentPersonnelUpdateWithWhereUniqueWithoutIncidentInput | Prisma.IncidentPersonnelUpdateWithWhereUniqueWithoutIncidentInput[]
+  updateMany?: Prisma.IncidentPersonnelUpdateManyWithWhereWithoutIncidentInput | Prisma.IncidentPersonnelUpdateManyWithWhereWithoutIncidentInput[]
+  deleteMany?: Prisma.IncidentPersonnelScalarWhereInput | Prisma.IncidentPersonnelScalarWhereInput[]
 }
 
-export type IncidentPersonnelUncheckedUpdateOneWithoutFireIncidentNestedInput = {
-  create?: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutFireIncidentInput, Prisma.IncidentPersonnelUncheckedCreateWithoutFireIncidentInput>
-  connectOrCreate?: Prisma.IncidentPersonnelCreateOrConnectWithoutFireIncidentInput
-  upsert?: Prisma.IncidentPersonnelUpsertWithoutFireIncidentInput
-  disconnect?: Prisma.IncidentPersonnelWhereInput | boolean
-  delete?: Prisma.IncidentPersonnelWhereInput | boolean
-  connect?: Prisma.IncidentPersonnelWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.IncidentPersonnelUpdateToOneWithWhereWithoutFireIncidentInput, Prisma.IncidentPersonnelUpdateWithoutFireIncidentInput>, Prisma.IncidentPersonnelUncheckedUpdateWithoutFireIncidentInput>
+export type EnumIncidentPersonnelRoleFieldUpdateOperationsInput = {
+  set?: $Enums.IncidentPersonnelRole
 }
 
-export type IncidentPersonnelCreateWithoutFireIncidentInput = {
+export type IncidentPersonnelCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutUserInput, Prisma.IncidentPersonnelUncheckedCreateWithoutUserInput> | Prisma.IncidentPersonnelCreateWithoutUserInput[] | Prisma.IncidentPersonnelUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.IncidentPersonnelCreateOrConnectWithoutUserInput | Prisma.IncidentPersonnelCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.IncidentPersonnelCreateManyUserInputEnvelope
+  connect?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+}
+
+export type IncidentPersonnelUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutUserInput, Prisma.IncidentPersonnelUncheckedCreateWithoutUserInput> | Prisma.IncidentPersonnelCreateWithoutUserInput[] | Prisma.IncidentPersonnelUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.IncidentPersonnelCreateOrConnectWithoutUserInput | Prisma.IncidentPersonnelCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.IncidentPersonnelCreateManyUserInputEnvelope
+  connect?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+}
+
+export type IncidentPersonnelUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutUserInput, Prisma.IncidentPersonnelUncheckedCreateWithoutUserInput> | Prisma.IncidentPersonnelCreateWithoutUserInput[] | Prisma.IncidentPersonnelUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.IncidentPersonnelCreateOrConnectWithoutUserInput | Prisma.IncidentPersonnelCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.IncidentPersonnelUpsertWithWhereUniqueWithoutUserInput | Prisma.IncidentPersonnelUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.IncidentPersonnelCreateManyUserInputEnvelope
+  set?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  disconnect?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  delete?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  connect?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  update?: Prisma.IncidentPersonnelUpdateWithWhereUniqueWithoutUserInput | Prisma.IncidentPersonnelUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.IncidentPersonnelUpdateManyWithWhereWithoutUserInput | Prisma.IncidentPersonnelUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.IncidentPersonnelScalarWhereInput | Prisma.IncidentPersonnelScalarWhereInput[]
+}
+
+export type IncidentPersonnelUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutUserInput, Prisma.IncidentPersonnelUncheckedCreateWithoutUserInput> | Prisma.IncidentPersonnelCreateWithoutUserInput[] | Prisma.IncidentPersonnelUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.IncidentPersonnelCreateOrConnectWithoutUserInput | Prisma.IncidentPersonnelCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.IncidentPersonnelUpsertWithWhereUniqueWithoutUserInput | Prisma.IncidentPersonnelUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.IncidentPersonnelCreateManyUserInputEnvelope
+  set?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  disconnect?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  delete?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  connect?: Prisma.IncidentPersonnelWhereUniqueInput | Prisma.IncidentPersonnelWhereUniqueInput[]
+  update?: Prisma.IncidentPersonnelUpdateWithWhereUniqueWithoutUserInput | Prisma.IncidentPersonnelUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.IncidentPersonnelUpdateManyWithWhereWithoutUserInput | Prisma.IncidentPersonnelUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.IncidentPersonnelScalarWhereInput | Prisma.IncidentPersonnelScalarWhereInput[]
+}
+
+export type IncidentPersonnelCreateWithoutIncidentInput = {
   id?: string
-  groundCommander: string
-  arsonInvestigator: string
-  sender: string
+  role: $Enums.IncidentPersonnelRole
+  fullName: string
+  rank?: $Enums.RANK | null
+  user?: Prisma.UserCreateNestedOneWithoutIncidentPersonnelInput
 }
 
-export type IncidentPersonnelUncheckedCreateWithoutFireIncidentInput = {
+export type IncidentPersonnelUncheckedCreateWithoutIncidentInput = {
   id?: string
-  groundCommander: string
-  arsonInvestigator: string
-  sender: string
+  role: $Enums.IncidentPersonnelRole
+  fullName: string
+  rank?: $Enums.RANK | null
+  userId?: string | null
 }
 
-export type IncidentPersonnelCreateOrConnectWithoutFireIncidentInput = {
+export type IncidentPersonnelCreateOrConnectWithoutIncidentInput = {
   where: Prisma.IncidentPersonnelWhereUniqueInput
-  create: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutFireIncidentInput, Prisma.IncidentPersonnelUncheckedCreateWithoutFireIncidentInput>
+  create: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutIncidentInput, Prisma.IncidentPersonnelUncheckedCreateWithoutIncidentInput>
 }
 
-export type IncidentPersonnelUpsertWithoutFireIncidentInput = {
-  update: Prisma.XOR<Prisma.IncidentPersonnelUpdateWithoutFireIncidentInput, Prisma.IncidentPersonnelUncheckedUpdateWithoutFireIncidentInput>
-  create: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutFireIncidentInput, Prisma.IncidentPersonnelUncheckedCreateWithoutFireIncidentInput>
-  where?: Prisma.IncidentPersonnelWhereInput
+export type IncidentPersonnelCreateManyIncidentInputEnvelope = {
+  data: Prisma.IncidentPersonnelCreateManyIncidentInput | Prisma.IncidentPersonnelCreateManyIncidentInput[]
+  skipDuplicates?: boolean
 }
 
-export type IncidentPersonnelUpdateToOneWithWhereWithoutFireIncidentInput = {
-  where?: Prisma.IncidentPersonnelWhereInput
-  data: Prisma.XOR<Prisma.IncidentPersonnelUpdateWithoutFireIncidentInput, Prisma.IncidentPersonnelUncheckedUpdateWithoutFireIncidentInput>
+export type IncidentPersonnelUpsertWithWhereUniqueWithoutIncidentInput = {
+  where: Prisma.IncidentPersonnelWhereUniqueInput
+  update: Prisma.XOR<Prisma.IncidentPersonnelUpdateWithoutIncidentInput, Prisma.IncidentPersonnelUncheckedUpdateWithoutIncidentInput>
+  create: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutIncidentInput, Prisma.IncidentPersonnelUncheckedCreateWithoutIncidentInput>
 }
 
-export type IncidentPersonnelUpdateWithoutFireIncidentInput = {
+export type IncidentPersonnelUpdateWithWhereUniqueWithoutIncidentInput = {
+  where: Prisma.IncidentPersonnelWhereUniqueInput
+  data: Prisma.XOR<Prisma.IncidentPersonnelUpdateWithoutIncidentInput, Prisma.IncidentPersonnelUncheckedUpdateWithoutIncidentInput>
+}
+
+export type IncidentPersonnelUpdateManyWithWhereWithoutIncidentInput = {
+  where: Prisma.IncidentPersonnelScalarWhereInput
+  data: Prisma.XOR<Prisma.IncidentPersonnelUpdateManyMutationInput, Prisma.IncidentPersonnelUncheckedUpdateManyWithoutIncidentInput>
+}
+
+export type IncidentPersonnelScalarWhereInput = {
+  AND?: Prisma.IncidentPersonnelScalarWhereInput | Prisma.IncidentPersonnelScalarWhereInput[]
+  OR?: Prisma.IncidentPersonnelScalarWhereInput[]
+  NOT?: Prisma.IncidentPersonnelScalarWhereInput | Prisma.IncidentPersonnelScalarWhereInput[]
+  id?: Prisma.StringFilter<"IncidentPersonnel"> | string
+  role?: Prisma.EnumIncidentPersonnelRoleFilter<"IncidentPersonnel"> | $Enums.IncidentPersonnelRole
+  fullName?: Prisma.StringFilter<"IncidentPersonnel"> | string
+  rank?: Prisma.EnumRANKNullableFilter<"IncidentPersonnel"> | $Enums.RANK | null
+  userId?: Prisma.StringNullableFilter<"IncidentPersonnel"> | string | null
+  incidentId?: Prisma.StringFilter<"IncidentPersonnel"> | string
+}
+
+export type IncidentPersonnelCreateWithoutUserInput = {
+  id?: string
+  role: $Enums.IncidentPersonnelRole
+  fullName: string
+  rank?: $Enums.RANK | null
+  incident: Prisma.IncidentCreateNestedOneWithoutPersonnelInput
+}
+
+export type IncidentPersonnelUncheckedCreateWithoutUserInput = {
+  id?: string
+  role: $Enums.IncidentPersonnelRole
+  fullName: string
+  rank?: $Enums.RANK | null
+  incidentId: string
+}
+
+export type IncidentPersonnelCreateOrConnectWithoutUserInput = {
+  where: Prisma.IncidentPersonnelWhereUniqueInput
+  create: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutUserInput, Prisma.IncidentPersonnelUncheckedCreateWithoutUserInput>
+}
+
+export type IncidentPersonnelCreateManyUserInputEnvelope = {
+  data: Prisma.IncidentPersonnelCreateManyUserInput | Prisma.IncidentPersonnelCreateManyUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type IncidentPersonnelUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.IncidentPersonnelWhereUniqueInput
+  update: Prisma.XOR<Prisma.IncidentPersonnelUpdateWithoutUserInput, Prisma.IncidentPersonnelUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.IncidentPersonnelCreateWithoutUserInput, Prisma.IncidentPersonnelUncheckedCreateWithoutUserInput>
+}
+
+export type IncidentPersonnelUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.IncidentPersonnelWhereUniqueInput
+  data: Prisma.XOR<Prisma.IncidentPersonnelUpdateWithoutUserInput, Prisma.IncidentPersonnelUncheckedUpdateWithoutUserInput>
+}
+
+export type IncidentPersonnelUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.IncidentPersonnelScalarWhereInput
+  data: Prisma.XOR<Prisma.IncidentPersonnelUpdateManyMutationInput, Prisma.IncidentPersonnelUncheckedUpdateManyWithoutUserInput>
+}
+
+export type IncidentPersonnelCreateManyIncidentInput = {
+  id?: string
+  role: $Enums.IncidentPersonnelRole
+  fullName: string
+  rank?: $Enums.RANK | null
+  userId?: string | null
+}
+
+export type IncidentPersonnelUpdateWithoutIncidentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  groundCommander?: Prisma.StringFieldUpdateOperationsInput | string
-  arsonInvestigator?: Prisma.StringFieldUpdateOperationsInput | string
-  sender?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumIncidentPersonnelRoleFieldUpdateOperationsInput | $Enums.IncidentPersonnelRole
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.NullableEnumRANKFieldUpdateOperationsInput | $Enums.RANK | null
+  user?: Prisma.UserUpdateOneWithoutIncidentPersonnelNestedInput
 }
 
-export type IncidentPersonnelUncheckedUpdateWithoutFireIncidentInput = {
+export type IncidentPersonnelUncheckedUpdateWithoutIncidentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  groundCommander?: Prisma.StringFieldUpdateOperationsInput | string
-  arsonInvestigator?: Prisma.StringFieldUpdateOperationsInput | string
-  sender?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumIncidentPersonnelRoleFieldUpdateOperationsInput | $Enums.IncidentPersonnelRole
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.NullableEnumRANKFieldUpdateOperationsInput | $Enums.RANK | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type IncidentPersonnelUncheckedUpdateManyWithoutIncidentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumIncidentPersonnelRoleFieldUpdateOperationsInput | $Enums.IncidentPersonnelRole
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.NullableEnumRANKFieldUpdateOperationsInput | $Enums.RANK | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type IncidentPersonnelCreateManyUserInput = {
+  id?: string
+  role: $Enums.IncidentPersonnelRole
+  fullName: string
+  rank?: $Enums.RANK | null
+  incidentId: string
+}
+
+export type IncidentPersonnelUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumIncidentPersonnelRoleFieldUpdateOperationsInput | $Enums.IncidentPersonnelRole
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.NullableEnumRANKFieldUpdateOperationsInput | $Enums.RANK | null
+  incident?: Prisma.IncidentUpdateOneRequiredWithoutPersonnelNestedInput
+}
+
+export type IncidentPersonnelUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumIncidentPersonnelRoleFieldUpdateOperationsInput | $Enums.IncidentPersonnelRole
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.NullableEnumRANKFieldUpdateOperationsInput | $Enums.RANK | null
+  incidentId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type IncidentPersonnelUncheckedUpdateManyWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumIncidentPersonnelRoleFieldUpdateOperationsInput | $Enums.IncidentPersonnelRole
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.NullableEnumRANKFieldUpdateOperationsInput | $Enums.RANK | null
+  incidentId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
 
 export type IncidentPersonnelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  groundCommander?: boolean
-  arsonInvestigator?: boolean
-  sender?: boolean
-  fireIncidentId?: boolean
-  fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  role?: boolean
+  fullName?: boolean
+  rank?: boolean
+  userId?: boolean
+  incidentId?: boolean
+  user?: boolean | Prisma.IncidentPersonnel$userArgs<ExtArgs>
+  incident?: boolean | Prisma.IncidentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["incidentPersonnel"]>
 
 export type IncidentPersonnelSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  groundCommander?: boolean
-  arsonInvestigator?: boolean
-  sender?: boolean
-  fireIncidentId?: boolean
-  fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  role?: boolean
+  fullName?: boolean
+  rank?: boolean
+  userId?: boolean
+  incidentId?: boolean
+  user?: boolean | Prisma.IncidentPersonnel$userArgs<ExtArgs>
+  incident?: boolean | Prisma.IncidentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["incidentPersonnel"]>
 
 export type IncidentPersonnelSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  groundCommander?: boolean
-  arsonInvestigator?: boolean
-  sender?: boolean
-  fireIncidentId?: boolean
-  fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  role?: boolean
+  fullName?: boolean
+  rank?: boolean
+  userId?: boolean
+  incidentId?: boolean
+  user?: boolean | Prisma.IncidentPersonnel$userArgs<ExtArgs>
+  incident?: boolean | Prisma.IncidentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["incidentPersonnel"]>
 
 export type IncidentPersonnelSelectScalar = {
   id?: boolean
-  groundCommander?: boolean
-  arsonInvestigator?: boolean
-  sender?: boolean
-  fireIncidentId?: boolean
+  role?: boolean
+  fullName?: boolean
+  rank?: boolean
+  userId?: boolean
+  incidentId?: boolean
 }
 
-export type IncidentPersonnelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "groundCommander" | "arsonInvestigator" | "sender" | "fireIncidentId", ExtArgs["result"]["incidentPersonnel"]>
+export type IncidentPersonnelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "role" | "fullName" | "rank" | "userId" | "incidentId", ExtArgs["result"]["incidentPersonnel"]>
 export type IncidentPersonnelInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.IncidentPersonnel$userArgs<ExtArgs>
+  incident?: boolean | Prisma.IncidentDefaultArgs<ExtArgs>
 }
 export type IncidentPersonnelIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.IncidentPersonnel$userArgs<ExtArgs>
+  incident?: boolean | Prisma.IncidentDefaultArgs<ExtArgs>
 }
 export type IncidentPersonnelIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  fireIncident?: boolean | Prisma.FireIncidentDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.IncidentPersonnel$userArgs<ExtArgs>
+  incident?: boolean | Prisma.IncidentDefaultArgs<ExtArgs>
 }
 
 export type $IncidentPersonnelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "IncidentPersonnel"
   objects: {
-    fireIncident: Prisma.$FireIncidentPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs> | null
+    incident: Prisma.$IncidentPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    groundCommander: string
-    arsonInvestigator: string
-    sender: string
-    fireIncidentId: string
+    role: $Enums.IncidentPersonnelRole
+    fullName: string
+    rank: $Enums.RANK | null
+    userId: string | null
+    incidentId: string
   }, ExtArgs["result"]["incidentPersonnel"]>
   composites: {}
 }
@@ -841,7 +1054,8 @@ readonly fields: IncidentPersonnelFieldRefs;
  */
 export interface Prisma__IncidentPersonnelClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  fireIncident<T extends Prisma.FireIncidentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FireIncidentDefaultArgs<ExtArgs>>): Prisma.Prisma__FireIncidentClient<runtime.Types.Result.GetResult<Prisma.$FireIncidentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.IncidentPersonnel$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IncidentPersonnel$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  incident<T extends Prisma.IncidentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IncidentDefaultArgs<ExtArgs>>): Prisma.Prisma__IncidentClient<runtime.Types.Result.GetResult<Prisma.$IncidentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -872,10 +1086,11 @@ export interface Prisma__IncidentPersonnelClient<T, Null = never, ExtArgs extend
  */
 export interface IncidentPersonnelFieldRefs {
   readonly id: Prisma.FieldRef<"IncidentPersonnel", 'String'>
-  readonly groundCommander: Prisma.FieldRef<"IncidentPersonnel", 'String'>
-  readonly arsonInvestigator: Prisma.FieldRef<"IncidentPersonnel", 'String'>
-  readonly sender: Prisma.FieldRef<"IncidentPersonnel", 'String'>
-  readonly fireIncidentId: Prisma.FieldRef<"IncidentPersonnel", 'String'>
+  readonly role: Prisma.FieldRef<"IncidentPersonnel", 'IncidentPersonnelRole'>
+  readonly fullName: Prisma.FieldRef<"IncidentPersonnel", 'String'>
+  readonly rank: Prisma.FieldRef<"IncidentPersonnel", 'RANK'>
+  readonly userId: Prisma.FieldRef<"IncidentPersonnel", 'String'>
+  readonly incidentId: Prisma.FieldRef<"IncidentPersonnel", 'String'>
 }
     
 
@@ -1274,6 +1489,25 @@ export type IncidentPersonnelDeleteManyArgs<ExtArgs extends runtime.Types.Extens
    * Limit how many IncidentPersonnels to delete.
    */
   limit?: number
+}
+
+/**
+ * IncidentPersonnel.user
+ */
+export type IncidentPersonnel$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

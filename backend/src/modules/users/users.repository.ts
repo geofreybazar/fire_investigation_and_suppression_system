@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service.js';
 import { UserInput } from './schema/user.schema.js';
-import { Prisma, RANK, ROLE } from '../../generated/prisma/client.js';
+import { Prisma, RANK } from '../../generated/prisma/client.js';
+import { officeScopeWhere } from '../../common/scope/jurisdiction.js';
 import { UUID } from 'crypto';
 import { CurrentUserJwtPayload } from '../../types/jwt.payload.js';
 import {
@@ -26,6 +27,8 @@ const USER_AUDIT_FIELDS = [
   'middle_name',
   'last_name',
   'role',
+  'section',
+  'sectionDesignationRef',
   'officeId',
   'positionId',
 ] as const;
@@ -85,19 +88,6 @@ export class UsersRepository {
     });
   }
 
-  async countActiveUsersWithRole(officeId: string, role: ROLE) {
-    return this.prismaService.user.count({
-      where: { officeId, role, isActive: true },
-    });
-  }
-
-  // Investigations assigned to the user that are not yet approved.
-  async countOpenAssignedInvestigations(userId: UUID) {
-    return this.prismaService.investigation.count({
-      where: { assignedInvestigatorId: userId, completedAt: null },
-    });
-  }
-
   // No isActive filter: inactive users must still be found to be reactivated.
   async findUserRoleById(userId: UUID) {
     return this.prismaService.user.findUnique({
@@ -110,6 +100,8 @@ export class UsersRepository {
         office: {
           select: {
             id: true,
+            type: true,
+            parentId: true,
             regionId: true,
           },
         },
@@ -147,6 +139,32 @@ export class UsersRepository {
       });
 
       return user;
+    });
+  }
+
+  // Default password, forced change at next login, and every session ended.
+  async resetPassword(id: UUID, passwordHash: string, actorId: string) {
+    return this.prismaService.$transaction(async (tx) => {
+      const user = await tx.user.update({
+        where: { id },
+        data: {
+          password: passwordHash,
+          mustChangePassword: true,
+          failedLoginCount: 0,
+          lockedUntil: null,
+        },
+        select: { officeId: true },
+      });
+
+      await tx.refreshToken.deleteMany({ where: { userId: id } });
+
+      await recordAudit(tx, {
+        actorId,
+        action: 'USER_PASSWORD_RESET',
+        entityType: 'USER',
+        entityId: id,
+        ...(await officeScope(tx, user.officeId)),
+      });
     });
   }
 
@@ -188,11 +206,10 @@ export class UsersRepository {
       isActive: status === 'Active' ? true : false,
     };
 
-    // REGIONAL_ADMIN only sees users in their own office and its region.
-    if (user.role === 'REGIONAL_ADMIN') {
-      where.office = {
-        OR: [{ id: user.officeId }, { regionId: user.officeId }],
-      };
+    // Admins below NHQ see users of the offices in their jurisdiction.
+    const offices = officeScopeWhere(user);
+    if (Object.keys(offices).length > 0) {
+      where.office = offices;
     }
 
     const [personnel, total] = await Promise.all([

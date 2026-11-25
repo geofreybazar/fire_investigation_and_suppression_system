@@ -11,11 +11,11 @@ describe('NotificationDispatcher', () => {
   };
 
   const event = {
-    ...notificationMessages.incidentSubmitted('incident-1'),
+    ...notificationMessages.casualtyDeceased('casualty-1', 'FIR-2027-01-R4A-000001-C01'),
     actorId: 'actor-1',
     recipients: {
-      officeId: 'station-1',
-      roles: ['CITY_MUNICIPALITY_OPERATION' as const],
+      officeIds: ['province-1', 'region-1'],
+      roles: ['ADMIN' as const],
     },
   };
 
@@ -40,16 +40,16 @@ describe('NotificationDispatcher', () => {
 
     expect(repository.findRecipientIds).toHaveBeenCalledWith(
       event.recipients,
-      'incidentUpdates',
+      'casualtyAlerts',
     );
     expect(repository.createNotifications).toHaveBeenCalledWith(
       ['chief-1', 'chief-2'].map((userId) => ({
         userId,
-        type: 'INCIDENT_SUBMITTED',
+        type: 'CASUALTY_DECEASED',
         title: event.title,
         body: event.body,
-        entityType: 'FIRE_INCIDENT',
-        entityId: 'incident-1',
+        entityType: 'CASUALTY',
+        entityId: 'casualty-1',
       })),
     );
   });
@@ -76,5 +76,15 @@ describe('NotificationDispatcher', () => {
     repository.createNotifications.mockRejectedValue(new Error('db down'));
 
     await expect(dispatcher.notify(event)).resolves.toBeUndefined();
+  });
+
+  it('names records by number only, never by person', () => {
+    const message = notificationMessages.bfpPersonnelCasualty(
+      'casualty-1',
+      'EMS-2027-01-R4A-000002-C01',
+    );
+    expect(message.body).toBe(
+      'A BFP personnel casualty was recorded (EMS-2027-01-R4A-000002-C01).',
+    );
   });
 });

@@ -20,9 +20,11 @@ const user = {
   account_number: 'ACC001',
   password: 'stored-hash',
   isActive: true,
-  role: 'REGIONAL_INVESTIGATOR',
+  role: 'ENCODER',
+  section: 'EMS',
   positionId: 'position-1',
   officeId: 'office-1',
+  office: { type: 'CITY_FIRE_STATION' },
   mustChangePassword: false,
   failedLoginCount: 0,
   lockedUntil: null as Date | null,
@@ -32,8 +34,11 @@ const tokenPayload = {
   sub: user.id,
   account_number: user.account_number,
   role: user.role,
+  // The section and office type travel in the token for read filters.
+  section: user.section,
   positionId: user.positionId,
   officeId: user.officeId,
+  officeType: user.office.type,
   mustChangePassword: false,
 };
 

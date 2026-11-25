@@ -1,15 +1,17 @@
-// Evidence and documents (REQUIREMENTS.md Q-22). The file itself is kept by
+// Supporting documents (REQUIREMENTS.md §9.3). The file itself is kept by
 // the storage service under `storageKey`, outside the web root; only this
-// row says who may see it. Hidden and restored with its incident.
+// row says who may see it. Hidden and restored with its record.
 model Attachment {
   id String @id @default(uuid())
 
-  fireIncidentId String
-  fireIncident   FireIncident @relation(fields: [fireIncidentId], references: [id], onDelete: Cascade)
+  incidentId String
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
 
-  // Set for investigation evidence; null for incident attachments.
-  investigationId String?
-  investigation   Investigation? @relation(fields: [investigationId], references: [id], onDelete: Cascade)
+  // Set for casualty documents (e.g. medical or death certificate); null for
+  // incident attachments. Casualty documents are sensitive (FR-ATT-002).
+  casualtyId  String?
+  casualty    Casualty? @relation(fields: [casualtyId], references: [id], onDelete: Cascade)
+  isSensitive Boolean   @default(false)
 
   uploadedById String
   uploadedBy   User   @relation("AttachmentUploadedBy", fields: [uploadedById], references: [id])
@@ -19,7 +21,7 @@ model Attachment {
   mimeType     String
   sizeBytes    Int
   storageKey   String  @unique
-  // SHA-256 of the content, for chain-of-custody integrity checks.
+  // SHA-256 of the content, for integrity checks.
   sha256       String
   description  String?
 
@@ -30,6 +32,6 @@ model Attachment {
   removedById String?
   removedBy   User?     @relation("AttachmentRemovedBy", fields: [removedById], references: [id])
 
-  @@index([fireIncidentId, createdAt])
-  @@index([investigationId])
+  @@index([incidentId, createdAt])
+  @@index([casualtyId])
 }

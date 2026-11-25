@@ -48,7 +48,7 @@ describe('Login security (e2e)', () => {
         first_name: 'E2E',
         last_name: tag,
         password: await bcrypt.hash(password, 10),
-        role: 'NHQ_VIEWER',
+        role: 'VIEWER',
         officeId,
         positionId,
         mustChangePassword,

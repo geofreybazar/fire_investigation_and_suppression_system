@@ -2,33 +2,27 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   NotificationEntityType,
   NotificationType,
-  ROLE,
+  UserRole,
 } from '../../generated/prisma/enums.js';
 import { NotificationRepository } from './notification.repository.js';
 
-// The preference that lets a user opt out of each notification type (Q-21).
-export type NotificationPreferenceKey =
-  'incidentUpdates' | 'investigationUpdates' | 'reportReview';
+// The preference that lets a user opt out of each notification type
+// (REQUIREMENTS.md §9.2).
+export type NotificationPreferenceKey = 'casualtyAlerts' | 'recordCorrections';
 
 export const PREFERENCE_FOR: Record<
   NotificationType,
   NotificationPreferenceKey
 > = {
-  INCIDENT_SUBMITTED: 'incidentUpdates',
-  INCIDENT_RESUBMITTED: 'incidentUpdates',
-  INCIDENT_APPROVED: 'incidentUpdates',
-  INCIDENT_REJECTED: 'incidentUpdates',
-  INCIDENT_INVESTIGABLE: 'investigationUpdates',
-  CASE_REFERRED: 'investigationUpdates',
-  INVESTIGATOR_ASSIGNED: 'investigationUpdates',
-  REPORT_SUBMITTED: 'reportReview',
-  REPORT_APPROVED: 'reportReview',
-  REPORT_REJECTED: 'reportReview',
+  BFP_PERSONNEL_CASUALTY: 'casualtyAlerts',
+  CASUALTY_DECEASED: 'casualtyAlerts',
+  RECORD_CORRECTED: 'recordCorrections',
 };
 
-// Either specific users, or the active holders of some roles in one office.
+// Either specific users, or the active holders of some roles in some offices.
 export type NotificationRecipients =
-  { userIds: string[] } | { officeId: string; roles: ROLE[] };
+  | { userIds: string[] }
+  | { officeIds: string[]; roles: UserRole[] };
 
 export interface NotificationEvent {
   type: NotificationType;

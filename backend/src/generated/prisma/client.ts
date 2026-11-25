@@ -31,8 +31,8 @@ export * from "./enums.js"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more InvestigationReports
- * const investigationReports = await prisma.investigationReport.findMany()
+ * // Fetch zero or more Attachments
+ * const attachments = await prisma.attachment.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -41,26 +41,6 @@ export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
 export { Prisma }
 
-/**
- * Model InvestigationReport
- * 
- */
-export type InvestigationReport = Prisma.InvestigationReportModel
-/**
- * Model InvestigationReportReview
- * 
- */
-export type InvestigationReportReview = Prisma.InvestigationReportReviewModel
-/**
- * Model Investigation
- * 
- */
-export type Investigation = Prisma.InvestigationModel
-/**
- * Model InvestigationReferral
- * 
- */
-export type InvestigationReferral = Prisma.InvestigationReferralModel
 /**
  * Model Attachment
  * 
@@ -72,55 +52,75 @@ export type Attachment = Prisma.AttachmentModel
  */
 export type AuditLog = Prisma.AuditLogModel
 /**
- * Model FireOpertaionResources
+ * Model Casualty
  * 
  */
-export type FireOpertaionResources = Prisma.FireOpertaionResourcesModel
+export type Casualty = Prisma.CasualtyModel
 /**
- * Model IncidentImpact
+ * Model CasualtyPerson
  * 
  */
-export type IncidentImpact = Prisma.IncidentImpactModel
+export type CasualtyPerson = Prisma.CasualtyPersonModel
 /**
- * Model IncidentLocation
+ * Model CasualtyMedical
  * 
  */
-export type IncidentLocation = Prisma.IncidentLocationModel
+export type CasualtyMedical = Prisma.CasualtyMedicalModel
+/**
+ * Model CasualtyInjury
+ * 
+ */
+export type CasualtyInjury = Prisma.CasualtyInjuryModel
+/**
+ * Model CasualtyStatusEvent
+ * 
+ */
+export type CasualtyStatusEvent = Prisma.CasualtyStatusEventModel
+/**
+ * Model CasualtyRevision
+ * 
+ */
+export type CasualtyRevision = Prisma.CasualtyRevisionModel
+/**
+ * Model Incident
+ * 
+ */
+export type Incident = Prisma.IncidentModel
+/**
+ * Model IncidentCategory
+ * 
+ */
+export type IncidentCategory = Prisma.IncidentCategoryModel
+/**
+ * Model FireIncidentDetail
+ * 
+ */
+export type FireIncidentDetail = Prisma.FireIncidentDetailModel
+/**
+ * Model EmsIncidentDetail
+ * 
+ */
+export type EmsIncidentDetail = Prisma.EmsIncidentDetailModel
+/**
+ * Model RescueIncidentDetail
+ * 
+ */
+export type RescueIncidentDetail = Prisma.RescueIncidentDetailModel
+/**
+ * Model IncidentExternalRef
+ * 
+ */
+export type IncidentExternalRef = Prisma.IncidentExternalRefModel
+/**
+ * Model IncidentRespondingUnit
+ * 
+ */
+export type IncidentRespondingUnit = Prisma.IncidentRespondingUnitModel
 /**
  * Model IncidentPersonnel
  * 
  */
 export type IncidentPersonnel = Prisma.IncidentPersonnelModel
-/**
- * Model IncidentTimeline
- * 
- */
-export type IncidentTimeline = Prisma.IncidentTimelineModel
-/**
- * Model Establishment
- * 
- */
-export type Establishment = Prisma.EstablishmentModel
-/**
- * Model FireIncident
- * 
- */
-export type FireIncident = Prisma.FireIncidentModel
-/**
- * Model FireIncidentCategory
- * 
- */
-export type FireIncidentCategory = Prisma.FireIncidentCategoryModel
-/**
- * Model FireIncidentEvent
- * 
- */
-export type FireIncidentEvent = Prisma.FireIncidentEventModel
-/**
- * Model FireIncidentSubcategory
- * 
- */
-export type FireIncidentSubcategory = Prisma.FireIncidentSubcategoryModel
 /**
  * Model IncidentNumberCounter
  * 
@@ -146,6 +146,16 @@ export type Office = Prisma.OfficeModel
  * 
  */
 export type Position = Prisma.PositionModel
+/**
+ * Model Agency
+ * 
+ */
+export type Agency = Prisma.AgencyModel
+/**
+ * Model InjuryType
+ * 
+ */
+export type InjuryType = Prisma.InjuryTypeModel
 /**
  * Model RefreshToken
  * 

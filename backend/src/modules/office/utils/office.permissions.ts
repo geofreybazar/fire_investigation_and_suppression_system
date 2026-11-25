@@ -1,52 +1,32 @@
-import { OfficeType, ROLE } from '../../../generated/prisma/enums.js';
+import { OfficeType } from '../../../generated/prisma/enums.js';
+import { hasPermission, Permission } from '../../../common/authz/permissions.js';
+import { tierOf } from '../../../common/authz/tier.js';
+import { CurrentUserJwtPayload } from '../../../types/jwt.payload.js';
 
-export const officePermissions: Record<ROLE, OfficeType[]> = {
-  [ROLE.SUPER_ADMIN]: [
-    OfficeType.NATIONAL_HEADQUARTERS,
-    OfficeType.REGIONAL_OFFICE,
-    OfficeType.DISTRICT_FIRE_STATION,
-    OfficeType.PROVINCIAL_FIRE_STATION,
-    OfficeType.CITY_FIRE_STATION,
-    OfficeType.MUNICIPAL_FIRE_STATION,
-  ],
+// Office types each office manager may create, edit or delete (KEPT from
+// FIIS, REQUIREMENTS.md §7.2). Scope is checked separately.
+const BELOW_NHQ: OfficeType[] = [
+  OfficeType.REGIONAL_OFFICE,
+  OfficeType.DISTRICT_FIRE_STATION,
+  OfficeType.PROVINCIAL_FIRE_STATION,
+  OfficeType.CITY_FIRE_STATION,
+  OfficeType.MUNICIPAL_FIRE_STATION,
+];
 
-  [ROLE.NHQ_ADMIN]: [
-    OfficeType.REGIONAL_OFFICE,
-    OfficeType.DISTRICT_FIRE_STATION,
-    OfficeType.PROVINCIAL_FIRE_STATION,
-    OfficeType.CITY_FIRE_STATION,
-    OfficeType.MUNICIPAL_FIRE_STATION,
-  ],
+const BELOW_REGION: OfficeType[] = BELOW_NHQ.filter(
+  (type) => type !== OfficeType.REGIONAL_OFFICE,
+);
 
-  [ROLE.REGIONAL_ADMIN]: [
-    OfficeType.DISTRICT_FIRE_STATION,
-    OfficeType.PROVINCIAL_FIRE_STATION,
-    OfficeType.CITY_FIRE_STATION,
-    OfficeType.MUNICIPAL_FIRE_STATION,
-  ],
+export function manageableOfficeTypes(
+  user: Pick<CurrentUserJwtPayload, 'role' | 'officeType'>,
+): OfficeType[] {
+  if (user.role === 'SUPER_ADMIN') {
+    return Object.values(OfficeType);
+  }
 
-  // Other roles cannot create offices
-  [ROLE.NHQ_CHIEF_INVESTIGATOR]: [],
-  [ROLE.NHQ_INVESTIGATOR]: [],
-  [ROLE.NHQ_VIEWER]: [],
-  [ROLE.NHQ_OPERATION]: [],
-  [ROLE.NHQ_OPERATION_STAFF]: [],
+  if (!hasPermission(user, Permission.OFFICE_MANAGE)) {
+    return [];
+  }
 
-  [ROLE.REGIONAL_CHIEF_INVESTIGATOR]: [],
-  [ROLE.REGIONAL_INVESTIGATOR]: [],
-  [ROLE.REGIONAL_VIEWER]: [],
-  [ROLE.REGIONAL_OPERATION]: [],
-  [ROLE.REGIONAL_OPERATION_STAFF]: [],
-
-  [ROLE.DISTRICT_PROVINCE_CHIEF_INVESTIGATOR]: [],
-  [ROLE.DISTRICT_PROVINCE_INVESTIGATOR]: [],
-  [ROLE.DISTRICT_PROVINCE_VIEWER]: [],
-  [ROLE.DISTRICT_PROVINCE_OPERATION]: [],
-  [ROLE.DISTRICT_PROVINCE_OPERATION_STAFF]: [],
-
-  [ROLE.CITY_MUNICIPALITY_OPERATION]: [],
-  [ROLE.CITY_MUNICIPALITY_OPERATION_STAFF]: [],
-  [ROLE.CITY_MUNICIPALITY_INVESTIGATOR]: [],
-  [ROLE.CITY_MUNICIPALITY_COMMEL]: [],
-  [ROLE.CITY_MUNICIPALITY_CHIEF_INVESTIGATOR]: [],
-};
+  return tierOf(user.officeType) === 'NHQ' ? BELOW_NHQ : BELOW_REGION;
+}

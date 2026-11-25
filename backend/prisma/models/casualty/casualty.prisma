@@ -1,0 +1,152 @@
+// One person injured or killed in one incident (REQUIREMENTS.md §5).
+// Classification only: personal information lives in CasualtyPerson and
+// health information in CasualtyMedical, which statistics never read.
+model Casualty {
+  id         String @id @default(uuid())
+  // <incidentNo>-C<NN>
+  casualtyNo String @unique
+
+  incidentId String
+  incident   Incident @relation(fields: [incidentId], references: [id])
+
+  affiliation Affiliation
+  agencyId    String?
+  agency      Agency?     @relation(fields: [agencyId], references: [id])
+  // For BFP personnel: their office and, optionally, their user account.
+  bfpOfficeId String?
+  bfpOffice   Office?     @relation("CasualtyBfpOffice", fields: [bfpOfficeId], references: [id])
+  bfpUserId   String?
+  bfpUser     User?       @relation("CasualtyBfpUser", fields: [bfpUserId], references: [id])
+  bfpRank     RANK?
+
+  currentStatus  CasualtyStatus
+  severity       CasualtySeverity?
+  activityAtTime CasualtyActivity?
+
+  isIdentified Boolean @default(true)
+  // Computed on save from the fields expected for the affiliation and status.
+  isComplete   Boolean @default(false)
+  // Minor per-response-type fields, validated by a Zod schema per type.
+  extra        Json?
+
+  person       CasualtyPerson?
+  medical      CasualtyMedical?
+  statusEvents CasualtyStatusEvent[]
+  revisions    CasualtyRevision[]
+  attachments  Attachment[]
+
+  createdById String
+  createdBy   User    @relation("CasualtyCreatedBy", fields: [createdById], references: [id])
+  updatedById String?
+  updatedBy   User?   @relation("CasualtyUpdatedBy", fields: [updatedById], references: [id])
+
+  deletedAt      DateTime?
+  deletedById    String?
+  deletedBy      User?     @relation("CasualtyDeletedBy", fields: [deletedById], references: [id])
+  deletionReason String?
+
+  // Set by the retention job once personal and health data are erased.
+  anonymizedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([incidentId])
+  @@index([affiliation])
+  @@index([currentStatus])
+  @@index([createdAt])
+  @@index([deletedAt])
+}
+
+// Personal information (RA 10173). Read only through PII-aware repository
+// methods; blanked by the retention job.
+model CasualtyPerson {
+  id String @id @default(uuid())
+
+  lastName   String?
+  firstName  String?
+  middleName String?
+  suffix     String?
+
+  dateOfBirth    DateTime? @db.Date
+  ageYears       Int?
+  ageIsEstimated Boolean   @default(false)
+  sex            Sex?
+  nationality    String?
+
+  addressLine      String?
+  barangay         String?
+  cityMunicipality String?
+  province         String?
+
+  // AES-256-GCM, see common/privacy.
+  contactNumberEnc String?
+
+  casualtyId String   @unique
+  casualty   Casualty @relation(fields: [casualtyId], references: [id], onDelete: Cascade)
+}
+
+// Sensitive personal information: injury and death details.
+model CasualtyMedical {
+  id String @id @default(uuid())
+
+  bodyParts         String?
+  treatment         TreatmentType?
+  receivingFacility String?
+  transportedBy     String?
+
+  dateOfDeath         DateTime?     @db.Timestamptz(3)
+  placeOfDeath        PlaceOfDeath?
+  // AES-256-GCM, see common/privacy.
+  causeOfDeathNoteEnc String?
+
+  injuries CasualtyInjury[]
+
+  casualtyId String   @unique
+  casualty   Casualty @relation(fields: [casualtyId], references: [id], onDelete: Cascade)
+}
+
+model CasualtyInjury {
+  medicalId String
+  medical   CasualtyMedical @relation(fields: [medicalId], references: [id], onDelete: Cascade)
+
+  injuryTypeId String
+  injuryType   InjuryType @relation(fields: [injuryTypeId], references: [id])
+
+  @@id([medicalId, injuryTypeId])
+}
+
+// Status history: an injured person who later dies (FR-CAS-006).
+model CasualtyStatusEvent {
+  id         String          @id @default(uuid())
+  fromStatus CasualtyStatus?
+  toStatus   CasualtyStatus
+  occurredAt DateTime        @db.Timestamptz(3)
+  remarks    String?
+
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+
+  casualtyId String
+  casualty   Casualty @relation(fields: [casualtyId], references: [id], onDelete: Cascade)
+
+  @@index([casualtyId, occurredAt])
+}
+
+// Corrections (FR-CAS-008). Field names only, never personal or health values.
+model CasualtyRevision {
+  id            String @id @default(uuid())
+  revisionNo    Int
+  reason        String
+  changedFields Json
+
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+
+  casualtyId String
+  casualty   Casualty @relation(fields: [casualtyId], references: [id], onDelete: Cascade)
+
+  @@unique([casualtyId, revisionNo])
+}

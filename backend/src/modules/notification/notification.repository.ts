@@ -26,10 +26,9 @@ export class NotificationRepository {
   ) {
     return this.prismaService.notificationPreference.update({
       data: {
-        investigationUpdates: updateNotificationDato.investigationUpdates,
-        reportReview: updateNotificationDato.reportReview,
+        casualtyAlerts: updateNotificationDato.casualtyAlerts,
+        recordCorrections: updateNotificationDato.recordCorrections,
         systemAnnouncements: updateNotificationDato.systemAnnouncements,
-        incidentUpdates: updateNotificationDato.incidentUpdates,
       },
       where: {
         userId: id,
@@ -46,7 +45,10 @@ export class NotificationRepository {
     const who: Prisma.UserWhereInput =
       'userIds' in recipients
         ? { id: { in: recipients.userIds } }
-        : { officeId: recipients.officeId, role: { in: recipients.roles } };
+        : {
+            officeId: { in: recipients.officeIds },
+            role: { in: recipients.roles },
+          };
 
     const users = await this.prismaService.user.findMany({
       where: {

@@ -26,28 +26,25 @@ export type AggregateNotificationPreference = {
 
 export type NotificationPreferenceMinAggregateOutputType = {
   id: string | null
-  investigationUpdates: boolean | null
-  reportReview: boolean | null
+  casualtyAlerts: boolean | null
+  recordCorrections: boolean | null
   systemAnnouncements: boolean | null
-  incidentUpdates: boolean | null
   userId: string | null
 }
 
 export type NotificationPreferenceMaxAggregateOutputType = {
   id: string | null
-  investigationUpdates: boolean | null
-  reportReview: boolean | null
+  casualtyAlerts: boolean | null
+  recordCorrections: boolean | null
   systemAnnouncements: boolean | null
-  incidentUpdates: boolean | null
   userId: string | null
 }
 
 export type NotificationPreferenceCountAggregateOutputType = {
   id: number
-  investigationUpdates: number
-  reportReview: number
+  casualtyAlerts: number
+  recordCorrections: number
   systemAnnouncements: number
-  incidentUpdates: number
   userId: number
   _all: number
 }
@@ -55,28 +52,25 @@ export type NotificationPreferenceCountAggregateOutputType = {
 
 export type NotificationPreferenceMinAggregateInputType = {
   id?: true
-  investigationUpdates?: true
-  reportReview?: true
+  casualtyAlerts?: true
+  recordCorrections?: true
   systemAnnouncements?: true
-  incidentUpdates?: true
   userId?: true
 }
 
 export type NotificationPreferenceMaxAggregateInputType = {
   id?: true
-  investigationUpdates?: true
-  reportReview?: true
+  casualtyAlerts?: true
+  recordCorrections?: true
   systemAnnouncements?: true
-  incidentUpdates?: true
   userId?: true
 }
 
 export type NotificationPreferenceCountAggregateInputType = {
   id?: true
-  investigationUpdates?: true
-  reportReview?: true
+  casualtyAlerts?: true
+  recordCorrections?: true
   systemAnnouncements?: true
-  incidentUpdates?: true
   userId?: true
   _all?: true
 }
@@ -155,10 +149,9 @@ export type NotificationPreferenceGroupByArgs<ExtArgs extends runtime.Types.Exte
 
 export type NotificationPreferenceGroupByOutputType = {
   id: string
-  investigationUpdates: boolean
-  reportReview: boolean
+  casualtyAlerts: boolean
+  recordCorrections: boolean
   systemAnnouncements: boolean
-  incidentUpdates: boolean
   userId: string
   _count: NotificationPreferenceCountAggregateOutputType | null
   _min: NotificationPreferenceMinAggregateOutputType | null
@@ -185,20 +178,18 @@ export type NotificationPreferenceWhereInput = {
   OR?: Prisma.NotificationPreferenceWhereInput[]
   NOT?: Prisma.NotificationPreferenceWhereInput | Prisma.NotificationPreferenceWhereInput[]
   id?: Prisma.StringFilter<"NotificationPreference"> | string
-  investigationUpdates?: Prisma.BoolFilter<"NotificationPreference"> | boolean
-  reportReview?: Prisma.BoolFilter<"NotificationPreference"> | boolean
+  casualtyAlerts?: Prisma.BoolFilter<"NotificationPreference"> | boolean
+  recordCorrections?: Prisma.BoolFilter<"NotificationPreference"> | boolean
   systemAnnouncements?: Prisma.BoolFilter<"NotificationPreference"> | boolean
-  incidentUpdates?: Prisma.BoolFilter<"NotificationPreference"> | boolean
   userId?: Prisma.StringFilter<"NotificationPreference"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type NotificationPreferenceOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  investigationUpdates?: Prisma.SortOrder
-  reportReview?: Prisma.SortOrder
+  casualtyAlerts?: Prisma.SortOrder
+  recordCorrections?: Prisma.SortOrder
   systemAnnouncements?: Prisma.SortOrder
-  incidentUpdates?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
 }
@@ -209,19 +200,17 @@ export type NotificationPreferenceWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.NotificationPreferenceWhereInput | Prisma.NotificationPreferenceWhereInput[]
   OR?: Prisma.NotificationPreferenceWhereInput[]
   NOT?: Prisma.NotificationPreferenceWhereInput | Prisma.NotificationPreferenceWhereInput[]
-  investigationUpdates?: Prisma.BoolFilter<"NotificationPreference"> | boolean
-  reportReview?: Prisma.BoolFilter<"NotificationPreference"> | boolean
+  casualtyAlerts?: Prisma.BoolFilter<"NotificationPreference"> | boolean
+  recordCorrections?: Prisma.BoolFilter<"NotificationPreference"> | boolean
   systemAnnouncements?: Prisma.BoolFilter<"NotificationPreference"> | boolean
-  incidentUpdates?: Prisma.BoolFilter<"NotificationPreference"> | boolean
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "userId">
 
 export type NotificationPreferenceOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  investigationUpdates?: Prisma.SortOrder
-  reportReview?: Prisma.SortOrder
+  casualtyAlerts?: Prisma.SortOrder
+  recordCorrections?: Prisma.SortOrder
   systemAnnouncements?: Prisma.SortOrder
-  incidentUpdates?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   _count?: Prisma.NotificationPreferenceCountOrderByAggregateInput
   _max?: Prisma.NotificationPreferenceMaxOrderByAggregateInput
@@ -233,109 +222,94 @@ export type NotificationPreferenceScalarWhereWithAggregatesInput = {
   OR?: Prisma.NotificationPreferenceScalarWhereWithAggregatesInput[]
   NOT?: Prisma.NotificationPreferenceScalarWhereWithAggregatesInput | Prisma.NotificationPreferenceScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"NotificationPreference"> | string
-  investigationUpdates?: Prisma.BoolWithAggregatesFilter<"NotificationPreference"> | boolean
-  reportReview?: Prisma.BoolWithAggregatesFilter<"NotificationPreference"> | boolean
+  casualtyAlerts?: Prisma.BoolWithAggregatesFilter<"NotificationPreference"> | boolean
+  recordCorrections?: Prisma.BoolWithAggregatesFilter<"NotificationPreference"> | boolean
   systemAnnouncements?: Prisma.BoolWithAggregatesFilter<"NotificationPreference"> | boolean
-  incidentUpdates?: Prisma.BoolWithAggregatesFilter<"NotificationPreference"> | boolean
   userId?: Prisma.StringWithAggregatesFilter<"NotificationPreference"> | string
 }
 
 export type NotificationPreferenceCreateInput = {
   id?: string
-  investigationUpdates?: boolean
-  reportReview?: boolean
+  casualtyAlerts?: boolean
+  recordCorrections?: boolean
   systemAnnouncements?: boolean
-  incidentUpdates?: boolean
   user: Prisma.UserCreateNestedOneWithoutNotificationInput
 }
 
 export type NotificationPreferenceUncheckedCreateInput = {
   id?: string
-  investigationUpdates?: boolean
-  reportReview?: boolean
+  casualtyAlerts?: boolean
+  recordCorrections?: boolean
   systemAnnouncements?: boolean
-  incidentUpdates?: boolean
   userId: string
 }
 
 export type NotificationPreferenceUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  investigationUpdates?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  reportReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  casualtyAlerts?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recordCorrections?: Prisma.BoolFieldUpdateOperationsInput | boolean
   systemAnnouncements?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  incidentUpdates?: Prisma.BoolFieldUpdateOperationsInput | boolean
   user?: Prisma.UserUpdateOneRequiredWithoutNotificationNestedInput
 }
 
 export type NotificationPreferenceUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  investigationUpdates?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  reportReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  casualtyAlerts?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recordCorrections?: Prisma.BoolFieldUpdateOperationsInput | boolean
   systemAnnouncements?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  incidentUpdates?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type NotificationPreferenceCreateManyInput = {
   id?: string
-  investigationUpdates?: boolean
-  reportReview?: boolean
+  casualtyAlerts?: boolean
+  recordCorrections?: boolean
   systemAnnouncements?: boolean
-  incidentUpdates?: boolean
   userId: string
 }
 
 export type NotificationPreferenceUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  investigationUpdates?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  reportReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  casualtyAlerts?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recordCorrections?: Prisma.BoolFieldUpdateOperationsInput | boolean
   systemAnnouncements?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  incidentUpdates?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type NotificationPreferenceUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  investigationUpdates?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  reportReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  casualtyAlerts?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recordCorrections?: Prisma.BoolFieldUpdateOperationsInput | boolean
   systemAnnouncements?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  incidentUpdates?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type NotificationPreferenceCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  investigationUpdates?: Prisma.SortOrder
-  reportReview?: Prisma.SortOrder
+  casualtyAlerts?: Prisma.SortOrder
+  recordCorrections?: Prisma.SortOrder
   systemAnnouncements?: Prisma.SortOrder
-  incidentUpdates?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
 export type NotificationPreferenceMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  investigationUpdates?: Prisma.SortOrder
-  reportReview?: Prisma.SortOrder
+  casualtyAlerts?: Prisma.SortOrder
+  recordCorrections?: Prisma.SortOrder
   systemAnnouncements?: Prisma.SortOrder
-  incidentUpdates?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
 export type NotificationPreferenceMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  investigationUpdates?: Prisma.SortOrder
-  reportReview?: Prisma.SortOrder
+  casualtyAlerts?: Prisma.SortOrder
+  recordCorrections?: Prisma.SortOrder
   systemAnnouncements?: Prisma.SortOrder
-  incidentUpdates?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
 export type NotificationPreferenceNullableScalarRelationFilter = {
   is?: Prisma.NotificationPreferenceWhereInput | null
   isNot?: Prisma.NotificationPreferenceWhereInput | null
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
 }
 
 export type NotificationPreferenceCreateNestedOneWithoutUserInput = {
@@ -372,18 +346,16 @@ export type NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput = {
 
 export type NotificationPreferenceCreateWithoutUserInput = {
   id?: string
-  investigationUpdates?: boolean
-  reportReview?: boolean
+  casualtyAlerts?: boolean
+  recordCorrections?: boolean
   systemAnnouncements?: boolean
-  incidentUpdates?: boolean
 }
 
 export type NotificationPreferenceUncheckedCreateWithoutUserInput = {
   id?: string
-  investigationUpdates?: boolean
-  reportReview?: boolean
+  casualtyAlerts?: boolean
+  recordCorrections?: boolean
   systemAnnouncements?: boolean
-  incidentUpdates?: boolean
 }
 
 export type NotificationPreferenceCreateOrConnectWithoutUserInput = {
@@ -404,62 +376,56 @@ export type NotificationPreferenceUpdateToOneWithWhereWithoutUserInput = {
 
 export type NotificationPreferenceUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  investigationUpdates?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  reportReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  casualtyAlerts?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recordCorrections?: Prisma.BoolFieldUpdateOperationsInput | boolean
   systemAnnouncements?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  incidentUpdates?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type NotificationPreferenceUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  investigationUpdates?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  reportReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  casualtyAlerts?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recordCorrections?: Prisma.BoolFieldUpdateOperationsInput | boolean
   systemAnnouncements?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  incidentUpdates?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
 
 export type NotificationPreferenceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  investigationUpdates?: boolean
-  reportReview?: boolean
+  casualtyAlerts?: boolean
+  recordCorrections?: boolean
   systemAnnouncements?: boolean
-  incidentUpdates?: boolean
   userId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["notificationPreference"]>
 
 export type NotificationPreferenceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  investigationUpdates?: boolean
-  reportReview?: boolean
+  casualtyAlerts?: boolean
+  recordCorrections?: boolean
   systemAnnouncements?: boolean
-  incidentUpdates?: boolean
   userId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["notificationPreference"]>
 
 export type NotificationPreferenceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  investigationUpdates?: boolean
-  reportReview?: boolean
+  casualtyAlerts?: boolean
+  recordCorrections?: boolean
   systemAnnouncements?: boolean
-  incidentUpdates?: boolean
   userId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["notificationPreference"]>
 
 export type NotificationPreferenceSelectScalar = {
   id?: boolean
-  investigationUpdates?: boolean
-  reportReview?: boolean
+  casualtyAlerts?: boolean
+  recordCorrections?: boolean
   systemAnnouncements?: boolean
-  incidentUpdates?: boolean
   userId?: boolean
 }
 
-export type NotificationPreferenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "investigationUpdates" | "reportReview" | "systemAnnouncements" | "incidentUpdates" | "userId", ExtArgs["result"]["notificationPreference"]>
+export type NotificationPreferenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "casualtyAlerts" | "recordCorrections" | "systemAnnouncements" | "userId", ExtArgs["result"]["notificationPreference"]>
 export type NotificationPreferenceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -477,10 +443,9 @@ export type $NotificationPreferencePayload<ExtArgs extends runtime.Types.Extensi
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    investigationUpdates: boolean
-    reportReview: boolean
+    casualtyAlerts: boolean
+    recordCorrections: boolean
     systemAnnouncements: boolean
-    incidentUpdates: boolean
     userId: string
   }, ExtArgs["result"]["notificationPreference"]>
   composites: {}
@@ -907,10 +872,9 @@ export interface Prisma__NotificationPreferenceClient<T, Null = never, ExtArgs e
  */
 export interface NotificationPreferenceFieldRefs {
   readonly id: Prisma.FieldRef<"NotificationPreference", 'String'>
-  readonly investigationUpdates: Prisma.FieldRef<"NotificationPreference", 'Boolean'>
-  readonly reportReview: Prisma.FieldRef<"NotificationPreference", 'Boolean'>
+  readonly casualtyAlerts: Prisma.FieldRef<"NotificationPreference", 'Boolean'>
+  readonly recordCorrections: Prisma.FieldRef<"NotificationPreference", 'Boolean'>
   readonly systemAnnouncements: Prisma.FieldRef<"NotificationPreference", 'Boolean'>
-  readonly incidentUpdates: Prisma.FieldRef<"NotificationPreference", 'Boolean'>
   readonly userId: Prisma.FieldRef<"NotificationPreference", 'String'>
 }
     

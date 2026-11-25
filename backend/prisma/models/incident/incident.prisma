@@ -1,0 +1,65 @@
+// An emergency response of any type (REQUIREMENTS.md §4). Owned by the
+// reporting station; its casualties are counted under that office.
+model Incident {
+  id         String @id @default(uuid())
+  // <FIR|EMS|SRF>-YYYY-MM-<REGIONCODE>-NNNNNN, generated in the create transaction.
+  incidentNo String @unique
+
+  // Taken from the creator's section, never from the client.
+  responseType ResponseType
+  categoryId   String
+  category     IncidentCategory @relation(fields: [categoryId], references: [id])
+
+  reportingOfficeId String
+  reportingOffice   Office @relation("IncidentReportingOffice", fields: [reportingOfficeId], references: [id])
+
+  occurredAt DateTime? @db.Timestamptz(3)
+  reportedAt DateTime? @db.Timestamptz(3)
+
+  // Location. Region, province/district and city/municipality are derived
+  // from the reporting office.
+  placeOfOccurrence String
+  barangay          String
+  cityMunicipality  String
+  provinceDistrict  String
+  region            String
+  latitude          Decimal? @db.Decimal(9, 6)
+  longitude         Decimal? @db.Decimal(9, 6)
+
+  narrative String?
+  // Minor per-response-type fields, validated by a Zod schema per type.
+  extra     Json?
+
+  // Sequence for casualty numbers (<incidentNo>-C<NN>).
+  lastCasualtySeq Int @default(0)
+
+  fireDetail   FireIncidentDetail?
+  emsDetail    EmsIncidentDetail?
+  rescueDetail RescueIncidentDetail?
+
+  externalRefs    IncidentExternalRef[]
+  respondingUnits IncidentRespondingUnit[]
+  personnel       IncidentPersonnel[]
+  casualties      Casualty[]
+  attachments     Attachment[]
+
+  createdById String
+  createdBy   User    @relation("IncidentCreatedBy", fields: [createdById], references: [id])
+  updatedById String?
+  updatedBy   User?   @relation("IncidentUpdatedBy", fields: [updatedById], references: [id])
+
+  // Soft delete: hides the incident, its casualties and attachments.
+  deletedAt      DateTime?
+  deletedById    String?
+  deletedBy      User?     @relation("IncidentDeletedBy", fields: [deletedById], references: [id])
+  deletionReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([reportingOfficeId])
+  @@index([responseType, occurredAt])
+  @@index([occurredAt])
+  @@index([categoryId])
+  @@index([deletedAt])
+}

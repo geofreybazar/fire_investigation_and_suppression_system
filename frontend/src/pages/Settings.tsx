@@ -23,7 +23,7 @@ const Settings = () => {
       <PageHeader
         icon={<SettingsIcon />}
         title='Settings'
-        description='Manage your FIIS preferences and account settings.'
+        description='Manage your BFP-CMS preferences and account settings.'
       />
 
       {/* Appearance */}

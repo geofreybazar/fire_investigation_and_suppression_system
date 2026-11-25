@@ -18,7 +18,9 @@ const getOffices = async (
   return response.data;
 };
 
-const getAllOffices = async (): Promise<Pick<Office, "id" | "name">[]> => {
+const getAllOffices = async (): Promise<
+  Pick<Office, "id" | "name" | "type">[]
+> => {
   const apiClient = await axiosJWT("/api/office_api");
   const response = await apiClient.get("/alloffices");
   return response.data;

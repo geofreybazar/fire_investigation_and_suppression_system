@@ -8,45 +8,61 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { AddNewUserInput } from "@/interface/users/users";
-import { ROLE } from "@/constants/personnel";
+import { ROLE_LABELS } from "@/constants/personnel";
+import { useUserStore } from "@/store/userStore";
+import { assignableRoles } from "@/utils/permissions";
 
 const Role = () => {
-  const { control } = useFormContext<AddNewUserInput>();
-
-  const formatRole = (role: string) => {
-    return role
-      .split("_")
-      .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
-      .join(" ");
-  };
+  const { control, setValue } = useFormContext<AddNewUserInput>();
+  const currentUser = useUserStore((state) => state.user);
+  const options = assignableRoles(currentUser);
 
   return (
     <Controller
       name='role'
       control={control}
-      render={({ field, fieldState }) => (
-        <Field data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor='type'>Role</FieldLabel>
+      render={({ field, fieldState }) => {
+        // An existing account keeps showing its role even if it isn't one
+        // the current admin could pick (e.g. the SUPER_ADMIN account).
+        const roles =
+          field.value && !options.includes(field.value as never)
+            ? [field.value, ...options]
+            : options;
 
-          <Select value={field.value ?? ""} onValueChange={field.onChange}>
-            <SelectTrigger id='type'>
-              <SelectValue placeholder='Select role'>
-                {field.value ? formatRole(field.value) : "Select role"}
-              </SelectValue>
-            </SelectTrigger>
+        return (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor='role'>Role</FieldLabel>
 
-            <SelectContent>
-              {ROLE.map((role) => (
-                <SelectItem key={role} value={role}>
-                  {formatRole(role)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <Select
+              value={field.value ?? ""}
+              onValueChange={(value) => {
+                field.onChange(value);
+                // Administrators have no section.
+                if (value === "ADMIN" || value === "SUPER_ADMIN") {
+                  setValue("section", null);
+                  setValue("sectionDesignationRef", null);
+                }
+              }}
+            >
+              <SelectTrigger id='role'>
+                <SelectValue placeholder='Select role'>
+                  {field.value ? ROLE_LABELS[field.value] : "Select role"}
+                </SelectValue>
+              </SelectTrigger>
 
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-        </Field>
-      )}
+              <SelectContent>
+                {roles.map((role) => (
+                  <SelectItem key={role} value={role}>
+                    {ROLE_LABELS[role]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        );
+      }}
     />
   );
 };
